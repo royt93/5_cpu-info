@@ -1,8 +1,16 @@
 package com.galaxyjoy.cpuinfo
 
+import android.util.Log
 import androidx.multidex.MultiDexApplication
 import com.galaxyjoy.cpuinfo.appinitializers.InitializersApp
+import com.galaxyjoy.cpuinfo.feat.SplashActivity
+import com.galaxyjoy.cpuinfo.sdkadbmob.AdMobManager
+import com.galaxyjoy.cpuinfo.sdkadbmob.AppLifecycleListener
+import com.google.android.gms.ads.MobileAds
 import dagger.hilt.android.HiltAndroidApp
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 //TODO roy93~ why you see ad
@@ -40,8 +48,49 @@ class GalaxyApp : MultiDexApplication() {
     override fun onCreate() {
         super.onCreate()
 //        this.setupApplovinAd()
-        //TODO roy93~ admob init
+        setupAdmob()
 
         initializers.init(this)
+    }
+
+    private fun setupAdmob() {
+        CoroutineScope(Dispatchers.IO).launch {
+            MobileAds.initialize(this@GalaxyApp) {}
+            AdMobManager.init(this@GalaxyApp) { success, gaidCurrent ->
+                Log.d("roy93~", "AdMobManager init success $success, gaidCurrent $gaidCurrent")
+            }
+        }
+        registerActivityLifecycleCallbacks(
+            AppLifecycleListener(
+                { isForeground, activity ->
+                    if (isForeground) {
+                        Log.d("roy93~", "App moved to Foreground")
+                        Log.d("roy93~", "activity.localClassName ${activity.localClassName}")
+                        Log.d(
+                            "roy93~",
+                            "SplashActivity::class.java.simpleName ${SplashActivity::class.java.simpleName}"
+                        )
+                        if (activity.localClassName == SplashActivity::class.java.simpleName) {
+                            //do nothing
+                        } else {
+//                            AdMobManager.showAppOpenAd(activity)
+                        }
+                    } else {
+                        Log.d("roy93~", "App moved to Background")
+                    }
+                }, { activity ->
+                    Log.d("roy93~", "callbackActivityCreated ${activity.localClassName}")
+                    if (activity.localClassName == SplashActivity::class.java.simpleName) {
+                        //do nothing
+                    } else {
+//                        AdMobManager.loadAppOpenAd(
+//                            context = this,
+//                            adUnitId = BuildConfig.ADMOB_APP_OPEN_ID,
+//                            onAdLoaded = {},
+//                        )
+                    }
+                }
+            )
+        )
     }
 }
