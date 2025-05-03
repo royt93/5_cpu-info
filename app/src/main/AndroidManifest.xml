@@ -35,6 +35,11 @@
         tools:replace="android:supportsRtl"
         tools:targetApi="tiramisu">
 
+        <!-- Khai báo AdMob App ID -->
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-3612191981543807~1355135619" /> <!-- Sample AdMob App ID -->
+
         <activity
             android:name=".feat.ActHost"
             android:exported="true"
@@ -46,9 +51,9 @@
             </intent-filter>
         </activity>
 
-<!--        <meta-data-->
-<!--            android:name="applovin.sdk.key"-->
-<!--            android:value="@string/SDK_KEY" />-->
+        <!--        <meta-data-->
+        <!--            android:name="applovin.sdk.key"-->
+        <!--            android:value="@string/SDK_KEY" />-->
 
         <service android:name=".feat.app.ServiceStorageUsage" />
 

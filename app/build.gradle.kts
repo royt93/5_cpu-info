@@ -60,12 +60,21 @@ android {
 
     buildTypes {
         debug {
+            buildConfigField("String", "ADMOB_BANNER_ID", "\"ca-app-pub-3940256099942544/6300978111\"")
+            buildConfigField("String", "ADMOB_INTERSTITIAL_ID", "\"ca-app-pub-3940256099942544/1033173712\"")
+            buildConfigField("String", "ADMOB_APP_OPEN_ID", "\"ca-app-pub-3940256099942544/9257395921\"")
+
             signingConfig = signingConfigs.getByName("debug")
             isMinifyEnabled = false
             enableUnitTestCoverage = true
 //            applicationIdSuffix = ".debug"
         }
         release {
+            //nho check APPLICATION_ID trong manifest
+            buildConfigField("String", "ADMOB_BANNER_ID", "\"ca-app-pub-3612191981543807/6633406668\"")
+            buildConfigField("String", "ADMOB_INTERSTITIAL_ID", "\"ca-app-pub-3612191981543807/5493932422\"")
+            buildConfigField("String", "ADMOB_APP_OPEN_ID", "\"ca-app-pub-3612191981543807/5265851653\"")
+
             signingConfig = signingConfigs.getByName("release")
             isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
@@ -188,6 +197,7 @@ dependencies {
     implementation("com.getkeepsafe.relinker:relinker:1.4.5")
     implementation("io.coil-kt:coil-compose:2.7.0")
 //    implementation("com.applovin:applovin-sdk:13.1.0")
+    implementation("com.google.android.gms:play-services-ads:24.2.0")
     debugImplementation("com.squareup.leakcanary:leakcanary-android:2.14")
 
 //    testImplementation(Libs.junit)
