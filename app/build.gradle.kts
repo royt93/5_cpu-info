@@ -18,7 +18,7 @@ android {
     defaultConfig {
         applicationId = "com.galaxyjoy.cpuinfo"
 
-        minSdk = 21
+        minSdk = 23
         //noinspection EditedTargetSdkVersion
         targetSdk = 35
         versionCode = 20250503
@@ -197,7 +197,7 @@ dependencies {
     implementation("com.getkeepsafe.relinker:relinker:1.4.5")
     implementation("io.coil-kt:coil-compose:2.7.0")
 //    implementation("com.applovin:applovin-sdk:13.1.0")
-    implementation("com.google.android.gms:play-services-ads:24.2.0")
+    implementation("com.google.android.gms:play-services-ads:23.6.0")
     debugImplementation("com.squareup.leakcanary:leakcanary-android:2.14")
 
 //    testImplementation(Libs.junit)
