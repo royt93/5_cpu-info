@@ -2,7 +2,6 @@ package com.galaxyjoy.cpuinfo
 
 import androidx.multidex.MultiDexApplication
 import com.galaxyjoy.cpuinfo.appinitializers.InitializersApp
-import com.galaxyjoy.cpuinfo.ext.setupApplovinAd
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
 
@@ -14,9 +13,8 @@ import javax.inject.Inject
 //TODO roy93~ add lottie trang tri cho dep
 //TODO roy93~ github
 //TODO roy93~ uninstall app
-//TODO roy93~ applovin ok roi, con show ad full thi chua tim dc cho thich hop,
-//co the dung splash de show ad full?
 
+//admob
 //ad applovin
 //review in app bingo
 //120hz
@@ -41,7 +39,9 @@ class GalaxyApp : MultiDexApplication() {
 
     override fun onCreate() {
         super.onCreate()
-        this.setupApplovinAd()
+//        this.setupApplovinAd()
+        //TODO roy93~ admob init
+
         initializers.init(this)
     }
 }

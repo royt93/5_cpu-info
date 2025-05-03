@@ -117,30 +117,28 @@ android {
         create("dev") {
             dimension = "type"
             resValue("string", "app_name", "Device Info & System CPU DEV")
-            resValue(
-                "string",
-                "SDK_KEY",
-                "e75FnQfS9XTTqM1Kne69U7PW_MBgAnGQTFvtwVVui6kRPKs5L7ws9twr5IQWwVfzPKZ5pF2IfDa7lguMgGlCyt"
-            )
-            resValue("string", "BANNER", "b568752d68ca93f8")
-            resValue("string", "INTER", "5ce404d8a94fa941")
-
-            resValue("string", "EnableAdInter", "false")
-            resValue("string", "EnableAdBanner", "true")
+//            resValue(
+//                "string",
+//                "SDK_KEY",
+//                "e75FnQfS9XTTqM1Kne69U7PW_MBgAnGQTFvtwVVui6kRPKs5L7ws9twr5IQWwVfzPKZ5pF2IfDa7lguMgGlCyt"
+//            )
+//            resValue("string", "BANNER", "b568752d68ca93f8")
+//            resValue("string", "INTER", "5ce404d8a94fa941")
+//            resValue("string", "EnableAdInter", "false")
+//            resValue("string", "EnableAdBanner", "true")
         }
         create("production") {
             dimension = "type"
             resValue("string", "app_name", "Device Info & System CPU")
-            resValue(
-                "string",
-                "SDK_KEY",
-                "e75FnQfS9XTTqM1Kne69U7PW_MBgAnGQTFvtwVVui6kRPKs5L7ws9twr5IQWwVfzPKZ5pF2IfDa7lguMgGlCyt"
-            )
-            resValue("string", "BANNER", "b568752d68ca93f8")
-            resValue("string", "INTER", "5ce404d8a94fa941")
-
-            resValue("string", "EnableAdInter", "true")
-            resValue("string", "EnableAdBanner", "true")
+//            resValue(
+//                "string",
+//                "SDK_KEY",
+//                "e75FnQfS9XTTqM1Kne69U7PW_MBgAnGQTFvtwVVui6kRPKs5L7ws9twr5IQWwVfzPKZ5pF2IfDa7lguMgGlCyt"
+//            )
+//            resValue("string", "BANNER", "b568752d68ca93f8")
+//            resValue("string", "INTER", "5ce404d8a94fa941")
+//            resValue("string", "EnableAdInter", "true")
+//            resValue("string", "EnableAdBanner", "true")
         }
     }
 }
@@ -189,7 +187,7 @@ dependencies {
     implementation("com.jakewharton.timber:timber:5.0.1")
     implementation("com.getkeepsafe.relinker:relinker:1.4.5")
     implementation("io.coil-kt:coil-compose:2.7.0")
-    implementation("com.applovin:applovin-sdk:13.1.0")
+//    implementation("com.applovin:applovin-sdk:13.1.0")
     debugImplementation("com.squareup.leakcanary:leakcanary-android:2.14")
 
 //    testImplementation(Libs.junit)
