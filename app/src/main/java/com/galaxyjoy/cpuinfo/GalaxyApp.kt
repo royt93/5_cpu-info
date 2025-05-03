@@ -16,8 +16,6 @@ import javax.inject.Inject
 //TODO roy93~ why you see ad
 //TODO roy93~ firebase
 
-//TODO roy93~ vung bi mat de show applovin config
-//TODO roy93~ splash screen
 //TODO roy93~ add lottie trang tri cho dep
 //TODO roy93~ github
 //TODO roy93~ uninstall app
