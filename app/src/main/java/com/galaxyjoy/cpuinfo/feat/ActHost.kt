@@ -12,8 +12,11 @@ import com.galaxyjoy.cpuinfo.BuildConfig
 import com.galaxyjoy.cpuinfo.R
 import com.galaxyjoy.cpuinfo.databinding.ActHostLayoutBinding
 import com.galaxyjoy.cpuinfo.rateAppInApp
+import com.galaxyjoy.cpuinfo.sdkadbmob.AdMobManager
 import com.galaxyjoy.cpuinfo.util.runOnApiAbove
 import com.galaxyjoy.cpuinfo.util.setupEdgeToEdge
+import com.google.android.gms.ads.AdSize
+import com.google.android.gms.ads.AdView
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -24,8 +27,19 @@ class ActHost : BaseActivity() {
 
     private lateinit var navController: NavController
     private lateinit var binding: ActHostLayoutBinding
-    //TODO roy93~ admob banner
-//    private var adView: MaxAdView? = null
+
+    //    private var adView: MaxAdView? = null
+    private var adView: AdView? = null
+
+    override fun onResume() {
+        super.onResume()
+        adView?.resume()
+    }
+
+    override fun onPause() {
+        adView?.pause()
+        super.onPause()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppThemeBase)
@@ -41,12 +55,17 @@ class ActHost : BaseActivity() {
             menu.findItem(R.id.menuProcesses).isVisible = false
         }
 
-        //TODO roy93~ admob
 //        adView = this.createAdBanner(
 //            logTag = ActHost::class.simpleName,
 //            viewGroup = binding.flAd,
 //            isAdaptiveBanner = true,
 //        )
+        adView = AdMobManager.loadBanner(
+            context = this,
+            adUnitId = BuildConfig.ADMOB_BANNER_ID,
+            container = binding.flAd,
+            adSize = AdSize.BANNER,
+        )
     }
 
     override fun onSupportNavigateUp() = navController.navigateUp()
@@ -83,10 +102,10 @@ class ActHost : BaseActivity() {
     }
 
     override fun onDestroy() {
-        //TODO roy93~ admob
 //        with(binding) {
 //            flAd.destroyAdBanner(adView)
 //        }
+        adView?.destroy()
         super.onDestroy()
     }
 }
