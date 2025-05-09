@@ -3,9 +3,7 @@ package com.galaxyjoy.cpuinfo
 import android.util.Log
 import androidx.multidex.MultiDexApplication
 import com.galaxyjoy.cpuinfo.appinitializers.InitializersApp
-import com.galaxyjoy.cpuinfo.feat.SplashActivity
 import com.galaxyjoy.cpuinfo.sdkadbmob.AdMobManager
-import com.galaxyjoy.cpuinfo.sdkadbmob.AppLifecycleListener
 import com.google.android.gms.ads.MobileAds
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
