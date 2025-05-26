@@ -198,7 +198,7 @@ dependencies {
     implementation("io.coil-kt:coil-compose:2.7.0")
 //    implementation("com.applovin:applovin-sdk:13.1.0")
     implementation("com.google.android.gms:play-services-ads:23.6.0")
-    implementation("com.google.ads.mediation:applovin:13.0.0.0")
+    implementation("com.google.ads.mediation:applovin:13.1.0.0")
     debugImplementation("com.squareup.leakcanary:leakcanary-android:2.14")
 
 //    testImplementation(Libs.junit)
