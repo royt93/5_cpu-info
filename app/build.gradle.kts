@@ -21,8 +21,8 @@ android {
         minSdk = 23
         //noinspection EditedTargetSdkVersion
         targetSdk = 35
-        versionCode = 20250509
-        versionName = "2025.05.09"
+        versionCode = 20250526
+        versionName = "2025.05.26"
 
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled = true
@@ -198,6 +198,7 @@ dependencies {
     implementation("io.coil-kt:coil-compose:2.7.0")
 //    implementation("com.applovin:applovin-sdk:13.1.0")
     implementation("com.google.android.gms:play-services-ads:23.6.0")
+//    implementation("com.google.ads.mediation:applovin:13.2.0.1")
     debugImplementation("com.squareup.leakcanary:leakcanary-android:2.14")
 
 //    testImplementation(Libs.junit)
