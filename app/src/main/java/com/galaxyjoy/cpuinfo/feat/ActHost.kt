@@ -63,8 +63,9 @@ class ActHost : BaseActivity() {
         adView = AdMobManager.loadBanner(
             context = this,
             adUnitId = BuildConfig.ADMOB_BANNER_ID,
-            container = binding.flAd,
-            adSize = AdSize.BANNER,
+            container = binding.layoutAdBanner.bannerContainer,
+            tvLabelAd = binding.layoutAdBanner.tvLabelAd,
+            adSize = AdSize.FULL_BANNER,
         )
     }
 
