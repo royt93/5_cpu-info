@@ -75,7 +75,6 @@ fun ApplicationsScreen(
     onNativeLibsClicked: (nativeLibraryDir: String) -> Unit,
     onSystemAppsSwitched: (enabled: Boolean) -> Unit,
     onOpenPlayStore: (packageName: String) -> Unit = {},
-    onExtractApk: (packageName: String) -> Unit = {},
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -126,13 +125,7 @@ fun ApplicationsScreen(
                 onAppSettingsClicked = onAppSettingsClicked,
                 onNativeLibsClicked = onNativeLibsClicked,
                 onOpenPlayStore = onOpenPlayStore,
-                onExtractApk = onExtractApk,
             )
-
-            // Loading dialog for APK extraction
-            if (uiState.isExtractingApk) {
-                LoadingDialog(message = "Extracting APK...")
-            }
             PullRefreshIndicator(
                 refreshing = uiState.isLoading,
                 state = pullRefreshState,
@@ -196,7 +189,6 @@ private fun ApplicationsList(
     onAppSettingsClicked: (id: String) -> Unit,
     onNativeLibsClicked: (nativeLibraryDir: String) -> Unit,
     onOpenPlayStore: (packageName: String) -> Unit = {},
-    onExtractApk: (packageName: String) -> Unit = {},
 ) {
     val listState = rememberLazyListState()
     LazyColumn(
@@ -223,7 +215,6 @@ private fun ApplicationsList(
                 onAppUninstallClicked = onAppUninstallClicked,
                 onAppSettingsClicked = onAppSettingsClicked,
                 onOpenPlayStore = onOpenPlayStore,
-                onExtractApk = onExtractApk,
             )
 
             if (index < appList.lastIndex) {
@@ -245,7 +236,6 @@ private fun ApplicationItem(
     onAppUninstallClicked: (packageName: String) -> Unit,
     onAppSettingsClicked: (packageName: String) -> Unit,
     onOpenPlayStore: (packageName: String) -> Unit,
-    onExtractApk: (packageName: String) -> Unit,
 ) {
 
     Row(
@@ -319,10 +309,6 @@ private fun ApplicationItem(
             onOpenPlayStore = {
                 onBottomSheetDismiss()
                 onOpenPlayStore(appData.packageName)
-            },
-            onExtractApk = {
-                onBottomSheetDismiss()
-                onExtractApk(appData.packageName)
             }
         )
     }
@@ -337,7 +323,6 @@ private fun AppActionsBottomSheet(
     onSettings: () -> Unit,
     onUninstall: () -> Unit,
     onOpenPlayStore: () -> Unit,
-    onExtractApk: () -> Unit,
 ) {
     val sheetState = rememberModalBottomSheetState()
 
@@ -423,26 +408,6 @@ private fun AppActionsBottomSheet(
                 Spacer(modifier = Modifier.width(16.dp))
                 Text(
                     text = "View in Play Store",
-                    style = MaterialTheme.typography.bodyLarge
-                )
-            }
-
-            // Extract APK option
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable(onClick = onExtractApk)
-                    .padding(horizontal = 16.dp, vertical = 16.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_android),
-                    contentDescription = "Extract APK",
-                    modifier = Modifier.size(24.dp)
-                )
-                Spacer(modifier = Modifier.width(16.dp))
-                Text(
-                    text = "Extract APK",
                     style = MaterialTheme.typography.bodyLarge
                 )
             }

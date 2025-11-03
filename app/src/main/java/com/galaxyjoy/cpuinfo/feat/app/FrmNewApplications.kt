@@ -1,14 +1,11 @@
 package com.galaxyjoy.cpuinfo.feat.app
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.content.pm.PackageManager
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.view.LayoutInflater
@@ -18,47 +15,24 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.galaxyjoy.cpuinfo.R
 import com.galaxyjoy.cpuinfo.ui.theme.CpuInfoTheme
-import com.galaxyjoy.cpuinfo.util.ApkExtractor
 import com.galaxyjoy.cpuinfo.util.Utils
 import com.galaxyjoy.cpuinfo.util.uninstallApp
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class FrmNewApplications : Fragment() {
 
     private val viewModel: VMNewApplications by viewModels()
-
-    @Inject
-    lateinit var apkExtractor: ApkExtractor
-
-    private var pendingExtractPackageName: String? = null
-
-    private val storagePermissionLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { isGranted ->
-        if (isGranted) {
-            pendingExtractPackageName?.let { packageName ->
-                viewModel.onExtractApk(packageName)
-                pendingExtractPackageName = null
-            }
-        } else {
-            Toast.makeText(requireContext(), "Storage permission denied", Toast.LENGTH_SHORT).show()
-            pendingExtractPackageName = null
-        }
-    }
 
     private val uninstallReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
@@ -93,7 +67,6 @@ class FrmNewApplications : Fragment() {
                         onNativeLibsClicked = viewModel::onNativeLibsClicked,
                         onSystemAppsSwitched = viewModel::onSystemAppsSwitched,
                         onOpenPlayStore = viewModel::onOpenPlayStore,
-                        onExtractApk = ::onExtractApkWithPermissionCheck,
                     )
                 }
             }
@@ -163,27 +136,6 @@ class FrmNewApplications : Fragment() {
                 }
             }
 
-            is VMNewApplications.Event.ApkExtracted -> {
-                Toast.makeText(
-                    requireContext(),
-                    "APK saved to Downloads/CPUInfo_APKs/${event.file.name}",
-                    Toast.LENGTH_LONG
-                ).show()
-
-                // Show dialog to share APK
-                MaterialAlertDialogBuilder(requireContext())
-                    .setTitle("APK Extracted")
-                    .setMessage("${event.appName} APK has been extracted successfully.")
-                    .setPositiveButton("Share") { dialog, _ ->
-                        apkExtractor.shareApk(event.file)
-                        dialog.dismiss()
-                    }
-                    .setNegativeButton("OK") { dialog, _ ->
-                        dialog.dismiss()
-                    }
-                    .show()
-            }
-
             is VMNewApplications.Event.ShowNativeLibraries -> {
                 val dialogLayout = LayoutInflater.from(context)
                     .inflate(R.layout.dlg_native_libs, null)
@@ -204,30 +156,6 @@ class FrmNewApplications : Fragment() {
                     .setView(dialogLayout)
                     .create()
                     .show()
-            }
-        }
-    }
-
-    private fun onExtractApkWithPermissionCheck(packageName: String) {
-        // Android 10+ doesn't need storage permission for Downloads folder
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            viewModel.onExtractApk(packageName)
-            return
-        }
-
-        // Android < 10 needs WRITE_EXTERNAL_STORAGE
-        when {
-            ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-            ) == PackageManager.PERMISSION_GRANTED -> {
-                // Permission already granted
-                viewModel.onExtractApk(packageName)
-            }
-            else -> {
-                // Request permission
-                pendingExtractPackageName = packageName
-                storagePermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
             }
         }
     }

@@ -85,27 +85,6 @@
         app:iconTint="@android:color/black" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnShare"
-        style="@style/Widget.Material3.Button.TextButton"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:gravity="start|center_vertical"
-        android:insetTop="0dp"
-        android:insetBottom="0dp"
-        android:paddingStart="24dp"
-        android:paddingEnd="24dp"
-        android:text="@string/share_apk"
-        android:textAlignment="viewStart"
-        android:textAllCaps="false"
-        android:textColor="@android:color/black"
-        android:textSize="16sp"
-        app:icon="@android:drawable/ic_menu_share"
-        app:iconGravity="start"
-        app:iconPadding="16dp"
-        app:iconSize="24dp"
-        app:iconTint="@android:color/black" />
-
-    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnUninstall"
         style="@style/Widget.Material3.Button.TextButton"
         android:layout_width="match_parent"
