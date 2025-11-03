@@ -8,6 +8,7 @@ import com.galaxyjoy.cpuinfo.domain.model.ExtendedApplicationData
 import com.galaxyjoy.cpuinfo.domain.model.sortOrderFromBoolean
 import com.galaxyjoy.cpuinfo.domain.observable.ObservableApplicationsData
 import com.galaxyjoy.cpuinfo.domain.result.InteractorGetPackageName
+import com.galaxyjoy.cpuinfo.util.ApkExtractor
 import com.galaxyjoy.cpuinfo.util.SingleLiveEvent
 import com.galaxyjoy.cpuinfo.util.wrapper.MyResult
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,6 +28,7 @@ import javax.inject.Inject
 class VMNewApplications @Inject constructor(
     private val observableApplicationsData: ObservableApplicationsData,
     private val interactorGetPackageName: InteractorGetPackageName,
+    private val apkExtractor: ApkExtractor,
 ) : ViewModel() {
 
     private val _uiStateFlow = MutableStateFlow(UiState())
@@ -105,6 +107,27 @@ class VMNewApplications @Inject constructor(
         onRefreshApplications()
     }
 
+    fun onOpenPlayStore(packageName: String) {
+        _events.value = Event.OpenPlayStore(packageName)
+    }
+
+    fun onExtractApk(packageName: String) {
+        viewModelScope.launch {
+            _uiStateFlow.update { it.copy(isExtractingApk = true) }
+
+            when (val result = apkExtractor.extractApk(packageName)) {
+                is ApkExtractor.Result.Success -> {
+                    _events.value = Event.ApkExtracted(result.file, result.appName)
+                }
+                is ApkExtractor.Result.Error -> {
+                    _uiStateFlow.update { it.copy(snackbarMessage = R.string.app_open) } // TODO: Add proper error message
+                }
+            }
+
+            _uiStateFlow.update { it.copy(isExtractingApk = false) }
+        }
+    }
+
     @Suppress("unused")
     fun onSortOrderChange(isAscending: Boolean) {
         _uiStateFlow.update { it.copy(isSortAscending = isAscending) }
@@ -129,10 +152,13 @@ class VMNewApplications @Inject constructor(
         data class OpenAppSettings(val packageName: String) : Event
         data class UninstallApp(val packageName: String) : Event
         data class ShowNativeLibraries(val nativeLibs: List<String>) : Event
+        data class OpenPlayStore(val packageName: String) : Event
+        data class ApkExtracted(val file: File, val appName: String) : Event
     }
 
     data class UiState(
         val isLoading: Boolean = false,
+        val isExtractingApk: Boolean = false,
         val withSystemApps: Boolean = false,
         val isSortAscending: Boolean = true,
         val applications: ImmutableList<ExtendedApplicationData> = persistentListOf(),

@@ -2,29 +2,36 @@ package com.galaxyjoy.cpuinfo.feat.app
 
 import android.content.res.Configuration
 import android.net.Uri
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -67,6 +74,8 @@ fun ApplicationsScreen(
     onAppSettingsClicked: (id: String) -> Unit,
     onNativeLibsClicked: (nativeLibraryDir: String) -> Unit,
     onSystemAppsSwitched: (enabled: Boolean) -> Unit,
+    onOpenPlayStore: (packageName: String) -> Unit = {},
+    onExtractApk: (packageName: String) -> Unit = {},
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -116,7 +125,14 @@ fun ApplicationsScreen(
                 onAppUninstallClicked = onAppUninstallClicked,
                 onAppSettingsClicked = onAppSettingsClicked,
                 onNativeLibsClicked = onNativeLibsClicked,
+                onOpenPlayStore = onOpenPlayStore,
+                onExtractApk = onExtractApk,
             )
+
+            // Loading dialog for APK extraction
+            if (uiState.isExtractingApk) {
+                LoadingDialog(message = "Extracting APK...")
+            }
             PullRefreshIndicator(
                 refreshing = uiState.isLoading,
                 state = pullRefreshState,
@@ -179,6 +195,8 @@ private fun ApplicationsList(
     onAppUninstallClicked: (id: String) -> Unit,
     onAppSettingsClicked: (id: String) -> Unit,
     onNativeLibsClicked: (nativeLibraryDir: String) -> Unit,
+    onOpenPlayStore: (packageName: String) -> Unit = {},
+    onExtractApk: (packageName: String) -> Unit = {},
 ) {
     val listState = rememberLazyListState()
     LazyColumn(
@@ -190,44 +208,24 @@ private fun ApplicationsList(
             items = appList,
             key = { _, item -> item.packageName }
         ) { index, item ->
-            DraggableBox(
-                isRevealed = revealedCardId == item.packageName,
-                onExpand = { onCardExpanded(item.packageName) },
-                onCollapse = { onCardCollapsed(item.packageName) },
-                actionRow = {
-                    Row {
-                        IconButton(
-                            modifier = Modifier.size(rowActionIconSize),
-                            onClick = { onAppSettingsClicked(item.packageName) },
-                            content = {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.ic_settings),
-                                    tint = MaterialTheme.colorScheme.onBackground,
-                                    contentDescription = stringResource(id = R.string.settings),
-                                )
-                            }
-                        )
-                        IconButton(
-                            modifier = Modifier.size(56.dp),
-                            onClick = { onAppUninstallClicked(item.packageName) },
-                            content = {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.ic_thrash),
-                                    tint = MaterialTheme.colorScheme.onBackground,
-                                    contentDescription = null,
-                                )
-                            }
-                        )
-                    }
+            var showBottomSheetForItem by remember { mutableStateOf(false) }
+
+            ApplicationItem(
+                appData = item,
+                onAppClicked = onAppClicked,
+                onLongPress = {
+                    timber.log.Timber.d("App long press: ${item.packageName}")
+                    showBottomSheetForItem = true
                 },
-                content = {
-                    ApplicationItem(
-                        appData = item,
-                        onAppClicked = onAppClicked,
-                        onNativeLibsClicked = onNativeLibsClicked,
-                    )
-                }
+                onNativeLibsClicked = onNativeLibsClicked,
+                showBottomSheet = showBottomSheetForItem,
+                onBottomSheetDismiss = { showBottomSheetForItem = false },
+                onAppUninstallClicked = onAppUninstallClicked,
+                onAppSettingsClicked = onAppSettingsClicked,
+                onOpenPlayStore = onOpenPlayStore,
+                onExtractApk = onExtractApk,
             )
+
             if (index < appList.lastIndex) {
                 Divider()
             }
@@ -235,18 +233,36 @@ private fun ApplicationsList(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun ApplicationItem(
     appData: ExtendedApplicationData,
     onAppClicked: (packageName: String) -> Unit,
+    onLongPress: () -> Unit,
     onNativeLibsClicked: (nativeLibraryDir: String) -> Unit,
+    showBottomSheet: Boolean,
+    onBottomSheetDismiss: () -> Unit,
+    onAppUninstallClicked: (packageName: String) -> Unit,
+    onAppSettingsClicked: (packageName: String) -> Unit,
+    onOpenPlayStore: (packageName: String) -> Unit,
+    onExtractApk: (packageName: String) -> Unit,
 ) {
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
             .background(color = MaterialTheme.colorScheme.background)
-            .clickable(onClick = { onAppClicked(appData.packageName) })
+            .combinedClickable(
+                onClick = {
+                    timber.log.Timber.d("App clicked: ${appData.packageName}")
+                    onAppClicked(appData.packageName)
+                },
+                onLongClick = {
+                    timber.log.Timber.d("App long clicked: ${appData.packageName}")
+                    onLongPress()
+                }
+            )
             .padding(spacingSmall),
     ) {
         AsyncImage(
@@ -283,6 +299,184 @@ private fun ApplicationItem(
                     .requiredSize(40.dp)
                     .clickable { appData.nativeLibraryDir?.let { onNativeLibsClicked(it) } },
             )
+        }
+    }
+
+    // Bottom Sheet Dialog
+    if (showBottomSheet) {
+        AppActionsBottomSheet(
+            appName = appData.name,
+            packageName = appData.packageName,
+            onDismiss = onBottomSheetDismiss,
+            onSettings = {
+                onBottomSheetDismiss()
+                onAppSettingsClicked(appData.packageName)
+            },
+            onUninstall = {
+                onBottomSheetDismiss()
+                onAppUninstallClicked(appData.packageName)
+            },
+            onOpenPlayStore = {
+                onBottomSheetDismiss()
+                onOpenPlayStore(appData.packageName)
+            },
+            onExtractApk = {
+                onBottomSheetDismiss()
+                onExtractApk(appData.packageName)
+            }
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun AppActionsBottomSheet(
+    appName: String,
+    packageName: String,
+    onDismiss: () -> Unit,
+    onSettings: () -> Unit,
+    onUninstall: () -> Unit,
+    onOpenPlayStore: () -> Unit,
+    onExtractApk: () -> Unit,
+) {
+    val sheetState = rememberModalBottomSheetState()
+
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        sheetState = sheetState,
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 32.dp)
+        ) {
+            // Header
+            Text(
+                text = appName,
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+            )
+            Text(
+                text = packageName,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Settings option
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable(onClick = onSettings)
+                    .padding(horizontal = 16.dp, vertical = 16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_settings),
+                    contentDescription = "Settings",
+                    modifier = Modifier.size(24.dp)
+                )
+                Spacer(modifier = Modifier.width(16.dp))
+                Text(
+                    text = "App Settings",
+                    style = MaterialTheme.typography.bodyLarge
+                )
+            }
+
+            // Uninstall option
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable(onClick = onUninstall)
+                    .padding(horizontal = 16.dp, vertical = 16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = "Uninstall",
+                    tint = MaterialTheme.colorScheme.error,
+                    modifier = Modifier.size(24.dp)
+                )
+                Spacer(modifier = Modifier.width(16.dp))
+                Text(
+                    text = "Uninstall",
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.error
+                )
+            }
+
+            // Play Store option
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable(onClick = onOpenPlayStore)
+                    .padding(horizontal = 16.dp, vertical = 16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.Default.ShoppingCart,
+                    contentDescription = "View in Play Store",
+                    modifier = Modifier.size(24.dp)
+                )
+                Spacer(modifier = Modifier.width(16.dp))
+                Text(
+                    text = "View in Play Store",
+                    style = MaterialTheme.typography.bodyLarge
+                )
+            }
+
+            // Extract APK option
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable(onClick = onExtractApk)
+                    .padding(horizontal = 16.dp, vertical = 16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_android),
+                    contentDescription = "Extract APK",
+                    modifier = Modifier.size(24.dp)
+                )
+                Spacer(modifier = Modifier.width(16.dp))
+                Text(
+                    text = "Extract APK",
+                    style = MaterialTheme.typography.bodyLarge
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun LoadingDialog(message: String) {
+    androidx.compose.ui.window.Dialog(
+        onDismissRequest = { /* Block dismiss */ },
+        properties = androidx.compose.ui.window.DialogProperties(
+            dismissOnBackPress = false,
+            dismissOnClickOutside = false
+        )
+    ) {
+        androidx.compose.material3.Surface(
+            shape = MaterialTheme.shapes.medium,
+            color = MaterialTheme.colorScheme.surface,
+            tonalElevation = 8.dp
+        ) {
+            Row(
+                modifier = Modifier.padding(24.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                androidx.compose.material3.CircularProgressIndicator(
+                    modifier = Modifier.size(32.dp)
+                )
+                Spacer(modifier = Modifier.width(16.dp))
+                Text(
+                    text = message,
+                    style = MaterialTheme.typography.bodyLarge
+                )
+            }
         }
     }
 }

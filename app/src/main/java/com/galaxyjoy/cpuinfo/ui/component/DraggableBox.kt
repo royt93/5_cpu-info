@@ -3,6 +3,7 @@ package com.galaxyjoy.cpuinfo.ui.component
 import android.annotation.SuppressLint
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
@@ -28,6 +29,7 @@ fun DraggableBox(
     onCollapse: () -> Unit,
     actionRow: @Composable () -> Unit,
     content: @Composable () -> Unit,
+    onLongPress: (() -> Unit)? = null,
 ) {
     var offsetX by remember { mutableStateOf(0f) }
     var actionRowOffset by remember { mutableStateOf(0) }
@@ -73,7 +75,16 @@ fun DraggableBox(
                         if (change.positionChange() != Offset.Zero) change.consume()
                         offsetX = newValue.x
                     }
-                },
+                }
+                .then(
+                    if (onLongPress != null) {
+                        Modifier.pointerInput(Unit) {
+                            detectTapGestures(
+                                onLongPress = { onLongPress() }
+                            )
+                        }
+                    } else Modifier
+                ),
         ) {
             content()
         }

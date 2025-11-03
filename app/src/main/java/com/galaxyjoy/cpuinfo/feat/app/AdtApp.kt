@@ -84,6 +84,15 @@ class AdtApp(
                     appClickListener.appOpenClicked(pos)
                 }
             }
+            mainContainer.setOnLongClickListener {
+                val pos = bindingAdapterPosition
+                if (pos != RecyclerView.NO_POSITION) {
+                    appClickListener.appLongClicked(pos)
+                    true
+                } else {
+                    false
+                }
+            }
             settingsV.setOnClickListener {
                 val pos = bindingAdapterPosition
                 if (pos != RecyclerView.NO_POSITION) {
@@ -116,5 +125,6 @@ class AdtApp(
         fun appSettingsClicked(position: Int)
         fun appUninstallClicked(position: Int)
         fun appNativeLibsClicked(nativeDir: String)
+        fun appLongClicked(position: Int)
     }
 }

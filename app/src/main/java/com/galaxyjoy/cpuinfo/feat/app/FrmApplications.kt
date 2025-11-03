@@ -16,9 +16,11 @@ import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.galaxyjoy.cpuinfo.R
+import com.galaxyjoy.cpuinfo.databinding.DlgAppActionsBottomSheetBinding
 import com.galaxyjoy.cpuinfo.databinding.FrmApplicationsBinding
 import com.galaxyjoy.cpuinfo.ext.openBrowserPolicy
 import com.galaxyjoy.cpuinfo.feat.infor.base.BaseFrm
@@ -227,6 +229,150 @@ class FrmApplications : BaseFrm<FrmApplicationsBinding>(
         builder.setView(dialogLayout)
         val alert = builder.create()
         alert.show()
+    }
+
+    /**
+     * Show bottom sheet with app actions when long clicked
+     */
+    override fun appLongClicked(position: Int) {
+        val appInfo = viewModel.applicationList[position]
+        val bottomSheetDialog = BottomSheetDialog(requireContext())
+        val binding = DlgAppActionsBottomSheetBinding.inflate(layoutInflater)
+
+        binding.tvAppName.text = appInfo.name
+
+        binding.btnOpen.setOnClickListener {
+            bottomSheetDialog.dismiss()
+            appOpenClicked(position)
+        }
+
+        binding.btnPlayStore.setOnClickListener {
+            bottomSheetDialog.dismiss()
+            openInPlayStore(appInfo.packageName)
+        }
+
+        binding.btnSettings.setOnClickListener {
+            bottomSheetDialog.dismiss()
+            appSettingsClicked(position)
+        }
+
+        binding.btnShare.setOnClickListener {
+            bottomSheetDialog.dismiss()
+            shareApk(appInfo)
+        }
+
+        binding.btnUninstall.setOnClickListener {
+            bottomSheetDialog.dismiss()
+            appUninstallClicked(position)
+        }
+
+        bottomSheetDialog.setContentView(binding.root)
+        bottomSheetDialog.show()
+    }
+
+    /**
+     * Open app in Play Store
+     */
+    private fun openInPlayStore(packageName: String) {
+        android.util.Log.d("roy93~", "Opening Play Store for package: $packageName")
+        try {
+            // Try to open Play Store app
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$packageName"))
+            startActivity(intent)
+            android.util.Log.d("roy93~", "Play Store app opened successfully")
+        } catch (e: Exception) {
+            android.util.Log.e("roy93~", "Failed to open Play Store app, trying browser", e)
+            // If Play Store app is not available, open in browser
+            try {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$packageName"))
+                startActivity(intent)
+                android.util.Log.d("roy93~", "Play Store browser opened successfully")
+            } catch (e: Exception) {
+                android.util.Log.e("roy93~", "Failed to open Play Store in browser", e)
+                Snackbar.make(
+                    binding.mainContainer,
+                    "Cannot open Play Store",
+                    Snackbar.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }
+
+    /**
+     * Share APK file by copying to cache first
+     */
+    private fun shareApk(appInfo: ExtendedAppInfo) {
+        android.util.Log.d("roy93~", "Starting shareApk for: ${appInfo.name} (${appInfo.packageName})")
+        android.util.Log.d("roy93~", "Source APK path: ${appInfo.sourceDir}")
+
+        try {
+            val sourceApk = File(appInfo.sourceDir)
+            android.util.Log.d("roy93~", "Source APK exists: ${sourceApk.exists()}")
+            android.util.Log.d("roy93~", "Source APK can read: ${sourceApk.canRead()}")
+            android.util.Log.d("roy93~", "Source APK size: ${sourceApk.length()} bytes")
+
+            if (!sourceApk.exists()) {
+                android.util.Log.e("roy93~", "Source APK file does not exist!")
+                Snackbar.make(
+                    binding.mainContainer,
+                    getString(R.string.app_share_error),
+                    Snackbar.LENGTH_SHORT
+                ).show()
+                return
+            }
+
+            // Copy APK to cache directory
+            val context = requireContext()
+            val cleanName = appInfo.name.replace(Regex("[^a-zA-Z0-9]"), "_")
+            val cacheApkFile = File(context.cacheDir, "${cleanName}.apk")
+
+            android.util.Log.d("roy93~", "Cache APK path: ${cacheApkFile.absolutePath}")
+            android.util.Log.d("roy93~", "Starting copy from source to cache...")
+
+            // Copy file
+            sourceApk.inputStream().use { input ->
+                cacheApkFile.outputStream().use { output ->
+                    val copied = input.copyTo(output)
+                    android.util.Log.d("roy93~", "Copied $copied bytes to cache")
+                }
+            }
+
+            android.util.Log.d("roy93~", "Cache file exists after copy: ${cacheApkFile.exists()}")
+            android.util.Log.d("roy93~", "Cache file size: ${cacheApkFile.length()} bytes")
+
+            // Create content URI using FileProvider from cache
+            val authority = "${context.packageName}.fileprovider"
+            android.util.Log.d("roy93~", "FileProvider authority: $authority")
+
+            val contentUri = androidx.core.content.FileProvider.getUriForFile(
+                context,
+                authority,
+                cacheApkFile
+            )
+
+            android.util.Log.d("roy93~", "Content URI created: $contentUri")
+
+            val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                type = "application/vnd.android.package-archive"
+                putExtra(Intent.EXTRA_STREAM, contentUri)
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            }
+
+            android.util.Log.d("roy93~", "Starting share intent chooser...")
+            startActivity(Intent.createChooser(shareIntent, getString(R.string.share_apk)))
+            android.util.Log.d("roy93~", "Share intent started successfully")
+
+        } catch (e: Exception) {
+            android.util.Log.e("roy93~", "Error sharing APK: ${e.message}", e)
+            android.util.Log.e("roy93~", "Exception type: ${e.javaClass.simpleName}")
+            e.printStackTrace()
+
+            Snackbar.make(
+                binding.mainContainer,
+                getString(R.string.app_share_error),
+                Snackbar.LENGTH_SHORT
+            ).show()
+        }
     }
 
     override fun onDestroy() {
