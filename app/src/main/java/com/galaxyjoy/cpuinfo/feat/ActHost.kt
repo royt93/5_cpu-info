@@ -3,6 +3,8 @@ package com.galaxyjoy.cpuinfo.feat
 import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -13,11 +15,13 @@ import com.galaxyjoy.cpuinfo.R
 import com.galaxyjoy.cpuinfo.databinding.ActHostLayoutBinding
 import com.galaxyjoy.cpuinfo.rateAppInApp
 import com.galaxyjoy.cpuinfo.sdkadbmob.AdMobManager
+import com.galaxyjoy.cpuinfo.util.SystemInfoExporter
 import com.galaxyjoy.cpuinfo.util.runOnApiAbove
 import com.galaxyjoy.cpuinfo.util.setupEdgeToEdge
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 /**
  * Base activity which is a host for whole application.
@@ -27,6 +31,9 @@ class ActHost : BaseActivity() {
 
     private lateinit var navController: NavController
     private lateinit var binding: ActHostLayoutBinding
+
+    @Inject
+    lateinit var systemInfoExporter: SystemInfoExporter
 
     //    private var adView: MaxAdView? = null
     private var adView: AdView? = null
@@ -99,6 +106,21 @@ class ActHost : BaseActivity() {
             binding.toolbar.elevation = 0f
         } else {
             binding.toolbar.elevation = resources.getDimension(R.dimen.elevation_height)
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menuActionShare -> {
+                systemInfoExporter.exportSystemInfo(this)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
