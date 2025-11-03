@@ -1,5 +1,7 @@
 package com.galaxyjoy.cpuinfo.feat.ramtile
 
+import android.app.PendingIntent
+import android.content.Intent
 import android.graphics.drawable.Icon
 import android.os.Build
 import android.service.quicksettings.Tile
@@ -65,17 +67,17 @@ class ServiceRamTile : TileService(), CoroutineScope {
         // Get RAM before cleanup
         val ramBeforeGB = dataProviderRam.getAvailableBytes() / (1024 * 1024 * 1024.0)
 
-        // Show visual feedback
+        // Show visual feedback before collapsing
         qsTile?.apply {
             label = "Cleaning..."
             state = Tile.STATE_UNAVAILABLE
             updateTile()
         }
 
-        // Show toast immediately
-        Toast.makeText(applicationContext, "Cleaning RAM...", Toast.LENGTH_SHORT).show()
-
         launch {
+            // Show toast
+            Toast.makeText(applicationContext, "Cleaning RAM...", Toast.LENGTH_SHORT).show()
+
             // Run RAM cleanup
             withContext(dispatchersProvider.io) {
                 ramCleanupAction(Unit)
@@ -105,6 +107,30 @@ class ServiceRamTile : TileService(), CoroutineScope {
             // Wait then restore normal display
             delay(1500)
             updateTileInfo()
+        }
+
+        // Collapse Quick Settings panel immediately
+        // Use an empty PendingIntent to collapse without starting any activity
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            // Android 14+ (API 34+)
+            val intent = Intent()
+            val pendingIntent = PendingIntent.getActivity(
+                applicationContext,
+                0,
+                intent,
+                PendingIntent.FLAG_IMMUTABLE
+            )
+            startActivityAndCollapse(pendingIntent)
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            // Android 7+ (API 24+)
+            val intent = Intent()
+            val pendingIntent = PendingIntent.getActivity(
+                applicationContext,
+                0,
+                intent,
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            )
+            startActivityAndCollapse(pendingIntent)
         }
     }
 
