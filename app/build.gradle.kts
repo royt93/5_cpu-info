@@ -21,8 +21,8 @@ android {
         minSdk = 23
         //noinspection EditedTargetSdkVersion
         targetSdk = 35
-        versionCode = 20250912
-        versionName = "2025.09.12"
+        versionCode = 20251103
+        versionName = "2025.11.03"
 
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled = true
@@ -78,7 +78,7 @@ android {
 
             signingConfig = signingConfigs.getByName("release")
             isMinifyEnabled = true
-            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
 
