@@ -4,6 +4,7 @@ import android.graphics.drawable.Icon
 import android.os.Build
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.galaxyjoy.cpuinfo.R
 import com.galaxyjoy.cpuinfo.data.provider.DataProviderRam
@@ -60,13 +61,49 @@ class ServiceRamTile : TileService(), CoroutineScope {
 
     override fun onClick() {
         super.onClick()
+
+        // Get RAM before cleanup
+        val ramBeforeGB = dataProviderRam.getAvailableBytes() / (1024 * 1024 * 1024.0)
+
+        // Show visual feedback
+        qsTile?.apply {
+            label = "Cleaning..."
+            state = Tile.STATE_UNAVAILABLE
+            updateTile()
+        }
+
+        // Show toast immediately
+        Toast.makeText(applicationContext, "Cleaning RAM...", Toast.LENGTH_SHORT).show()
+
         launch {
             // Run RAM cleanup
             withContext(dispatchersProvider.io) {
                 ramCleanupAction(Unit)
             }
-            // Update tile immediately after cleanup
-            delay(500)
+            // Wait for cleanup to take effect
+            delay(1000)
+
+            // Get RAM after cleanup
+            val ramAfterGB = dataProviderRam.getAvailableBytes() / (1024 * 1024 * 1024.0)
+            val freedMB = ((ramAfterGB - ramBeforeGB) * 1024).toInt()
+
+            // Show result toast
+            val message = if (freedMB > 0) {
+                "RAM Cleaned! Freed ${freedMB}MB"
+            } else {
+                "RAM Cleaned!"
+            }
+            Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
+
+            // Show success feedback on tile
+            qsTile?.apply {
+                label = "Cleaned!"
+                state = Tile.STATE_ACTIVE
+                updateTile()
+            }
+
+            // Wait then restore normal display
+            delay(1500)
             updateTileInfo()
         }
     }
