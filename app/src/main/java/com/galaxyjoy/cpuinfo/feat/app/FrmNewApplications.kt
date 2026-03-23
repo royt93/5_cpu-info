@@ -40,8 +40,8 @@ class FrmNewApplications : Fragment() {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onStart() {
+        super.onStart()
         registerUninstallBroadcast()
     }
 
@@ -78,9 +78,9 @@ class FrmNewApplications : Fragment() {
         registerObservers()
     }
 
-    override fun onDestroy() {
+    override fun onStop() {
         requireActivity().unregisterReceiver(uninstallReceiver)
-        super.onDestroy()
+        super.onStop()
     }
 
     private fun registerObservers() {

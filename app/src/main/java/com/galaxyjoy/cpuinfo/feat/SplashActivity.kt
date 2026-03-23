@@ -18,6 +18,8 @@ class SplashActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySplashBinding
 
+    private val delayedFinishRunnable = Runnable { finish() }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d("roy93~", "onCreate")
@@ -32,9 +34,13 @@ class SplashActivity : AppCompatActivity() {
         val intent = Intent(this@SplashActivity, ActHost::class.java)
         startActivity(intent)
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-        // Trì hoãn finish để đợi animation hoàn tất
-        window.decorView.postDelayed({
-            finish() // Finish sau animation
-        }, 300) // delay khoảng 300ms (hoặc đúng thời gian của animation)
+        // Delay finish để đợi animation hoàn tất, dùng named Runnable để có thể cancel
+        window.decorView.postDelayed(delayedFinishRunnable, 300)
+    }
+
+    override fun onDestroy() {
+        // Cancel pending runnable để tránh rò rỉ Activity reference
+        window.decorView.removeCallbacks(delayedFinishRunnable)
+        super.onDestroy()
     }
 }

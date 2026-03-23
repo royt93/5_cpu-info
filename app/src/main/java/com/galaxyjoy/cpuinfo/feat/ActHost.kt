@@ -38,6 +38,13 @@ class ActHost : BaseActivity() {
     //    private var adView: MaxAdView? = null
     private var adView: AdView? = null
 
+    private val destinationChangedListener =
+        NavController.OnDestinationChangedListener { _, destination, _ ->
+            setToolbarTitleAndElevation(destination.label.toString())
+//            Log.d("roy93~", "addOnDestinationChangedListener ${destination.label.toString()}")
+            rateAppInApp(BuildConfig.DEBUG)
+        }
+
     override fun onResume() {
         super.onResume()
         adView?.resume()
@@ -82,11 +89,7 @@ class ActHost : BaseActivity() {
         navController =
             (supportFragmentManager.findFragmentById(R.id.navHostFragment) as NavHostFragment)
                 .navController
-        navController.addOnDestinationChangedListener { _, destination, _ ->
-            setToolbarTitleAndElevation(destination.label.toString())
-//            Log.d("roy93~", "addOnDestinationChangedListener ${destination.label.toString()}")
-            rateAppInApp(BuildConfig.DEBUG)
-        }
+        navController.addOnDestinationChangedListener(destinationChangedListener)
         binding.bottomNavigation.apply {
             setupWithNavController(navController)
             setOnItemReselectedListener {
@@ -128,6 +131,7 @@ class ActHost : BaseActivity() {
 //        with(binding) {
 //            flAd.destroyAdBanner(adView)
 //        }
+        navController.removeOnDestinationChangedListener(destinationChangedListener)
         adView?.destroy()
         super.onDestroy()
     }

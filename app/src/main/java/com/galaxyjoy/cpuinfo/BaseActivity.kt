@@ -69,7 +69,8 @@ fun Activity.rateAppInApp(forceRateInApp: Boolean = false) {
 //    if (daysSinceLastReview >= 7) {
         val reviewManager = ReviewManagerFactory.create(this)
         val request = reviewManager.requestReviewFlow()
-        request.addOnCompleteListener { task ->
+        // Truyền Activity làm LifecycleOwner → callback tự động unregister khi Activity bị destroy
+        request.addOnCompleteListener(this) { task ->
             if (task.isSuccessful) {
                 val reviewInfo: ReviewInfo = task.result
                 reviewManager.launchReviewFlow(this, reviewInfo)

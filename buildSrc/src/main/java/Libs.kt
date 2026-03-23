@@ -1,6 +1,6 @@
 object Libs {
 
-    const val androidGradlePlugin = "com.android.tools.build:gradle:8.6.1"
+    const val androidGradlePlugin = "com.android.tools.build:gradle:8.7.3"
 //    const val bus = "org.greenrobot:eventbus:3.3.1"
 //    const val timber = "com.jakewharton.timber:timber:5.0.1"
 //    const val relinker = "com.getkeepsafe.relinker:relinker:1.4.5"
@@ -10,7 +10,7 @@ object Libs {
     object Kotlin {
 //        private const val version = "1.8.22"
 //        const val stdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.22"
-        const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.22"
+        const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.25"
 //        const val immutable = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5"
     }
 
@@ -49,8 +49,8 @@ object Libs {
         }
 
         object Compose {
-            const val compilerVersion = "1.4.8"
-            const val bom = "androidx.compose:compose-bom:2023.06.01"
+            const val compilerVersion = "1.5.15"
+            const val bom = "androidx.compose:compose-bom:2024.06.00"
 //            const val material = "androidx.compose.material:material"
 //            const val material3 = "androidx.compose.material3:material3"
 //            const val animations = "androidx.compose.animation:animation"
@@ -86,11 +86,11 @@ object Libs {
     }
 
     object Hilt {
-//        private const val version = "2.47"
-        const val gradlePlugin = "com.google.dagger:hilt-android-gradle-plugin:2.47"
-//        const val android = "com.google.dagger:hilt-android:2.47"
-//        const val androidCompiler = "com.google.dagger:hilt-android-compiler:2.47"
-        const val androidTesting = "com.google.dagger:hilt-android-testing:2.47"
+//        private const val version = "2.51.1"
+        const val gradlePlugin = "com.google.dagger:hilt-android-gradle-plugin:2.51.1"
+//        const val android = "com.google.dagger:hilt-android:2.51.1"
+//        const val androidCompiler = "com.google.dagger:hilt-android-compiler:2.51.1"
+        const val androidTesting = "com.google.dagger:hilt-android-testing:2.51.1"
     }
 
     object Glide {

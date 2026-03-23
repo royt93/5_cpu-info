@@ -48,8 +48,8 @@ class FrmApplications : BaseFrm<FrmApplicationsBinding>(
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onStart() {
+        super.onStart()
         registerUninstallBroadcast()
     }
 
@@ -293,8 +293,8 @@ class FrmApplications : BaseFrm<FrmApplicationsBinding>(
         }
     }
 
-    override fun onDestroy() {
+    override fun onStop() {
         requireActivity().unregisterReceiver(uninstallReceiver)
-        super.onDestroy()
+        super.onStop()
     }
 }

@@ -5,10 +5,13 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.galaxyjoy.cpuinfo.util.DispatchersProvider
 import com.galaxyjoy.cpuinfo.util.lifecycle.ListLiveData
 import com.galaxyjoy.cpuinfo.util.round1
 import com.galaxyjoy.cpuinfo.util.runOnApiAbove
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
@@ -17,7 +20,8 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class VMSensorsInfo @Inject constructor(
-    private val sensorManager: SensorManager
+    private val sensorManager: SensorManager,
+    private val dispatchersProvider: DispatchersProvider
 ) : ViewModel(), SensorEventListener {
 
     val listLiveData = ListLiveData<Pair<String, String>>()
@@ -30,21 +34,27 @@ class VMSensorsInfo @Inject constructor(
             listLiveData.addAll(sensorList.map { Pair(it.name, " ") })
         }
 
-        // Start register process on new Thread to avoid UI block
-        Thread {
+        // Start register process on IO dispatcher to avoid UI block
+        viewModelScope.launch(dispatchersProvider.io) {
             for (sensor in sensorList) {
                 sensorManager.registerListener(
-                    this, sensor,
+                    this@VMSensorsInfo, sensor,
                     SensorManager.SENSOR_DELAY_NORMAL
                 )
             }
-        }.start()
+        }
     }
 
     fun stopProvidingData() {
-        Thread {
-            sensorManager.unregisterListener(this)
-        }.start()
+        viewModelScope.launch(dispatchersProvider.io) {
+            sensorManager.unregisterListener(this@VMSensorsInfo)
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        // Guarantee sensor unregister even if stopProvidingData() was never called
+        sensorManager.unregisterListener(this)
     }
 
     override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {
