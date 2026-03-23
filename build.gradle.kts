@@ -24,6 +24,17 @@ allprojects {
     repositories {
         google()
         mavenCentral()
+        maven { url = uri("https://jitpack.io") } // AdmobWrapper SDK
+    }
+    configurations.all {
+        resolutionStrategy {
+            force("org.jetbrains.kotlin:kotlin-stdlib:1.9.20")
+            force("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.20")
+            force("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.20")
+            force("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+            force("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+            force("com.google.android.gms:play-services-ads:23.6.0")
+        }
     }
 }
 

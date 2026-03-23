@@ -5,6 +5,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -14,12 +15,10 @@ import com.galaxyjoy.cpuinfo.BuildConfig
 import com.galaxyjoy.cpuinfo.R
 import com.galaxyjoy.cpuinfo.databinding.ActHostLayoutBinding
 import com.galaxyjoy.cpuinfo.rateAppInApp
-import com.galaxyjoy.cpuinfo.sdkadbmob.AdMobManager
 import com.galaxyjoy.cpuinfo.util.SystemInfoExporter
 import com.galaxyjoy.cpuinfo.util.runOnApiAbove
 import com.galaxyjoy.cpuinfo.util.setupEdgeToEdge
-import com.google.android.gms.ads.AdSize
-import com.google.android.gms.ads.AdView
+import com.roy.sdkadbmob.AdManager
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -35,23 +34,21 @@ class ActHost : BaseActivity() {
     @Inject
     lateinit var systemInfoExporter: SystemInfoExporter
 
-    //    private var adView: MaxAdView? = null
-    private var adView: AdView? = null
+    private var adView: View? = null // AdmobWrapper — giữ reference để lifecycle hoạt động đúng
 
     private val destinationChangedListener =
         NavController.OnDestinationChangedListener { _, destination, _ ->
             setToolbarTitleAndElevation(destination.label.toString())
-//            Log.d("roy93~", "addOnDestinationChangedListener ${destination.label.toString()}")
             rateAppInApp(BuildConfig.DEBUG)
         }
 
     override fun onResume() {
         super.onResume()
-        adView?.resume()
+        AdManager.bannerResume(adView)
     }
 
     override fun onPause() {
-        adView?.pause()
+        AdManager.bannerPause(adView)
         super.onPause()
     }
 
@@ -60,27 +57,22 @@ class ActHost : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.act_host_layout)
         setupEdgeToEdge()
-//        enableEdgeToEdge()
         setupNavigation()
         setSupportActionBar(binding.toolbar)
         runOnApiAbove(Build.VERSION_CODES.M) {
-            // Processes cannot be listed above M
             val menu = binding.bottomNavigation.menu
             menu.findItem(R.id.menuProcesses).isVisible = false
         }
 
-//        adView = this.createAdBanner(
-//            logTag = ActHost::class.simpleName,
-//            viewGroup = binding.flAd,
-//            isAdaptiveBanner = true,
-//        )
-        adView = AdMobManager.loadBanner(
-            context = this,
-            adUnitId = BuildConfig.ADMOB_BANNER_ID,
+        // Banner Ad
+        adView = AdManager.loadBanner(
+            context   = this,
             container = binding.layoutAdBanner.bannerContainer,
             tvLabelAd = binding.layoutAdBanner.tvLabelAd,
-            adSize = AdSize.FULL_BANNER,
         )
+
+        // Preload Interstitial ngầm — sẵn sàng cho khi user trigger
+        AdManager.loadInterstitial(this)
     }
 
     override fun onSupportNavigateUp() = navController.navigateUp()
@@ -104,7 +96,6 @@ class ActHost : BaseActivity() {
     @SuppressLint("NewApi")
     private fun setToolbarTitleAndElevation(title: String) {
         binding.toolbar.title = title
-        // binding.toolbar.isVisible = navController.currentDestination?.id != R.id.applications
         if (navController.currentDestination?.id == R.id.menuHardware) {
             binding.toolbar.elevation = 0f
         } else {
@@ -128,11 +119,8 @@ class ActHost : BaseActivity() {
     }
 
     override fun onDestroy() {
-//        with(binding) {
-//            flAd.destroyAdBanner(adView)
-//        }
         navController.removeOnDestinationChangedListener(destinationChangedListener)
-        adView?.destroy()
+        AdManager.bannerDestroy(adView)
         super.onDestroy()
     }
 }

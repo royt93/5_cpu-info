@@ -16,6 +16,7 @@
 
 package com.galaxyjoy.cpuinfo.util.lifecycle
 
+import java.util.ArrayList
 import androidx.lifecycle.MutableLiveData
 
 /**

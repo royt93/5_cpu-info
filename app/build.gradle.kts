@@ -32,6 +32,13 @@ android {
                 arguments += "-DANDROID_STL=c++_static"
             }
         }
+
+        // AppLovin MAX
+        buildConfigField("String", "APPLOVIN_SDK_KEY",     "\"e75FnQfS9XTTqM1Kne69U7PW_MBgAnGQTFvtwVVui6kRPKs5L7ws9twr5IQWwVfzPKZ5pF2IfDa7lguMgGlCyt\"")
+        buildConfigField("String", "APPLOVIN_BANNER_ID",   "\"b568752d68ca93f8\"")
+        buildConfigField("String", "APPLOVIN_INTER_ID",    "\"5ce404d8a94fa941\"")
+        buildConfigField("String", "APPLOVIN_APP_OPEN_ID", "\"8f218722ddc4ff48\"")
+        buildConfigField("String", "APPLOVIN_REWARD_ID",   "\"e460250d026fafa6\"")
     }
 
 //    ndkVersion = "25.1.8937393"
@@ -64,6 +71,7 @@ android {
             buildConfigField("String", "ADMOB_BANNER_ID", "\"ca-app-pub-3940256099942544/6300978111\"")
             buildConfigField("String", "ADMOB_INTERSTITIAL_ID", "\"ca-app-pub-3940256099942544/1033173712\"")
             buildConfigField("String", "ADMOB_APP_OPEN_ID", "\"ca-app-pub-3940256099942544/9257395921\"")
+            buildConfigField("Boolean", "IS_ENABLE_ADMOB", "false") // false = AppLovin MAX
 
             signingConfig = signingConfigs.getByName("debug")
             isMinifyEnabled = false
@@ -75,6 +83,7 @@ android {
             buildConfigField("String", "ADMOB_BANNER_ID", "\"ca-app-pub-3612191981543807/6633406668\"")
             buildConfigField("String", "ADMOB_INTERSTITIAL_ID", "\"ca-app-pub-3612191981543807/5493932422\"")
             buildConfigField("String", "ADMOB_APP_OPEN_ID", "\"ca-app-pub-3612191981543807/5265851653\"")
+            buildConfigField("Boolean", "IS_ENABLE_ADMOB", "false") // false = AppLovin MAX
 
             signingConfig = signingConfigs.getByName("release")
             isMinifyEnabled = true
@@ -198,8 +207,9 @@ dependencies {
     implementation("com.getkeepsafe.relinker:relinker:1.4.5")
     implementation("io.coil-kt:coil-compose:2.7.0")
 //    implementation("com.applovin:applovin-sdk:13.1.0")
-    implementation("com.google.android.gms:play-services-ads:23.6.0")
-    implementation("com.google.ads.mediation:applovin:13.1.0.0")
+//    implementation("com.google.android.gms:play-services-ads:23.6.0")   // replaced by AdmobWrapper
+//    implementation("com.google.ads.mediation:applovin:13.1.0.0")        // replaced by AdmobWrapper
+    implementation("com.github.royt93:AdmobWrapper:1.1.1")               // AdmobWrapper SDK
 //    debugImplementation("com.squareup.leakcanary:leakcanary-android:2.14")
 
 //    testImplementation(Libs.junit)

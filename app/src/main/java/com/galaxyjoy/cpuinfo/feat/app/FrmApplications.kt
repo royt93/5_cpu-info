@@ -19,6 +19,7 @@ import androidx.lifecycle.Lifecycle
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import com.roy.sdkadbmob.AdManager
 import com.galaxyjoy.cpuinfo.R
 import com.galaxyjoy.cpuinfo.databinding.DlgAppActionsBottomSheetBinding
 import com.galaxyjoy.cpuinfo.databinding.FrmApplicationsBinding
@@ -71,7 +72,10 @@ class FrmApplications : BaseFrm<FrmApplicationsBinding>(
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return when (menuItem.itemId) {
                     R.id.menuActionSorting -> {
-                        viewModel.changeAppsSorting()
+                        // Interstitial trước sort — SDK tự throttle, sort luôn chạy sau
+                        AdManager.showInterstitial(requireActivity()) { _ ->
+                            viewModel.changeAppsSorting()
+                        }
                         true
                     }
 
