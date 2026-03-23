@@ -18,11 +18,11 @@ android {
     defaultConfig {
         applicationId = "com.galaxyjoy.cpuinfo"
 
-        minSdk = 23
+        minSdk = 24
         //noinspection EditedTargetSdkVersion
         targetSdk = 35
-        versionCode = 20251115
-        versionName = "2025.11.15"
+        versionCode = 20250323
+        versionName = "2026.03.23"
 
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled = true
