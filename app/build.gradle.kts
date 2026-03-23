@@ -52,10 +52,10 @@ android {
 //            keyPassword = releaseSigningConfig.getProperty(SigningConfig.KEY_PASS)
 //            storePassword = releaseSigningConfig.getProperty(SigningConfig.KEY_PASS)
 
-            storeFile = file("keystore.jks")
-            storePassword = "27072000"
-            keyAlias = "mckimquyen"
-            keyPassword = "27072000"
+            storeFile = file(project.properties["STORE_FILE"] as String)
+            storePassword = project.properties["STORE_PASSWORD"] as String
+            keyAlias = project.properties["KEY_ALIAS"] as String
+            keyPassword = project.properties["KEY_PASSWORD"] as String
         }
     }
 
