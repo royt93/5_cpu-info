@@ -1,5 +1,5 @@
 # 📊 AD SYSTEM — cpu-info
-> **SDK:** `com.github.royt93:AdmobWrapper:1.1.1` | **Cập nhật:** 2026-03-23 | **Status:** ✅ Đã tích hợp
+> **SDK:** `com.github.royt93:AdmobWrapper:1.1.1` | **Cập nhật:** 2026-03-24 | **Status:** ✅ Đã tích hợp hoàn chỉnh
 
 ---
 
@@ -8,6 +8,7 @@
 2. [Touchpoint quảng cáo](#2-touchpoint-quảng-cáo)
 3. [Cơ chế bảo vệ AdSafety (tự động)](#3-cơ-chế-bảo-vệ-adsafety-tự-động)
 4. [Files đã thay đổi](#4-files-đã-thay-đổi)
+5. [Ghi chú kỹ thuật](#5-ghi-chú-kỹ-thuật)
 
 ---
 
@@ -36,32 +37,50 @@
 
 ## 2. TOUCHPOINT QUẢNG CÁO
 
+### Sơ đồ tổng quan
+
 ```
 SplashActivity
-    └── [APP OPEN AD] ← tự động, SDK lo toàn bộ
+    └── [APP OPEN AD] ← tự động, SDK lo toàn bộ (timeout 8s)
 
 ActHost (Main)
     ├── Bottom bar ──────────── [BANNER AD] ← auto loaded & lifecycle managed
+    │                            (onResume/onPause/onDestroy hooks)
     │
-    └── FrmApplications (tab Apps)
-            └── Nút Sort A/Z (action bar) ── [INTERSTITIAL AD] → sort chạy sau
+    └── Preload Interstitial ── loadInterstitial() gọi sẵn trong onCreate
+
+FrmApplications (tab Apps trong ActHost)
+    └── Nút Sort A/Z (action bar) ── [INTERSTITIAL AD] → sort chạy sau callback
 ```
 
-### Chi tiết Interstitial — FrmApplications
+### Touchpoint 1: App Open Ad — SplashActivity
 
-```kotlin
-R.id.menuActionSorting -> {
-    AdManager.showInterstitial(requireActivity()) { _ ->
-        viewModel.changeAppsSorting()   // sort luôn chạy dù có ad hay không
-    }
-    true
-}
-```
+| Thuộc tính | Giá trị |
+|------------|---------|
+| File | `SplashActivity.kt` |
+| Cách gọi | `AdManager.initSplashScreen(this) { goToMain() }` |
+| Auto hiện | Splash khởi động (timeout 8s) & resume từ background |
+| Auto SKIP | Cold start, resume < 5s, session < 10s |
+
+### Touchpoint 2: Banner Ad — ActHost
+
+| Thuộc tính | Giá trị |
+|------------|---------|
+| File | `ActHost.kt` |
+| Layout | `@layout/layout_ad_banner` (include trong `act_host_layout.xml`) |
+| Cách gọi | `AdManager.loadBanner(context, container, tvLabelAd)` |
+| Lifecycle | `bannerResume` / `bannerPause` / `bannerDestroy` — copy đúng 3 override |
+
+### Touchpoint 3: Interstitial Ad — FrmApplications
+
+| Thuộc tính | Giá trị |
+|------------|---------|
+| File | `FrmApplications.kt` |
+| Trigger | Nút Sort A/Z trên action bar |
+| Cách gọi | `AdManager.showInterstitial(requireActivity()) { _ -> viewModel.changeAppsSorting() }` |
+| Preload | `AdManager.loadInterstitial(this)` gọi trong `ActHost.onCreate` |
+
 > SDK tự throttle: min 60s giữa 2 lần, max 6 lần/session.
-
-### App Open Ad — Khi nào hiện
-- **Auto hiện:** Splash khởi động (timeout 8s) & resume từ background
-- **Auto SKIP:** Cold start, resume < 5s, session < 10s
 
 ### Reward Ad
 ❌ Không dùng trong app này.
@@ -90,9 +109,28 @@ SDK tự xử lý, không cần code thêm:
 |------|---------|
 | `build.gradle.kts` (root) | Thêm JitPack repository |
 | `app/build.gradle.kts` | Thêm AppLovin BuildConfig fields + `IS_ENABLE_ADMOB=false` + swap sang `AdmobWrapper:1.1.1` |
-| `AndroidManifest.xml` | Bỏ comment AppLovin SDK key meta-data |
-| `GalaxyApp.kt` | Viết lại init dùng `AdManager` + AppLovin path |
-| `SplashActivity.kt` | Đổi `AdMobManager` → `AdManager` |
-| `ActHost.kt` | Banner dùng `AdManager.loadBanner` + lifecycle hooks + preload inter |
-| `FrmRamInfo.kt` | Interstitial touchpoint tại nút RAM Clean |
+| `AndroidManifest.xml` | AdMob App ID + AppLovin SDK key meta-data |
+| `GalaxyApp.kt` | Init dùng `AdManager.setConfig → earlyInit → AppLovinSdk.init → AdManager.init` |
+| `SplashActivity.kt` | `AdManager.initSplashScreen` cho App Open Ad |
+| `ActHost.kt` | Banner (`loadBanner` + lifecycle hooks) + preload interstitial |
+| `FrmApplications.kt` | `showInterstitial` tại nút Sort A/Z |
+| `Applovin.kt` | Toàn bộ code đã comment out (legacy, không dùng) |
 | `sdkadbmob/AdMobManager.kt` | **ĐÃ XÓA** (thay thế bởi AdmobWrapper SDK) |
+
+---
+
+## 5. GHI CHÚ KỸ THUẬT
+
+### ⚠️ VIP GAID Set chưa truyền vào SDK
+`GalaxyApp.kt` có hàm `getMyVipGAIDSet()` chứa 21 GAID nhưng **chưa truyền vào `AdSdkConfig`**.
+SDK dùng list VIP nội bộ hardcoded (trùng với list trong project), nên hiện tại vẫn hoạt động đúng.
+
+### Luồng khởi tạo
+```
+GalaxyApp.onCreate()
+  → setupAd()
+    → AdManager.setConfig(adConfig)       // 1. Gắn config (Main Thread)
+    → AdManager.earlyInit(this)           // 2. AdSafety session clock
+    → AppLovinSdk.initializeSdk()         // 3. AppLovin SDK init
+      → AdManager.init(this, adConfig)    // 4. GAID fetch + VIP check + auto-preload App Open
+```
