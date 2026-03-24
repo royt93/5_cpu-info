@@ -21,7 +21,7 @@ android {
         minSdk = 24
         //noinspection EditedTargetSdkVersion
         targetSdk = 36
-        versionCode = 20250324
+        versionCode = 20260324
         versionName = "2026.03.24"
 
         vectorDrawables.useSupportLibrary = true
