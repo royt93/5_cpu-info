@@ -5,6 +5,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.galaxyjoy.cpuinfo.R
 import com.galaxyjoy.cpuinfo.feat.infor.android.FrmAndroidInfo
 import com.galaxyjoy.cpuinfo.feat.infor.cpu.FrmCpuInfo
+import com.galaxyjoy.cpuinfo.feat.infor.drm.FrmDrmInfo
 import com.galaxyjoy.cpuinfo.feat.infor.gpu.FrmGpuInfo
 import com.galaxyjoy.cpuinfo.feat.infor.hardware.FrmHardwareInfo
 import com.galaxyjoy.cpuinfo.feat.infor.ram.FrmRamInfo
@@ -27,6 +28,7 @@ class AdtInfoContainerState(fragment: Fragment) : FragmentStateAdapter(fragment)
             ANDROID_POS -> FrmAndroidInfo()
             HARDWARE_POS -> FrmHardwareInfo()
             SENSORS_POS -> FrmSensorsInfo()
+            DRM_POS -> FrmDrmInfo()
             else -> throw IllegalArgumentException("Unknown position for ViewPager2")
         }
 
@@ -41,6 +43,7 @@ class AdtInfoContainerState(fragment: Fragment) : FragmentStateAdapter(fragment)
         ANDROID_POS -> R.string.android
         HARDWARE_POS -> R.string.hardware
         SENSORS_POS -> R.string.sensors
+        DRM_POS -> R.string.drm
         else -> throw IllegalArgumentException("Unknown position for ViewPager2")
     }
 
@@ -53,7 +56,8 @@ class AdtInfoContainerState(fragment: Fragment) : FragmentStateAdapter(fragment)
         private const val ANDROID_POS = 5
         private const val HARDWARE_POS = 6
         private const val SENSORS_POS = 7
+        private const val DRM_POS = 8
 
-        private const val INFO_PAGE_AMOUNT = 8
+        private const val INFO_PAGE_AMOUNT = 9
     }
 }

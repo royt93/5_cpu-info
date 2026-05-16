@@ -16,6 +16,8 @@
     <string name="android">Android</string>
     <string name="hardware">Hardware</string>
     <string name="sensors">Sensors</string>
+    <string name="drm" translatable="false">DRM</string>
+    <string name="media" translatable="false">Media</string>
     <string name="processes">Processes</string>
     <string name="applications">Applications</string>
     <string name="temp">Temperature</string>
