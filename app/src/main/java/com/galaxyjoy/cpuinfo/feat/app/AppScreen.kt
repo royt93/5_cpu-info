@@ -18,7 +18,7 @@ import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -181,10 +181,10 @@ private fun TopBar(
 @Composable
 private fun ApplicationsList(
     appList: List<ExtendedApplicationData>,
-    revealedCardId: String?,
+    @Suppress("UNUSED_PARAMETER") revealedCardId: String?,
     onAppClicked: (packageName: String) -> Unit,
-    onCardExpanded: (id: String) -> Unit,
-    onCardCollapsed: (id: String) -> Unit,
+    @Suppress("UNUSED_PARAMETER") onCardExpanded: (id: String) -> Unit,
+    @Suppress("UNUSED_PARAMETER") onCardCollapsed: (id: String) -> Unit,
     onAppUninstallClicked: (id: String) -> Unit,
     onAppSettingsClicked: (id: String) -> Unit,
     onNativeLibsClicked: (nativeLibraryDir: String) -> Unit,
@@ -218,7 +218,7 @@ private fun ApplicationsList(
             )
 
             if (index < appList.lastIndex) {
-                Divider()
+                HorizontalDivider()
             }
         }
     }

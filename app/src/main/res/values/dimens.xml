@@ -1,6 +1,5 @@
 <resources>
     <dimen name="elevation_height">4dp</dimen>
-    <dimen name="widget_margin">8dp</dimen>
     <dimen name="temp_item_margin">16dp</dimen>
     <dimen name="temp_image_size">60dp</dimen>
 </resources>

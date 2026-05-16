@@ -72,7 +72,7 @@ class DataProviderCpu @Inject constructor() {
             }
         }
         return try {
-            File(CPU_INFO_DIR).listFiles(CpuFilter())!!.size
+            File(CPU_INFO_DIR).listFiles(CpuFilter())?.size ?: 1
         } catch (_: Exception) {
             1
         }

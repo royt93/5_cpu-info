@@ -67,13 +67,13 @@
         </activity>
 
         <!-- AppLovin SDK Key -->
-        <meta-data
-            android:name="applovin.sdk.key"
-            android:value="e75FnQfS9XTTqM1Kne69U7PW_MBgAnGQTFvtwVVui6kRPKs5L7ws9twr5IQWwVfzPKZ5pF2IfDa7lguMgGlCyt" />
+<!--        <meta-data-->
+<!--            android:name="applovin.sdk.key"-->
+<!--            android:value="e75FnQfS9XTTqM1Kne69U7PW_MBgAnGQTFvtwVVui6kRPKs5L7ws9twr5IQWwVfzPKZ5pF2IfDa7lguMgGlCyt" />-->
 
-        <service android:name=".feat.app.ServiceStorageUsage" />
+<!--        <service android:name=".feat.app.ServiceStorageUsage" />-->
 
-        <service android:name=".feat.ramwidget.ServiceRefresh" />
+<!--        <service android:name=".feat.ramwidget.ServiceRefresh" />-->
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -84,19 +84,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-
-        <receiver
-            android:name=".feat.ramwidget.RamUsageWidgetProvider"
-            android:enabled="@bool/belowOreo"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/widget_ram_provider" />
-        </receiver>
 
         <service
             android:name=".feat.cputile.ServiceCpuTile"

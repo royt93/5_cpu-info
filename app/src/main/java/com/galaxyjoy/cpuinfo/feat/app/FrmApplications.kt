@@ -29,7 +29,6 @@ import com.galaxyjoy.cpuinfo.util.DividerItemDecoration
 import com.galaxyjoy.cpuinfo.util.Utils
 import com.galaxyjoy.cpuinfo.util.lifecycle.ListLiveDataObserver
 import com.galaxyjoy.cpuinfo.util.uninstallApp
-import com.galaxyjoy.cpuinfo.util.wrapper.EventObserver
 import dagger.hilt.android.AndroidEntryPoint
 import moreApp
 import rateApp
@@ -105,8 +104,6 @@ class FrmApplications : BaseFrm<FrmApplicationsBinding>(
                 }
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
-
-        initObservables()
     }
 
     private fun setupRecyclerView() {
@@ -123,14 +120,6 @@ class FrmApplications : BaseFrm<FrmApplicationsBinding>(
         }
     }
 
-    /**
-     * Register all fields from [VMApplications] which should be observed
-     */
-    private fun initObservables() {
-        viewModel.shouldStartStorageServiceEvent.observe(viewLifecycleOwner, EventObserver {
-            ServiceStorageUsage.startService(requireContext(), viewModel.applicationList)
-        })
-    }
 
     /**
      * Register broadcast receiver for uninstalling apps

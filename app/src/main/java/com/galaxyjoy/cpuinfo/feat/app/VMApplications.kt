@@ -7,16 +7,12 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import androidx.annotation.VisibleForTesting
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.galaxyjoy.cpuinfo.util.DispatchersProvider
 import com.galaxyjoy.cpuinfo.util.NonNullMutableLiveData
 import com.galaxyjoy.cpuinfo.util.Prefs
 import com.galaxyjoy.cpuinfo.util.lifecycle.ListLiveData
-import com.galaxyjoy.cpuinfo.util.runOnApiBelow
-import com.galaxyjoy.cpuinfo.util.wrapper.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Single
@@ -24,8 +20,6 @@ import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
 import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
@@ -49,15 +43,10 @@ class VMApplications @Inject constructor(
     val isLoading = NonNullMutableLiveData(false)
     val applicationList = ListLiveData<ExtendedAppInfo>()
 
-    private val _shouldStartStorageServiceEvent = MutableLiveData<Event<Unit>>()
-    val shouldStartStorageServiceEvent: LiveData<Event<Unit>>
-        get() = _shouldStartStorageServiceEvent
-
     private var isSortingAsc = prefs.get(SORTING_APPS_KEY, true)
     private var refreshingDisposable: Disposable? = null
 
     init {
-        EventBus.getDefault().register(this)
         refreshApplicationsList()
     }
 
@@ -71,9 +60,6 @@ class VMApplications @Inject constructor(
                 .doFinally { isLoading.value = false }
                 .subscribe({ appList ->
                     applicationList.replace(appList)
-                    runOnApiBelow(Build.VERSION_CODES.O) {
-                        _shouldStartStorageServiceEvent.value = Event(Unit)
-                    }
                 }, Timber::e)
         }
     }
@@ -142,36 +128,6 @@ class VMApplications @Inject constructor(
         }
     }
 
-    /**
-     * Update package size whit specific package name using coroutine
-     */
-    @Suppress("unused")
-    @Subscribe
-    fun onUpdatePackageSizeEvent(event: ServiceStorageUsage.UpdatePackageSizeEvent) {
-        viewModelScope.launch {
-            val newAppPair = withContext(dispatchersProvider.io) {
-                getUpdatedApp(event)
-            }
-            if (newAppPair.first != -1) {
-                applicationList[newAppPair.first] = newAppPair.second!!
-            }
-        }
-    }
-
-    /**
-     * @return updated [ExtendedAppInfo] instance with corresponding index
-     */
-    private fun getUpdatedApp(event: ServiceStorageUsage.UpdatePackageSizeEvent)
-            : Pair<Int, ExtendedAppInfo?> {
-        val app = applicationList.find { it.packageName == event.packageName }
-        if (app != null) {
-            val index = applicationList.indexOf(app)
-            app.appSize = event.size
-            return Pair(index, app)
-        }
-        return Pair(-1, null)
-    }
-
     private fun getAppIconUri(packageName: String): Uri {
         return Uri.Builder()
             .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
@@ -198,6 +154,5 @@ class VMApplications @Inject constructor(
     override fun onCleared() {
         super.onCleared()
         refreshingDisposable?.dispose()
-        EventBus.getDefault().unregister(this)
     }
 }

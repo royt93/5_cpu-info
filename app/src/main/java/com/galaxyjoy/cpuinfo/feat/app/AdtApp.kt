@@ -8,10 +8,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.galaxyjoy.cpuinfo.R
 import com.galaxyjoy.cpuinfo.util.Utils
-import com.galaxyjoy.cpuinfo.util.glide.GlideApp
 import com.galaxyjoy.cpuinfo.util.runOnApiBelow
 import com.galaxyjoy.cpuinfo.widget.swiperv.SwipeHorizontalMenuLayout
 
@@ -60,7 +60,7 @@ class AdtApp(
 
         @SuppressLint("SetTextI18n")
         fun bind(app: ExtendedAppInfo, appClickListener: ItemClickListener) {
-            GlideApp.with(iconIv.context)
+            Glide.with(iconIv.context)
                 .load(app.appIconUri)
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .fitCenter()

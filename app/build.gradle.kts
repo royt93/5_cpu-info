@@ -1,9 +1,10 @@
 plugins {
-    id("com.android.application")
-    id("kotlin-android")
-    id("kotlin-parcelize")
-    id("kotlin-kapt")
-    id("dagger.hilt.android.plugin")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt)
 }
 
 kapt {
@@ -128,7 +129,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = Libs.AndroidX.Compose.compilerVersion
+        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
     }
 
     flavorDimensions.add("type")
@@ -163,71 +164,61 @@ android {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.25")
-    implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5")
-    implementation("androidx.core:core-ktx:1.15.0")
-    implementation("androidx.activity:activity-compose:1.10.0")
-    implementation("androidx.fragment:fragment-ktx:1.8.6")
-    implementation("androidx.appcompat:appcompat:1.7.0")
-    implementation("androidx.preference:preference-ktx:1.2.1")
-    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.2.0")
-    implementation("androidx.multidex:multidex:2.0.1")
-    implementation("androidx.viewpager2:viewpager2:1.1.0")
-    implementation("androidx.datastore:datastore-preferences:1.1.2")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
-    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.7")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.7")
-    implementation("androidx.lifecycle:lifecycle-common-java8:2.8.7")
-    implementation(platform(Libs.AndroidX.Compose.bom))
-    implementation("androidx.compose.material:material")
-    implementation("androidx.compose.material3:material3")
-    implementation("androidx.compose.animation:animation")
-    implementation("androidx.compose.ui:ui-tooling-preview")
-//    debugImplementation("androidx.compose.ui:ui-tooling")
-    implementation("androidx.navigation:navigation-fragment-ktx:2.8.7")
-    implementation("androidx.navigation:navigation-ui-ktx:2.8.7")
-    implementation("com.google.android.material:material:1.12.0")
-    implementation("com.google.code.gson:gson:2.11.0")
-    implementation("io.reactivex.rxjava3:rxjava:3.1.6")
-    implementation("io.reactivex.rxjava3:rxandroid:3.0.2")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0")
-    implementation("com.google.dagger:hilt-android:2.51.1")
-    kapt("com.google.dagger:hilt-android-compiler:2.51.1")
-    implementation("com.github.bumptech.glide:glide:4.16.0")
-    //noinspection KaptUsageInsteadOfKsp
-    kapt("com.github.bumptech.glide:compiler:4.16.0")
-    implementation("com.airbnb.android:epoxy:5.1.3")
-    implementation("com.airbnb.android:epoxy-databinding:5.1.3")
-    //noinspection KaptUsageInsteadOfKsp
-    kapt("com.airbnb.android:epoxy-processor:5.1.3")
-    implementation("org.greenrobot:eventbus:3.3.1")
-    implementation("com.jakewharton.timber:timber:5.0.1")
-    implementation("com.getkeepsafe.relinker:relinker:1.4.5")
-    implementation("io.coil-kt:coil-compose:2.7.0")
-//    implementation("com.applovin:applovin-sdk:13.1.0")
-//    implementation("com.google.android.gms:play-services-ads:23.6.0")   // replaced by AdmobWrapper
-//    implementation("com.google.ads.mediation:applovin:13.1.0.0")        // replaced by AdmobWrapper
-    implementation("com.github.royt93:AdmobWrapper:1.1.1")               // AdmobWrapper SDK
-//    debugImplementation("com.squareup.leakcanary:leakcanary-android:2.14")
+    implementation(libs.kotlin.stdlib.jdk7)
+    implementation(libs.kotlinx.collections.immutable)
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.android)
 
-//    testImplementation(Libs.junit)
-//    testImplementation(Libs.AndroidX.Test.core)
-//    testImplementation(Libs.AndroidX.Test.archCoreTesting)
-//    testImplementation(Libs.Mockito.core)
-//    testImplementation(Libs.Mockito.kotlin)
-//    testImplementation(Libs.Hilt.androidTesting)
-//    testImplementation(kotlin("test"))
-//    kaptTest(Libs.Hilt.androidCompiler)
-//    androidTestImplementation(Libs.AndroidX.Test.runner)
-//    androidTestImplementation(Libs.AndroidX.Test.rules)
-//    androidTestImplementation(Libs.AndroidX.Test.jUnitExt)
-//    androidTestImplementation(Libs.AndroidX.Test.Espresso.core)
-//    androidTestImplementation(Libs.AndroidX.Test.Espresso.contrib)
-//    androidTestImplementation(Libs.Hilt.androidTesting)
-//    kaptAndroidTest(Libs.Hilt.androidCompiler)
-//    androidTestUtil(Libs.AndroidX.Test.orchestrator)
-    implementation("com.google.android.play:review:2.0.2")
-    implementation("com.google.android.play:review-ktx:2.0.2")
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.fragment.ktx)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.preference.ktx)
+    implementation(libs.androidx.swiperefreshlayout)
+    implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.multidex)
+    implementation(libs.androidx.viewpager2)
+    implementation(libs.androidx.datastore.preferences)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.androidx.lifecycle.common.java8)
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
+
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.material)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.animation)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+
+    implementation(libs.google.material)
+    implementation(libs.google.gson)
+    implementation(libs.google.play.review)
+    implementation(libs.google.play.review.ktx)
+
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.android.compiler)
+
+    implementation(libs.glide)
+    ksp(libs.glide.ksp)
+
+    implementation(libs.epoxy)
+    implementation(libs.epoxy.databinding)
+    //noinspection KaptUsageInsteadOfKsp
+    kapt(libs.epoxy.processor)
+
+    implementation(libs.rxjava)
+    implementation(libs.rxandroid)
+
+    implementation(libs.timber)
+    implementation(libs.relinker)
+    implementation(libs.coil.compose)
+
+    implementation(libs.admob.wrapper) // replaces direct applovin-sdk + play-services-ads + ads-mediation
+
+    testImplementation(libs.junit)
+    testImplementation(libs.mockk)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(kotlin("test"))
 }

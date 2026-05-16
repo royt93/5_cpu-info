@@ -297,7 +297,7 @@ class VMHardwareInfo @Inject constructor(
         }
 
         return try {
-            File("/proc/asound/").listFiles(AudioFilter())!!.size
+            File("/proc/asound/").listFiles(AudioFilter())?.size ?: 1
         } catch (_: Exception) {
             1
         }

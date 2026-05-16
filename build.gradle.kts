@@ -2,22 +2,13 @@ import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id(Libs.GradleVersion.plugin) version Libs.GradleVersion.version
-}
-
-buildscript {
-
-    repositories {
-        google()
-        mavenCentral()
-        gradlePluginPortal()
-    }
-
-    dependencies {
-        classpath(Libs.androidGradlePlugin)
-        classpath(Libs.Kotlin.gradlePlugin)
-        classpath(Libs.Hilt.gradlePlugin)
-    }
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.kotlin.android) apply false
+    alias(libs.plugins.kotlin.parcelize) apply false
+    alias(libs.plugins.kotlin.kapt) apply false
+    alias(libs.plugins.ksp) apply false
+    alias(libs.plugins.hilt) apply false
+    alias(libs.plugins.dependency.updates)
 }
 
 allprojects {
@@ -28,11 +19,14 @@ allprojects {
     }
     configurations.all {
         resolutionStrategy {
-            force("org.jetbrains.kotlin:kotlin-stdlib:1.9.20")
-            force("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.20")
-            force("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.20")
-            force("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
-            force("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+            // Compose BOM / other transitive deps pull artifacts compiled with Kotlin 2.x;
+            // our compiler is 1.9.25 (reads metadata up to 2.0.0 only). Pin to match.
+            force("org.jetbrains.kotlin:kotlin-stdlib:1.9.25")
+            force("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.25")
+            force("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.25")
+            force("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
+            force("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0")
+            // AdmobWrapper transitively pulls a different version.
             force("com.google.android.gms:play-services-ads:23.6.0")
         }
     }

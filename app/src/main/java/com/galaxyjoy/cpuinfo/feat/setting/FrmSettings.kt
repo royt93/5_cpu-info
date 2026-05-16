@@ -1,16 +1,13 @@
 package com.galaxyjoy.cpuinfo.feat.setting
 
 import android.content.SharedPreferences
-import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.galaxyjoy.cpuinfo.BuildConfig
 import com.galaxyjoy.cpuinfo.R
 import com.galaxyjoy.cpuinfo.ext.openBrowserPolicy
 import com.galaxyjoy.cpuinfo.util.ThemeHelper
-import com.galaxyjoy.cpuinfo.util.runOnApiAbove
 import moreApp
 import rateApp
 import shareApp
@@ -20,19 +17,11 @@ class FrmSettings : PreferenceFragmentCompat(),
 
     companion object {
         const val KEY_TEMPERATURE_UNIT = "temperature_unit"
-        const val KEY_RAM_REFRESHING = "ram_refreshing"
         const val KEY_THEME_CONFIG = "key_theme"
-
-        private const val KEY_RAM_CATEGORIES = "pref_key_ram_settings"
     }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.pref)
-
-        // RAM widget isn't supported currently on O and above
-        runOnApiAbove(Build.VERSION_CODES.N_MR1) {
-            preferenceScreen.removePreference(preferenceScreen.findPreference(KEY_RAM_CATEGORIES)!!)
-        }
 
         val rateAppPreference: Preference? = findPreference("key_rate_app")
         rateAppPreference?.setOnPreferenceClickListener {
