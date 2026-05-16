@@ -11,6 +11,7 @@ import android.content.res.Resources
 import android.hardware.ConsumerIrManager
 import android.hardware.SensorManager
 import android.hardware.camera2.CameraManager
+import android.hardware.display.DisplayManager
 import android.net.wifi.WifiManager
 import android.os.storage.StorageManager
 import android.view.WindowManager
@@ -74,6 +75,11 @@ class AppModule {
     @Singleton
     fun provideCameraManager(@ApplicationContext appContext: Context): CameraManager =
         appContext.getSystemService(Context.CAMERA_SERVICE) as CameraManager
+
+    @Provides
+    @Singleton
+    fun provideDisplayManager(@ApplicationContext appContext: Context): DisplayManager =
+        appContext.getSystemService(Context.DISPLAY_SERVICE) as DisplayManager
 
     @SuppressLint("WifiManagerPotentialLeak")
     @Provides

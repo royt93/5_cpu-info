@@ -2,7 +2,10 @@ package com.galaxyjoy.cpuinfo.feat.infor.screen
 
 import android.content.res.Configuration
 import android.content.res.Resources
+import android.hardware.display.DisplayManager
+import android.os.Build
 import android.util.DisplayMetrics
+import android.view.Display
 import android.view.WindowManager
 import androidx.lifecycle.ViewModel
 import com.galaxyjoy.cpuinfo.R
@@ -18,7 +21,8 @@ import javax.inject.Inject
 @HiltViewModel
 class VMScreenInfo @Inject constructor(
     private val resources: Resources,
-    private val windowManager: WindowManager
+    private val windowManager: WindowManager,
+    private val displayManager: DisplayManager,
 ) : ViewModel() {
 
     val listLiveData = ListLiveData<Pair<String, String>>()
@@ -37,6 +41,7 @@ class VMScreenInfo @Inject constructor(
         listLiveData.add(getScreenClass())
         listLiveData.add(getDensityClass())
         listLiveData.addAll(getInfoFromDisplayMetrics())
+        listLiveData.addAll(getExtendedDisplayInfo())
     }
 
     /**
@@ -162,4 +167,64 @@ class VMScreenInfo @Inject constructor(
 
         return functionsList
     }
+
+    /**
+     * Surface display capabilities relevant to 2026 devices: supported refresh rate modes,
+     * HDR capabilities, wide color gamut, notch/cutout, native xdpi/ydpi.
+     */
+    private fun getExtendedDisplayInfo(): List<Pair<String, String>> {
+        val rows = mutableListOf<Pair<String, String>>()
+        val display = displayManager.getDisplay(Display.DEFAULT_DISPLAY) ?: return rows
+
+        // Per-axis pixel density — many displays have non-square pixels reported here
+        val metrics = DisplayMetrics()
+        @Suppress("DEPRECATION")
+        display.getRealMetrics(metrics)
+        rows.add("xdpi" to "${metrics.xdpi.round2()}")
+        rows.add("ydpi" to "${metrics.ydpi.round2()}")
+
+        // Supported refresh rate modes (Android 6+)
+        val modes = display.supportedModes
+        if (modes.isNotEmpty()) {
+            val description = modes.joinToString(", ") {
+                "${it.physicalWidth}×${it.physicalHeight}@${it.refreshRate.round2()}"
+            }
+            rows.add("Supported modes" to description)
+        }
+
+        // HDR capabilities (Android 7+)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            val hdr = display.hdrCapabilities
+            val types = hdr?.supportedHdrTypes?.map(::hdrTypeName) ?: emptyList()
+            rows.add("HDR support" to if (types.isEmpty()) "No" else types.joinToString(", "))
+        }
+
+        // Wide color gamut (Android 8+)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            rows.add("Wide color gamut" to display.isWideColorGamut.yesNo())
+        }
+
+        // Cutout / notch (Android 9+, via window insets) — best-effort from current window
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            val cutout = display.cutout
+            if (cutout != null) {
+                val boundingRectsSize = cutout.boundingRects.size
+                rows.add("Display cutout" to "$boundingRectsSize rect(s)")
+            } else {
+                rows.add("Display cutout" to "None")
+            }
+        }
+
+        return rows
+    }
+
+    private fun hdrTypeName(@Suppress("DEPRECATION") type: Int): String = when (type) {
+        Display.HdrCapabilities.HDR_TYPE_DOLBY_VISION -> "Dolby Vision"
+        Display.HdrCapabilities.HDR_TYPE_HDR10 -> "HDR10"
+        Display.HdrCapabilities.HDR_TYPE_HLG -> "HLG"
+        4 -> "HDR10+" // Display.HdrCapabilities.HDR_TYPE_HDR10_PLUS, API 29+
+        else -> "Type $type"
+    }
+
+    private fun Boolean.yesNo() = if (this) "Yes" else "No"
 }
