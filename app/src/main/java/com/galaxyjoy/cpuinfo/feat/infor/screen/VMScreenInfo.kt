@@ -176,48 +176,55 @@ class VMScreenInfo @Inject constructor(
         val rows = mutableListOf<Pair<String, String>>()
         val display = displayManager.getDisplay(Display.DEFAULT_DISPLAY) ?: return rows
 
-        // Per-axis pixel density — many displays have non-square pixels reported here
+        // Per-axis pixel density — xdpi/ydpi are universal acronyms, no translation needed
         val metrics = DisplayMetrics()
         @Suppress("DEPRECATION")
         display.getRealMetrics(metrics)
         rows.add("xdpi" to "${metrics.xdpi.round2()}")
         rows.add("ydpi" to "${metrics.ydpi.round2()}")
 
-        // Supported refresh rate modes (Android 6+)
         val modes = display.supportedModes
         if (modes.isNotEmpty()) {
             val description = modes.joinToString(", ") {
                 "${it.physicalWidth}×${it.physicalHeight}@${it.refreshRate.round2()}"
             }
-            rows.add("Supported modes" to description)
+            rows.add(resources.getString(R.string.display_supported_modes) to description)
         }
 
-        // HDR capabilities (Android 7+)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             val hdr = display.hdrCapabilities
             val types = hdr?.supportedHdrTypes?.map(::hdrTypeName) ?: emptyList()
-            rows.add("HDR support" to if (types.isEmpty()) "No" else types.joinToString(", "))
+            val value = if (types.isEmpty()) {
+                resources.getString(R.string.display_hdr_none)
+            } else {
+                types.joinToString(", ")
+            }
+            rows.add(resources.getString(R.string.display_hdr_support) to value)
         }
 
-        // Wide color gamut (Android 8+)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            rows.add("Wide color gamut" to display.isWideColorGamut.yesNo())
+            val yesNo = if (display.isWideColorGamut) {
+                resources.getString(R.string.yes)
+            } else {
+                resources.getString(R.string.no)
+            }
+            rows.add(resources.getString(R.string.display_wide_color) to yesNo)
         }
 
-        // Cutout / notch (Android 9+, via window insets) — best-effort from current window
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             val cutout = display.cutout
-            if (cutout != null) {
-                val boundingRectsSize = cutout.boundingRects.size
-                rows.add("Display cutout" to "$boundingRectsSize rect(s)")
+            val value = if (cutout != null) {
+                resources.getString(R.string.display_cutout_rects, cutout.boundingRects.size)
             } else {
-                rows.add("Display cutout" to "None")
+                resources.getString(R.string.display_cutout_none)
             }
+            rows.add(resources.getString(R.string.display_cutout) to value)
         }
 
         return rows
     }
 
+    /** HDR profile labels are universally-recognised brand names — keep verbatim. */
     private fun hdrTypeName(@Suppress("DEPRECATION") type: Int): String = when (type) {
         Display.HdrCapabilities.HDR_TYPE_DOLBY_VISION -> "Dolby Vision"
         Display.HdrCapabilities.HDR_TYPE_HDR10 -> "HDR10"
@@ -225,6 +232,4 @@ class VMScreenInfo @Inject constructor(
         4 -> "HDR10+" // Display.HdrCapabilities.HDR_TYPE_HDR10_PLUS, API 29+
         else -> "Type $type"
     }
-
-    private fun Boolean.yesNo() = if (this) "Yes" else "No"
 }

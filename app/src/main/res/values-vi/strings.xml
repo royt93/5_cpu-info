@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <string name="action_sorting">Sắp xếp</string>
+    <string name="action_gc">Bộ thu gom rác</string>
+    <string name="action_not_supported">Thao tác không khả dụng</string>
+    <string name="close_drawer" tools:ignore="PrivateResource">Đóng ngăn</string>
+    <string name="yes">Có</string>
+    <string name="no">Không</string>
+    <string name="ok">OK</string>
+    <!--Tabs-->
+    <string name="cpu">CPU</string>
+    <string name="gpu">GPU</string>
+    <string name="ram">RAM</string>
+    <string name="storage">Bộ nhớ</string>
+    <string name="screen">Màn hình</string>
+    <string name="android">Android</string>
+    <string name="hardware">Phần cứng</string>
+    <string name="sensors">Cảm biến</string>
+    <string name="media">Đa phương tiện</string>
+    <string name="export_format_title">Định dạng xuất</string>
+    <string name="export_as_text">Văn bản thuần</string>
+    <string name="language">Ngôn ngữ</string>
+    <string name="language_picker_title">Chọn ngôn ngữ</string>
+    <string name="language_system_default">Mặc định hệ thống</string>
+    <string name="language_change">Đổi ngôn ngữ</string>
+    <string name="processes">Tiến trình</string>
+    <string name="applications">Ứng dụng</string>
+    <string name="temp">Nhiệt độ</string>
+    <string name="settings">Cài đặt</string>
+    <string name="running_gc">Đang chạy Garbage Collector</string>
+    <string name="text_copied">Đã sao chép giá trị</string>
+    <!-- CPU -->
+    <string name="cpu_frequency_stopped">Lõi %1$d: Dừng</string>
+    <string name="cpu_soc_name">Tên SoC</string>
+    <string name="cpu_cores">Số lõi</string>
+    <!--Apps-->
+    <string name="app_open">Không thể mở ứng dụng này</string>
+    <string name="cpu_open">Đừng mở tôi hai lần :-)</string>
+    <string name="cpu_uninstall">Không thể làm điều đó :-(</string>
+    <string name="native_libs">Thư viện native</string>
+    <string name="storage_used">Bộ nhớ đã dùng:</string>
+    <string name="calculating">đang tính…</string>
+    <string name="apps_show_system_apps">Hiện ứng dụng hệ thống</string>
+    <string name="apps_sort_order">Thứ tự sắp xếp</string>
+    <string name="open_app">Mở</string>
+    <string name="app_settings">Cài đặt</string>
+    <string name="share_apk">Chia sẻ APK</string>
+    <string name="uninstall">Gỡ cài đặt</string>
+    <string name="app_share_error">Không thể chia sẻ tệp APK</string>
+    <string name="view_in_play_store">Xem trên Play Store</string>
+    <!--GPU-->
+    <string name="vulkan_version">Phiên bản Vulkan</string>
+    <string name="gles_version">Phiên bản GLES</string>
+    <string name="vendor">Nhà cung cấp</string>
+    <string name="version">Phiên bản</string>
+    <string name="renderer">Bộ kết xuất</string>
+    <string name="extensions">Phần mở rộng</string>
+    <!--RAM-->
+    <string name="total_memory">Tổng bộ nhớ</string>
+    <string name="available_memory">Bộ nhớ khả dụng</string>
+    <string name="threshold">Ngưỡng</string>
+    <string name="clear">Xóa</string>
+    <!--Storage-->
+    <string name="internal">Trong máy</string>
+    <string name="external">Ngoài</string>
+    <!--Screen-->
+    <string name="screen_class">Phân loại màn hình</string>
+    <string name="small">Nhỏ</string>
+    <string name="normal">Trung bình</string>
+    <string name="large">Lớn</string>
+    <string name="unknown">Không xác định</string>
+    <string name="density_class">Phân loại mật độ</string>
+    <string name="width">Chiều rộng</string>
+    <string name="height">Chiều cao</string>
+    <string name="dp_width">Chiều rộng (dp)</string>
+    <string name="dp_height">Chiều cao (dp)</string>
+    <string name="density">Mật độ</string>
+    <string name="absolute_width">Chiều rộng tuyệt đối</string>
+    <string name="absolute_height">Chiều cao tuyệt đối</string>
+    <string name="refresh_rate">Tần số quét</string>
+    <string name="orientation">Hướng</string>
+    <!--Android-->
+    <string name="codename">Tên mã</string>
+    <string name="brand">Thương hiệu</string>
+    <string name="model">Kiểu máy</string>
+    <string name="manufacturer">Nhà sản xuất</string>
+    <string name="board">Bo mạch</string>
+    <string name="serial">Số serial</string>
+    <string name="rooted">Đã root</string>
+    <string name="encrypted_storage">Bộ nhớ đã mã hóa</string>
+    <string name="security_providers">Nhà cung cấp bảo mật</string>
+    <!--Hardware-->
+    <string name="battery">Pin</string>
+    <string name="wireless">Không dây</string>
+    <string name="sound_card">Card âm thanh</string>
+    <string name="level">Mức</string>
+    <string name="voltage">Điện áp</string>
+    <string name="temperature">Nhiệt độ</string>
+    <string name="capacity">Dung lượng</string>
+    <string name="technology">Công nghệ</string>
+    <string name="is_charging">Đang sạc</string>
+    <string name="charging_type">Loại sạc</string>
+    <string name="wifi_mac">Wi-Fi MAC</string>
+    <string name="bluetooth_mac">Bluetooth MAC</string>
+    <string name="amount">Số lượng</string>
+    <string name="card">Thẻ</string>
+    <string name="cameras">Camera</string>
+    <string name="camera">Camera</string>
+    <string name="type">Loại</string>
+    <string name="front">Trước</string>
+    <string name="back">Sau</string>
+    <string name="battery_health">Tình trạng</string>
+    <string name="battery_cold">Lạnh</string>
+    <string name="battery_good">Tốt</string>
+    <string name="battery_dead">Hỏng</string>
+    <string name="battery_overheat">Quá nhiệt</string>
+    <string name="battery_overvoltage">Quá áp</string>
+    <string name="battery_unknown">Không xác định</string>
+    <string name="battery_unspecified_failure">Lỗi không xác định</string>
+    <string name="ir_emitter">Bộ phát hồng ngoại</string>
+    <string name="external_facing">Ngoài</string>
+    <!-- DRM tab -->
+    <string name="drm_supported">%1$s được hỗ trợ</string>
+    <string name="drm_security_level">Mức bảo mật %1$s</string>
+    <string name="drm_hdcp_level">Mức HDCP của %1$s</string>
+    <string name="drm_max_hdcp">HDCP tối đa của %1$s</string>
+    <string name="drm_version">Phiên bản %1$s</string>
+    <!-- Media codec tab -->
+    <string name="media_total_codecs">Tổng codec</string>
+    <string name="media_decoders">Bộ giải mã</string>
+    <string name="media_encoders">Bộ mã hóa</string>
+    <string name="media_codec_summary">%1$s · %2$s · %3$s</string>
+    <string name="media_role_encoder">mã hóa</string>
+    <string name="media_role_decoder">giải mã</string>
+    <!-- Camera tab -->
+    <string name="camera_total">Tổng số camera</string>
+    <string name="camera_label">Camera %1$s</string>
+    <string name="camera_focal_lengths">Tiêu cự</string>
+    <string name="camera_sensor_size">Kích thước cảm biến</string>
+    <string name="camera_pixel_array">Mảng pixel</string>
+    <string name="camera_max_jpeg">JPEG tối đa</string>
+    <string name="camera_max_slow_motion">Slow-motion tối đa</string>
+    <string name="camera_raw_capture">Chụp RAW</string>
+    <string name="camera_manual_sensor">Cảm biến thủ công</string>
+    <string name="camera_burst_capture">Chụp liên tiếp</string>
+    <string name="camera_hdr_scene_mode">Chế độ cảnh HDR</string>
+    <string name="camera_multi_lens">Đa ống kính</string>
+    <!-- Display extension -->
+    <string name="display_supported_modes">Chế độ hỗ trợ</string>
+    <string name="display_hdr_support">Hỗ trợ HDR</string>
+    <string name="display_hdr_none">Không</string>
+    <string name="display_wide_color">Gam màu rộng</string>
+    <string name="display_cutout">Khoét màn hình</string>
+    <string name="display_cutout_none">Không có</string>
+    <string name="display_cutout_rects">%1$d vùng</string>
+    <!--Prefs-->
+    <string name="ram_refreshing">Làm mới widget</string>
+    <string name="general">Chung</string>
+    <string name="temperature_unit">Đơn vị nhiệt độ</string>
+    <string name="pref_theme_dark">Tối</string>
+    <string name="pref_theme_light">Sáng</string>
+    <string name="pref_theme_battery">Theo chế độ tiết kiệm pin</string>
+    <string name="pref_theme_default">Theo hệ thống</string>
+    <string name="pref_theme">Giao diện</string>
+    <string name="pref_theme_choose">Chọn giao diện</string>
+    <!--Temp-->
+    <string name="cpu_temperature">Nhiệt độ CPU</string>
+    <string name="no_temp_data">Xin lỗi, không tìm thấy cảm biến nhiệt độ :-(</string>
+    <string name="rate_app">Đánh giá ứng dụng</string>
+    <string name="more_app">Ứng dụng khác</string>
+    <string name="share_app">Chia sẻ ứng dụng</string>
+    <string name="term_policy"><![CDATA[Điều khoản & Chính sách]]></string>
+</resources>

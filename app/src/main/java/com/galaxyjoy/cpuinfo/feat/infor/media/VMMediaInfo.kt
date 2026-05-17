@@ -1,9 +1,11 @@
 package com.galaxyjoy.cpuinfo.feat.infor.media
 
+import android.content.res.Resources
 import android.media.MediaCodecInfo
 import android.media.MediaCodecList
 import android.os.Build
 import androidx.lifecycle.ViewModel
+import com.galaxyjoy.cpuinfo.R
 import com.galaxyjoy.cpuinfo.util.lifecycle.ListLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -16,7 +18,9 @@ import javax.inject.Inject
  * within each group.
  */
 @HiltViewModel
-class VMMediaInfo @Inject constructor() : ViewModel() {
+class VMMediaInfo @Inject constructor(
+    private val resources: Resources,
+) : ViewModel() {
 
     val listLiveData = ListLiveData<Pair<String, String>>()
 
@@ -36,15 +40,21 @@ class VMMediaInfo @Inject constructor() : ViewModel() {
                 ),
             )
 
-        listLiveData.add("Total codecs" to codecs.size.toString())
-        listLiveData.add("Decoders" to codecs.count { !it.isEncoder }.toString())
-        listLiveData.add("Encoders" to codecs.count { it.isEncoder }.toString())
+        listLiveData.add(resources.getString(R.string.media_total_codecs) to codecs.size.toString())
+        listLiveData.add(resources.getString(R.string.media_decoders) to codecs.count { !it.isEncoder }.toString())
+        listLiveData.add(resources.getString(R.string.media_encoders) to codecs.count { it.isEncoder }.toString())
+
+        val encoderLabel = resources.getString(R.string.media_role_encoder)
+        val decoderLabel = resources.getString(R.string.media_role_decoder)
+        val hwLabel = resources.getString(R.string.media_accel_hw)
+        val swLabel = resources.getString(R.string.media_accel_sw)
 
         codecs.forEach { codec ->
-            val role = if (codec.isEncoder) "encoder" else "decoder"
-            val accel = if (codec.isHardwareAcceleratedSafe()) "HW" else "SW"
+            val role = if (codec.isEncoder) encoderLabel else decoderLabel
+            val accel = if (codec.isHardwareAcceleratedSafe()) hwLabel else swLabel
             val types = codec.supportedTypes.joinToString(", ")
-            listLiveData.add(codec.name to "$role · $accel · $types")
+            val summary = resources.getString(R.string.media_codec_summary, role, accel, types)
+            listLiveData.add(codec.name to summary)
         }
     }
 

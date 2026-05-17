@@ -23,6 +23,16 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        app:key="pref_key_language_category"
+        app:title="@string/language">
+
+        <Preference
+            app:key="key_change_language"
+            app:title="@string/language_change" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
         app:key="pref_key_theme_category"
         app:title="@string/pref_theme">
 

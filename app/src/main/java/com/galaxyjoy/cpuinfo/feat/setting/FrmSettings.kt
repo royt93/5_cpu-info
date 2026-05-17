@@ -51,6 +51,16 @@ class FrmSettings : PreferenceFragmentCompat(),
             //do nothing
             true
         }
+
+        val changeLanguagePreference: Preference? = findPreference("key_change_language")
+        changeLanguagePreference?.setOnPreferenceClickListener {
+            // Use activity FM so the result lands on ActHost's registered listener.
+            val fm = requireActivity().supportFragmentManager
+            if (!fm.isStateSaved && fm.findFragmentByTag(LanguagePickerBottomSheet.TAG) == null) {
+                LanguagePickerBottomSheet().show(fm, LanguagePickerBottomSheet.TAG)
+            }
+            true
+        }
     }
 
     override fun onResume() {

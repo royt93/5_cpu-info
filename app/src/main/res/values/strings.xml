@@ -21,6 +21,10 @@
     <string name="export_format_title">Export format</string>
     <string name="export_as_text">Plain text</string>
     <string name="export_as_json" translatable="false">JSON</string>
+    <string name="language">Language</string>
+    <string name="language_picker_title">Choose language</string>
+    <string name="language_system_default">System default</string>
+    <string name="language_change">Change language</string>
     <string name="processes">Processes</string>
     <string name="applications">Applications</string>
     <string name="temp">Temperature</string>
@@ -127,6 +131,44 @@
     <string name="battery_unknown">Unknown</string>
     <string name="battery_unspecified_failure">Unspecified failure</string>
     <string name="ir_emitter">IR Emitter</string>
+    <string name="external_facing" tools:ignore="UnusedResources">External</string>
+    <!-- DRM tab -->
+    <string name="drm_supported">%1$s supported</string>
+    <string name="drm_security_level">%1$s security level</string>
+    <string name="drm_hdcp_level">%1$s HDCP level</string>
+    <string name="drm_max_hdcp">%1$s max HDCP</string>
+    <string name="drm_version">%1$s version</string>
+    <!-- Media codec tab -->
+    <string name="media_total_codecs">Total codecs</string>
+    <string name="media_decoders">Decoders</string>
+    <string name="media_encoders">Encoders</string>
+    <string name="media_codec_summary">%1$s · %2$s · %3$s</string>
+    <string name="media_role_encoder">encoder</string>
+    <string name="media_role_decoder">decoder</string>
+    <string name="media_accel_hw" translatable="false">HW</string>
+    <string name="media_accel_sw" translatable="false">SW</string>
+    <!-- Camera tab -->
+    <string name="camera_total">Total cameras</string>
+    <string name="camera_label">Camera %1$s</string>
+    <string name="camera_focal_lengths">Focal lengths</string>
+    <string name="camera_sensor_size">Sensor size</string>
+    <string name="camera_pixel_array">Pixel array</string>
+    <string name="camera_max_jpeg">Max JPEG</string>
+    <string name="camera_max_slow_motion">Max slow-motion</string>
+    <string name="camera_raw_capture">RAW capture</string>
+    <string name="camera_manual_sensor">Manual sensor</string>
+    <string name="camera_burst_capture">Burst capture</string>
+    <string name="camera_ois" translatable="false">OIS</string>
+    <string name="camera_hdr_scene_mode">HDR scene mode</string>
+    <string name="camera_multi_lens">Multi-camera lens</string>
+    <!-- Display extension -->
+    <string name="display_supported_modes">Supported modes</string>
+    <string name="display_hdr_support">HDR support</string>
+    <string name="display_hdr_none">No</string>
+    <string name="display_wide_color">Wide color gamut</string>
+    <string name="display_cutout">Display cutout</string>
+    <string name="display_cutout_none">None</string>
+    <string name="display_cutout_rects">%1$d rect(s)</string>
     <!--Prefs-->
     <string name="ram_refreshing">Widget refreshing</string>
     <string name="general">General</string>

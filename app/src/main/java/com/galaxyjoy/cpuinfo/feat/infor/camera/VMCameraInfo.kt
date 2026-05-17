@@ -1,10 +1,12 @@
 package com.galaxyjoy.cpuinfo.feat.infor.camera
 
+import android.content.res.Resources
 import android.hardware.camera2.CameraCharacteristics
 import android.hardware.camera2.CameraManager
 import android.hardware.camera2.params.StreamConfigurationMap
 import android.os.Build
 import androidx.lifecycle.ViewModel
+import com.galaxyjoy.cpuinfo.R
 import com.galaxyjoy.cpuinfo.util.lifecycle.ListLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import timber.log.Timber
@@ -19,6 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class VMCameraInfo @Inject constructor(
     private val cameraManager: CameraManager,
+    private val resources: Resources,
 ) : ViewModel() {
 
     val listLiveData = ListLiveData<Pair<String, String>>()
@@ -37,7 +40,7 @@ class VMCameraInfo @Inject constructor(
             emptyArray()
         }
 
-        listLiveData.add("Total cameras" to ids.size.toString())
+        listLiveData.add(resources.getString(R.string.camera_total) to ids.size.toString())
 
         ids.forEach { id ->
             val ch = try {
@@ -48,23 +51,33 @@ class VMCameraInfo @Inject constructor(
             }
 
             val facingName = when (ch.get(CameraCharacteristics.LENS_FACING)) {
-                CameraCharacteristics.LENS_FACING_FRONT -> "Front"
-                CameraCharacteristics.LENS_FACING_BACK -> "Back"
-                CameraCharacteristics.LENS_FACING_EXTERNAL -> "External"
-                else -> "Unknown"
+                CameraCharacteristics.LENS_FACING_FRONT -> resources.getString(R.string.front)
+                CameraCharacteristics.LENS_FACING_BACK -> resources.getString(R.string.back)
+                CameraCharacteristics.LENS_FACING_EXTERNAL ->
+                    resources.getString(R.string.external_facing)
+                else -> resources.getString(R.string.unknown)
             }
-            listLiveData.add("Camera $id" to facingName)
+            listLiveData.add(resources.getString(R.string.camera_label, id) to facingName)
 
             ch.get(CameraCharacteristics.LENS_INFO_AVAILABLE_FOCAL_LENGTHS)?.let { fls ->
-                listLiveData.add("  Focal lengths" to fls.joinToString(", ") { "${it}mm" })
+                listLiveData.add(
+                    "  " + resources.getString(R.string.camera_focal_lengths) to
+                        fls.joinToString(", ") { "${it}mm" },
+                )
             }
 
             ch.get(CameraCharacteristics.SENSOR_INFO_PHYSICAL_SIZE)?.let { size ->
-                listLiveData.add("  Sensor size" to "${size.width} × ${size.height} mm")
+                listLiveData.add(
+                    "  " + resources.getString(R.string.camera_sensor_size) to
+                        "${size.width} × ${size.height} mm",
+                )
             }
 
             ch.get(CameraCharacteristics.SENSOR_INFO_PIXEL_ARRAY_SIZE)?.let { px ->
-                listLiveData.add("  Pixel array" to "${px.width} × ${px.height}")
+                listLiveData.add(
+                    "  " + resources.getString(R.string.camera_pixel_array) to
+                        "${px.width} × ${px.height}",
+                )
             }
 
             ch.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)?.let { map ->
@@ -80,7 +93,10 @@ class VMCameraInfo @Inject constructor(
 
         val jpegSizes = map.getOutputSizes(android.graphics.ImageFormat.JPEG)
         jpegSizes?.maxByOrNull { it.width.toLong() * it.height }?.let {
-            rows.add("  Max JPEG" to "${it.width} × ${it.height}")
+            rows.add(
+                "  " + resources.getString(R.string.camera_max_jpeg) to
+                    "${it.width} × ${it.height}",
+            )
         }
 
         val highSpeedSizes = map.highSpeedVideoSizes
@@ -88,7 +104,10 @@ class VMCameraInfo @Inject constructor(
             val maxSize = highSpeedSizes.maxByOrNull { it.width.toLong() * it.height }!!
             val fpsRanges = map.getHighSpeedVideoFpsRangesFor(maxSize)
             val maxFps = fpsRanges?.maxOfOrNull { it.upper } ?: 0
-            rows.add("  Max slow-motion" to "${maxSize.width} × ${maxSize.height} @ ${maxFps}fps")
+            rows.add(
+                "  " + resources.getString(R.string.camera_max_slow_motion) to
+                    "${maxSize.width} × ${maxSize.height} @ ${maxFps}fps",
+            )
         }
 
         return rows
@@ -98,38 +117,43 @@ class VMCameraInfo @Inject constructor(
         val caps = get(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES) ?: return emptyList()
 
         val rows = mutableListOf<Pair<String, String>>()
-        val raw = caps.contains(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES_RAW)
-        val manual =
-            caps.contains(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES_MANUAL_SENSOR)
-        val burst =
-            caps.contains(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES_BURST_CAPTURE)
+        rows.add(
+            "  " + resources.getString(R.string.camera_raw_capture) to
+                caps.contains(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES_RAW).yesNo(),
+        )
+        rows.add(
+            "  " + resources.getString(R.string.camera_manual_sensor) to
+                caps.contains(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES_MANUAL_SENSOR)
+                    .yesNo(),
+        )
+        rows.add(
+            "  " + resources.getString(R.string.camera_burst_capture) to
+                caps.contains(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES_BURST_CAPTURE)
+                    .yesNo(),
+        )
 
-        rows.add("  RAW capture" to raw.yesNo())
-        rows.add("  Manual sensor" to manual.yesNo())
-        rows.add("  Burst capture" to burst.yesNo())
-
-        // OIS — available since API 23
         get(CameraCharacteristics.LENS_INFO_AVAILABLE_OPTICAL_STABILIZATION)?.let { modes ->
             val hasOis = modes.any { it == CameraCharacteristics.LENS_OPTICAL_STABILIZATION_MODE_ON }
-            rows.add("  OIS" to hasOis.yesNo())
+            rows.add("  " + resources.getString(R.string.camera_ois) to hasOis.yesNo())
         }
 
-        // HDR scene mode hint — modern devices typically expose via Camera2 extensions
         get(CameraCharacteristics.CONTROL_AVAILABLE_SCENE_MODES)?.let { scenes ->
-            val hasHdr =
-                scenes.any { it == CameraCharacteristics.CONTROL_SCENE_MODE_HDR }
-            rows.add("  HDR scene mode" to hasHdr.yesNo())
+            val hasHdr = scenes.any { it == CameraCharacteristics.CONTROL_SCENE_MODE_HDR }
+            rows.add("  " + resources.getString(R.string.camera_hdr_scene_mode) to hasHdr.yesNo())
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             get(CameraCharacteristics.LENS_POSE_TRANSLATION)?.let {
-                // presence of pose translation hints at multi-camera physical lens
-                rows.add("  Multi-camera lens" to "Yes")
+                rows.add(
+                    "  " + resources.getString(R.string.camera_multi_lens) to
+                        resources.getString(R.string.yes),
+                )
             }
         }
 
         return rows
     }
 
-    private fun Boolean.yesNo() = if (this) "Yes" else "No"
+    private fun Boolean.yesNo(): String =
+        if (this) resources.getString(R.string.yes) else resources.getString(R.string.no)
 }

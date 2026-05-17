@@ -1,7 +1,9 @@
 package com.galaxyjoy.cpuinfo.feat.infor.drm
 
+import android.content.res.Resources
 import android.media.MediaDrm
 import androidx.lifecycle.ViewModel
+import com.galaxyjoy.cpuinfo.R
 import com.galaxyjoy.cpuinfo.util.lifecycle.ListLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import timber.log.Timber
@@ -15,7 +17,9 @@ import javax.inject.Inject
  * L3 = SD only (software DRM, no TEE).
  */
 @HiltViewModel
-class VMDrmInfo @Inject constructor() : ViewModel() {
+class VMDrmInfo @Inject constructor(
+    private val resources: Resources,
+) : ViewModel() {
 
     val listLiveData = ListLiveData<Pair<String, String>>()
 
@@ -26,23 +30,19 @@ class VMDrmInfo @Inject constructor() : ViewModel() {
     }
 
     private fun populate() {
-        val widevine = inspectScheme("Widevine", WIDEVINE_UUID)
-        listLiveData.addAll(widevine)
-
-        val playReady = inspectScheme("PlayReady", PLAYREADY_UUID)
-        listLiveData.addAll(playReady)
-
-        val clearKey = inspectScheme("ClearKey", CLEARKEY_UUID)
-        listLiveData.addAll(clearKey)
+        listLiveData.addAll(inspectScheme("Widevine", WIDEVINE_UUID))
+        listLiveData.addAll(inspectScheme("PlayReady", PLAYREADY_UUID))
+        listLiveData.addAll(inspectScheme("ClearKey", CLEARKEY_UUID))
     }
 
     private fun inspectScheme(name: String, uuid: UUID): List<Pair<String, String>> {
+        val supportedLabel = resources.getString(R.string.drm_supported, name)
         if (!MediaDrm.isCryptoSchemeSupported(uuid)) {
-            return listOf("$name supported" to "No")
+            return listOf(supportedLabel to resources.getString(R.string.no))
         }
 
         val rows = mutableListOf<Pair<String, String>>()
-        rows.add("$name supported" to "Yes")
+        rows.add(supportedLabel to resources.getString(R.string.yes))
 
         val drm: MediaDrm? = try {
             MediaDrm(uuid)
@@ -52,38 +52,28 @@ class VMDrmInfo @Inject constructor() : ViewModel() {
         }
 
         drm?.let {
-            try {
-                it.getPropertyString("securityLevel").takeIf(String::isNotBlank)?.let { lvl ->
-                    rows.add("$name security level" to lvl)
-                }
-            } catch (_: Exception) {
-                // property not supported by this scheme
+            it.readProperty("securityLevel")?.let { lvl ->
+                rows.add(resources.getString(R.string.drm_security_level, name) to lvl)
             }
-            try {
-                it.getPropertyString("hdcpLevel").takeIf(String::isNotBlank)?.let { hdcp ->
-                    rows.add("$name HDCP level" to hdcp)
-                }
-            } catch (_: Exception) {
-                // ignore
+            it.readProperty("hdcpLevel")?.let { hdcp ->
+                rows.add(resources.getString(R.string.drm_hdcp_level, name) to hdcp)
             }
-            try {
-                it.getPropertyString("maxHdcpLevel").takeIf(String::isNotBlank)?.let { max ->
-                    rows.add("$name max HDCP" to max)
-                }
-            } catch (_: Exception) {
-                // ignore
+            it.readProperty("maxHdcpLevel")?.let { max ->
+                rows.add(resources.getString(R.string.drm_max_hdcp, name) to max)
             }
-            try {
-                it.getPropertyString("version").takeIf(String::isNotBlank)?.let { v ->
-                    rows.add("$name version" to v)
-                }
-            } catch (_: Exception) {
-                // ignore
+            it.readProperty("version")?.let { v ->
+                rows.add(resources.getString(R.string.drm_version, name) to v)
             }
             it.releaseSafely()
         }
 
         return rows
+    }
+
+    private fun MediaDrm.readProperty(key: String): String? = try {
+        getPropertyString(key).takeIf(String::isNotBlank)
+    } catch (_: Exception) {
+        null
     }
 
     private fun MediaDrm.releaseSafely() {
