@@ -254,6 +254,27 @@ class FrmApplications : BaseFrm<FrmApplicationsBinding>(
             appUninstallClicked(position)
         }
 
+        // Top-left + top-right rounded 16dp khi sheet show. Áp dụng background drawable
+        // lên `design_bottom_sheet` view (container của Material BottomSheetDialog).
+        bottomSheetDialog.setOnShowListener {
+            val sheet = bottomSheetDialog.findViewById<android.view.View>(
+                com.google.android.material.R.id.design_bottom_sheet
+            ) ?: return@setOnShowListener
+            val ctx = sheet.context
+            val tv = android.util.TypedValue()
+            ctx.theme.resolveAttribute(com.google.android.material.R.attr.colorSurface, tv, true)
+            val surfaceColor = if (tv.resourceId != 0) {
+                androidx.core.content.ContextCompat.getColor(ctx, tv.resourceId)
+            } else tv.data
+            val radius = 16f * resources.displayMetrics.density
+            val shape = com.google.android.material.shape.ShapeAppearanceModel.builder()
+                .setTopLeftCorner(com.google.android.material.shape.CornerFamily.ROUNDED, radius)
+                .setTopRightCorner(com.google.android.material.shape.CornerFamily.ROUNDED, radius)
+                .build()
+            sheet.background = com.google.android.material.shape.MaterialShapeDrawable(shape).apply {
+                fillColor = android.content.res.ColorStateList.valueOf(surfaceColor)
+            }
+        }
         bottomSheetDialog.setContentView(binding.root)
         bottomSheetDialog.show()
     }

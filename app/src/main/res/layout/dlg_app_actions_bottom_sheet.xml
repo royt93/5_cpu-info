@@ -23,7 +23,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnOpen"
-        style="@style/Widget.Material3.Button.TextButton"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:gravity="start|center_vertical"
@@ -44,7 +44,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnPlayStore"
-        style="@style/Widget.Material3.Button.TextButton"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:gravity="start|center_vertical"
@@ -65,7 +65,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnSettings"
-        style="@style/Widget.Material3.Button.TextButton"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:gravity="start|center_vertical"
@@ -86,7 +86,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnUninstall"
-        style="@style/Widget.Material3.Button.TextButton"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:gravity="start|center_vertical"
