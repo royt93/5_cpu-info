@@ -18,6 +18,8 @@
     <string name="applications">Applikace</string>
     <string name="temp">Teplota</string>
     <string name="settings">Nastavení</string>
+    <string name="export_format_title">Formát exportu</string>
+    <string name="export_as_text">Prostý text</string>
     <string name="running_gc">Spouštění čištění</string>
     <string name="text_copied">Hodnota zkopírována</string>
     <!--Apps-->

@@ -18,6 +18,8 @@
     <string name="applications">Apps</string>
     <string name="temp">Temperatur</string>
     <string name="settings">Einstellungen</string>
+    <string name="export_format_title">Exportformat</string>
+    <string name="export_as_text">Klartext</string>
     <string name="running_gc">Führe Garbage Collector aus</string>
     <string name="text_copied">Wert kopiert</string>
     <!--Apps-->

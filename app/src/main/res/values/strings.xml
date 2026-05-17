@@ -18,6 +18,9 @@
     <string name="sensors">Sensors</string>
     <string name="drm" translatable="false">DRM</string>
     <string name="media" translatable="false">Media</string>
+    <string name="export_format_title">Export format</string>
+    <string name="export_as_text">Plain text</string>
+    <string name="export_as_json" translatable="false">JSON</string>
     <string name="processes">Processes</string>
     <string name="applications">Applications</string>
     <string name="temp">Temperature</string>

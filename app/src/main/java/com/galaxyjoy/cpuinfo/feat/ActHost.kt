@@ -111,11 +111,29 @@ class ActHost : BaseActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menuActionShare -> {
-                systemInfoExporter.exportSystemInfo(this)
+                showExportFormatChooser()
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun showExportFormatChooser() {
+        val items = arrayOf(
+            getString(R.string.export_as_text),
+            getString(R.string.export_as_json),
+        )
+        com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.export_format_title)
+            .setItems(items) { _, which ->
+                val format = if (which == 0) {
+                    SystemInfoExporter.Format.TEXT
+                } else {
+                    SystemInfoExporter.Format.JSON
+                }
+                systemInfoExporter.exportSystemInfo(this, format)
+            }
+            .show()
     }
 
     override fun onDestroy() {
