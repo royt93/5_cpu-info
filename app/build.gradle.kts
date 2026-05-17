@@ -40,6 +40,13 @@ android {
         buildConfigField("String", "APPLOVIN_INTER_ID",    "\"5ce404d8a94fa941\"")
         buildConfigField("String", "APPLOVIN_APP_OPEN_ID", "\"8f218722ddc4ff48\"")
         buildConfigField("String", "APPLOVIN_REWARD_ID",   "\"e460250d026fafa6\"")
+
+        // Privacy Policy URL — dùng chung cho consent dialog + VIP footer
+        buildConfigField(
+            "String",
+            "PRIVACY_POLICY_URL",
+            "\"https://loitp.notion.site/loitp/Privacy-Policy-319b1cd8783942fa8923d2a3c9bce60f/\""
+        )
     }
 
 //    ndkVersion = "25.1.8937393"
@@ -72,6 +79,7 @@ android {
             buildConfigField("String", "ADMOB_BANNER_ID", "\"ca-app-pub-3940256099942544/6300978111\"")
             buildConfigField("String", "ADMOB_INTERSTITIAL_ID", "\"ca-app-pub-3940256099942544/1033173712\"")
             buildConfigField("String", "ADMOB_APP_OPEN_ID", "\"ca-app-pub-3940256099942544/9257395921\"")
+            buildConfigField("String", "ADMOB_REWARDED_ID", "\"ca-app-pub-3940256099942544/5224354917\"")
             buildConfigField("Boolean", "IS_ENABLE_ADMOB", "false") // false = AppLovin MAX
 
             signingConfig = signingConfigs.getByName("debug")
@@ -84,6 +92,9 @@ android {
             buildConfigField("String", "ADMOB_BANNER_ID", "\"ca-app-pub-3612191981543807/6633406668\"")
             buildConfigField("String", "ADMOB_INTERSTITIAL_ID", "\"ca-app-pub-3612191981543807/5493932422\"")
             buildConfigField("String", "ADMOB_APP_OPEN_ID", "\"ca-app-pub-3612191981543807/5265851653\"")
+            // TODO: Thay test ID bằng AdMob Rewarded ID prod khi có (hỏi user). Test ID hiện tại
+            // KHÔNG kiếm tiền — chỉ giữ để release build không crash khi rewarded button được bấm.
+            buildConfigField("String", "ADMOB_REWARDED_ID", "\"ca-app-pub-3940256099942544/5224354917\"")
             buildConfigField("Boolean", "IS_ENABLE_ADMOB", "false") // false = AppLovin MAX
 
             signingConfig = signingConfigs.getByName("release")
@@ -216,6 +227,7 @@ dependencies {
     implementation(libs.coil.compose)
 
     implementation(libs.admob.wrapper) // replaces direct applovin-sdk + play-services-ads + ads-mediation
+    implementation(libs.lottie)
 
     testImplementation(libs.junit)
     testImplementation(libs.mockk)

@@ -33,4 +33,5 @@
         android:name="com.galaxyjoy.cpuinfo.feat.setting.FrmSettings"
         android:label="@string/settings" />
 
+
 </navigation>

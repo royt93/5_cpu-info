@@ -3,6 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/menuActionVip"
+        android:icon="@drawable/ic_workspace_premium"
+        android:orderInCategory="50"
+        android:title="@string/vip_menu_title"
+        app:actionLayout="@layout/action_vip_icon"
+        app:showAsAction="always" />
+
+    <item
         android:id="@+id/menuActionShare"
         android:icon="@android:drawable/ic_menu_share"
         android:orderInCategory="100"

@@ -186,4 +186,41 @@
     <string name="more_app">More app</string>
     <string name="share_app">Share app</string>
     <string name="term_policy"><![CDATA[Term & Policy]]></string>
+
+    <!-- VIP screen -->
+    <string name="vip_menu_title">VIP</string>
+    <string name="vip_active">VIP active</string>
+    <string name="vip_free_user">Free user</string>
+    <string name="vip_until">Until %1$s</string>
+    <string name="vip_activated_at">Activated: %1$s</string>
+    <string name="vip_expires_at">Expires: %1$s</string>
+    <string name="vip_remaining">%1$dd %2$02dh %3$02dm %4$02ds</string>
+    <string name="vip_redeem_label">Enter VIP key</string>
+    <string name="vip_redeem_hint">e.g. 9fA0…</string>
+    <string name="vip_redeem_button">Activate</string>
+    <string name="vip_redeem_invalid">Invalid key. Please try again.</string>
+    <string name="vip_redeem_success">Activated %1$d-day VIP. Enjoy!</string>
+    <string name="vip_watch_ad_3d">Watch ad → 3 days VIP</string>
+    <string name="vip_watch_ad_failed">Ad not available, please try again later.</string>
+    <string name="vip_buy_30d_locked">Buy 30-day VIP — coming soon</string>
+    <string name="vip_buy_90d_locked">Buy 90-day VIP — coming soon</string>
+    <string name="vip_buy_1y_locked">Buy 1-year VIP — coming soon</string>
+    <string name="vip_buy_lifetime_locked">Buy lifetime VIP — coming soon</string>
+    <string name="vip_restore_locked">Restore purchase — coming soon</string>
+    <string name="vip_revoke_all_button">Revoke VIP</string>
+    <string name="vip_revoke_all_confirm_title">Confirm revoke</string>
+    <string name="vip_revoke_all_confirm_message">Revoke VIP and return to Free?</string>
+    <string name="vip_entry_first_install">🎁 First-install gift</string>
+    <string name="vip_entry_redeemed">VIP %1$d days</string>
+    <string name="vip_privacy_policy">Privacy Policy</string>
+    <string name="vip_screen_title">VIP management</string>
+    <string name="vip_settings_title">VIP management</string>
+    <string name="vip_settings_summary">Manage your VIP, redeem keys, watch ad for 3-day VIP</string>
+    <string name="vip_stats_title">Your VIP stats</string>
+    <string name="vip_stats_days_remaining">Days remaining</string>
+    <string name="vip_stats_total_activated">Total VIP activated</string>
+    <string name="vip_stats_days_value">%1$d days</string>
+    <string name="vip_stats_no_active">No active VIP</string>
+    <string name="cancel">Cancel</string>
+    <string name="confirm">Confirm</string>
 </resources>

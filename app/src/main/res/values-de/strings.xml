@@ -154,4 +154,40 @@
     <string name="cpu_temperature">CPU-Temperatur</string>
     <string name="no_temp_data">Temperatur-Sensoren konnten nicht gefunden werden :-(</string>
 
+    <!-- VIP screen -->
+    <string name="vip_menu_title">VIP</string>
+    <string name="vip_active">VIP aktiv</string>
+    <string name="vip_free_user">Kostenloser Nutzer</string>
+    <string name="vip_until">Bis %1$s</string>
+    <string name="vip_activated_at">Aktiviert: %1$s</string>
+    <string name="vip_expires_at">Läuft ab: %1$s</string>
+    <string name="vip_remaining">%1$dd %2$02dh %3$02dm %4$02ds</string>
+    <string name="vip_redeem_label">VIP-Schlüssel eingeben</string>
+    <string name="vip_redeem_hint">z. B. 9fA0…</string>
+    <string name="vip_redeem_button">Aktivieren</string>
+    <string name="vip_redeem_invalid">Ungültiger Schlüssel. Bitte erneut versuchen.</string>
+    <string name="vip_redeem_success">%1$d-Tage-VIP aktiviert. Viel Spaß!</string>
+    <string name="vip_watch_ad_3d">Werbung ansehen → 3 Tage VIP</string>
+    <string name="vip_watch_ad_failed">Werbung nicht verfügbar, bitte später erneut versuchen.</string>
+    <string name="vip_buy_30d_locked">30-Tage-VIP kaufen — bald verfügbar</string>
+    <string name="vip_buy_90d_locked">90-Tage-VIP kaufen — bald verfügbar</string>
+    <string name="vip_buy_1y_locked">1-Jahr-VIP kaufen — bald verfügbar</string>
+    <string name="vip_buy_lifetime_locked">Lifetime-VIP kaufen — bald verfügbar</string>
+    <string name="vip_restore_locked">Kauf wiederherstellen — bald verfügbar</string>
+    <string name="vip_revoke_all_button">VIP entziehen</string>
+    <string name="vip_revoke_all_confirm_title">Entzug bestätigen</string>
+    <string name="vip_revoke_all_confirm_message">VIP entziehen und zum kostenlosen Konto zurückkehren?</string>
+    <string name="vip_entry_first_install">🎁 Geschenk zur Erstinstallation</string>
+    <string name="vip_entry_redeemed">VIP %1$d Tage</string>
+    <string name="vip_privacy_policy">Datenschutzrichtlinie</string>
+    <string name="vip_screen_title">VIP-Verwaltung</string>
+    <string name="vip_settings_title">VIP-Verwaltung</string>
+    <string name="vip_settings_summary">VIP verwalten, Schlüssel einlösen, Werbung für 3 Tage VIP ansehen</string>
+    <string name="vip_stats_title">VIP-Statistik</string>
+    <string name="vip_stats_days_remaining">Verbleibend</string>
+    <string name="vip_stats_total_activated">Gesamt aktiviert</string>
+    <string name="vip_stats_days_value">%1$d Tage</string>
+    <string name="vip_stats_no_active">Kein aktives VIP</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="confirm">Bestätigen</string>
 </resources>

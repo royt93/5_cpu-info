@@ -67,6 +67,13 @@
 <!--            </intent-filter>-->
         </activity>
 
+        <activity
+            android:name=".feat.vip.ActVip"
+            android:exported="false"
+            android:parentActivityName=".feat.ActHost"
+            android:theme="@style/AppThemeBase"
+            android:windowSoftInputMode="adjustResize" />
+
         <!-- AppLovin SDK Key -->
 <!--        <meta-data-->
 <!--            android:name="applovin.sdk.key"-->

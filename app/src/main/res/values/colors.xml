@@ -16,4 +16,9 @@
     <color name="status_bar">@color/primary</color>
     <color name="blueLight">@color/primaryDark</color>
     <color name="progressBackground">#E4E5E7</color>
+    <!-- VIP -->
+    <color name="vip_gold">#FFD60A</color>
+    <color name="vip_gold_dark">#FF8F00</color>
+    <color name="vip_text_on_gold">#1A1A1A</color>
+    <color name="vip_free_grey">#9E9E9E</color>
 </resources>

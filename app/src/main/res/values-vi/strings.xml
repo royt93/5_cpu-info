@@ -170,4 +170,41 @@
     <string name="more_app">Ứng dụng khác</string>
     <string name="share_app">Chia sẻ ứng dụng</string>
     <string name="term_policy"><![CDATA[Điều khoản & Chính sách]]></string>
+
+    <!-- VIP screen -->
+    <string name="vip_menu_title">VIP</string>
+    <string name="vip_active">VIP đang kích hoạt</string>
+    <string name="vip_free_user">Người dùng miễn phí</string>
+    <string name="vip_until">Đến %1$s</string>
+    <string name="vip_activated_at">Kích hoạt: %1$s</string>
+    <string name="vip_expires_at">Hết hạn: %1$s</string>
+    <string name="vip_remaining">%1$dd %2$02dh %3$02dm %4$02ds</string>
+    <string name="vip_redeem_label">Nhập mã VIP</string>
+    <string name="vip_redeem_hint">VD: 9fA0…</string>
+    <string name="vip_redeem_button">Kích hoạt</string>
+    <string name="vip_redeem_invalid">Mã không hợp lệ. Vui lòng thử lại.</string>
+    <string name="vip_redeem_success">Đã kích hoạt VIP %1$d ngày. Chúc bạn vui vẻ!</string>
+    <string name="vip_watch_ad_3d">Xem quảng cáo → 3 ngày VIP</string>
+    <string name="vip_watch_ad_failed">Quảng cáo chưa sẵn sàng, vui lòng thử lại sau.</string>
+    <string name="vip_buy_30d_locked">Mua VIP 30 ngày — sắp ra mắt</string>
+    <string name="vip_buy_90d_locked">Mua VIP 90 ngày — sắp ra mắt</string>
+    <string name="vip_buy_1y_locked">Mua VIP 1 năm — sắp ra mắt</string>
+    <string name="vip_buy_lifetime_locked">Mua VIP trọn đời — sắp ra mắt</string>
+    <string name="vip_restore_locked">Khôi phục mua hàng — sắp ra mắt</string>
+    <string name="vip_revoke_all_button">Thu hồi VIP</string>
+    <string name="vip_revoke_all_confirm_title">Xác nhận thu hồi</string>
+    <string name="vip_revoke_all_confirm_message">Thu hồi VIP và quay về tài khoản miễn phí?</string>
+    <string name="vip_entry_first_install">🎁 Quà tặng cài đặt mới</string>
+    <string name="vip_entry_redeemed">VIP %1$d ngày</string>
+    <string name="vip_privacy_policy">Chính sách bảo mật</string>
+    <string name="vip_screen_title">Quản lý VIP</string>
+    <string name="vip_settings_title">Quản lý VIP</string>
+    <string name="vip_settings_summary">Quản lý VIP, nhập mã, xem quảng cáo để nhận 3 ngày VIP</string>
+    <string name="vip_stats_title">Thống kê VIP</string>
+    <string name="vip_stats_days_remaining">Còn lại</string>
+    <string name="vip_stats_total_activated">Tổng đã kích hoạt</string>
+    <string name="vip_stats_days_value">%1$d ngày</string>
+    <string name="vip_stats_no_active">Chưa có VIP</string>
+    <string name="cancel">Huỷ</string>
+    <string name="confirm">Xác nhận</string>
 </resources>

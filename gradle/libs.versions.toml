@@ -36,7 +36,8 @@ playReview = "2.0.2"
 timber = "5.0.1"
 relinker = "1.4.5"
 coilCompose = "2.7.0"
-admobWrapper = "1.1.1"
+admobWrapper = "1.1.5"
+lottie = "6.6.6"
 
 [libraries]
 # Kotlin / Coroutines
@@ -98,7 +99,8 @@ rxandroid = { module = "io.reactivex.rxjava3:rxandroid", version.ref = "rxandroi
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 relinker = { module = "com.getkeepsafe.relinker:relinker", version.ref = "relinker" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
-admob-wrapper = { module = "com.github.royt93:AdmobWrapper", version.ref = "admobWrapper" }
+admob-wrapper = { module = "com.github.royt93:AdmobApplovinWrapper", version.ref = "admobWrapper" }
+lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }
 
 # Test
 junit = { module = "junit:junit", version.ref = "junit" }

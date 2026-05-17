@@ -150,4 +150,41 @@
     <!--Temp-->
     <string name="cpu_temperature">Teplota procesoru</string>
     <string name="no_temp_data">Je nám líto, ale nedaří se najít čidla teploty :-(</string>
+
+    <!-- VIP screen -->
+    <string name="vip_menu_title">VIP</string>
+    <string name="vip_active">VIP aktivní</string>
+    <string name="vip_free_user">Bezplatný uživatel</string>
+    <string name="vip_until">Do %1$s</string>
+    <string name="vip_activated_at">Aktivováno: %1$s</string>
+    <string name="vip_expires_at">Vyprší: %1$s</string>
+    <string name="vip_remaining">%1$dd %2$02dh %3$02dm %4$02ds</string>
+    <string name="vip_redeem_label">Zadejte klíč VIP</string>
+    <string name="vip_redeem_hint">např. 9fA0…</string>
+    <string name="vip_redeem_button">Aktivovat</string>
+    <string name="vip_redeem_invalid">Neplatný klíč. Zkuste to znovu.</string>
+    <string name="vip_redeem_success">Aktivováno VIP na %1$d dnů. Užijte si to!</string>
+    <string name="vip_watch_ad_3d">Sledovat reklamu → 3 dny VIP</string>
+    <string name="vip_watch_ad_failed">Reklama není dostupná, zkuste to později.</string>
+    <string name="vip_buy_30d_locked">Koupit VIP na 30 dnů — brzy</string>
+    <string name="vip_buy_90d_locked">Koupit VIP na 90 dnů — brzy</string>
+    <string name="vip_buy_1y_locked">Koupit VIP na 1 rok — brzy</string>
+    <string name="vip_buy_lifetime_locked">Koupit doživotní VIP — brzy</string>
+    <string name="vip_restore_locked">Obnovit nákup — brzy</string>
+    <string name="vip_revoke_all_button">Odvolat VIP</string>
+    <string name="vip_revoke_all_confirm_title">Potvrdit odvolání</string>
+    <string name="vip_revoke_all_confirm_message">Odvolat VIP a vrátit se k bezplatnému účtu?</string>
+    <string name="vip_entry_first_install">🎁 Dárek za první instalaci</string>
+    <string name="vip_entry_redeemed">VIP na %1$d dnů</string>
+    <string name="vip_privacy_policy">Zásady ochrany osobních údajů</string>
+    <string name="vip_screen_title">Správa VIP</string>
+    <string name="vip_settings_title">Správa VIP</string>
+    <string name="vip_settings_summary">Spravujte VIP, zadejte klíče, sledujte reklamu pro 3 dny VIP</string>
+    <string name="vip_stats_title">Statistiky VIP</string>
+    <string name="vip_stats_days_remaining">Zbývá</string>
+    <string name="vip_stats_total_activated">Celkem aktivováno</string>
+    <string name="vip_stats_days_value">%1$d dnů</string>
+    <string name="vip_stats_no_active">Žádné aktivní VIP</string>
+    <string name="cancel">Zrušit</string>
+    <string name="confirm">Potvrdit</string>
 </resources>

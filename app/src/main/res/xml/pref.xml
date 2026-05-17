@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory app:title="@string/vip_menu_title">
+
+        <Preference
+            app:icon="@drawable/ic_workspace_premium"
+            app:key="key_vip_management"
+            app:summary="@string/vip_settings_summary"
+            app:title="@string/vip_settings_title" />
+
+    </PreferenceCategory>
     <PreferenceCategory app:title="@string/version">
 
         <Preference

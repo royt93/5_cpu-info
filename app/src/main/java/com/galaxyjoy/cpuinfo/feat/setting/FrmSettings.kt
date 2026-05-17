@@ -24,6 +24,11 @@ class FrmSettings : PreferenceFragmentCompat(),
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.pref)
 
+        findPreference<Preference>("key_vip_management")?.setOnPreferenceClickListener {
+            activity?.let { com.galaxyjoy.cpuinfo.feat.vip.ActVip.start(it) }
+            true
+        }
+
         val rateAppPreference: Preference? = findPreference("key_rate_app")
         rateAppPreference?.setOnPreferenceClickListener {
             activity?.let {

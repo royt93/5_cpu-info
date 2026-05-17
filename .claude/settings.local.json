@@ -5,7 +5,15 @@
       "Bash(echo \"---exit:$?\")",
       "Bash(git restore *)",
       "Bash(git add *)",
-      "Bash(git commit -m ' *)"
+      "Bash(git commit -m ' *)",
+      "Bash(find /Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260323_cpu-info/app/src/main/res/values* -name \"strings.xml\" -type f)",
+      "WebSearch",
+      "Bash(xargs ls *)",
+      "Bash(xxd)",
+      "Bash(curl -sL \"https://assets10.lottiefiles.com/packages/lf20_obhph3sh.json\" -o /tmp/anim_confetti.json)",
+      "Read(//tmp/**)",
+      "Bash(curl -sL \"https://lottie.host/4f6db1f2-c20a-4f06-a3a6-d2c8a3d6f0e0/Wxc9NPHbST.json\" -o /tmp/test_alt.json)",
+      "Bash(curl -sL \"https://assets3.lottiefiles.com/packages/lf20_u4yrau.json\" -o /tmp/test2.json)"
     ],
     "deny": [],
     "ask": []
