@@ -22,6 +22,11 @@
     <string name="export_as_text">Zwykły tekst</string>
     <string name="running_gc">Uruchamianie Garbage Collector</string>
     <string name="text_copied">Wartość skopiowana</string>
+    <string name="action_gc">Garbage collector</string>
+    <string name="media">Multimedia</string>
+    <string name="cpu_soc_name">Nazwa SoC</string>
+    <string name="cpu_cores">Rdzenie</string>
+    <string name="cpu_frequency_stopped">Rdzeń %1$d: Zatrzymany</string>
     <!--Apps-->
     <string name="app_open">Nie można otworzyć tej aplikacji</string>
     <string name="cpu_open">Już otwarty :-)</string>

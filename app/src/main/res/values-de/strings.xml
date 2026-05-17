@@ -22,6 +22,11 @@
     <string name="export_as_text">Klartext</string>
     <string name="running_gc">Führe Garbage Collector aus</string>
     <string name="text_copied">Wert kopiert</string>
+    <string name="action_gc">Garbage Collector</string>
+    <string name="media">Medien</string>
+    <string name="cpu_soc_name">SoC-Name</string>
+    <string name="cpu_cores">Kerne</string>
+    <string name="cpu_frequency_stopped">Kern %1$d: Gestoppt</string>
     <!--Apps-->
     <string name="app_open">Konnte App nicht öffnen</string>
     <string name="cpu_open">Öffne mich nicht zweimal :-)</string>

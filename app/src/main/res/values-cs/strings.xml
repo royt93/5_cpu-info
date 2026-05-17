@@ -22,6 +22,11 @@
     <string name="export_as_text">Prostý text</string>
     <string name="running_gc">Spouštění čištění</string>
     <string name="text_copied">Hodnota zkopírována</string>
+    <string name="action_gc">Sběrač odpadu</string>
+    <string name="media">Média</string>
+    <string name="cpu_soc_name">Název SoC</string>
+    <string name="cpu_cores">Jádra</string>
+    <string name="cpu_frequency_stopped">Jádro %1$d: Zastaveno</string>
     <!--Apps-->
     <string name="app_open">Tuto aplikaci se nedaří spustit</string>
     <string name="cpu_open">Nespouštějte tuto aplikaci vícekrát naráz :-)</string>

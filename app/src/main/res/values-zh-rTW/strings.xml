@@ -24,6 +24,12 @@
     <string name="export_as_text">純文字</string>
     <string name="running_gc">正在清理記憶體</string>
     <string name="text_copied">數值已複製</string>
+    <string name="action_gc">垃圾回收</string>
+    <string name="media">媒體</string>
+    <string name="cpu_soc_name">SoC 名稱</string>
+    <string name="cpu_cores">核心數</string>
+    <string name="cpu_frequency_stopped">核心 %1$d: 已停止</string>
+    <string name="native_libs">原生程式庫</string>
     <!--Apps-->
     <string name="app_open">無法開啟這個應用程式</string>
     <string name="cpu_open">不要打開我兩次 :-)</string>
