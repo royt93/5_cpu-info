@@ -11,4 +11,9 @@
     <color name="onSurface">#E1E3E3</color>
     <color name="background">#191C1D</color>
     <color name="onBackground">#FFFFFF</color>
+    <!-- Stroke / divider trên dark surface — đậm vừa để contrast nhưng không chói. -->
+    <color name="progressBackground">#3A3D3F</color>
+    <!-- VIP overrides cho dark mode -->
+    <color name="vip_gold">#FFD180</color>
+    <color name="vip_gold_dark">#FFB74D</color>
 </resources>

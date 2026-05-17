@@ -175,7 +175,7 @@
                         android:layout_height="wrap_content"
                         android:letterSpacing="0.08"
                         android:text="@string/vip_stats_title"
-                        android:textColor="@color/primary"
+                        android:textColor="@color/accent"
                         android:textSize="13sp"
                         android:textStyle="bold" />
 
@@ -475,7 +475,7 @@
                 android:layout_marginTop="16dp"
                 android:padding="12dp"
                 android:text="@string/vip_privacy_policy"
-                android:textColor="@color/primary"
+                android:textColor="@color/accent"
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
