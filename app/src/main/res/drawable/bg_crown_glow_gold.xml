@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Radial gold gradient halo cho action bar crown icon khi VIP active.
+     Khác với bg_crown_glow.xml (cho hero card) — version này focused, intense gold,
+     để contrast trên toolbar (cả light + dark). -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <gradient
+        android:centerColor="#80FFD600"
+        android:endColor="#00FFD600"
+        android:gradientRadius="26dp"
+        android:startColor="#FFFFD600"
+        android:type="radial" />
+</shape>

@@ -30,8 +30,6 @@ import com.galaxyjoy.cpuinfo.util.LocaleManager
 import com.galaxyjoy.cpuinfo.util.SystemInfoExporter
 import com.galaxyjoy.cpuinfo.util.runOnApiAbove
 import com.galaxyjoy.cpuinfo.util.setupEdgeToEdge
-import com.google.android.material.badge.BadgeDrawable
-import com.google.android.material.badge.BadgeUtils
 import com.roy.sdkadbmob.AdManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.first
@@ -58,12 +56,12 @@ class ActHost : BaseActivity() {
     lateinit var userPreferencesRepository: UserPreferencesRepository
 
     private var menuMain: Menu? = null
-    private var vipBadge: BadgeDrawable? = null
     private var vipActionView: View? = null
     private var vipIconView: ImageView? = null
+    private var vipGlowView: View? = null
     private var vipIconPulse: ObjectAnimator? = null
     private var vipIconWiggle: ObjectAnimator? = null
-    private var vipIconTint: android.animation.ValueAnimator? = null
+    private var vipGlowAnimator: ObjectAnimator? = null
 
     /**
      * Reference banner view để có thể destroy khi user activate VIP mid-session.
@@ -209,6 +207,7 @@ class ActHost : BaseActivity() {
         val vipItem = menu.findItem(R.id.menuActionVip)
         vipActionView = vipItem?.actionView
         vipIconView = vipActionView?.findViewById(R.id.actionVipIcon)
+        vipGlowView = vipActionView?.findViewById(R.id.actionVipGlow)
         // actionLayout không trigger onOptionsItemSelected → wire click trực tiếp.
         vipActionView?.setOnClickListener { navigateToVip() }
         refreshVipBadgeAndPulse()
@@ -231,86 +230,97 @@ class ActHost : BaseActivity() {
      * Khi VIP active → attach BadgeDrawable (vàng) anchor lên actionView + pulse icon.
      * Free → detach + stop pulse. Cache instance, tránh duplicate khi onResume spam.
      */
-    @SuppressLint("UnsafeOptInUsageError")
+    /**
+     * Toggle visual giữa free / VIP active state cho crown icon ở toolbar.
+     * - VIP active: icon tint solid gold + glow halo ring + bouncy pulse + wiggle.
+     * - Free: icon tint default grey, ẩn glow, dừng animation.
+     *
+     * KHÔNG dùng BadgeDrawable nữa — user cho biết "chấm tròn kì quặc". Thay bằng
+     * visual diff rõ ràng qua color + glow + motion.
+     */
     private fun refreshVipBadgeAndPulse() {
-        val anchor = vipActionView ?: return
-        // BadgeUtils.attachBadgeDrawable() chain → BadgeDrawable.updateAnchorParentToNotClip()
-        // gọi anchor.parent.setClipChildren(false). Nếu anchor chưa attach vào ActionMenuView
-        // (hợp lệ khi onCreateOptionsMenu vừa fire, view tạo nhưng chưa add vào toolbar) → NPE.
-        // Workaround: defer 1 frame tới khi parent ready.
-        if (anchor.parent == null) {
-            Log.d(TAG, "refreshVipBadgeAndPulse: anchor not yet attached → post retry")
-            anchor.post { refreshVipBadgeAndPulse() }
-            return
-        }
         val active = AdManager.isVipByKeyActive()
-        Log.d(TAG, "refreshVipBadgeAndPulse: active=$active, badge=${vipBadge != null}")
-        val current = vipBadge
+        val icon = vipIconView ?: return
+        Log.d(TAG, "refreshVipBadgeAndPulse: active=$active")
         if (active) {
-            if (current == null) {
-                val badge = BadgeDrawable.create(this).apply {
-                    backgroundColor = getColor(R.color.vip_gold)
-                    isVisible = true
-                }
-                vipBadge = badge
-                BadgeUtils.attachBadgeDrawable(badge, anchor)
-            }
+            // Solid gold cho VIP — color visible rõ trên cả light/dark toolbar.
+            androidx.core.widget.ImageViewCompat.setImageTintList(
+                icon,
+                android.content.res.ColorStateList.valueOf(getColor(R.color.vip_gold_dark)),
+            )
             startVipIconPulse()
+            startVipGlow()
         } else {
-            if (current != null) {
-                BadgeUtils.detachBadgeDrawable(current, anchor)
-                vipBadge = null
-            }
+            androidx.core.widget.ImageViewCompat.setImageTintList(
+                icon,
+                android.content.res.ColorStateList.valueOf(resolveAttrColor(android.R.attr.colorControlNormal)),
+            )
             stopVipIconPulse()
+            stopVipGlow()
+        }
+    }
+
+    private fun startVipGlow() {
+        val glow = vipGlowView ?: return
+        if (vipGlowAnimator?.isRunning == true) return
+        glow.visibility = View.VISIBLE
+        vipGlowAnimator?.cancel()
+        vipGlowAnimator = ObjectAnimator.ofPropertyValuesHolder(
+            glow,
+            PropertyValuesHolder.ofFloat(View.ALPHA, 0.3f, 0.85f),
+            PropertyValuesHolder.ofFloat(View.SCALE_X, 0.9f, 1.2f),
+            PropertyValuesHolder.ofFloat(View.SCALE_Y, 0.9f, 1.2f),
+        ).apply {
+            duration = 1400L
+            repeatMode = ObjectAnimator.REVERSE
+            repeatCount = ObjectAnimator.INFINITE
+            start()
+        }
+    }
+
+    private fun stopVipGlow() {
+        vipGlowAnimator?.cancel()
+        vipGlowAnimator?.removeAllUpdateListeners()
+        vipGlowAnimator?.removeAllListeners()
+        vipGlowAnimator = null
+        vipGlowView?.apply {
+            alpha = 0f
+            scaleX = 1f
+            scaleY = 1f
+            visibility = View.GONE
         }
     }
 
     /**
-     * Multi-animator cho crown icon khi VIP active:
-     * - Pulse: scale 1.0 ↔ 1.15 (2.4s reverse infinite)
-     * - Wiggle: rotation -6° ↔ +6° (lệch phase 1.6s reverse infinite)
-     * - Tint shift: colorControlNormal ↔ vip_gold qua argb evaluator (3s reverse infinite)
+     * Bouncy pulse + wiggle khi VIP active. Animation rõ ràng hơn version trước:
+     * - Pulse: scale 1.0 ↔ 1.25 (dramatic bigger jump)
+     * - Wiggle: rotation -8° ↔ +8° (mạnh hơn)
      *
-     * 3 animators chạy parallel với duration khác nhau → tạo hiệu ứng "living crown" không
-     * monotone — pulse + nghiêng nhẹ + tint vàng nhấp nháy.
+     * Color shift đã xử lý qua `setImageTintList` solid (gold khi VIP, grey khi free) →
+     * không cần animator tint shift nữa. Glow halo riêng (xem startVipGlow).
      */
     private fun startVipIconPulse() {
         val icon = vipIconView ?: return
-        if (vipIconPulse?.isRunning == true) return  // tránh restart duplicate
-        stopVipIconPulse()  // clean any stale animators (rotation/tint)
+        if (vipIconPulse?.isRunning == true) return
+        stopVipIconPulse()
 
         vipIconPulse = ObjectAnimator.ofPropertyValuesHolder(
             icon,
-            PropertyValuesHolder.ofFloat(View.SCALE_X, 1.0f, 1.15f),
-            PropertyValuesHolder.ofFloat(View.SCALE_Y, 1.0f, 1.15f),
+            PropertyValuesHolder.ofFloat(View.SCALE_X, 1.0f, 1.25f),
+            PropertyValuesHolder.ofFloat(View.SCALE_Y, 1.0f, 1.25f),
         ).apply {
-            duration = 1200L
+            duration = 1100L
             repeatMode = ObjectAnimator.REVERSE
             repeatCount = ObjectAnimator.INFINITE
+            interpolator = android.view.animation.AccelerateDecelerateInterpolator()
             start()
         }
 
-        vipIconWiggle = ObjectAnimator.ofFloat(icon, View.ROTATION, -6f, 6f).apply {
-            duration = 800L
+        vipIconWiggle = ObjectAnimator.ofFloat(icon, View.ROTATION, -8f, 8f).apply {
+            duration = 750L
             repeatMode = ObjectAnimator.REVERSE
             repeatCount = ObjectAnimator.INFINITE
-            start()
-        }
-
-        val baseColor = resolveAttrColor(android.R.attr.colorControlNormal)
-        val goldColor = getColor(R.color.vip_gold_dark)
-        vipIconTint = android.animation.ValueAnimator.ofObject(
-            android.animation.ArgbEvaluator(),
-            baseColor,
-            goldColor,
-        ).apply {
-            duration = 1500L
-            repeatMode = android.animation.ValueAnimator.REVERSE
-            repeatCount = android.animation.ValueAnimator.INFINITE
-            addUpdateListener { anim ->
-                val color = anim.animatedValue as? Int ?: return@addUpdateListener
-                vipIconView?.setColorFilter(color)
-            }
+            interpolator = android.view.animation.AccelerateDecelerateInterpolator()
             start()
         }
     }
@@ -330,14 +340,11 @@ class ActHost : BaseActivity() {
         vipIconWiggle?.removeAllUpdateListeners()
         vipIconWiggle?.removeAllListeners()
         vipIconWiggle = null
-        vipIconTint?.cancel()
-        vipIconTint?.removeAllUpdateListeners()
-        vipIconTint?.removeAllListeners()
-        vipIconTint = null
-        vipIconView?.scaleX = 1f
-        vipIconView?.scaleY = 1f
-        vipIconView?.rotation = 0f
-        vipIconView?.clearColorFilter()
+        vipIconView?.apply {
+            scaleX = 1f
+            scaleY = 1f
+            rotation = 0f
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -374,13 +381,10 @@ class ActHost : BaseActivity() {
         Log.d(TAG, "onDestroy")
         navController.removeOnDestinationChangedListener(destinationChangedListener)
         stopVipIconPulse()
-        val anchor = vipActionView
-        vipBadge?.let { badge ->
-            if (anchor != null) BadgeUtils.detachBadgeDrawable(badge, anchor)
-        }
-        vipBadge = null
+        stopVipGlow()
         vipActionView = null
         vipIconView = null
+        vipGlowView = null
         menuMain = null
         adView?.let { AdManager.bannerDestroy(it) }
         adView = null

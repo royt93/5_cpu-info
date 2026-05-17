@@ -1,12 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="48dp"
-    android:layout_height="48dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="52dp"
+    android:layout_height="52dp"
     android:background="?attr/selectableItemBackgroundBorderless"
     android:clickable="true"
     android:clipChildren="false"
     android:clipToPadding="false"
     android:focusable="true">
+
+    <!-- Glow halo behind icon — chỉ visible khi VIP active. Radial gradient gold. -->
+    <View
+        android:id="@+id/actionVipGlow"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        android:layout_gravity="center"
+        android:alpha="0"
+        android:background="@drawable/bg_crown_glow_gold"
+        android:visibility="gone" />
 
     <ImageView
         android:id="@+id/actionVipIcon"
@@ -14,7 +25,5 @@
         android:layout_height="26dp"
         android:layout_gravity="center"
         android:contentDescription="@string/vip_menu_title"
-        android:src="@drawable/ic_crown_premium_v2"
-        app:tint="?attr/colorControlNormal"
-        xmlns:app="http://schemas.android.com/apk/res-auto" />
+        android:src="@drawable/ic_crown_premium_v2" />
 </FrameLayout>
