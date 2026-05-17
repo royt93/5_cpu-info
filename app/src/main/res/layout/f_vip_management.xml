@@ -331,15 +331,21 @@
                         app:boxCornerRadiusBottomStart="12dp"
                         app:boxCornerRadiusTopEnd="12dp"
                         app:boxCornerRadiusTopStart="12dp"
+                        app:boxStrokeColor="@color/btn_primary_activate"
                         app:endIconMode="clear_text"
-                        app:startIconDrawable="@drawable/ic_confirmation_number">
+                        app:endIconTint="@color/btn_primary_activate"
+                        app:hintTextColor="@color/btn_primary_activate"
+                        app:startIconDrawable="@drawable/ic_confirmation_number"
+                        app:startIconTint="@color/btn_primary_activate">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etRedeemKey"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="textVisiblePassword"
-                            android:maxLines="1" />
+                            android:maxLines="1"
+                            android:textColor="?attr/colorOnSurface"
+                            android:textColorHint="?android:attr/textColorSecondary" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.button.MaterialButton
@@ -349,7 +355,10 @@
                         android:layout_marginTop="16dp"
                         android:minHeight="48dp"
                         android:text="@string/vip_redeem_button"
+                        android:textColor="@color/btn_primary_activate_text"
                         android:textSize="15sp"
+                        android:textStyle="bold"
+                        app:backgroundTint="@color/btn_primary_activate"
                         app:cornerRadius="12dp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -372,11 +381,15 @@
                     android:layout_height="wrap_content"
                     android:minHeight="52dp"
                     android:text="@string/vip_watch_ad_3d"
+                    android:textColor="@color/btn_primary_activate_text"
                     android:textSize="15sp"
+                    android:textStyle="bold"
+                    app:backgroundTint="@color/btn_primary_activate"
                     app:cornerRadius="14dp"
                     app:icon="@drawable/ic_play_circle"
                     app:iconGravity="textStart"
-                    app:iconSize="22dp" />
+                    app:iconSize="22dp"
+                    app:iconTint="@color/btn_primary_activate_text" />
             </FrameLayout>
 
             <!-- ===== Buy buttons (4 + restore) ===== -->

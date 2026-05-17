@@ -10,11 +10,11 @@
 
     <ImageView
         android:id="@+id/actionVipIcon"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="26dp"
+        android:layout_height="26dp"
         android:layout_gravity="center"
         android:contentDescription="@string/vip_menu_title"
-        android:src="@drawable/ic_workspace_premium"
+        android:src="@drawable/ic_crown_premium_v2"
         app:tint="?attr/colorControlNormal"
         xmlns:app="http://schemas.android.com/apk/res-auto" />
 </FrameLayout>

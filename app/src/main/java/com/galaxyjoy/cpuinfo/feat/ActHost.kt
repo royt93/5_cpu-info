@@ -62,6 +62,8 @@ class ActHost : BaseActivity() {
     private var vipActionView: View? = null
     private var vipIconView: ImageView? = null
     private var vipIconPulse: ObjectAnimator? = null
+    private var vipIconWiggle: ObjectAnimator? = null
+    private var vipIconTint: android.animation.ValueAnimator? = null
 
     /**
      * Reference banner view để có thể destroy khi user activate VIP mid-session.
@@ -232,6 +234,15 @@ class ActHost : BaseActivity() {
     @SuppressLint("UnsafeOptInUsageError")
     private fun refreshVipBadgeAndPulse() {
         val anchor = vipActionView ?: return
+        // BadgeUtils.attachBadgeDrawable() chain → BadgeDrawable.updateAnchorParentToNotClip()
+        // gọi anchor.parent.setClipChildren(false). Nếu anchor chưa attach vào ActionMenuView
+        // (hợp lệ khi onCreateOptionsMenu vừa fire, view tạo nhưng chưa add vào toolbar) → NPE.
+        // Workaround: defer 1 frame tới khi parent ready.
+        if (anchor.parent == null) {
+            Log.d(TAG, "refreshVipBadgeAndPulse: anchor not yet attached → post retry")
+            anchor.post { refreshVipBadgeAndPulse() }
+            return
+        }
         val active = AdManager.isVipByKeyActive()
         Log.d(TAG, "refreshVipBadgeAndPulse: active=$active, badge=${vipBadge != null}")
         val current = vipBadge
@@ -254,10 +265,20 @@ class ActHost : BaseActivity() {
         }
     }
 
+    /**
+     * Multi-animator cho crown icon khi VIP active:
+     * - Pulse: scale 1.0 ↔ 1.15 (2.4s reverse infinite)
+     * - Wiggle: rotation -6° ↔ +6° (lệch phase 1.6s reverse infinite)
+     * - Tint shift: colorControlNormal ↔ vip_gold qua argb evaluator (3s reverse infinite)
+     *
+     * 3 animators chạy parallel với duration khác nhau → tạo hiệu ứng "living crown" không
+     * monotone — pulse + nghiêng nhẹ + tint vàng nhấp nháy.
+     */
     private fun startVipIconPulse() {
         val icon = vipIconView ?: return
         if (vipIconPulse?.isRunning == true) return  // tránh restart duplicate
-        vipIconPulse?.cancel()
+        stopVipIconPulse()  // clean any stale animators (rotation/tint)
+
         vipIconPulse = ObjectAnimator.ofPropertyValuesHolder(
             icon,
             PropertyValuesHolder.ofFloat(View.SCALE_X, 1.0f, 1.15f),
@@ -268,6 +289,36 @@ class ActHost : BaseActivity() {
             repeatCount = ObjectAnimator.INFINITE
             start()
         }
+
+        vipIconWiggle = ObjectAnimator.ofFloat(icon, View.ROTATION, -6f, 6f).apply {
+            duration = 800L
+            repeatMode = ObjectAnimator.REVERSE
+            repeatCount = ObjectAnimator.INFINITE
+            start()
+        }
+
+        val baseColor = resolveAttrColor(android.R.attr.colorControlNormal)
+        val goldColor = getColor(R.color.vip_gold_dark)
+        vipIconTint = android.animation.ValueAnimator.ofObject(
+            android.animation.ArgbEvaluator(),
+            baseColor,
+            goldColor,
+        ).apply {
+            duration = 1500L
+            repeatMode = android.animation.ValueAnimator.REVERSE
+            repeatCount = android.animation.ValueAnimator.INFINITE
+            addUpdateListener { anim ->
+                val color = anim.animatedValue as? Int ?: return@addUpdateListener
+                vipIconView?.setColorFilter(color)
+            }
+            start()
+        }
+    }
+
+    private fun resolveAttrColor(attr: Int): Int {
+        val tv = android.util.TypedValue()
+        theme.resolveAttribute(attr, tv, true)
+        return if (tv.resourceId != 0) getColor(tv.resourceId) else tv.data
     }
 
     private fun stopVipIconPulse() {
@@ -275,8 +326,18 @@ class ActHost : BaseActivity() {
         vipIconPulse?.removeAllUpdateListeners()
         vipIconPulse?.removeAllListeners()
         vipIconPulse = null
+        vipIconWiggle?.cancel()
+        vipIconWiggle?.removeAllUpdateListeners()
+        vipIconWiggle?.removeAllListeners()
+        vipIconWiggle = null
+        vipIconTint?.cancel()
+        vipIconTint?.removeAllUpdateListeners()
+        vipIconTint?.removeAllListeners()
+        vipIconTint = null
         vipIconView?.scaleX = 1f
         vipIconView?.scaleY = 1f
+        vipIconView?.rotation = 0f
+        vipIconView?.clearColorFilter()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

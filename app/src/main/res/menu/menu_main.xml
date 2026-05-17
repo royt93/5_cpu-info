@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/menuActionVip"
-        android:icon="@drawable/ic_workspace_premium"
+        android:icon="@drawable/ic_crown_premium_v2"
         android:orderInCategory="50"
         android:title="@string/vip_menu_title"
         app:actionLayout="@layout/action_vip_icon"

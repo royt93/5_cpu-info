@@ -16,4 +16,8 @@
     <!-- VIP overrides cho dark mode -->
     <color name="vip_gold">#FFD180</color>
     <color name="vip_gold_dark">#FFB74D</color>
+    <!-- Btn "Kích hoạt" dark: vàng đậm (#FFB300) cho contrast trên dark surface,
+         text màu đen đậm để readable trên gold bg. -->
+    <color name="btn_primary_activate">#FFB300</color>
+    <color name="btn_primary_activate_text">#1C1C1C</color>
 </resources>

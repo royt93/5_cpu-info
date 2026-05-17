@@ -1,5 +1,6 @@
 package com.galaxyjoy.cpuinfo.feat.vip
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -26,6 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -35,13 +37,6 @@ import com.galaxyjoy.cpuinfo.R
 import com.galaxyjoy.cpuinfo.feat.setting.BaseRoundedBottomSheet
 import com.galaxyjoy.cpuinfo.ui.theme.CpuInfoTheme
 
-/**
- * BottomSheet xác nhận revoke VIP — thay AlertDialog xấu.
- *
- * Return result qua FragmentResult API:
- *   - REQUEST_KEY: [REQUEST_KEY]
- *   - ARG_CONFIRMED: Boolean (true nếu user confirm revoke, false nếu cancel)
- */
 class VipRevokeConfirmBottomSheet : BaseRoundedBottomSheet() {
 
     override fun onCreateView(
@@ -51,7 +46,13 @@ class VipRevokeConfirmBottomSheet : BaseRoundedBottomSheet() {
     ): View = ComposeView(requireContext()).apply {
         setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
         setContent {
-            CpuInfoTheme {
+            // Force dark detection từ activity's actual uiMode — đảm bảo respect
+            // AppCompatDelegate.setDefaultNightMode override (user toggle theme qua Settings).
+            // Compose `isSystemInDarkTheme()` đôi khi không sync với AppCompatDelegate.
+            val ctx = LocalContext.current
+            val isDark = (ctx.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) ==
+                Configuration.UI_MODE_NIGHT_YES
+            CpuInfoTheme(useDarkTheme = isDark) {
                 RevokeConfirmContent(
                     onCancel = {
                         emitResult(false)
@@ -120,8 +121,15 @@ private fun RevokeConfirmContent(onCancel: () -> Unit, onConfirm: () -> Unit) {
                 OutlinedButton(
                     onClick = onCancel,
                     modifier = Modifier.weight(1f),
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        // Explicit để tránh phụ thuộc theme default — luôn readable trên cả light/dark.
+                        contentColor = MaterialTheme.colorScheme.onSurface,
+                    ),
                 ) {
-                    Text(stringResource(R.string.cancel))
+                    Text(
+                        stringResource(R.string.cancel),
+                        color = MaterialTheme.colorScheme.onSurface,
+                    )
                 }
                 Button(
                     onClick = onConfirm,
@@ -131,7 +139,10 @@ private fun RevokeConfirmContent(onCancel: () -> Unit, onConfirm: () -> Unit) {
                         contentColor = MaterialTheme.colorScheme.onError,
                     ),
                 ) {
-                    Text(stringResource(R.string.confirm))
+                    Text(
+                        stringResource(R.string.confirm),
+                        color = MaterialTheme.colorScheme.onError,
+                    )
                 }
             }
         }

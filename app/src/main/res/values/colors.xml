@@ -21,4 +21,7 @@
     <color name="vip_gold_dark">#FF8F00</color>
     <color name="vip_text_on_gold">#1A1A1A</color>
     <color name="vip_free_grey">#9E9E9E</color>
+    <!-- Btn "Kích hoạt" / "Watch ad" — light: cyan accent; dark: vibrant gold để nổi bật. -->
+    <color name="btn_primary_activate">#36C2CE</color>
+    <color name="btn_primary_activate_text">#FFFFFF</color>
 </resources>
