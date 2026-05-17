@@ -110,7 +110,7 @@ class ActHost : BaseActivity() {
             val tag = bundle.getString(LanguagePickerBottomSheet.ARG_TAG) ?: return@setFragmentResultListener
             // No need to setLanguagePicked here — maybeShow already persists it before showing,
             // so flag survives any path (pick, swipe-dismiss, app kill).
-            LocaleManager.apply(tag)
+            LocaleManager.applyNoFlicker(this, tag)
         }
     }
 

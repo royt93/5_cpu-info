@@ -6,9 +6,10 @@
     <color name="error">#F06292</color>
     <color name="onError">#FFFFFF</color>
     <color name="accent">#36C2CE</color>
-    <color name="surface">#FFFFFF</color>
-    <color name="onSurface">#000000</color>
-    <color name="background">#FFFFFF</color>
+    <!-- Aligned with Compose md_theme_light_surface so XML & Compose render identical tone. -->
+    <color name="surface">#FAFDFD</color>
+    <color name="onSurface">#191C1D</color>
+    <color name="background">#FAFDFD</color>
     <color name="onBackground">#000000</color>
     <color name="red">#F06292</color>
     <color name="nav_bar">#B3000000</color>

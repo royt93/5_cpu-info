@@ -1,5 +1,7 @@
 package com.galaxyjoy.cpuinfo.util
 
+import android.app.Activity
+import android.os.Build
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
 
@@ -53,6 +55,45 @@ object LocaleManager {
             LocaleListCompat.forLanguageTags(tag)
         }
         AppCompatDelegate.setApplicationLocales(list)
+    }
+
+    /**
+     * Apply locale and refresh the current activity **without** the system fade-through-black
+     * that [Activity.recreate] normally produces on locale change.
+     *
+     * How it works:
+     *  1. [apply] synchronously persists the locale (file + Android 13+ system per-app language).
+     *     AppCompat then schedules its own [Activity.recreate] via `postAtFrontOfQueue`.
+     *  2. Before that recreate runs, we *synchronously* `finish()` + `startActivity(intent)`
+     *     with a zero-time `overridePendingTransition(0, 0)` on both sides.
+     *  3. When the main looper next processes events, AppCompat's queued recreate fires on
+     *     the now-destroyed activity → no-op. The new activity instance comes up with the
+     *     new locale already applied (AppCompat reads it back in attachBaseContext).
+     *
+     * Result: no fade frame, no splash detour, process stays alive (SDKs / ads / cached
+     * state preserved). The visible effect is an instant content swap.
+     */
+    fun applyNoFlicker(activity: Activity, tag: String) {
+        apply(tag)
+
+        val intent = activity.intent
+        activity.finish()
+        zeroTransition(activity, opening = false)
+        activity.startActivity(intent)
+        zeroTransition(activity, opening = true)
+    }
+
+    private fun zeroTransition(activity: Activity, opening: Boolean) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            activity.overrideActivityTransition(
+                if (opening) Activity.OVERRIDE_TRANSITION_OPEN else Activity.OVERRIDE_TRANSITION_CLOSE,
+                0,
+                0,
+            )
+        } else {
+            @Suppress("DEPRECATION")
+            activity.overridePendingTransition(0, 0)
+        }
     }
 
     /**

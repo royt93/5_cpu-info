@@ -12,13 +12,10 @@
         app:key="pref_key_storage_settings"
         app:title="@string/general">
 
-        <ListPreference
+        <Preference
             app:defaultValue="0"
-            app:entries="@array/prefTemperatureNames"
-            app:entryValues="@array/prefTemperatureValues"
             app:key="temperature_unit"
-            app:title="@string/temperature_unit"
-            app:useSimpleSummaryProvider="true" />
+            app:title="@string/temperature_unit" />
 
     </PreferenceCategory>
 
@@ -36,14 +33,10 @@
         app:key="pref_key_theme_category"
         app:title="@string/pref_theme">
 
-        <ListPreference
+        <Preference
             app:defaultValue="default"
-            app:dialogTitle="@string/pref_theme_choose"
-            app:entries="@array/themeListArray"
-            app:entryValues="@array/themeEntryArray"
             app:key="key_theme"
-            app:title="@string/pref_theme_choose"
-            app:useSimpleSummaryProvider="true" />
+            app:title="@string/pref_theme_choose" />
 
     </PreferenceCategory>
 

@@ -4,13 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
@@ -29,19 +26,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.setFragmentResult
 import com.galaxyjoy.cpuinfo.R
 import com.galaxyjoy.cpuinfo.ui.theme.CpuInfoTheme
-import com.galaxyjoy.cpuinfo.util.LocaleManager
 
 /**
- * Material You bottom sheet to pick app language. Returns the chosen BCP-47 tag via
- * Fragment Result API under key [REQUEST_KEY] / arg [ARG_TAG]. Empty string means
- * "follow system default".
+ * Material You bottom sheet to pick temperature unit (°C / °F / °K).
+ * Returns chosen value (matches @array/prefTemperatureValues) via Fragment Result API.
  */
-class LanguagePickerBottomSheet : BaseRoundedBottomSheet() {
+class TemperatureUnitBottomSheet : BaseRoundedBottomSheet() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,12 +45,13 @@ class LanguagePickerBottomSheet : BaseRoundedBottomSheet() {
         savedInstanceState: Bundle?,
     ): View = ComposeView(requireContext()).apply {
         setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+        val initialValue = arguments?.getString(ARG_INITIAL_VALUE).orEmpty()
         setContent {
             CpuInfoTheme {
-                LanguagePickerContent(
-                    currentTag = LocaleManager.currentTag(),
-                    onPicked = { tag ->
-                        setFragmentResult(REQUEST_KEY, Bundle().apply { putString(ARG_TAG, tag) })
+                TemperatureUnitContent(
+                    initialValue = initialValue,
+                    onPicked = { value ->
+                        setFragmentResult(REQUEST_KEY, Bundle().apply { putString(ARG_VALUE, value) })
                         dismiss()
                     },
                 )
@@ -63,24 +60,31 @@ class LanguagePickerBottomSheet : BaseRoundedBottomSheet() {
     }
 
     companion object {
-        const val TAG = "LanguagePickerBottomSheet"
-        const val REQUEST_KEY = "LanguagePicker.result"
-        const val ARG_TAG = "tag"
+        const val TAG = "TemperatureUnitBottomSheet"
+        const val REQUEST_KEY = "TemperatureUnit.result"
+        const val ARG_VALUE = "value"
+        const val ARG_INITIAL_VALUE = "initial_value"
+
+        fun newInstance(currentValue: String): TemperatureUnitBottomSheet =
+            TemperatureUnitBottomSheet().apply {
+                arguments = Bundle().apply { putString(ARG_INITIAL_VALUE, currentValue) }
+            }
     }
 }
 
 @Composable
-private fun LanguagePickerContent(
-    currentTag: String,
+private fun TemperatureUnitContent(
+    initialValue: String,
     onPicked: (String) -> Unit,
 ) {
-    var selectedTag by rememberSaveable { mutableStateOf(currentTag) }
-    val options = remember { LocaleManager.SUPPORTED_LOCALES }
+    val names = stringArrayResource(R.array.prefTemperatureNames)
+    val values = stringArrayResource(R.array.prefTemperatureValues)
+    val pairs = remember(names, values) {
+        names.zip(values)
+    }
 
-    // Surface establishes (1) the rounded clip + (2) LocalContentColor = onSurface so
-    // titleLarge Text inherits the correct on-surface color in both light + dark modes.
-    // Without this wrapper, LocalContentColor defaults to Color.Black → title invisible
-    // on dark surface.
+    var selected by rememberSaveable { mutableStateOf(initialValue) }
+
     Surface(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
@@ -88,7 +92,7 @@ private fun LanguagePickerContent(
     ) {
         Column(modifier = Modifier.padding(vertical = 16.dp)) {
             Text(
-                text = stringResource(R.string.language_picker_title),
+                text = stringResource(R.string.temperature_unit),
                 style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp),
             )
@@ -96,37 +100,23 @@ private fun LanguagePickerContent(
                 modifier = Modifier.padding(top = 8.dp),
                 color = MaterialTheme.colorScheme.outlineVariant,
             )
-
-            LazyColumn(
-                modifier = Modifier.heightIn(max = 480.dp),
-                verticalArrangement = Arrangement.Top,
-            ) {
-                items(options, key = { it.tag.ifEmpty { "system" } }) { option ->
-                    LanguageRow(
-                        option = option,
-                        selected = option.tag == selectedTag,
-                        onClick = {
-                            selectedTag = option.tag
-                            onPicked(option.tag)
-                        },
-                    )
-                }
+            pairs.forEach { (label, value) ->
+                OptionRow(
+                    label = label,
+                    selected = selected == value,
+                    onClick = {
+                        selected = value
+                        onPicked(value)
+                    },
+                )
             }
         }
     }
 }
 
 @Composable
-private fun LanguageRow(
-    option: LocaleManager.LocaleOption,
-    selected: Boolean,
-    onClick: () -> Unit,
-) {
-    val label = when (option.displayKey) {
-        LocaleManager.DisplayKey.SystemDefault -> stringResource(R.string.language_system_default)
-        null -> option.nativeName.orEmpty()
-    }
-    androidx.compose.foundation.layout.Row(
+internal fun OptionRow(label: String, selected: Boolean, onClick: () -> Unit) {
+    Row(
         modifier = Modifier
             .fillMaxWidth()
             .selectable(selected = selected, onClick = onClick)
@@ -137,9 +127,6 @@ private fun LanguageRow(
             selected = selected,
             onClick = onClick,
             colors = RadioButtonDefaults.colors(
-                // Use tertiary instead of primary: in this app's Compose dark palette
-                // primary is near-black (#1C1C1C), which would be invisible on the
-                // dark surface (#191C1D). Tertiary is peach in dark / brand teal in light.
                 selectedColor = MaterialTheme.colorScheme.tertiary,
             ),
         )

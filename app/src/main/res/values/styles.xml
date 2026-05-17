@@ -13,6 +13,9 @@
         <item name="colorOnSurface">@color/onSurface</item>
         <item name="android:colorBackground">@color/background</item>
         <item name="colorOnBackground">@color/onBackground</item>
+        <!-- Use surface as window background so Activity.recreate() (e.g. locale change)
+             doesn't show a contrasting flash between destroyed and new activity instances. -->
+        <item name="android:windowBackground">?attr/colorSurface</item>
         <item name="android:statusBarColor" tools:ignore="NewApi">@color/status_bar</item>
         <item name="android:navigationBarColor" tools:ignore="NewApi">@color/nav_bar</item>
         <item name="alertDialogTheme">@style/CustomAppCompatAlertDialogStyle</item>
@@ -21,9 +24,25 @@
     </style>
 
     <style name="AppThemeBase.Launcher">
-        <item name="android:windowBackground">@drawable/bkg_splash</item>
+        <!-- Suppress the "preview window" Android paints between activity instances +
+             remove Activity transition animations so locale-change recreate happens
+             without a fade-through-black frame. -->
+        <item name="android:windowDisablePreview">true</item>
+        <item name="android:windowAnimationStyle">@style/NoActivityAnimation</item>
         <item name="colorPrimaryDark">@color/background</item>
     </style>
+
+    <style name="NoActivityAnimation" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@null</item>
+        <item name="android:activityOpenExitAnimation">@null</item>
+        <item name="android:activityCloseEnterAnimation">@null</item>
+        <item name="android:activityCloseExitAnimation">@null</item>
+    </style>
+
+    <!-- Bottom sheet rounded corners + expanded state are applied at runtime via
+         BaseRoundedBottomSheet (MaterialShapeDrawable). Theme-level styles aren't used
+         because the app theme parent is Material 2 and M3 BottomSheet styles don't
+         overlay cleanly on M2 base. -->
 
     <style name="TintedProgressBar" parent="Theme.AppCompat.Dialog.Alert">
         <item name="colorAccent">@color/accent</item>

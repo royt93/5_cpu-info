@@ -93,11 +93,17 @@ fun Activity.uninstallApp(packageName: String) {
 
 /**
  * !Warning! It will control only top/left/right insets. Register your own one for bottom ones.
+ *
+ * Window background is forced to the primary status-bar color: in edge-to-edge mode the system
+ * status bar area shows the window background through, so this is what gives the status bar
+ * its app-primary tint instead of falling back to surface (which would appear white in light mode).
+ *
+ * The locale-change recreate flicker is mitigated separately via [LocaleManager.applyWithSnapshot]
+ * which sets a bitmap drawable as window background just before triggering recreate.
  */
 fun Activity.setupEdgeToEdge(
     @IdRes containerId: Int = android.R.id.content,
 ) {
-//    window.setBackgroundDrawable(ColorDrawable(android.graphics.Color.RED))
     window.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(this, R.color.status_bar)))
     WindowCompat.setDecorFitsSystemWindows(window, false)
     ViewCompat.setOnApplyWindowInsetsListener(findViewById(containerId)) { v, insets ->
