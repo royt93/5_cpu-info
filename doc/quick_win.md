@@ -1,90 +1,212 @@
-# Enhancement Plan — cpu-info
+# Quick Wins — Feature Backlog
 
-> Plan dựa trên đánh giá codebase (2026-05-16). Mỗi mục là 1 commit độc lập, có thể revert riêng.
-
----
-
-## ✅ Implemented — đợt 1 (2026-05-16)
-
-| # | Mục | Outcome |
-|---|---|---|
-| 1 | Xóa code chết | Đã xóa `ext/Applovin.kt` (toàn bộ comment), `sdkadbmob/` (package rỗng), `compile_info.txt`, `compile_output.txt`, block `testImplementation` comment-out trong `app/build.gradle.kts`. Build vẫn pass. |
-| 2 | Bump `resolutionStrategy.force()` versions | Điều chỉnh từ "bỏ" → "bump cho khớp" sau khi phát hiện force là load-bearing (transitive deps kéo Kotlin 2.x). kotlin-stdlib 1.9.20 → 1.9.25, coroutines 1.7.3 → 1.9.0. Thêm comment giải thích. |
-| 3 | Migrate sang `gradle/libs.versions.toml` | Tạo `gradle/libs.versions.toml`. Root + app build script chuyển sang `alias(libs.plugins.xxx)` + `libs.xxx`. Xóa `Libs.kt` + `Versions.kt`. Thêm `pluginManagement` + `dependencyResolutionManagement(PREFER_PROJECT)` vào `settings.gradle.kts`. |
-| 4 | Hilt + Glide → KSP | Thêm plugin `com.google.devtools.ksp:1.9.25-1.0.20`. `kapt(hilt-android-compiler)` → `ksp(...)`. `kapt(glide:compiler)` → `ksp(glide:ksp)`. Giữ `kapt(epoxy-processor)`. Side effect: `GlideApp` không còn được generate bởi Glide KSP → thay bằng `Glide.with()` trực tiếp trong `AdtApp.kt` (`GlideAppModule` rỗng nên tương đương). |
-| 5 | Smoke test critical path | 10 unit tests pass: 4 `DataProviderRamTest`, 3 `DataProviderApplicationsTest`, 2 `DataProviderGpuTest`, 1 `VMSensorsInfoTest` (regression cho memory leak #1). Test deps: JUnit 4.13.2, MockK 1.13.13, coroutines-test 1.9.0. Chạy bằng `./gradlew :app:testDevDebugUnitTest`. |
-
-## ✅ Implemented — đợt 2 (2026-05-16)
-
-| # | Mục | Outcome |
-|---|---|---|
-| 6 | Xóa `features/information/` rỗng | Folder chỉ chứa `.DS_Store`, đã xóa hoàn toàn. Concern "feat/ vs features/" duplication chính thức đóng. |
-| 7 | Xóa `getMyVipGAIDSet()` dead code | Xóa function + 21 GAID hardcoded khỏi `GalaxyApp.kt`. SDK đã có internal VIP list tương đương (doc/AD.MD đã ghi). |
-| 8 | Fix `!!` NPE risks | `VMHardwareInfo.kt:300` + `DataProviderCpu.kt:75` đổi `listFiles()!!.size` → `listFiles()?.size ?: 1`. Idiomatic Kotlin, không dựa vào exception flow. |
-| 9 | Fix 5 deprecated API warnings | `Divider` → `HorizontalDivider` (AppScreen.kt). `updateTransition` → `rememberTransition` (DraggableBox.kt). `overridePendingTransition` → `overrideActivityTransition` (SplashActivity.kt, có API gate cho < UDC). AppLovin `mediationProvider` setter + `initializeSdk(listener)` → `AppLovinSdkInitializationConfiguration.builder()` (GalaxyApp.kt). 3 unused Compose params suppress bằng `@Suppress("UNUSED_PARAMETER")` để giữ plumbing cho future swipe-reveal implementation. **Runtime crash fix**: API mới yêu cầu xóa `<meta-data applovin.sdk.key>` khỏi `AndroidManifest.xml` (mutex với key trong config object). |
-| 10 | Xóa ServiceStorageUsage + RamUsageWidgetProvider | Xóa 10 file (`RamUsageWidgetProvider.kt`, `ServiceRefresh.kt`, `ServiceStorageUsage.kt`, `InitializerRamWidget.kt`, `widget_ram_provider.xml`, `vi_widget.xml`, `ic_ram_preview.png`, `bools.xml` x2, `values-v14/dimens.xml`). Xóa 3 manifest entries. Xóa `KEY_RAM_REFRESHING` + `KEY_RAM_CATEGORIES` + RAM PreferenceCategory. Xóa `_shouldStartStorageServiceEvent` + `onUpdatePackageSizeEvent` trong VMApplications, observer trong FrmApplications. **Xóa hẳn EventBus dependency** (TOML + build.gradle.kts) — không còn subscriber nào. Lý do gate: cả 2 feature đều có API gate < O nên ~99% user 2026 không bao giờ chạy. |
-
-## 🟡 In progress
-*(none)*
-
-## 📋 Picked — đợt 1 (đã thực thi xong)
-
-### 1. Xóa code chết
-- `app/src/main/java/com/galaxyjoy/cpuinfo/ext/Applovin.kt` — toàn bộ file đã comment, legacy AppLovin trực tiếp (đã thay bằng AdmobWrapper SDK)
-- `app/src/main/java/com/galaxyjoy/cpuinfo/sdkadbmob/` — package rỗng (xem `doc/AD.MD` mục 4)
-- `compile_info.txt`, `compile_output.txt` ở root — build log debug
-- Block `testImplementation` comment-out trong `app/build.gradle.kts` — sẽ thêm lại đúng ở task #5
-
-### 2. Bump `resolutionStrategy.force()` versions
-**Điều chỉnh khi thực thi**: build vỡ khi xóa force — transitive deps (Compose BOM, ...) kéo `kotlin-stdlib:2.1.0` và `kotlinx-coroutines:1.10.1` (cả hai compiled với Kotlin 2.x), nhưng compiler 1.9.25 chỉ đọc metadata ≤ 2.0.0.
-
-→ Thay vì xóa, **bump versions** cho khớp app declares:
-- `kotlin-stdlib` 1.9.20 → 1.9.25 (match Kotlin compiler)
-- `kotlinx-coroutines` 1.7.3 → 1.9.0 (match dependency declaration; trước đó là downgrade vô nghĩa)
-- Thêm comment giải thích lý do tồn tại của block force.
-
-### 3. Migrate sang `gradle/libs.versions.toml`
-- Tạo `gradle/libs.versions.toml` chứa toàn bộ version + library declarations
-- Sửa `app/build.gradle.kts` dùng `libs.xxx` references
-- Xóa `buildSrc/src/main/java/Libs.kt` + `Versions.kt`
-- Giữ `DependencyUpdates.kt` (vẫn có giá trị cho task `dependencyUpdates`) và `SigningConfig.kt`
-
-### 4. Hilt + Glide → KSP (giữ kapt cho Epoxy)
-- Thêm plugin `com.google.devtools.ksp` ở root (version map với Kotlin 1.9.25 → KSP `1.9.25-1.0.20`)
-- `kapt("com.google.dagger:hilt-android-compiler:2.51.1")` → `ksp(...)`
-- `kapt("com.github.bumptech.glide:compiler:4.16.0")` → `ksp("com.github.bumptech.glide:ksp:4.16.0")`
-- **Giữ** `kapt("com.airbnb.android:epoxy-processor:5.1.3")` — Epoxy chưa support KSP đầy đủ
-- Verify: `./gradlew clean assembleDevDebug`
-
-### 5. Smoke test critical path
-Target ~10–15 unit tests cho:
-- `data/provider/DataProviderCpu` — parse `/proc/cpuinfo` lines
-- `data/provider/DataProviderGpu` — GL extension parsing
-- `data/provider/DataProviderRam` — `/proc/meminfo` parsing
-- `data/provider/DataProviderApplications` — package filter logic
-- `feat/infor/sensor/VMSensorsInfo.onCleared()` — verify `unregisterListener` được gọi (regression cho memory leak #1 trong `doc/MEMORY_LEAK.MD`)
-
-Test deps cần uncomment trong `app/build.gradle.kts`:
-```kotlin
-testImplementation("junit:junit:4.13.2")
-testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
-testImplementation("io.mockk:mockk:1.13.x")
-testImplementation(kotlin("test"))
-```
+> Đề xuất feature mới cho cpu-info. **Sắp xếp theo khả thi tăng dần** — items ở **đầu** là phức tạp nhất (least feasible), items ở **cuối** là dễ nhất (most feasible / quick win).
+>
+> Mỗi mục đều **tách bạch** với feature đã có, không chồng lấn `feat/infor/{cpu,gpu,ram,sensor,storage,screen,hardware,android}`, `feat/app`, `feat/processes`, `feat/temp`, `feat/cputile`, `feat/ramtile`.
 
 ---
 
-## ⏸️ Deferred
+## 🎯 User picks (2026-05-16)
 
-- **Security cleanup** (gỡ password/keystore khỏi repo) — user pick: skip, repo private
-- **Merge `feat/` ↔ `features/`** — scope lớn, để đợt sau
-- **Tech stack consolidation** (bỏ EventBus, RxJava→Coroutines) — scope rất lớn, cần plan riêng
-- **Bỏ Epoxy** — Airbnb đã deprecated, nhưng scope migration sang RecyclerView/LazyColumn lớn, defer
+**Picked** (9/10, đề xuất execution order từ nhỏ → lớn):
 
-## ❌ Skipped
-- Full Hilt test runner + Espresso UI test (chọn smoke test thay thế)
+| Order | # | Feature | Effort | Status |
+|---|---|---|---|---|
+| 1 | #10 | DRM/Widevine level | 2h | 📋 Picked |
+| 2 | #8 | Media codec capabilities | 0.5d | 📋 Picked |
+| 3 | #7 | Display detail & refresh rate | 0.5d | 📋 Picked |
+| 4 | #6 | Camera capabilities | 0.5d | 📋 Picked |
+| 5 | #9 | Export hardware report | 0.5d | 📋 Picked |
+| 6 | #5 | Network info screen | 1d | 📋 Picked |
+| 7 | #4 | Battery health & analytics | 1d | 📋 Picked |
+| 8 | #1 | Floating system monitor overlay | 3–4d | 📋 Picked |
 
-## 💭 Ideas
-- Migrate Material 2 → Material 3 dynamic colors (TODO trong README)
-- Bench native cpuinfo lib khởi tạo time
-- Tách `widget/swiperv/` thành module riêng (port code, không nên đụng)
+**Skipped**: #2 Widget v2 (Android O+), #3 CPU stress test / benchmark.
+
+**Đề xuất batching commit**:
+- **Đợt 3a**: #10 + #8 + #7 + #6 + #9 (≈ 2.5d, 5 read-only tab + utility, zero permission risk)
+- **Đợt 3b**: #5 + #4 (≈ 2d, mỗi cái 1 commit vì permission UX cần consent flow riêng)
+- **Đợt 3c**: #1 (≈ 3–4d, signature feature, sẽ kéo dài qua nhiều commit)
+
+---
+
+## 🔴 #1 — Floating system monitor overlay (3-4 ngày)
+
+**Mô tả**: Bubble nổi hiển thị real-time CPU/RAM/temp/network speed trên top mọi app.
+
+**Tech**:
+- `SYSTEM_ALERT_WINDOW` permission (Android 8+ cần user grant qua Settings)
+- Foreground service với notification persistent
+- Toggle qua Quick Settings Tile (đã có infrastructure `ServiceCpuTile`/`ServiceRamTile`)
+- UX: drag-move, resize, hide gesture, snap-to-edge
+
+**Risk**: ANR nếu update quá tần suất; battery drain; quirks per OEM (Xiaomi, Vivo có blocking).
+
+**Value**: 🌟🌟🌟 signature differentiator — competitors như CPU-Z Android không có. **Lý do đặt ở top**: scope lớn nhất, không phải pure-API, UX phức tạp.
+
+---
+
+## 🔴 #2 — RAM widget rewrite cho Android O+ (2 ngày)
+
+**Mô tả**: Thay thế widget legacy vừa xoá (chỉ chạy Android < O) bằng implementation modern hỗ trợ Android 8+.
+
+**Tech**:
+- `AppWidgetProvider` + `WorkManager` periodic (min 15 phút) hoặc Foreground service cho realtime
+- `JobScheduler` cho background refresh
+- Quick action button "kill background apps" (permission `KILL_BACKGROUND_PROCESSES` đã có)
+- Configurable update interval qua widget config activity
+
+**Risk**: Android battery optimization aggresively kill widget services trên OEM khác nhau.
+
+**Value**: 🌟🌟 user request phổ biến nhưng đã có alternative (third-party widget apps).
+
+---
+
+## 🟠 #3 — CPU stress test / mini benchmark (1.5 ngày)
+
+**Mô tả**: Burn CPU N giây, score float ops/sec hoặc Coremark-style, compare với baseline.
+
+**Tech**:
+- Native C++ workload (đã có CMake setup, có thể nhúng vào `cpuinfo-libs`)
+- Foreground service để không bị system kill mid-test
+- Live freq graph trong khi chạy (qua `DataProviderCpu.getCurrentFreq`)
+- Hardcoded baseline scores per chipset family
+
+**Risk**: Battery drain warning từ Play Store; cần disclaimer; thermal throttling skew kết quả.
+
+**Value**: 🌟🌟 differentiator vs read-only info app, gamify thiết bị.
+
+---
+
+## 🟠 #4 — Battery health & analytics (1 ngày)
+
+**Mô tả**: Mở rộng `feat/infor/hardware` (hiện chỉ có battery basic) thành tab riêng `feat/infor/battery`.
+
+**Tech**:
+- `BatteryManager.BATTERY_PROPERTY_*` (CHARGE_COUNTER, CAPACITY, ENERGY_COUNTER, CURRENT_NOW)
+- Designed capacity vs current qua reflection `BatteryStats`
+- Cycle count (Android 14+, `BatteryManager.BATTERY_PROPERTY_CYCLE_COUNT`)
+- Charging speed graph 5–10 phút gần nhất (session-only, không persist)
+- Health status enum (good/cold/overheat/dead/over_voltage/unspecified_failure)
+
+**Risk**: Reflection vào `BatteryStats` có thể fail trên một số OEM; cycle count chỉ available Android 14+.
+
+**Value**: 🌟🌟🌟 mọi user đều care về battery health.
+
+---
+
+## 🟠 #5 — Network info screen (1 ngày)
+
+**Mô tả**: Tab mới `feat/infor/network`. Hoàn toàn không có hiện tại (chỉ có permission internet/wifi/network state).
+
+**Tech**:
+- WiFi: SSID, BSSID, IP v4/v6, gateway, DNS, signal strength (dBm), link speed, frequency (2.4/5/6 GHz), security (WPA2/WPA3), MAC randomization status — qua `WifiManager`
+- Mobile: carrier, network type (5G NR/SA, LTE-A, etc.), signal strength, CellID, MCC/MNC — qua `TelephonyManager`
+- VPN status, proxy — qua `ConnectivityManager.getNetworkCapabilities()`
+- Live signal strength update qua `TelephonyCallback` (API 31+)
+
+**Risk**: Một số info cần permission `READ_PHONE_STATE` / `ACCESS_FINE_LOCATION` (cho WiFi SSID Android 10+); cần UX consent.
+
+**Value**: 🌟🌟🌟 gap rõ ràng nhất so với feature hiện có.
+
+---
+
+## 🟡 #6 — Camera hardware capabilities (0.5 ngày)
+
+**Mô tả**: Tab mới `feat/infor/camera`. Read-only metadata, không cần CAMERA permission.
+
+**Tech**:
+- `CameraManager.getCameraIdList()` → loop
+- `getCameraCharacteristics()` → focal length, sensor size, max resolution, supported video frame rates (60/120/240/960 fps), RAW capture, manual control, OIS, HDR support, lens facing
+
+**Risk**: Minimal — read-only metadata API.
+
+**Value**: 🌟🌟 user check trước khi mua phim/dùng tính năng video.
+
+---
+
+## 🟡 #7 — Display detail & refresh rate (0.5 ngày)
+
+**Mô tả**: Mở rộng `feat/infor/screen` thành tab riêng hoặc nested section. Bổ sung thông tin thiếu mà user 2026 quan tâm nhất.
+
+**Tech**:
+- Refresh rate hiện tại (live, có thể `Choreographer` callback) + max + supported modes (`Display.getSupportedModes()`)
+- HDR capabilities (`Display.getHdrCapabilities()` → HDR10/HLG/Dolby Vision)
+- Color gamut, color space (`Display.getColorMode()`)
+- Pixel density độc lập per axis (xdpi, ydpi)
+- Notch/cutout info (`DisplayCutout.getBoundingRects()`)
+- Always-on display support
+
+**Risk**: Minimal.
+
+**Value**: 🌟🌟 user gaming/multimedia care nhiều.
+
+---
+
+## 🟡 #8 — Media codec capabilities (0.5 ngày)
+
+**Mô tả**: Tab mới `feat/infor/media`. Zero info codec hiện tại.
+
+**Tech**:
+- `MediaCodecList.REGULAR_CODECS` → list codec (HEVC, AV1, H.264, VP9, AAC, Opus)
+- Max resolution/bitrate cho mỗi codec
+- HW vs SW decoder (`MediaCodecInfo.isHardwareAccelerated()`)
+- HDR profile support (HDR10, HDR10+, Dolby Vision)
+- Encoder vs decoder
+
+**Risk**: Minimal — pure API.
+
+**Value**: 🌟🌟 user check trước khi mua phim/game.
+
+---
+
+## 🟡 #9 — Export hardware report (0.5 ngày)
+
+**Mô tả**: Generate JSON/HTML/Text từ tất cả `DataProvider*`, share intent.
+
+**Tech**:
+- `SystemInfoExporter.kt` đã có khung (utility class) — chỉ cần extend
+- Pull data từ tất cả existing providers
+- Format: JSON (machine-readable), HTML (printable), plain text
+- `Intent.ACTION_SEND` → email/Telegram/save file (đã có `FileProvider` trong manifest)
+
+**Risk**: Minimal — chỉ là format + share.
+
+**Value**: 🌟🌟 user utility, hiện phải screenshot từng tab.
+
+---
+
+## 🟢 #10 — Widevine DRM level (~2 giờ)
+
+**Mô tả**: Single-screen feature. Bottom-line item dễ làm nhất.
+
+**Tech**:
+- `MediaDrm.getPropertyString("securityLevel")` → L1/L2/L3
+- HDCP version supported (qua `Display.getDeviceProductInfo()` Android 13+)
+- Cho biết device có chơi Netflix HD/Disney+ HD được không (L1 = HD streaming OK)
+- Có thể nest vào tab Media (#8) nếu làm cả 2
+
+**Risk**: Zero — single API call.
+
+**Value**: 🌟🌟 user streaming care; ROI cao nhất / effort.
+
+---
+
+## Tổng kết
+
+| # | Feature | Effort | Distinct | Risk | Value |
+|---|---|---|---|---|---|
+| 1 | Floating overlay | 3–4d | ✅✅✅ | High (UX, OEM quirks) | 🌟🌟🌟 |
+| 2 | Widget v2 (Android O+) | 2d | ✅ | Med (battery opt kill) | 🌟🌟 |
+| 3 | CPU stress test | 1.5d | ✅✅ | Med (battery, thermal) | 🌟🌟 |
+| 4 | Battery health | 1d | 🟡 (extend) | Low (reflection OEM) | 🌟🌟🌟 |
+| 5 | Network info | 1d | ✅✅✅ | Low (permission UX) | 🌟🌟🌟 |
+| 6 | Camera capabilities | 0.5d | ✅ | Zero | 🌟🌟 |
+| 7 | Display detail | 0.5d | 🟡 (extend) | Zero | 🌟🌟 |
+| 8 | Media codec | 0.5d | ✅ | Zero | 🌟🌟 |
+| 9 | Export report | 0.5d | ✅ | Zero | 🌟🌟 |
+| 10 | DRM/Widevine | 2h | ✅ | Zero | 🌟🌟 |
+
+**Recommend bundle quick-wins** (#6 + #7 + #8 + #9 + #10): ≈ 2.5 ngày, 5 tab/feature mới hiển thị ngay, 0 permission rủi ro, 0 backend, fit hoàn hảo "CPU Info" positioning read-only.
+
+**Recommend big bet**: #1 (floating overlay) — signature feature competitor không có, ROI dài hạn cao nhất.
