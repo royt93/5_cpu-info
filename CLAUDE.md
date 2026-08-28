@@ -76,3 +76,5 @@ Chi tiết đầy đủ ở `doc/AD.MD`. Tóm tắt:
 
 - `local.properties` chứa SDK path → không commit.
 - `doc/feature.md` track roadmap enhancement (đợt 1 đã ship, đợt 2 đang plan ở mục Deferred).
+- `doc/quick_win.md` — danh sách cải tiến nhỏ, dễ làm, chưa gắn vào roadmap chính.
+- `doc/AD_PROMPT_AOS.MD` — prompt/spec gốc dùng khi triển khai lại hệ thống quảng cáo, tham khảo khi cần đối chiếu hành vi AppLovin/AdMob mong muốn.
