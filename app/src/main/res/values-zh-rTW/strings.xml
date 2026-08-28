@@ -154,4 +154,24 @@
     <!--Temp-->
     <string name="cpu_temperature">處理器溫度</string>
     <string name="no_temp_data">抱歉我找不到溫度感測器 :-(</string>
+    <string name="apps_more_options">更多選項</string>
+    <string name="shield_score_menu_title">防護分數</string>
+    <string name="shield_score_title">防護分數</string>
+    <string name="shield_score_ram_label">記憶體</string>
+    <string name="shield_score_storage_label">儲存空間</string>
+    <string name="shield_score_battery_label">電池</string>
+    <string name="shield_score_band_excellent">優秀</string>
+    <string name="shield_score_band_good">良好</string>
+    <string name="shield_score_band_fair">需要注意</string>
+    <string name="shield_score_band_poor">不佳</string>
+    <string name="shield_score_suggestion_ram">記憶體即將用盡 — 試試清理記憶體以提升速度。</string>
+    <string name="shield_score_suggestion_storage">儲存空間即將用盡 — 請清理一些空間。</string>
+    <string name="shield_score_suggestion_battery">電池健康度似乎有所下降 — 避免整夜充電。</string>
+    <string name="shield_score_suggestion_none">您的裝置狀態非常好！</string>
+    <string name="streak_title">每日連續紀錄</string>
+    <string name="streak_progress">第 %1$d 天，共 %2$d 天</string>
+    <string name="streak_claim_button">觀看廣告 → 領取 1 天 VIP</string>
+    <string name="streak_claim_button_double">觀看廣告 → 領取 2 天 VIP</string>
+    <string name="streak_claimed_toast">已授予 VIP — 感謝您每天回來！</string>
+    <string name="streak_no_milestone_yet">每天開啟應用程式即可獲得免費 VIP 時間。</string>
 </resources>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="52dp"
+    android:layout_height="52dp"
+    android:background="?attr/selectableItemBackgroundBorderless"
+    android:clickable="true"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:contentDescription="@string/shield_score_menu_title"
+    android:focusable="true">
+
+    <ImageView
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_gravity="center"
+        android:importantForAccessibility="no"
+        android:src="@drawable/ic_shield"
+        app:tint="?attr/colorOnPrimary" />
+
+    <!-- Score badge — text/visibility/background color set at runtime in ActHost, matches the
+         device's current Shield Score (0-100). Hidden until first computed. -->
+    <TextView
+        android:id="@+id/actionShieldScoreBadge"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_gravity="top|end"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/bg_shield_badge"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:textColor="#FFFFFFFF"
+        android:textSize="9sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        tools:text="87" />
+</FrameLayout>

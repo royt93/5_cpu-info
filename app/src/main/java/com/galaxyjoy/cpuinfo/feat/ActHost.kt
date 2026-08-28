@@ -9,6 +9,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
@@ -22,11 +23,16 @@ import com.galaxyjoy.cpuinfo.data.local.UserPreferencesRepository
 import com.galaxyjoy.cpuinfo.databinding.ActHostLayoutBinding
 import com.galaxyjoy.cpuinfo.feat.setting.ExportFormatBottomSheet
 import com.galaxyjoy.cpuinfo.feat.setting.LanguagePickerBottomSheet
+import com.galaxyjoy.cpuinfo.feat.shield.ShieldScoreBottomSheet
+import com.galaxyjoy.cpuinfo.feat.shield.ShieldScoreProvider
 import com.galaxyjoy.cpuinfo.feat.vip.ActVip
+import com.galaxyjoy.cpuinfo.feat.vip.streak.CheckInStreak
+import com.galaxyjoy.cpuinfo.feat.vip.streak.CheckInStreakPrefs
 import com.galaxyjoy.cpuinfo.rateAppInApp
 import com.galaxyjoy.cpuinfo.util.LocaleManager
 import com.galaxyjoy.cpuinfo.util.SystemInfoExporter
 import com.galaxyjoy.cpuinfo.util.setupEdgeToEdge
+import com.google.android.material.snackbar.Snackbar
 import com.roy.sdkadbmob.AdManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.first
@@ -52,6 +58,9 @@ class ActHost : BaseActivity() {
     @Inject
     lateinit var userPreferencesRepository: UserPreferencesRepository
 
+    @Inject
+    lateinit var shieldScoreProvider: ShieldScoreProvider
+
     private var menuMain: Menu? = null
     private var vipActionView: View? = null
     private var vipIconView: ImageView? = null
@@ -59,6 +68,9 @@ class ActHost : BaseActivity() {
     private var vipIconPulse: ObjectAnimator? = null
     private var vipIconWiggle: ObjectAnimator? = null
     private var vipGlowAnimator: ObjectAnimator? = null
+    private var shieldScoreActionView: View? = null
+    private var shieldScoreBadgeView: TextView? = null
+    private var shieldBadgePulse: ObjectAnimator? = null
 
     /**
      * Reference banner view để có thể destroy khi user activate VIP mid-session.
@@ -100,6 +112,29 @@ class ActHost : BaseActivity() {
         registerExportFormatResult()
         registerLanguagePickResult()
         maybeShowFirstLaunchLanguagePicker()
+        evaluateDailyStreak()
+    }
+
+    /**
+     * U09 daily check-in streak: evaluated once per app open (idempotent if already recorded
+     * today — see [CheckInStreak.evaluate]). On a 7-day milestone, nudge the user toward the
+     * Shield Score sheet where the actual claim button lives.
+     */
+    private fun evaluateDailyStreak() {
+        val prefs = CheckInStreakPrefs(this)
+        val today = CheckInStreakPrefs.todayEpochDay()
+        val result = CheckInStreak.evaluate(prefs.getLastCheckInEpochDay(), prefs.getStreak(), today)
+        if (!result.isNewCheckIn) return
+        prefs.saveCheckIn(today, result.streak, result.milestoneReached)
+        if (result.milestoneReached) {
+            Snackbar.make(
+                binding.contentContainer,
+                getString(R.string.streak_progress, result.streak, result.streak),
+                Snackbar.LENGTH_LONG,
+            ).setAction(R.string.shield_score_menu_title) {
+                ShieldScoreBottomSheet().show(supportFragmentManager, ShieldScoreBottomSheet.TAG)
+            }.show()
+        }
     }
 
     /**
@@ -199,6 +234,14 @@ class ActHost : BaseActivity() {
         // actionLayout không trigger onOptionsItemSelected → wire click trực tiếp.
         vipActionView?.setOnClickListener { navigateToVip() }
         refreshVipBadgeAndPulse()
+
+        val shieldItem = menu.findItem(R.id.menuActionShieldScore)
+        shieldScoreActionView = shieldItem?.actionView
+        shieldScoreBadgeView = shieldScoreActionView?.findViewById(R.id.actionShieldScoreBadge)
+        shieldScoreActionView?.setOnClickListener {
+            ShieldScoreBottomSheet().show(supportFragmentManager, ShieldScoreBottomSheet.TAG)
+        }
+        refreshShieldScoreBadge()
         return true
     }
 
@@ -207,6 +250,55 @@ class ActHost : BaseActivity() {
         Log.d(TAG, "onResume → refresh banner state + VIP badge")
         applyVipBannerState()
         refreshVipBadgeAndPulse()
+        refreshShieldScoreBadge()
+    }
+
+    /**
+     * U10 Shield Score badge — colored 0-100 number overlaid on the toolbar shield icon.
+     * When the score is "Poor" (<50) the badge pulses gently to draw attention, same
+     * ObjectAnimator pattern as [startVipIconPulse] — stopped as soon as the score recovers.
+     */
+    private fun refreshShieldScoreBadge() {
+        val badge = shieldScoreBadgeView ?: return
+        val score = shieldScoreProvider.compute().overall
+        badge.text = score.toString()
+        badge.visibility = View.VISIBLE
+        val color = when {
+            score >= 80 -> 0xFF4CAF50.toInt()
+            score >= 50 -> 0xFFFFA726.toInt()
+            else -> 0xFFE53935.toInt()
+        }
+        badge.background?.setTint(color)
+
+        if (score < 50) {
+            startShieldBadgePulse()
+        } else {
+            stopShieldBadgePulse()
+        }
+    }
+
+    private fun startShieldBadgePulse() {
+        val badge = shieldScoreBadgeView ?: return
+        if (shieldBadgePulse?.isRunning == true) return
+        shieldBadgePulse = ObjectAnimator.ofPropertyValuesHolder(
+            badge,
+            PropertyValuesHolder.ofFloat(View.SCALE_X, 1.0f, 1.25f),
+            PropertyValuesHolder.ofFloat(View.SCALE_Y, 1.0f, 1.25f),
+        ).apply {
+            duration = 700L
+            repeatMode = ObjectAnimator.REVERSE
+            repeatCount = ObjectAnimator.INFINITE
+            start()
+        }
+    }
+
+    private fun stopShieldBadgePulse() {
+        shieldBadgePulse?.cancel()
+        shieldBadgePulse = null
+        shieldScoreBadgeView?.apply {
+            scaleX = 1f
+            scaleY = 1f
+        }
     }
 
     private fun navigateToVip() {
@@ -373,6 +465,9 @@ class ActHost : BaseActivity() {
         vipActionView = null
         vipIconView = null
         vipGlowView = null
+        stopShieldBadgePulse()
+        shieldScoreActionView = null
+        shieldScoreBadgeView = null
         menuMain = null
         adView?.let { AdManager.bannerDestroy(it) }
         adView = null

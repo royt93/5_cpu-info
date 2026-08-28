@@ -187,4 +187,24 @@
     <string name="vip_stats_no_active">Žádné aktivní VIP</string>
     <string name="cancel">Zrušit</string>
     <string name="confirm">Potvrdit</string>
+    <string name="apps_more_options">Další možnosti</string>
+    <string name="shield_score_menu_title">Shield Score</string>
+    <string name="shield_score_title">Shield Score</string>
+    <string name="shield_score_ram_label">RAM</string>
+    <string name="shield_score_storage_label">Úložiště</string>
+    <string name="shield_score_battery_label">Baterie</string>
+    <string name="shield_score_band_excellent">Vynikající</string>
+    <string name="shield_score_band_good">Dobrý</string>
+    <string name="shield_score_band_fair">Vyžaduje pozornost</string>
+    <string name="shield_score_band_poor">Špatný</string>
+    <string name="shield_score_suggestion_ram">RAM je téměř plná — zkuste vyčistit RAM pro zrychlení.</string>
+    <string name="shield_score_suggestion_storage">Úložiště je téměř plné — uvolněte místo.</string>
+    <string name="shield_score_suggestion_battery">Zdraví baterie se zdá být zhoršené — vyhněte se nabíjení přes noc.</string>
+    <string name="shield_score_suggestion_none">Vaše zařízení je ve skvělém stavu!</string>
+    <string name="streak_title">Denní série</string>
+    <string name="streak_progress">Den %1$d z %2$d</string>
+    <string name="streak_claim_button">Sledovat reklamu → získat 1 den VIP</string>
+    <string name="streak_claim_button_double">Sledovat reklamu → získat 2 dny VIP</string>
+    <string name="streak_claimed_toast">VIP uděleno — děkujeme za vaši věrnost!</string>
+    <string name="streak_no_milestone_yet">Otevírejte aplikaci denně a získejte VIP zdarma.</string>
 </resources>

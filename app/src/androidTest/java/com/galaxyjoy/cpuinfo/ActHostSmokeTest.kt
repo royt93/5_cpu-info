@@ -63,6 +63,21 @@ class ActHostSmokeTest {
     }
 
     @Test
+    fun shieldScoreBadgeOpensBottomSheetWithScoreAndStreak() {
+        // The toolbar badge is a plain XML View (action_shield_score.xml), not a Compose node —
+        // must drive it via Espresso. The resulting BottomSheetDialogFragment content IS Compose,
+        // so that part is verified via ComposeTestRule below.
+        onView(withId(R.id.actionShieldScoreBadge)).perform(click())
+        composeRule.waitForIdle()
+
+        // Regression guard for U10: the sheet must actually compute+render a score (not crash on
+        // a real device's RAM/storage/battery state) and show the U09 streak section in the same
+        // sheet.
+        composeRule.onNodeWithText(composeRule.activity.getString(R.string.shield_score_title)).assertExists()
+        composeRule.onNodeWithText(composeRule.activity.getString(R.string.streak_title)).assertExists()
+    }
+
+    @Test
     fun navigatingThroughAllBottomTabsDoesNotCrash() {
         onView(withId(R.id.menuApplications)).perform(click())
         composeRule.waitForIdle()

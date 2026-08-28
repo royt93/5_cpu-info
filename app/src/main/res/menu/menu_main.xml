@@ -3,6 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/menuActionShieldScore"
+        android:icon="@drawable/ic_shield"
+        android:orderInCategory="40"
+        android:title="@string/shield_score_menu_title"
+        app:actionLayout="@layout/action_shield_score"
+        app:showAsAction="always" />
+
+    <item
         android:id="@+id/menuActionVip"
         android:icon="@drawable/ic_crown_premium_v2"
         android:orderInCategory="50"

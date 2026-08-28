@@ -190,4 +190,24 @@
     <string name="vip_stats_no_active">Kein aktives VIP</string>
     <string name="cancel">Abbrechen</string>
     <string name="confirm">Bestätigen</string>
+    <string name="apps_more_options">Weitere Optionen</string>
+    <string name="shield_score_menu_title">Shield Score</string>
+    <string name="shield_score_title">Shield Score</string>
+    <string name="shield_score_ram_label">RAM</string>
+    <string name="shield_score_storage_label">Speicher</string>
+    <string name="shield_score_battery_label">Akku</string>
+    <string name="shield_score_band_excellent">Ausgezeichnet</string>
+    <string name="shield_score_band_good">Gut</string>
+    <string name="shield_score_band_fair">Braucht Aufmerksamkeit</string>
+    <string name="shield_score_band_poor">Schlecht</string>
+    <string name="shield_score_suggestion_ram">RAM ist fast voll — RAM-Bereinigung kann helfen.</string>
+    <string name="shield_score_suggestion_storage">Speicher ist fast voll — Platz freigeben.</string>
+    <string name="shield_score_suggestion_battery">Akkuzustand scheint verschlechtert — nächtliches Laden vermeiden.</string>
+    <string name="shield_score_suggestion_none">Dein Gerät ist in bestem Zustand!</string>
+    <string name="streak_title">Tägliche Serie</string>
+    <string name="streak_progress">Tag %1$d von %2$d</string>
+    <string name="streak_claim_button">Anzeige ansehen → 1 Tag VIP erhalten</string>
+    <string name="streak_claim_button_double">Anzeige ansehen → 2 Tage VIP erhalten</string>
+    <string name="streak_claimed_toast">VIP gewährt — danke fürs tägliche Vorbeischauen!</string>
+    <string name="streak_no_milestone_yet">Öffne die App täglich, um kostenlose VIP-Zeit zu verdienen.</string>
 </resources>
