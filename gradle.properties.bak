@@ -1,0 +1,19 @@
+# Project-wide Gradle settings.
+org.gradle.configureondemand=true
+org.gradle.caching=true
+org.gradle.parallel=true
+#org.gradle.jvmargs=-Xmx1536m
+org.gradle.unsafe.configuration-cache=true
+# AndroidX
+android.useAndroidX=true
+# Allow data binding to be incremental
+#android.databinding.incremental=true
+kapt.incremental.apt=true
+kapt.include.compile.classpath=false
+kapt.use.worker.api=false
+org.gradle.jvmargs=-Xmx4096m --add-exports jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED --add-exports jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED --add-exports jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED --add-exports jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED --add-exports jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED
+# Signing Config
+STORE_FILE=keystore.jks
+STORE_PASSWORD=27072000
+KEY_ALIAS=mckimquyen
+KEY_PASSWORD=27072000

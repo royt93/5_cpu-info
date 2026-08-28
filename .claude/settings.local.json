@@ -16,6 +16,8 @@
       "Bash(curl -sL \"https://assets3.lottiefiles.com/packages/lf20_u4yrau.json\" -o /tmp/test2.json)"
     ],
     "deny": [],
-    "ask": []
-  }
+    "ask": [],
+    "defaultMode": "bypassPermissions"
+  },
+  "skipDangerousModePermissionPrompt": true
 }
