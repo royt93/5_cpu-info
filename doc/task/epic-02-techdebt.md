@@ -9,11 +9,11 @@
 **Rủi ro để dang dở lâu**: chi phí duplicate tăng dần (case Applications ở B03), dev mới dễ sửa nhầm chỗ chết (`DataProviderStorage.kt` rỗng nhưng tưởng có tác dụng), 2 mô hình threading (Rx + Flow) tăng rủi ro sửa nhầm.
 
 **Task**:
-- T2.1 — ✅ **Đã quyết định**: xoá `FrmApplications`/`VMApplications` (cũ), wire `FrmNewApplications` vào `nav_graph.xml` thay thế. Làm chung với B03b (fix `registerReceiver` thiếu `RECEIVER_EXPORTED`/`NOT_EXPORTED` — crash Android 14+, xem Epic 1) vì đụng đúng file đang xoá/giữ. Test kỹ UX trước khi merge (uninstall flow, sort, swipe-reveal `DraggableBox` — xem B23) — L
+- T2.1 — ✅ **Đã xong (2026-08-28)**: xoá `FrmApplications`/`VMApplications`/`AdtApp`/`ExtendedAppInfo` (cũ), wire `FrmNewApplications` vào `nav_graph.xml` thay thế. Đã fix chung B03b. **Phát hiện lúc làm**: bản Compose ban đầu thiếu nút Sort (không hoạt động) + 4 action (Rate/More/Share/Policy) + mất 1 vị trí quảng cáo Interstitial — đã hỏi user, chọn hoàn thiện đầy đủ trước khi chuyển thay vì chấp nhận mất tính năng. Verify bằng `assembleDevDebug` full build — L
 - T2.2 — Migrate `storage` sang Interactor/Observable pattern, xoá `DataProviderStorage.kt` stub rỗng hoặc implement thật — M
 - T2.3 — Migrate `hardware` (`VMHardwareInfo.kt` 432 dòng, đang gộp 5-6 domain concern: battery/camera/audio/wireless/usb — tách domain layer) — L
 - T2.4 — Migrate `temp` (đang RxJava) sang Coroutine/Flow — M
-- T2.10b — **[mới, Gemini CLI]** Xoá hẳn `feat/processes/` (`FrmProcesses`, `ProcessesVM`, `PsProvider`, `AdtProcesses`) — tab này đã bị ẩn 100% người dùng thật (`ActHost.kt:88` ẩn khi `SDK_INT > M`/API 23, trong khi `minSdk=24`) và đọc `/system/bin/ps` bị SELinux chặn từ Android 7+ nên dữ liệu vốn không đáng tin ngay cả khi hiện. Xoá thay vì fix B11-B13 — giảm size APK, giảm nợ kỹ thuật thay vì tăng — S
+- T2.10b — ✅ **Đã xong (2026-08-28)** Xoá hẳn `feat/processes/` (`FrmProcesses`, `ProcessesVM`, `PsProvider`, `AdtProcesses`) — tab này đã bị ẩn 100% người dùng thật (`ActHost.kt:88` ẩn khi `SDK_INT > M`/API 23, trong khi `minSdk=24`) và đọc `/system/bin/ps` bị SELinux chặn từ Android 7+ nên dữ liệu vốn không đáng tin ngay cả khi hiện. Xoá thay vì fix B11-B13 — giảm size APK, giảm nợ kỹ thuật thay vì tăng — S
 
 ## Story 2 — Dọn 3 mô hình async song song
 
