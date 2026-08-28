@@ -1,0 +1,20 @@
+# Epic 3 — Feature mới (gap vs competitor)
+
+> `doc/quick_win.md` đã cover: Camera, Display/refresh rate, Media codec, DRM/Widevine, Export report, Network info, Battery health, Floating overlay. **Không lặp lại các mục đó** — epic này chỉ chứa gap MỚI phát hiện qua review, so với competitor CPU-Z, AIDA64, Device Info HW, CPU Monitor.
+
+| # | Feature | Mô tả | Effort | Giá trị | Nguồn |
+|---|---|---|---|---|---|
+| F01 | Realtime dashboard có lịch sử | Biểu đồ CPU từng core/load, RAM, nhiệt độ, pin, thermal-throttling trong 1/5/15 phút gần nhất (session-only). Khác floating overlay (overlay là hiển thị ngoài app, cái này là 1 tab trong app) | L (2-3d) | 🌟🌟🌟 | Codex |
+| F02 | Thermal throttling diagnostics | Đọc `PowerManager.currentThermalStatus`, thermal headroom (API mới), thermal zones, tương quan với xung CPU giảm — cảnh báo "đang throttle" thay vì chỉ liệt kê nhiệt độ tĩnh như `feat/temp` hiện tại | M (1d) | 🌟🌟🌟 | Codex + Claude CLI (2 nguồn) |
+| F03 | USB/OTG + Bluetooth capability inspector | USB device/interface, USB-C role, BT version/profile/codec (aptX/LDAC) khả dụng | M (1d) | 🌟🌟 | Codex + Claude CLI |
+| F04 | Security posture checklist | Patch level, Verified Boot state, bootloader/root indicator, hardware-backed Keystore/StrongBox, SELinux, encryption status — dạng checklist thông tin, không tuyên bố "an toàn/nguy hiểm" | M (1d) | 🌟🌟🌟 | Codex + Claude CLI |
+| F05 | App permission & SDK inventory | Lọc app theo dangerous permission, target SDK, installer source, debuggable/signature, native ABI — mở rộng tab Applications sẵn có | M (1d) | 🌟🌟 | Codex |
+| F06 | Storage/CPU benchmark nhẹ có baseline | Đo sequential/random I/O trong cache riêng, benchmark nén/hash ngắn, có cooldown + cảnh báo nhiệt. `doc/quick_win.md` đã **Skip** "CPU stress test" ở đợt trước — mục này hẹp hơn (storage I/O), có thể re-scope | M (1d) | 🌟🌟 | Codex + Claude CLI |
+| F07 | Sensor test suite tương tác | Graph realtime accelerometer/gyroscope, proximity trigger test, compass calibration — thay vì chỉ list tĩnh như `feat/infor/sensor` hiện tại | M (1d) | 🌟🌟 | Claude CLI |
+| F08 | Vulkan/OpenGL ES chi tiết hơn | Full extension list, Vulkan API level, compute shader support (mở rộng tab GPU sau khi fix bug B04) | S (0.5d) | 🌟 | Claude CLI |
+| F09 | CPU Cluster Topology (Prime/Performance/Efficiency) | Hiện app liệt kê phẳng Core 0-N, không phân biệt nhân nào Cortex-X (Prime) / Cortex-A (Perf/Eff). Dùng `libcpuinfo` nhóm core theo cluster, hiển thị microarchitecture + xung min/max từng cụm — đúng cách CPU-Z/Device Info HW làm. **Trùng hướng với U06 (Epic 4)** — nên làm chung 1 task, U06 là bản mở rộng sâu hơn (thêm cache hierarchy) | M (1d) | 🌟🌟🌟 | Gemini CLI |
+| F10 | NPU/AI Capability Detection | Phát hiện NPU/TPU (Hexagon/APU/Tensor), NNAPI HAL version, tập lệnh tăng tốc ma trận (`i8mm`, dot product, `bf16`, SVE/SVE2) — `libcpuinfo` đã có sẵn cờ này, chưa khai thác. Xu hướng on-device AI 2025-2026, chưa app system-info nào trong phân khúc có. **Là nền tảng cho U12 (Epic 4)** | M (1d) | 🌟🌟🌟 | Gemini CLI |
+| F11 | Audio Hardware capabilities | Thay code ALSA `/proc/asound` (đang bị SELinux chặn hoàn toàn, xem Epic 2) bằng `AudioManager`/`AudioDeviceInfo` hiện đại: thiết bị xuất âm thanh, BT codec (LDAC/aptX HD/LHDC/AAC), Hi-Res Audio 24-bit/192kHz, Spatial Audio/Dolby Atmos | S (0.5d) | 🌟🌟 | Gemini CLI |
+| F12 | Sensor live waveform plotter | Tab Sensors hiện chỉ hiện text tĩnh X/Y/Z nhảy số — thêm biểu đồ waveform nhẹ (50 điểm gần nhất) cho Accelerometer/Gyroscope/Barometer. Trùng ý F07, gộp chung | S (0.5d) | 🌟🌟 | Gemini CLI (trùng Claude CLI F07) |
+
+**Khuyến nghị batch**: F02 + F08 đi kèm sau khi fix B04 (cùng chạm `DataProviderGpu`/tab CPU-temp). F04 + F05 cùng nhóm "read-only audit info", 0 permission mới, có thể gộp 1 sprint giống cách `doc/quick_win.md` đã gộp đợt 3a. F09 + F10 nên làm cùng đợt vì cùng khai thác `libcpuinfo` extension flags chưa dùng tới — hiệu quả đầu tư nghiên cứu 1 lần dùng 2 chỗ.
