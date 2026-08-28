@@ -243,4 +243,28 @@
     <string name="vip_stats_no_active">No active VIP</string>
     <string name="cancel">Cancel</string>
     <string name="confirm">Confirm</string>
+    <!--Throttling Fingerprint (U02)-->
+    <string name="throttle">Stress Test</string>
+    <string name="throttle_disclaimer_title">Before you start</string>
+    <string name="throttle_disclaimer_body">This test runs your CPU at full load for up to 30 seconds to measure how much it slows down when hot. Your device may get warm. The test stops automatically if it gets too hot.</string>
+    <string name="throttle_previous_summary">Last test: %1$s · throttle %2$d%% · peak %3$d MHz</string>
+    <string name="throttle_start_button">Start test</string>
+    <string name="throttle_stop_button">Stop</string>
+    <string name="throttle_running_label">Testing… %1$ds left</string>
+    <string name="throttle_current_freq_label">Current frequency</string>
+    <string name="throttle_current_temp_label">Temperature</string>
+    <string name="throttle_safety_note">Safety: test stops automatically if the device gets too hot.</string>
+    <string name="throttle_verdict_throttled">Your device throttles under sustained load</string>
+    <string name="throttle_verdict_stable">Frequency stayed stable — no throttling detected</string>
+    <string name="throttle_peak_freq_label">Peak frequency</string>
+    <string name="throttle_sustained_freq_label">Sustained frequency</string>
+    <string name="throttle_throttle_percent_label">Frequency drop</string>
+    <string name="throttle_max_temp_label">Max temperature</string>
+    <string name="throttle_aborted_overheat">Stopped early — temperature reached the safety limit</string>
+    <string name="throttle_aborted_user">Stopped by you</string>
+    <string name="throttle_compare_previous">%1$+d%% vs your last test</string>
+    <string name="throttle_no_previous">This is your first test</string>
+    <string name="throttle_share_button">Share result</string>
+    <string name="throttle_done_button">Done</string>
+    <string name="throttle_share_text">Throttling Fingerprint — CPU Info\nPeak: %1$d MHz\nSustained: %2$d MHz\nDrop: %3$d%%\nMax temp: %4$d°C</string>
 </resources>

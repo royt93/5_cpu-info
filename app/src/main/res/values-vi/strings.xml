@@ -227,4 +227,28 @@
     <string name="vip_stats_no_active">Chưa có VIP</string>
     <string name="cancel">Huỷ</string>
     <string name="confirm">Xác nhận</string>
+    <!--Throttling Fingerprint (U02)-->
+    <string name="throttle">Test tải</string>
+    <string name="throttle_disclaimer_title">Trước khi bắt đầu</string>
+    <string name="throttle_disclaimer_body">Bài test sẽ cho CPU chạy hết công suất tối đa 30 giây để đo mức giảm xung khi máy nóng lên. Máy có thể ấm hơn bình thường. Test sẽ tự dừng nếu nhiệt độ vượt ngưỡng an toàn.</string>
+    <string name="throttle_previous_summary">Lần trước: %1$s · tụt xung %2$d%% · đỉnh %3$d MHz</string>
+    <string name="throttle_start_button">Bắt đầu test</string>
+    <string name="throttle_stop_button">Dừng</string>
+    <string name="throttle_running_label">Đang test… còn %1$ds</string>
+    <string name="throttle_current_freq_label">Xung hiện tại</string>
+    <string name="throttle_current_temp_label">Nhiệt độ</string>
+    <string name="throttle_safety_note">An toàn: test sẽ tự dừng nếu máy quá nóng.</string>
+    <string name="throttle_verdict_throttled">Máy có hiện tượng giảm xung khi chịu tải lâu</string>
+    <string name="throttle_verdict_stable">Xung ổn định — không phát hiện giảm hiệu năng</string>
+    <string name="throttle_peak_freq_label">Xung đỉnh</string>
+    <string name="throttle_sustained_freq_label">Xung ổn định</string>
+    <string name="throttle_throttle_percent_label">Độ tụt xung</string>
+    <string name="throttle_max_temp_label">Nhiệt độ cao nhất</string>
+    <string name="throttle_aborted_overheat">Đã dừng sớm — nhiệt độ chạm ngưỡng an toàn</string>
+    <string name="throttle_aborted_user">Đã dừng theo yêu cầu của bạn</string>
+    <string name="throttle_compare_previous">%1$+d%% so với lần trước</string>
+    <string name="throttle_no_previous">Đây là lần test đầu tiên</string>
+    <string name="throttle_share_button">Chia sẻ kết quả</string>
+    <string name="throttle_done_button">Xong</string>
+    <string name="throttle_share_text">Throttling Fingerprint — CPU Info\nXung đỉnh: %1$d MHz\nXung ổn định: %2$d MHz\nĐộ tụt: %3$d%%\nNhiệt độ tối đa: %4$d°C</string>
 </resources>

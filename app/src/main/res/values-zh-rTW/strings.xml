@@ -174,4 +174,28 @@
     <string name="streak_claim_button_double">觀看廣告 → 領取 2 天 VIP</string>
     <string name="streak_claimed_toast">已授予 VIP — 感謝您每天回來！</string>
     <string name="streak_no_milestone_yet">每天開啟應用程式即可獲得免費 VIP 時間。</string>
+    <!--Throttling Fingerprint (U02)-->
+    <string name="throttle">壓力測試</string>
+    <string name="throttle_disclaimer_title">開始前須知</string>
+    <string name="throttle_disclaimer_body">此測試會讓 CPU 全速運轉最多 30 秒，以測量發熱後降頻的程度。裝置可能會發熱。若溫度過高，測試會自動停止。</string>
+    <string name="throttle_previous_summary">上次測試：%1$s · 降頻 %2$d%% · 峰值 %3$d MHz</string>
+    <string name="throttle_start_button">開始測試</string>
+    <string name="throttle_stop_button">停止</string>
+    <string name="throttle_running_label">測試中…剩餘 %1$d 秒</string>
+    <string name="throttle_current_freq_label">目前頻率</string>
+    <string name="throttle_current_temp_label">溫度</string>
+    <string name="throttle_safety_note">安全提示：若裝置過熱，測試會自動停止。</string>
+    <string name="throttle_verdict_throttled">裝置在持續高負載下出現降頻</string>
+    <string name="throttle_verdict_stable">頻率保持穩定 — 未偵測到降頻</string>
+    <string name="throttle_peak_freq_label">峰值頻率</string>
+    <string name="throttle_sustained_freq_label">穩定頻率</string>
+    <string name="throttle_throttle_percent_label">頻率下降幅度</string>
+    <string name="throttle_max_temp_label">最高溫度</string>
+    <string name="throttle_aborted_overheat">已提前停止 — 溫度達到安全上限</string>
+    <string name="throttle_aborted_user">已依您的要求停止</string>
+    <string name="throttle_compare_previous">與上次測試相比 %1$+d%%</string>
+    <string name="throttle_no_previous">這是您的第一次測試</string>
+    <string name="throttle_share_button">分享結果</string>
+    <string name="throttle_done_button">完成</string>
+    <string name="throttle_share_text">Throttling Fingerprint — CPU Info\n峰值：%1$d MHz\n穩定：%2$d MHz\n下降：%3$d%%\n最高溫度：%4$d°C</string>
 </resources>

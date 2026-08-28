@@ -211,4 +211,28 @@
     <string name="streak_claim_button_double">Obejrzyj reklamę → odbierz 2 dni VIP</string>
     <string name="streak_claimed_toast">Przyznano VIP — dzięki za codzienne odwiedziny!</string>
     <string name="streak_no_milestone_yet">Otwieraj aplikację codziennie, aby zdobyć darmowy czas VIP.</string>
+    <!--Throttling Fingerprint (U02)-->
+    <string name="throttle">Test obciążeniowy</string>
+    <string name="throttle_disclaimer_title">Zanim zaczniesz</string>
+    <string name="throttle_disclaimer_body">Ten test obciąża procesor na pełnej mocy przez maksymalnie 30 sekund, aby zmierzyć, jak bardzo zwalnia po nagrzaniu. Urządzenie może się rozgrzać. Test zatrzyma się automatycznie, jeśli zrobi się zbyt gorąco.</string>
+    <string name="throttle_previous_summary">Ostatni test: %1$s · spadek %2$d%% · szczyt %3$d MHz</string>
+    <string name="throttle_start_button">Rozpocznij test</string>
+    <string name="throttle_stop_button">Zatrzymaj</string>
+    <string name="throttle_running_label">Testowanie… pozostało %1$d s</string>
+    <string name="throttle_current_freq_label">Aktualna częstotliwość</string>
+    <string name="throttle_current_temp_label">Temperatura</string>
+    <string name="throttle_safety_note">Bezpieczeństwo: test zatrzyma się automatycznie, jeśli urządzenie zbyt się nagrzeje.</string>
+    <string name="throttle_verdict_throttled">Urządzenie zwalnia (throttling) przy długotrwałym obciążeniu</string>
+    <string name="throttle_verdict_stable">Częstotliwość pozostała stabilna — nie wykryto throttlingu</string>
+    <string name="throttle_peak_freq_label">Szczytowa częstotliwość</string>
+    <string name="throttle_sustained_freq_label">Ustabilizowana częstotliwość</string>
+    <string name="throttle_throttle_percent_label">Spadek częstotliwości</string>
+    <string name="throttle_max_temp_label">Najwyższa temperatura</string>
+    <string name="throttle_aborted_overheat">Zatrzymano wcześniej — temperatura osiągnęła limit bezpieczeństwa</string>
+    <string name="throttle_aborted_user">Zatrzymano na Twoje żądanie</string>
+    <string name="throttle_compare_previous">%1$+d%% w porównaniu do ostatniego testu</string>
+    <string name="throttle_no_previous">To Twój pierwszy test</string>
+    <string name="throttle_share_button">Udostępnij wynik</string>
+    <string name="throttle_done_button">Gotowe</string>
+    <string name="throttle_share_text">Throttling Fingerprint — CPU Info\nSzczyt: %1$d MHz\nUstabilizowana: %2$d MHz\nSpadek: %3$d%%\nMaks. temp.: %4$d°C</string>
 </resources>

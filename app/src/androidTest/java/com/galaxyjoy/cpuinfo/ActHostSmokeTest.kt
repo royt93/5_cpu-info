@@ -1,12 +1,15 @@
 package com.galaxyjoy.cpuinfo
 
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.swipeLeft
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.galaxyjoy.cpuinfo.feat.ActHost
 import org.junit.Rule
@@ -90,5 +93,32 @@ class ActHostSmokeTest {
         // No assertion beyond "didn't throw" — this is the regression guard for deleting
         // feat/processes (B11) and its nav_graph/menu_nav entries: the remaining tabs must
         // still all resolve and render.
+    }
+
+    @Test
+    fun throttleTestTabRunsFullCycleAndShowsResult() {
+        onView(withId(R.id.menuHardware)).perform(click())
+        composeRule.waitForIdle()
+
+        // "Stress Test" is the last tab in AdtInfoContainerState — the TabLayout is scrollable,
+        // so swipe it into view before clicking by its label.
+        repeat(4) { onView(withId(R.id.tabs)).perform(swipeLeft()) }
+        composeRule.waitForIdle()
+        onView(withText(composeRule.activity.getString(R.string.throttle))).perform(click())
+        composeRule.waitForIdle()
+
+        composeRule.onNodeWithText(composeRule.activity.getString(R.string.throttle_start_button))
+            .performClick()
+
+        // Real hard-capped 30s stress test (U02) — waits for the actual run to finish on device
+        // rather than faking it, so this is a genuine regression guard for the runner + verdict
+        // pipeline, not just the idle-state UI.
+        composeRule.waitUntil(timeoutMillis = 35_000) {
+            composeRule.onAllNodesWithText(composeRule.activity.getString(R.string.throttle_done_button))
+                .fetchSemanticsNodes().isNotEmpty()
+        }
+
+        composeRule.onNodeWithText(composeRule.activity.getString(R.string.throttle_done_button)).assertExists()
+        composeRule.onNodeWithText(composeRule.activity.getString(R.string.throttle_share_button)).assertExists()
     }
 }
