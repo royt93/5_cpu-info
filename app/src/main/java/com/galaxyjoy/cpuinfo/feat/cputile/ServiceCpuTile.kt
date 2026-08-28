@@ -35,6 +35,7 @@ class ServiceCpuTile : TileService(), CoroutineScope {
 
     private val minMaxAvg: Pair<Long, Long> by lazy {
         val cpuCount = dataProviderCpu.getNumberOfCores()
+        if (cpuCount == 0) return@lazy Pair(0L, 0L)
         val minFreq = mutableListOf<Long>()
         val maxFreq = mutableListOf<Long>()
         for (i in 0 until cpuCount) {
@@ -60,9 +61,11 @@ class ServiceCpuTile : TileService(), CoroutineScope {
         refreshingJob = launch {
             while (true) {
                 val load = withContext(dispatchersProvider.io) { averageCPUFreq() }
-                qsTile.label = "Avg ${load}MHz"
-                qsTile.icon = getLoadIcon(load)
-                qsTile.updateTile()
+                qsTile?.apply {
+                    label = "Avg ${load}MHz"
+                    icon = getLoadIcon(load)
+                    updateTile()
+                }
                 delay(REFRESHING_DELAY_MS)
             }
         }
@@ -91,9 +94,10 @@ class ServiceCpuTile : TileService(), CoroutineScope {
 
     private fun averageCPUFreq(): Long {
         val cpuCount = dataProviderCpu.getNumberOfCores()
+        if (cpuCount == 0) return 0L
         var sumFreq = 0L
         for (i in 0 until cpuCount) {
-            sumFreq += dataProviderCpu.getCurrentFreq(i)
+            sumFreq += dataProviderCpu.getCurrentFreq(i).coerceAtLeast(0L)
         }
         return (sumFreq / cpuCount)
     }

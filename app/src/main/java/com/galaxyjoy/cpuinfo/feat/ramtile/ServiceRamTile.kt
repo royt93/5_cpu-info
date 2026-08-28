@@ -11,6 +11,7 @@ import androidx.annotation.RequiresApi
 import com.galaxyjoy.cpuinfo.R
 import com.galaxyjoy.cpuinfo.data.provider.DataProviderRam
 import com.galaxyjoy.cpuinfo.domain.action.RamCleanupAction
+import com.galaxyjoy.cpuinfo.feat.ActHost
 import com.galaxyjoy.cpuinfo.util.DispatchersProvider
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -109,11 +110,13 @@ class ServiceRamTile : TileService(), CoroutineScope {
             updateTileInfo()
         }
 
-        // Collapse Quick Settings panel immediately
-        // Use an empty PendingIntent to collapse without starting any activity
+        // Collapse Quick Settings panel. An empty Intent (no component/action) doesn't resolve
+        // to any Activity — startActivityAndCollapse() then throws ActivityNotFoundException on
+        // Android 14+. Point it at the app itself instead, which also collapses the panel.
+        val intent = Intent(applicationContext, ActHost::class.java)
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
             // Android 14+ (API 34+)
-            val intent = Intent()
             val pendingIntent = PendingIntent.getActivity(
                 applicationContext,
                 0,
@@ -123,7 +126,6 @@ class ServiceRamTile : TileService(), CoroutineScope {
             startActivityAndCollapse(pendingIntent)
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             // Android 7+ (API 24+)
-            val intent = Intent()
             val pendingIntent = PendingIntent.getActivity(
                 applicationContext,
                 0,

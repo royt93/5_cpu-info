@@ -3,7 +3,6 @@ package com.galaxyjoy.cpuinfo.feat
 import android.animation.ObjectAnimator
 import android.animation.PropertyValuesHolder
 import android.annotation.SuppressLint
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -24,11 +23,9 @@ import com.galaxyjoy.cpuinfo.databinding.ActHostLayoutBinding
 import com.galaxyjoy.cpuinfo.feat.setting.ExportFormatBottomSheet
 import com.galaxyjoy.cpuinfo.feat.setting.LanguagePickerBottomSheet
 import com.galaxyjoy.cpuinfo.feat.vip.ActVip
-import com.galaxyjoy.cpuinfo.feat.vip.FVipManagement
 import com.galaxyjoy.cpuinfo.rateAppInApp
 import com.galaxyjoy.cpuinfo.util.LocaleManager
 import com.galaxyjoy.cpuinfo.util.SystemInfoExporter
-import com.galaxyjoy.cpuinfo.util.runOnApiAbove
 import com.galaxyjoy.cpuinfo.util.setupEdgeToEdge
 import com.roy.sdkadbmob.AdManager
 import dagger.hilt.android.AndroidEntryPoint
@@ -85,10 +82,6 @@ class ActHost : BaseActivity() {
         setupEdgeToEdge()
         setupNavigation()
         setSupportActionBar(binding.toolbar)
-        runOnApiAbove(Build.VERSION_CODES.M) {
-            val menu = binding.bottomNavigation.menu
-            menu.findItem(R.id.menuProcesses).isVisible = false
-        }
 
         // Banner Ad — apply state ngay tuỳ VIP. Free → load. VIP → skip + hide container.
         applyVipBannerState()
@@ -99,16 +92,11 @@ class ActHost : BaseActivity() {
         // tự auto-load rewarded (khác Banner/Interstitial). Phải preload thủ công.
         AdManager.loadRewarded(this)
 
-        // Listen VIP state thay đổi từ FVipManagement (redeem / watch ad / revoke).
-        supportFragmentManager.setFragmentResultListener(
-            FVipManagement.KEY_VIP_CHANGED,
-            this,
-        ) { _, _ ->
-            Log.d(TAG, "VIP state changed event → reapply banner + badge")
-            applyVipBannerState()
-            refreshVipBadgeAndPulse()
-        }
-
+        // VIP state changes (redeem / watch ad / revoke) happen inside FVipManagement, which
+        // lives in the separate ActVip Activity — a FragmentResultListener registered here on
+        // ActHost's own supportFragmentManager can never receive that result (it's a different
+        // FragmentManager instance). Returning from ActVip always re-triggers ActHost.onResume(),
+        // which already reapplies banner + badge state below — that's the real refresh path.
         registerExportFormatResult()
         registerLanguagePickResult()
         maybeShowFirstLaunchLanguagePicker()
@@ -148,7 +136,7 @@ class ActHost : BaseActivity() {
             val format = runCatching { SystemInfoExporter.Format.valueOf(name) }.getOrNull()
                 ?: SystemInfoExporter.Format.TEXT
             lifecycleScope.launch { userPreferencesRepository.setExportFormat(format.name) }
-            systemInfoExporter.exportSystemInfo(this, format)
+            systemInfoExporter.exportSystemInfo(this, lifecycleScope, format)
         }
     }
 

@@ -16,7 +16,6 @@ import com.galaxyjoy.cpuinfo.data.provider.DataProviderCpu
 import com.galaxyjoy.cpuinfo.data.provider.DataProviderGpu
 import com.galaxyjoy.cpuinfo.data.provider.DataProviderRam
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
@@ -41,8 +40,8 @@ class SystemInfoExporter @Inject constructor(
         JSON("application/json", "json"),
     }
 
-    fun exportSystemInfo(context: Context, format: Format = Format.TEXT) {
-        CoroutineScope(Dispatchers.Main).launch {
+    fun exportSystemInfo(context: Context, scope: CoroutineScope, format: Format = Format.TEXT) {
+        scope.launch {
             val body = withContext(dispatchersProvider.io) {
                 when (format) {
                     Format.TEXT -> buildSystemInfoText()

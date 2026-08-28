@@ -76,13 +76,9 @@ object Utils {
     fun readOneLine(file: File): Double? {
         val text: String?
         try {
-            val fs = FileInputStream(file)
-            val sr = InputStreamReader(fs)
-            val br = BufferedReader(sr)
-            text = br.readLine()
-            br.close()
-            sr.close()
-            fs.close()
+            text = FileInputStream(file).use { fs ->
+                BufferedReader(InputStreamReader(fs)).use { br -> br.readLine() }
+            }
         } catch (_: Exception) {
             return null
         }

@@ -1,6 +1,7 @@
 package com.galaxyjoy.cpuinfo.data.provider
 
 import android.os.Build
+import androidx.annotation.VisibleForTesting
 import timber.log.Timber
 import java.io.File
 import java.io.FileFilter
@@ -19,11 +20,29 @@ class DataProviderCpu @Inject constructor() {
         }
     }
 
+    /**
+     * `Runtime.availableProcessors()` only counts cores currently online. On modern
+     * big.LITTLE/DynamIQ chips the big cores are often power-collapsed (offline) when idle, so
+     * that API alone would undercount and flicker with load. `/sys/.../cpu/possible` lists every
+     * core the kernel knows about regardless of online state, so prefer it when readable.
+     */
     fun getNumberOfCores(): Int {
-        return if (Build.VERSION.SDK_INT >= 17) {
+        return getNumberOfCoresFromPossibleList() ?: if (Build.VERSION.SDK_INT >= 17) {
             Runtime.getRuntime().availableProcessors()
         } else {
             getNumCoresLegacy()
+        }
+    }
+
+    /**
+     * Parses e.g. "0-7" or "0-3,4-7" from `/sys/devices/system/cpu/possible` into a core count.
+     */
+    private fun getNumberOfCoresFromPossibleList(): Int? {
+        return try {
+            val text = RandomAccessFile("${CPU_INFO_DIR}possible", "r").use { it.readLine() }
+            parsePossibleCoreCount(text)
+        } catch (_: Exception) {
+            null
         }
     }
 
@@ -80,5 +99,23 @@ class DataProviderCpu @Inject constructor() {
 
     companion object {
         private const val CPU_INFO_DIR = "/sys/devices/system/cpu/"
+
+        /** Parses e.g. "0-7" or "0-3,4-7" into a core count. Null on malformed/blank input. */
+        @VisibleForTesting(otherwise = VisibleForTesting.PACKAGE_PRIVATE)
+        internal fun parsePossibleCoreCount(text: String?): Int? {
+            if (text.isNullOrBlank()) return null
+            return try {
+                text.split(",").sumOf { range ->
+                    val bounds = range.trim().split("-")
+                    when (bounds.size) {
+                        1 -> 1
+                        2 -> bounds[1].toInt() - bounds[0].toInt() + 1
+                        else -> 0
+                    }
+                }.takeIf { it > 0 }
+            } catch (_: Exception) {
+                null
+            }
+        }
     }
 }

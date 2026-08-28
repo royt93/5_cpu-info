@@ -20,10 +20,14 @@ Java_com_galaxyjoy_cpuinfo_data_provider_DataNativeProviderCpu_initLibrary(JNIEn
 extern "C" JNIEXPORT jstring JNICALL
 Java_com_galaxyjoy_cpuinfo_data_provider_DataNativeProviderCpu_getCpuName(JNIEnv *env,
                                                                            jobject thiz) {
-    if (!cpuinfo_initialize()) {
+    if (!cpuinfo_initialize() || cpuinfo_get_packages_count() == 0) {
         return env->NewStringUTF("");
     }
-    return env->NewStringUTF(cpuinfo_get_package(0)->name);
+    const struct cpuinfo_package *package = cpuinfo_get_package(0);
+    if (package == nullptr || package->name[0] == '\0') {
+        return env->NewStringUTF("");
+    }
+    return env->NewStringUTF(package->name);
 }
 
 extern "C"

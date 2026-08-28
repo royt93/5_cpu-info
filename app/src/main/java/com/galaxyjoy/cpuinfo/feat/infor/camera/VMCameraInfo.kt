@@ -50,6 +50,19 @@ class VMCameraInfo @Inject constructor(
                 return@forEach
             }
 
+            // OEM HAL quirks (seen on Samsung/Xiaomi) can throw IllegalArgumentException /
+            // AssertionError deep inside stream-configuration lookups for a single camera —
+            // isolate per camera so one bad camera doesn't abort the whole init() and crash
+            // the tab.
+            try {
+                populateCamera(id, ch)
+            } catch (e: Throwable) {
+                Timber.w(e, "Failed to read full characteristics for camera $id")
+            }
+        }
+    }
+
+    private fun populateCamera(id: String, ch: CameraCharacteristics) {
             val facingName = when (ch.get(CameraCharacteristics.LENS_FACING)) {
                 CameraCharacteristics.LENS_FACING_FRONT -> resources.getString(R.string.front)
                 CameraCharacteristics.LENS_FACING_BACK -> resources.getString(R.string.back)
@@ -85,7 +98,6 @@ class VMCameraInfo @Inject constructor(
             }
 
             ch.describeCapabilities().forEach { listLiveData.add(it) }
-        }
     }
 
     private fun describeStreams(map: StreamConfigurationMap): List<Pair<String, String>> {

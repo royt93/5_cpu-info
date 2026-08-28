@@ -57,7 +57,7 @@ class CpuInfoEpoxyController(
                 context.getString(R.string.cpu_frequency_stopped, i)
             }
             val minFreq = if (frequency.min != -1L) {
-                context.getString(R.string.cpu_frequency, "0")
+                context.getString(R.string.cpu_frequency, frequency.min.toString())
             } else {
                 ""
             }

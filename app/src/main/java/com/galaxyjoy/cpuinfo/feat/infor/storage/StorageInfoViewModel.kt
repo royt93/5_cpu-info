@@ -3,6 +3,7 @@ package com.galaxyjoy.cpuinfo.feat.infor.storage
 import android.annotation.SuppressLint
 import android.content.res.Resources
 import android.os.Environment
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.galaxyjoy.cpuinfo.R
@@ -99,7 +100,7 @@ class StorageInfoViewModel @Inject constructor(
                             resources.getString(R.string.external),
                             R.drawable.ic_sdcard, sdTotal, sdUsed
                         )
-                        listLiveData.add(sdMemory)
+                        upsertSdCard(listLiveData, sdMemory)
                     }
                 }, {
                     Timber.i("Cannot find SD card file")
@@ -190,51 +191,22 @@ class StorageInfoViewModel @Inject constructor(
     private fun getExternalSDMounts(): ArrayList<String> {
         val sdDirList = ArrayList<String>()
         try {
-            val dis = DataInputStream(FileInputStream("/proc/mounts"))
-            val br = BufferedReader(InputStreamReader(dis))
-            val externalDir = Environment.getExternalStorageDirectory().path
-            while (true) {
-                val strLine = br.readLine()
-                if (strLine == null) {
-                    break
-                } else if (!(strLine.contains("asec")
-                            || strLine.contains("legacy")
-                            || strLine.contains("Android/obb"))
-                ) {
-                    if (strLine.startsWith("/dev/block/vold/")
-                        || strLine.startsWith("/dev/block/sd")
-                        || strLine.startsWith("/dev/fuse")
-                        || strLine.startsWith("/mnt/media_rw")
+            DataInputStream(FileInputStream("/proc/mounts")).use { dis ->
+                val br = BufferedReader(InputStreamReader(dis))
+                val externalDir = Environment.getExternalStorageDirectory().path
+                while (true) {
+                    val strLine = br.readLine() ?: break
+                    val mountPoint = candidateMountPoint(strLine, externalDir, sdDirList) ?: continue
+                    val path = File(mountPoint)
+                    if ((path.exists() || path.isDirectory || path.canWrite())
+                        && path.exists()
+                        //&& path.canRead()
+                        && !path.path.contains("/system")
                     ) {
-                        val lineElements =
-                            strLine.split(" ".toRegex()).dropLastWhile { it.isEmpty() }
-                                .toTypedArray()
-                        val path = File(lineElements[1])
-                        if ((path.exists()
-                                    || path.isDirectory
-                                    || path.canWrite())
-                            && path.exists()
-                            //&& path.canRead()
-                            && !path.path.contains("/system")
-                            && !sdDirList.contains(lineElements[1])
-                            && lineElements[1] != externalDir
-                            && lineElements[1] != "/storage/emulated"
-                            && !sdDirList.any {
-                                it.endsWith(
-                                    lineElements[1]
-                                        .substring(
-                                            lineElements[1].lastIndexOf("/"),
-                                            lineElements[1].length
-                                        )
-                                )
-                            }
-                        ) {
-                            sdDirList.add(lineElements[1])
-                        }
+                        sdDirList.add(mountPoint)
                     }
                 }
             }
-            dis.close()
         } catch (e: Exception) {
             Timber.i(e)
         }
@@ -245,5 +217,57 @@ class StorageInfoViewModel @Inject constructor(
     override fun onCleared() {
         super.onCleared()
         sdCardFinderDisposable?.dispose()
+    }
+
+    companion object {
+        /**
+         * Upsert instead of blind add(): the mount broadcast can fire more than once for the
+         * same card, add() alone would duplicate the row on every re-fire (B08).
+         */
+        @VisibleForTesting(otherwise = VisibleForTesting.PACKAGE_PRIVATE)
+        internal fun upsertSdCard(list: ListLiveData<StorageItem>, sdMemory: StorageItem) {
+            val existingIndex = list.indexOfFirst { it.iconRes == R.drawable.ic_sdcard }
+            if (existingIndex >= 0) {
+                list[existingIndex] = sdMemory
+            } else {
+                list.add(sdMemory)
+            }
+        }
+
+        /**
+         * Applies the format/dedup filters to a single `/proc/mounts` line and returns the
+         * candidate mount point, or null if the line should be skipped. Deliberately excludes
+         * filesystem existence checks (File.exists()/canWrite()) so this stays pure and testable
+         * — those still run in [getExternalSDMounts] afterwards.
+         *
+         * Malformed/short lines used to throw ArrayIndexOutOfBounds / StringIndexOutOfBounds here,
+         * which the caller's try/catch silently swallowed — failing SD detection with no log (B09).
+         */
+        @VisibleForTesting(otherwise = VisibleForTesting.PACKAGE_PRIVATE)
+        internal fun candidateMountPoint(
+            line: String,
+            externalDir: String,
+            alreadyFound: List<String>,
+        ): String? {
+            if (line.contains("asec") || line.contains("legacy") || line.contains("Android/obb")) {
+                return null
+            }
+            if (!(line.startsWith("/dev/block/vold/")
+                        || line.startsWith("/dev/block/sd")
+                        || line.startsWith("/dev/fuse")
+                        || line.startsWith("/mnt/media_rw"))
+            ) {
+                return null
+            }
+            val lineElements = line.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+            if (lineElements.size < 2) return null
+            val mountPoint = lineElements[1]
+            val lastSlash = mountPoint.lastIndexOf("/")
+            if (lastSlash < 0) return null
+            if (alreadyFound.contains(mountPoint)) return null
+            if (mountPoint == externalDir || mountPoint == "/storage/emulated") return null
+            if (alreadyFound.any { it.endsWith(mountPoint.substring(lastSlash)) }) return null
+            return mountPoint
+        }
     }
 }

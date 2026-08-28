@@ -17,11 +17,12 @@
 package com.galaxyjoy.cpuinfo.util.lifecycle
 
 import java.util.ArrayList
+import android.os.Looper
 import androidx.lifecycle.MutableLiveData
 
 /**
  * [ArrayList] with additional [listStatusChangeNotificator] which will notify all observers about
- * changes in that list. All operations MUST be invoked from main thread to avoid inconsistency.
+ * changes in that list.
  *
  * In addition to normal [ArrayList] it contains [replace] method to make nicer animations with
  * [androidx.recyclerview.widget.RecyclerView].
@@ -30,22 +31,38 @@ class ListLiveData<T> : ArrayList<T>() {
 
     val listStatusChangeNotificator = MutableLiveData<ListLiveDataChangeEvent>()
 
+    /**
+     * setValue() requires the main thread; callers registering listeners on a background
+     * dispatcher (e.g. sensor callbacks) would otherwise crash with IllegalStateException.
+     */
+    private fun notify(event: ListLiveDataChangeEvent) {
+        if (Looper.myLooper() == Looper.getMainLooper()) {
+            listStatusChangeNotificator.value = event
+        } else {
+            listStatusChangeNotificator.postValue(event)
+        }
+    }
+
     override fun add(element: T): Boolean {
         super.add(element)
-        listStatusChangeNotificator.value = ListLiveDataChangeEvent(
-            listLiveDataState = ListLiveDataState.ITEM_RANGE_INSERTED,
-            startIndex = size - 1,
-            itemCount = 1
+        notify(
+            ListLiveDataChangeEvent(
+                listLiveDataState = ListLiveDataState.ITEM_RANGE_INSERTED,
+                startIndex = size - 1,
+                itemCount = 1
+            )
         )
         return true
     }
 
     override fun add(index: Int, element: T) {
         super.add(index, element)
-        listStatusChangeNotificator.value = ListLiveDataChangeEvent(
-            listLiveDataState = ListLiveDataState.ITEM_RANGE_INSERTED,
-            startIndex = index,
-            itemCount = 1
+        notify(
+            ListLiveDataChangeEvent(
+                listLiveDataState = ListLiveDataState.ITEM_RANGE_INSERTED,
+                startIndex = index,
+                itemCount = 1
+            )
         )
     }
 
@@ -53,10 +70,12 @@ class ListLiveData<T> : ArrayList<T>() {
         val oldSize = size
         val added = super.addAll(elements)
         if (added) {
-            listStatusChangeNotificator.value = ListLiveDataChangeEvent(
-                listLiveDataState = ListLiveDataState.ITEM_RANGE_INSERTED,
-                startIndex = oldSize,
-                itemCount = size - oldSize
+            notify(
+                ListLiveDataChangeEvent(
+                    listLiveDataState = ListLiveDataState.ITEM_RANGE_INSERTED,
+                    startIndex = oldSize,
+                    itemCount = size - oldSize
+                )
             )
         }
         return added
@@ -65,10 +84,12 @@ class ListLiveData<T> : ArrayList<T>() {
     override fun addAll(index: Int, elements: Collection<T>): Boolean {
         val added = super.addAll(index, elements)
         if (added) {
-            listStatusChangeNotificator.value = ListLiveDataChangeEvent(
-                listLiveDataState = ListLiveDataState.ITEM_RANGE_INSERTED,
-                startIndex = index,
-                itemCount = elements.size
+            notify(
+                ListLiveDataChangeEvent(
+                    listLiveDataState = ListLiveDataState.ITEM_RANGE_INSERTED,
+                    startIndex = index,
+                    itemCount = elements.size
+                )
             )
         }
         return added
@@ -78,20 +99,24 @@ class ListLiveData<T> : ArrayList<T>() {
         val oldSize = size
         super.clear()
         if (oldSize != 0) {
-            listStatusChangeNotificator.value = ListLiveDataChangeEvent(
-                listLiveDataState = ListLiveDataState.ITEM_RANGE_REMOVED,
-                startIndex = 0,
-                itemCount = oldSize
+            notify(
+                ListLiveDataChangeEvent(
+                    listLiveDataState = ListLiveDataState.ITEM_RANGE_REMOVED,
+                    startIndex = 0,
+                    itemCount = oldSize
+                )
             )
         }
     }
 
     override fun removeAt(index: Int): T {
         val value = super.removeAt(index)
-        listStatusChangeNotificator.value = ListLiveDataChangeEvent(
-            listLiveDataState = ListLiveDataState.ITEM_RANGE_REMOVED,
-            startIndex = index,
-            itemCount = 1
+        notify(
+            ListLiveDataChangeEvent(
+                listLiveDataState = ListLiveDataState.ITEM_RANGE_REMOVED,
+                startIndex = index,
+                itemCount = 1
+            )
         )
         return value
     }
@@ -108,10 +133,12 @@ class ListLiveData<T> : ArrayList<T>() {
 
     override fun set(index: Int, element: T): T {
         val value = super.set(index, element)
-        listStatusChangeNotificator.value = ListLiveDataChangeEvent(
-            listLiveDataState = ListLiveDataState.ITEM_RANGE_CHANGED,
-            startIndex = index,
-            itemCount = 1
+        notify(
+            ListLiveDataChangeEvent(
+                listLiveDataState = ListLiveDataState.ITEM_RANGE_CHANGED,
+                startIndex = index,
+                itemCount = 1
+            )
         )
         return value
     }
@@ -119,17 +146,17 @@ class ListLiveData<T> : ArrayList<T>() {
     fun replace(elements: Collection<T>) {
         super.clear()
         super.addAll(elements)
-        listStatusChangeNotificator.value = ListLiveDataChangeEvent(
-            listLiveDataState = ListLiveDataState.CHANGED
-        )
+        notify(ListLiveDataChangeEvent(listLiveDataState = ListLiveDataState.CHANGED))
     }
 
     override fun removeRange(fromIndex: Int, toIndex: Int) {
         super.removeRange(fromIndex, toIndex)
-        listStatusChangeNotificator.value = ListLiveDataChangeEvent(
-            listLiveDataState = ListLiveDataState.ITEM_RANGE_REMOVED,
-            startIndex = fromIndex,
-            itemCount = toIndex - fromIndex
+        notify(
+            ListLiveDataChangeEvent(
+                listLiveDataState = ListLiveDataState.ITEM_RANGE_REMOVED,
+                startIndex = fromIndex,
+                itemCount = toIndex - fromIndex
+            )
         )
     }
 }

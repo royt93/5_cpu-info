@@ -4,14 +4,13 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.galaxyjoy.cpuinfo.util.DispatchersProvider
 import com.galaxyjoy.cpuinfo.util.lifecycle.ListLiveData
 import com.galaxyjoy.cpuinfo.util.round1
 import com.galaxyjoy.cpuinfo.util.runOnApiAbove
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
@@ -28,27 +27,28 @@ class VMSensorsInfo @Inject constructor(
 
     private val sensorList = sensorManager.getSensorList(Sensor.TYPE_ALL)
 
+    /**
+     * registerListener()/unregisterListener() are cheap Binder calls, not I/O — running them on
+     * viewModelScope.launch(io) let start/stop calls race and interleave on fast tab switches.
+     * Calling directly on the caller's thread keeps ordering deterministic.
+     */
     @Synchronized
     fun startProvidingData() {
         if (listLiveData.isEmpty()) {
             listLiveData.addAll(sensorList.map { Pair(it.name, " ") })
         }
 
-        // Start register process on IO dispatcher to avoid UI block
-        viewModelScope.launch(dispatchersProvider.io) {
-            for (sensor in sensorList) {
-                sensorManager.registerListener(
-                    this@VMSensorsInfo, sensor,
-                    SensorManager.SENSOR_DELAY_NORMAL
-                )
-            }
+        for (sensor in sensorList) {
+            sensorManager.registerListener(
+                this, sensor,
+                SensorManager.SENSOR_DELAY_NORMAL
+            )
         }
     }
 
+    @Synchronized
     fun stopProvidingData() {
-        viewModelScope.launch(dispatchersProvider.io) {
-            sensorManager.unregisterListener(this@VMSensorsInfo)
-        }
+        sensorManager.unregisterListener(this)
     }
 
     override fun onCleared() {
@@ -70,8 +70,19 @@ class VMSensorsInfo @Inject constructor(
      */
     @Synchronized
     private fun updateSensorInfo(event: SensorEvent) {
-        val updatedRowId = sensorList.indexOf(event.sensor)
+        val updatedRowId = indexOfSensor(event.sensor) ?: return
         listLiveData[updatedRowId] = Pair(event.sensor.name, getSensorData(event))
+    }
+
+    /**
+     * indexOf can return -1 on custom ROMs where the SensorEvent's sensor instance doesn't
+     * match-by-equals the one returned by getSensorList() at startup — guard against writing to
+     * a negative/out-of-range row.
+     */
+    @VisibleForTesting(otherwise = VisibleForTesting.PACKAGE_PRIVATE)
+    internal fun indexOfSensor(sensor: Sensor): Int? {
+        val index = sensorList.indexOf(sensor)
+        return index.takeIf { it in listLiveData.indices }
     }
 
     /**
