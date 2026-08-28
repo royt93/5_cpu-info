@@ -26,7 +26,6 @@ android {
         versionName = "2026.08.28"
 
         vectorDrawables.useSupportLibrary = true
-        multiDexEnabled = true
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         externalNativeBuild {
             cmake {
@@ -187,7 +186,6 @@ dependencies {
     implementation(libs.androidx.preference.ktx)
     implementation(libs.androidx.swiperefreshlayout)
     implementation(libs.androidx.constraintlayout)
-    implementation(libs.androidx.multidex)
     implementation(libs.androidx.viewpager2)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.androidx.lifecycle.viewmodel.compose)

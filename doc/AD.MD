@@ -1,5 +1,7 @@
 # AD migration — `AdmobApplovinWrapper 1.1.5`
 
+> **Cập nhật 2026-08-28**: mục 7 dưới đây ghi "đã xoá field `adView`" đúng tại thời điểm migration, nhưng field này **đã được thêm lại sau đó** trong `ActHost.kt` — cần thiết để có thể `AdManager.bannerDestroy()` thủ công khi user activate VIP giữa session (lib không tự destroy khi VIP toggle vì view đã instantiated trước đó). Không phải leak — có comment giải thích tại chỗ khai báo field. Phần còn lại của tài liệu vẫn đúng lịch sử migration.
+
 Lib reference: `/Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/_AdmobWrapper`
 Coordinate: `com.github.royt93:AdmobApplovinWrapper:1.1.5` (JitPack)
 Spec gốc của template: `doc/AD_PROMPT_AOS.MD`

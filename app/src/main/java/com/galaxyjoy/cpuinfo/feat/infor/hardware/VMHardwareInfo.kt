@@ -7,7 +7,6 @@ import android.content.ContentResolver
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.content.res.Resources
-import android.hardware.Camera
 import android.hardware.ConsumerIrManager
 import android.net.wifi.WifiManager
 import android.os.BatteryManager
@@ -64,10 +63,8 @@ class VMHardwareInfo @Inject constructor(
         listLiveData.add(Pair(resources.getString(R.string.battery), ""))
         listLiveData.addAll(getBatteryStatus())
 
-        if (hasCamera()) {
-            listLiveData.add(Pair(resources.getString(R.string.cameras), ""))
-            listLiveData.addAll(getCameraInfo())
-        }
+        // Camera info moved to the dedicated Camera tab (VMCameraInfo, Camera2 API) — this
+        // section used the deprecated android.hardware.Camera API and duplicated that tab.
 
         listLiveData.add(Pair(resources.getString(R.string.sound_card), ""))
         listLiveData.addAll(getSoundCardInfo())
@@ -367,51 +364,6 @@ class VMHardwareInfo @Inject constructor(
 
         return alsa
     }
-
-    /**
-     * @return true if device has at least 1 camera, otherwise false
-     */
-    private fun hasCamera(): Boolean =
-        packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA)
-
-    /**
-     * Get number, type and orientation of the cameras
-     */
-    @Suppress("DEPRECATION")
-    private fun getCameraInfo(): List<Pair<String, String>> {
-        val functionsList = mutableListOf<Pair<String, String>>()
-
-        val numbersOfCameras = Camera.getNumberOfCameras()
-        functionsList.add(Pair(resources.getString(R.string.amount), numbersOfCameras.toString()))
-
-        val cameraName = resources.getString(R.string.camera)
-        val cameraType = resources.getString(R.string.type)
-        val cameraOrientation = resources.getString(R.string.orientation)
-        for (i in 0 until numbersOfCameras) {
-            functionsList.add(Pair("     $cameraName $i", " "))
-            try {
-                val info = Camera.CameraInfo()
-                Camera.getCameraInfo(i, info)
-                val type = getCameraType(info)
-                functionsList.add(Pair("         $cameraType", type))
-                functionsList.add(Pair("         $cameraOrientation", info.orientation.toString()))
-            } catch (e: Exception) {
-                Timber.e(e)
-            }
-        }
-
-        return functionsList
-    }
-
-    /**
-     * Detect camera type using old API
-     */
-    private fun getCameraType(info: Camera.CameraInfo): String =
-        when (info.facing) {
-            Camera.CameraInfo.CAMERA_FACING_FRONT -> resources.getString(R.string.front)
-            Camera.CameraInfo.CAMERA_FACING_BACK -> resources.getString(R.string.back)
-            else -> resources.getString(R.string.unknown)
-        }
 
     private fun getYesNoString(yesValue: Boolean) = if (yesValue) {
         resources.getString(R.string.yes)

@@ -1,7 +1,7 @@
 package com.galaxyjoy.cpuinfo
 
+import android.app.Application
 import android.util.Log
-import androidx.multidex.MultiDexApplication
 import com.galaxyjoy.cpuinfo.appinitializers.InitializersApp
 import com.galaxyjoy.cpuinfo.common.const.AdKeys
 import com.roy.sdkadbmob.AdManager
@@ -11,7 +11,7 @@ import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
 
 @HiltAndroidApp
-class GalaxyApp : MultiDexApplication() {
+class GalaxyApp : Application() {
 
     private companion object {
         private const val TAG = "roy93~GalaxyApp"

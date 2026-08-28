@@ -18,7 +18,7 @@ class ObservableGpuData @Inject constructor(
         emit(
             GpuData(
                 vulkanVersion = dataProviderGpu.getVulkanVersion(),
-                glesVersio = dataProviderGpu.getGlEsVersion(),
+                glesVersion = dataProviderGpu.getGlEsVersion(),
                 glVendor = params.glVendor,
                 glRenderer = params.glRenderer,
                 glExtensions = params.glExtensions

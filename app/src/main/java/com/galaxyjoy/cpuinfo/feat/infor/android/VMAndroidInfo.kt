@@ -67,7 +67,8 @@ class VMAndroidInfo @Inject constructor(
         listLiveData.add(Pair(resources.getString(R.string.model), Build.MODEL))
         listLiveData.add(Pair(resources.getString(R.string.manufacturer), Build.MANUFACTURER))
         listLiveData.add(Pair(resources.getString(R.string.board), Build.BOARD))
-        listLiveData.add(Pair("VM", getVmVersion()))
+        // minSdk=24 → runtime is always ART (Dalvik was removed in Android 5.0/API 21).
+        listLiveData.add(Pair("VM", "ART"))
         listLiveData.add(Pair("Kernel", System.getProperty("os.version") ?: ""))
         @Suppress("DEPRECATION")
         listLiveData.add(Pair(resources.getString(R.string.serial), Build.SERIAL))
@@ -145,18 +146,6 @@ class VMAndroidInfo @Inject constructor(
         } finally {
             process?.destroy()
         }
-    }
-
-    /**
-     * Specify if device is using ART or Dalvik
-     */
-    private fun getVmVersion(): String {
-        var vm = "Dalvik"
-        val vmVersion = System.getProperty("java.vm.version")
-        if (vmVersion != null && vmVersion.startsWith("2")) {
-            vm = "ART"
-        }
-        return vm
     }
 
     /**

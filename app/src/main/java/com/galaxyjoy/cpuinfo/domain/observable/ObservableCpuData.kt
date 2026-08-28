@@ -19,31 +19,34 @@ class ObservableCpuData @Inject constructor(
     override val dispatcher = dispatchersProvider.io
 
     override fun createObservable(params: Unit) = flow {
+        // Everything below is fixed hardware info that never changes at runtime — querying it
+        // (incl. 7 JNI calls) every second was pure waste. Only per-core current frequency
+        // actually needs to be re-read each tick.
+        val processorName = dataNativeProviderCpu.getCpuName()
+        val abi = dataProviderCpu.getAbi()
+        val coreNumber = dataProviderCpu.getNumberOfCores()
+        val hasArmNeon = dataNativeProviderCpu.hasArmNeon()
+        val l1dCaches = dataNativeProviderCpu.getL1dCaches()
+            ?.joinToString(separator = "\n") { Utils.humanReadableByteCount(it.toLong()) }
+            ?: ""
+        val l1iCaches = dataNativeProviderCpu.getL1iCaches()
+            ?.joinToString(separator = "\n") { Utils.humanReadableByteCount(it.toLong()) }
+            ?: ""
+        val l2Caches = dataNativeProviderCpu.getL2Caches()
+            ?.joinToString(separator = "\n") { Utils.humanReadableByteCount(it.toLong()) }
+            ?: ""
+        val l3Caches = dataNativeProviderCpu.getL3Caches()
+            ?.joinToString(separator = "\n") { Utils.humanReadableByteCount(it.toLong()) }
+            ?: ""
+        val l4Caches = dataNativeProviderCpu.getL4Caches()
+            ?.joinToString(separator = "\n") { Utils.humanReadableByteCount(it.toLong()) }
+            ?: ""
+        val minMaxFreqs = (0 until coreNumber).map { dataProviderCpu.getMinMaxFreq(it) }
+
         while (true) {
-            val processorName = dataNativeProviderCpu.getCpuName()
-            val abi = dataProviderCpu.getAbi()
-            val coreNumber = dataProviderCpu.getNumberOfCores()
-            val hasArmNeon = dataNativeProviderCpu.hasArmNeon()
-            val frequencies = mutableListOf<CpuData.Frequency>()
-            val l1dCaches = dataNativeProviderCpu.getL1dCaches()
-                ?.joinToString(separator = "\n") { Utils.humanReadableByteCount(it.toLong()) }
-                ?: ""
-            val l1iCaches = dataNativeProviderCpu.getL1iCaches()
-                ?.joinToString(separator = "\n") { Utils.humanReadableByteCount(it.toLong()) }
-                ?: ""
-            val l2Caches = dataNativeProviderCpu.getL2Caches()
-                ?.joinToString(separator = "\n") { Utils.humanReadableByteCount(it.toLong()) }
-                ?: ""
-            val l3Caches = dataNativeProviderCpu.getL3Caches()
-                ?.joinToString(separator = "\n") { Utils.humanReadableByteCount(it.toLong()) }
-                ?: ""
-            val l4Caches = dataNativeProviderCpu.getL4Caches()
-                ?.joinToString(separator = "\n") { Utils.humanReadableByteCount(it.toLong()) }
-                ?: ""
-            for (i in 0 until coreNumber) {
-                val (min, max) = dataProviderCpu.getMinMaxFreq(i)
-                val current = dataProviderCpu.getCurrentFreq(i)
-                frequencies.add(CpuData.Frequency(min, max, current))
+            val frequencies = (0 until coreNumber).map { i ->
+                val (min, max) = minMaxFreqs[i]
+                CpuData.Frequency(min, max, dataProviderCpu.getCurrentFreq(i))
             }
             emit(
                 CpuData(

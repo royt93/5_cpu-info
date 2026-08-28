@@ -25,7 +25,7 @@ Release signing đọc từ `gradle.properties` (`STORE_FILE`, `STORE_PASSWORD`,
 
 ## Toolchain (bị pin chặt — đừng tự nâng)
 
-- AGP **8.7.3**, Kotlin **1.9.25**, Java target **11**, NDK **26.3.11579264**, `compileSdk=36`, `minSdk=24`.
+- AGP **8.7.3**, Kotlin **1.9.25**, Java target **11**, NDK **26.3.11579264**, `compileSdk=37`, `minSdk=24`.
 - `build.gradle.kts` (root) `force()` các phiên bản: `kotlin-stdlib 1.9.25`, `kotlinx-coroutines 1.9.0`, `play-services-ads 23.6.0`. **Đừng xoá block force này** — Compose BOM và transitive deps kéo artifact compiled với Kotlin 2.x mà compiler 1.9.25 không đọc được metadata (max 2.0.0). Nếu bump Kotlin/coroutines phải bump force tương ứng.
 - **KSP** dùng cho Hilt + Glide (`com.google.devtools.ksp:1.9.25-1.0.20`). **kapt** vẫn dùng cho Epoxy (5.1.3 chưa support KSP). Mọi annotation processor mới ưu tiên KSP.
 - `GlideApp` class không được generate (Glide KSP 4.16.0 chỉ tạo `GeneratedAppGlideModuleImpl`). Dùng `Glide.with()` trực tiếp; `GlideAppModule` hiện rỗng (chỉ đăng ký với Glide qua `@GlideModule`).
@@ -42,7 +42,7 @@ Release signing đọc từ `gradle.properties` (`STORE_FILE`, `STORE_PASSWORD`,
 
 ### Package map (`com.galaxyjoy.cpuinfo`)
 
-- `feat/` — mỗi feature 1 sub-package (`feat/infor/{cpu,gpu,ram,sensor,storage,screen,hardware,android}`, `feat/app`, `feat/processes`, `feat/temp`, `feat/setting`, `feat/cputile`, `feat/ramtile`). `feat/ActHost.kt` là Activity chính có bottom nav, `feat/SplashActivity.kt` là entry điểm.
+- `feat/` — mỗi feature 1 sub-package (`feat/infor/{cpu,gpu,ram,sensor,storage,screen,hardware,android,camera,drm,media}`, `feat/app`, `feat/temp`, `feat/setting`, `feat/cputile`, `feat/ramtile`). `feat/ActHost.kt` là Activity chính có bottom nav, `feat/SplashActivity.kt` là entry điểm. `feat/processes` đã bị xoá (tab bị ẩn từ lâu, không dùng được — xem `doc/task/epic-01-bugfix.md` B11).
 - `data/{provider,local}` — `DataProvider*` cho từng loại thông tin (CPU/GPU/RAM/Storage/Applications) + `RepositoryUserPreferences` (DataStore).
 - `domain/{model,observable,action,result}` + `Interactor.kt` — kiến trúc đang chuyển sang Interactor / Observable pattern (TODO trong README), chưa hoàn tất.
 - `di/modules/{AppModule,AppModuleBinds}.kt` — Hilt graph. App entry: `GalaxyApp.kt` (`@HiltAndroidApp`).
@@ -53,11 +53,11 @@ Release signing đọc từ `gradle.properties` (`STORE_FILE`, `STORE_PASSWORD`,
 
 ### Hệ thống quảng cáo
 Chi tiết đầy đủ ở `doc/AD.MD`. Tóm tắt:
-- Provider hiện tại: **AppLovin MAX** thông qua SDK wrapper `com.github.royt93:AdmobWrapper:1.1.1` (cài qua JitPack — repo đã được thêm vào `allprojects.repositories`). Flag `BuildConfig.IS_ENABLE_ADMOB = false` switch về AppLovin; bật lên là dùng AdMob ID trong cùng file `build.gradle.kts`.
+- Provider hiện tại: **AppLovin MAX** thông qua SDK wrapper `com.github.royt93:AdmobWrapper:1.1.5` (cài qua JitPack — repo đã được thêm vào `allprojects.repositories`). Flag `BuildConfig.IS_ENABLE_ADMOB = false` switch về AppLovin; bật lên là dùng AdMob ID trong cùng file `build.gradle.kts`.
 - 3 touchpoint: App Open (`SplashActivity`), Banner (`ActHost` bottom — có lifecycle hooks `bannerResume/Pause/Destroy`), Interstitial (`FrmApplications` — nút Sort A/Z). Preload interstitial gọi trong `ActHost.onCreate`.
-- Init flow trong `GalaxyApp.setupAd()`: `setConfig → earlyInit → AppLovinSdk.initializeSdk → AdManager.init`. Thứ tự này **bắt buộc** — SDK sẽ no-op hoặc crash nếu đảo.
+- Init flow trong `GalaxyApp.setupAd()`: `AdManager.setConfig(adConfig) → AdManager.initialize(this) { ... }`. Thứ tự này **bắt buộc** — SDK sẽ no-op hoặc crash nếu đảo.
 - SDK tự throttle (min 60s giữa fullscreen, max 6/session, 5/ngày) → không cần thêm logic gating ở app layer.
-- `getMyVipGAIDSet()` trong `GalaxyApp.kt` chứa danh sách VIP nhưng **chưa được truyền vào `AdSdkConfig`** — SDK hiện dùng list nội bộ trùng khớp. Nếu cần thêm GAID, phải sửa cả 2 chỗ hoặc wire qua config.
+- VIP whitelist GAID cứng (`getMyVipGAIDSet()`) đã được xoá khỏi `GalaxyApp.kt` — SDK dùng danh sách nội bộ + `vipKeySecret` (xem `doc/feature.md` đợt 2 #7).
 
 ### Memory leak history
 `doc/MEMORY_LEAK.MD` ghi lại 7 leak đã fix (sensor listener, broadcast receiver lifecycle, postDelayed, NavController listener, ReviewManager callback). Khi đụng vào các file đó hoặc thêm pattern tương tự (raw `Thread`, anonymous listener, `postDelayed`, receiver register), check lại doc này trước.

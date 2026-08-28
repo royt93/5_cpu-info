@@ -29,7 +29,6 @@ appcompat = "1.7.0"
 preferenceKtx = "1.2.1"
 swiperefreshlayout = "1.1.0"
 constraintlayout = "2.2.0"
-multidex = "2.0.1"
 viewpager2 = "1.1.0"
 datastorePreferences = "1.1.2"
 collectionsImmutable = "0.3.5"
@@ -60,7 +59,6 @@ androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "a
 androidx-preference-ktx = { module = "androidx.preference:preference-ktx", version.ref = "preferenceKtx" }
 androidx-swiperefreshlayout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "swiperefreshlayout" }
 androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayout" }
-androidx-multidex = { module = "androidx.multidex:multidex", version.ref = "multidex" }
 androidx-viewpager2 = { module = "androidx.viewpager2:viewpager2", version.ref = "viewpager2" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }

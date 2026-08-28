@@ -20,7 +20,7 @@ class GpuInfoEpoxyController(
         itemValue {
             id("gles_version")
             title(this@GpuInfoEpoxyController.context.getString(R.string.gles_version))
-            value(data.gpuData.glesVersio)
+            value(data.gpuData.glesVersion)
         }
         if (data.gpuData.glVendor != null) {
             verticalDivider { id("gl_vendor_divider") }
