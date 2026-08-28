@@ -12,15 +12,8 @@
 
     <fragment
         android:id="@+id/menuApplications"
-        android:name="com.galaxyjoy.cpuinfo.feat.app.FrmApplications"
-        android:label="@string/applications"
-        tools:layout="@layout/frm_applications" />
-
-    <fragment
-        android:id="@+id/menuProcesses"
-        android:name="com.galaxyjoy.cpuinfo.feat.processes.FrmProcesses"
-        android:label="@string/processes"
-        tools:layout="@layout/frm_processes" />
+        android:name="com.galaxyjoy.cpuinfo.feat.app.FrmNewApplications"
+        android:label="@string/applications" />
 
     <fragment
         android:id="@+id/menuTemperature"

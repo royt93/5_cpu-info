@@ -234,4 +234,16 @@ dependencies {
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.androidx.arch.core.testing)
     testImplementation(kotlin("test"))
+
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.test.ext.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.androidx.uiautomator)
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
+    // Required at runtime because testOptions.execution = ANDROIDX_TEST_ORCHESTRATOR — without
+    // these, connectedAndroidTest aborts with ClassNotFoundException: ShellMain (orchestrator
+    // support APKs never installed on the device).
+    androidTestUtil(libs.androidx.test.orchestrator)
+    androidTestUtil(libs.androidx.test.services)
 }

@@ -18,15 +18,21 @@ import android.widget.Toast
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.roy.sdkadbmob.AdManager
 import com.galaxyjoy.cpuinfo.R
+import com.galaxyjoy.cpuinfo.ext.openBrowserPolicy
 import com.galaxyjoy.cpuinfo.ui.theme.CpuInfoTheme
 import com.galaxyjoy.cpuinfo.util.Utils
 import com.galaxyjoy.cpuinfo.util.uninstallApp
 import dagger.hilt.android.AndroidEntryPoint
+import moreApp
+import rateApp
+import shareApp
 import timber.log.Timber
 
 @AndroidEntryPoint
@@ -67,6 +73,11 @@ class FrmNewApplications : Fragment() {
                         onNativeLibsClicked = viewModel::onNativeLibsClicked,
                         onSystemAppsSwitched = viewModel::onSystemAppsSwitched,
                         onOpenPlayStore = viewModel::onOpenPlayStore,
+                        onSortClicked = ::onSortClicked,
+                        onRateClicked = { activity?.let { it.rateApp(it.packageName) } },
+                        onMoreAppsClicked = { activity?.moreApp() },
+                        onShareClicked = { activity?.shareApp() },
+                        onPolicyClicked = { context?.openBrowserPolicy() },
                     )
                 }
             }
@@ -85,6 +96,17 @@ class FrmNewApplications : Fragment() {
 
     private fun registerObservers() {
         viewModel.events.observe(viewLifecycleOwner, ::handleEvent)
+    }
+
+    /**
+     * Same touchpoint as the old FrmApplications: interstitial before sort — SDK throttles
+     * itself, sort always runs after regardless of whether the ad showed.
+     */
+    private fun onSortClicked() {
+        val activity = activity ?: return
+        AdManager.showInterstitial(activity) { _ ->
+            viewModel.onSortOrderChange(!viewModel.uiStateFlow.value.isSortAscending)
+        }
     }
 
     @SuppressLint("InflateParams")
@@ -164,6 +186,14 @@ class FrmNewApplications : Fragment() {
         val intentFilter = IntentFilter()
         intentFilter.addAction(Intent.ACTION_PACKAGE_REMOVED)
         intentFilter.addDataScheme("package")
-        requireActivity().registerReceiver(uninstallReceiver, intentFilter)
+        // Android 14+ (API 34) requires an explicit exported flag or registerReceiver throws
+        // SecurityException. This broadcast only needs to observe the system's own uninstall
+        // events, not receive from other apps, so NOT_EXPORTED is correct.
+        ContextCompat.registerReceiver(
+            requireActivity(),
+            uninstallReceiver,
+            intentFilter,
+            ContextCompat.RECEIVER_NOT_EXPORTED,
+        )
     }
 }

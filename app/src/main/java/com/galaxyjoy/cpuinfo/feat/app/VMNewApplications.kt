@@ -110,7 +110,6 @@ class VMNewApplications @Inject constructor(
     }
 
 
-    @Suppress("unused")
     fun onSortOrderChange(isAscending: Boolean) {
         _uiStateFlow.update { it.copy(isSortAscending = isAscending) }
         onRefreshApplications()

@@ -75,6 +75,11 @@ fun ApplicationsScreen(
     onNativeLibsClicked: (nativeLibraryDir: String) -> Unit,
     onSystemAppsSwitched: (enabled: Boolean) -> Unit,
     onOpenPlayStore: (packageName: String) -> Unit = {},
+    onSortClicked: () -> Unit = {},
+    onRateClicked: () -> Unit = {},
+    onMoreAppsClicked: () -> Unit = {},
+    onShareClicked: () -> Unit = {},
+    onPolicyClicked: () -> Unit = {},
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -96,7 +101,12 @@ fun ApplicationsScreen(
         topBar = {
             TopBar(
                 withSystemApps = uiState.withSystemApps,
-                onSystemAppsSwitched = onSystemAppsSwitched
+                onSystemAppsSwitched = onSystemAppsSwitched,
+                onSortClicked = onSortClicked,
+                onRateClicked = onRateClicked,
+                onMoreAppsClicked = onMoreAppsClicked,
+                onShareClicked = onShareClicked,
+                onPolicyClicked = onPolicyClicked,
             )
         },
         snackbarHost = {
@@ -139,6 +149,11 @@ fun ApplicationsScreen(
 private fun TopBar(
     withSystemApps: Boolean,
     onSystemAppsSwitched: (enabled: Boolean) -> Unit,
+    onSortClicked: () -> Unit,
+    onRateClicked: () -> Unit,
+    onMoreAppsClicked: () -> Unit,
+    onShareClicked: () -> Unit,
+    onPolicyClicked: () -> Unit,
 ) {
     var showMenu by remember { mutableStateOf(false) }
     SurfaceTopAppBar(
@@ -147,7 +162,7 @@ private fun TopBar(
             IconButton(onClick = { showMenu = !showMenu }) {
                 Icon(
                     imageVector = Icons.Default.MoreVert,
-                    contentDescription = null
+                    contentDescription = stringResource(id = R.string.apps_more_options)
                 )
             }
             DropdownMenu(
@@ -171,7 +186,70 @@ private fun TopBar(
                             style = MaterialTheme.typography.bodyMedium,
                         )
                     },
-                    onClick = { },
+                    leadingIcon = {
+                        Icon(painter = painterResource(id = R.drawable.ic_sort), contentDescription = null)
+                    },
+                    onClick = {
+                        showMenu = false
+                        onSortClicked()
+                    },
+                )
+                DropdownMenuItem(
+                    text = {
+                        Text(
+                            text = stringResource(id = R.string.rate_app),
+                            style = MaterialTheme.typography.bodyMedium,
+                        )
+                    },
+                    leadingIcon = {
+                        Icon(painter = painterResource(id = R.drawable.baseline_star_rate_24), contentDescription = null)
+                    },
+                    onClick = {
+                        showMenu = false
+                        onRateClicked()
+                    },
+                )
+                DropdownMenuItem(
+                    text = {
+                        Text(
+                            text = stringResource(id = R.string.more_app),
+                            style = MaterialTheme.typography.bodyMedium,
+                        )
+                    },
+                    leadingIcon = {
+                        Icon(painter = painterResource(id = R.drawable.baseline_star_rate_24), contentDescription = null)
+                    },
+                    onClick = {
+                        showMenu = false
+                        onMoreAppsClicked()
+                    },
+                )
+                DropdownMenuItem(
+                    text = {
+                        Text(
+                            text = stringResource(id = R.string.share_app),
+                            style = MaterialTheme.typography.bodyMedium,
+                        )
+                    },
+                    leadingIcon = {
+                        Icon(painter = painterResource(id = R.drawable.baseline_star_rate_24), contentDescription = null)
+                    },
+                    onClick = {
+                        showMenu = false
+                        onShareClicked()
+                    },
+                )
+                DropdownMenuItem(
+                    text = {
+                        Text(
+                            text = stringResource(id = R.string.term_policy),
+                            style = MaterialTheme.typography.bodyMedium,
+                        )
+                    },
+                    onClick = {
+                        showMenu = false
+                        onPolicyClicked()
+                    },
                 )
             }
         }

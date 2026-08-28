@@ -16,13 +16,6 @@
         android:title="@string/applications" />
 
     <item
-        android:id="@+id/menuProcesses"
-        android:checkable="false"
-        android:checked="false"
-        android:icon="@drawable/ic_process"
-        android:title="@string/processes" />
-
-    <item
         android:id="@+id/menuTemperature"
         android:checkable="false"
         android:checked="false"
