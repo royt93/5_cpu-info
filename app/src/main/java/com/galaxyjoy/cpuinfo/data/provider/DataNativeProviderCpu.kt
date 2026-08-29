@@ -55,4 +55,21 @@ class DataNativeProviderCpu @Inject constructor() {
 
     /** [cpuinfo_uarch] enum value shared by all cores in this cluster. */
     external fun getClusterUarch(clusterIndex: Int): Int
+
+    // --- F10/U12 "AI Readiness Score" additions below ---
+
+    /** Int8 matrix multiply extension — key accelerator for quantized on-device LLM inference. */
+    external fun hasArmI8mm(): Boolean
+
+    /** bfloat16 support — used by many on-device ML runtimes. */
+    external fun hasArmBf16(): Boolean
+
+    /** NEON dot-product instructions — baseline quantized-inference acceleration. */
+    external fun hasArmNeonDot(): Boolean
+
+    external fun hasArmSve(): Boolean
+
+    external fun hasArmSve2(): Boolean
+
+    external fun hasArmFp16Arith(): Boolean
 }

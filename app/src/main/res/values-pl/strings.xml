@@ -265,4 +265,17 @@
     <string name="cluster_tier_unlabeled">Klaster</string>
     <string name="cluster_core_range">%1$d rdzeni (Core %2$d–%3$d)</string>
     <string name="cluster_max_freq">Maks. %1$d MHz</string>
+    <!--AI Readiness Score (F10/U12)-->
+    <string name="ai_readiness_bar_label">Gotowość do AI</string>
+    <string name="ai_readiness_title">Wynik gotowości do AI</string>
+    <string name="ai_readiness_tier_not_ready">Niegotowe na AI na urządzeniu</string>
+    <string name="ai_readiness_tier_basic">Podstawowy — lekkie AI (OCR, głos)</string>
+    <string name="ai_readiness_tier_capable">Dobry — kompaktowe modele (~1–3B)</string>
+    <string name="ai_readiness_tier_advanced">Zaawansowany — większe modele działają dobrze</string>
+    <string name="ai_readiness_flag_neon_dot">NEON dot product</string>
+    <string name="ai_readiness_flag_i8mm">Mnożenie macierzy Int8 (i8mm)</string>
+    <string name="ai_readiness_flag_bf16">bfloat16</string>
+    <string name="ai_readiness_flag_fp16">Arytmetyka FP16</string>
+    <string name="ai_readiness_flag_sve">Scalable Vector Extension (SVE)</string>
+    <string name="ai_readiness_disclaimer">Szacunek na podstawie obsługiwanych instrukcji CPU, RAM i liczby rdzeni — to nie benchmark i nie wykrywa dedykowanego NPU.</string>
 </resources>

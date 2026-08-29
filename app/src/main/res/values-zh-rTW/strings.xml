@@ -228,4 +228,17 @@
     <string name="cluster_tier_unlabeled">叢集</string>
     <string name="cluster_core_range">%1$d 核心（Core %2$d–%3$d）</string>
     <string name="cluster_max_freq">最高 %1$d MHz</string>
+    <!--AI Readiness Score (F10/U12)-->
+    <string name="ai_readiness_bar_label">AI 就緒度</string>
+    <string name="ai_readiness_title">AI 就緒度分數</string>
+    <string name="ai_readiness_tier_not_ready">尚未準備好本機 AI</string>
+    <string name="ai_readiness_tier_basic">基本 — 輕量本機 AI（OCR、語音）</string>
+    <string name="ai_readiness_tier_capable">尚可 — 可執行精簡模型（約 1–3B）</string>
+    <string name="ai_readiness_tier_advanced">進階 — 可順暢執行較大型本機模型</string>
+    <string name="ai_readiness_flag_neon_dot">NEON 點積運算</string>
+    <string name="ai_readiness_flag_i8mm">Int8 矩陣乘法（i8mm）</string>
+    <string name="ai_readiness_flag_bf16">bfloat16</string>
+    <string name="ai_readiness_flag_fp16">FP16 運算</string>
+    <string name="ai_readiness_flag_sve">可擴展向量延伸（SVE）</string>
+    <string name="ai_readiness_disclaimer">依 CPU 指令集支援、RAM 與核心數量估算，非效能測試，也無法偵測獨立 NPU 晶片。</string>
 </resources>

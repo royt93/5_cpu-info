@@ -264,4 +264,17 @@
     <string name="cluster_tier_unlabeled">Cluster</string>
     <string name="cluster_core_range">%1$d Kerne (Core %2$d–%3$d)</string>
     <string name="cluster_max_freq">Max. %1$d MHz</string>
+    <!--AI Readiness Score (F10/U12)-->
+    <string name="ai_readiness_bar_label">KI-Bereitschaft</string>
+    <string name="ai_readiness_title">KI-Bereitschaftswert</string>
+    <string name="ai_readiness_tier_not_ready">Nicht bereit für On-Device-KI</string>
+    <string name="ai_readiness_tier_basic">Basis — leichte On-Device-KI (OCR, Sprache)</string>
+    <string name="ai_readiness_tier_capable">Fähig — kompakte On-Device-Modelle (~1–3B)</string>
+    <string name="ai_readiness_tier_advanced">Fortgeschritten — größere On-Device-Modelle laufen gut</string>
+    <string name="ai_readiness_flag_neon_dot">NEON Dot Product</string>
+    <string name="ai_readiness_flag_i8mm">Int8-Matrixmultiplikation (i8mm)</string>
+    <string name="ai_readiness_flag_bf16">bfloat16</string>
+    <string name="ai_readiness_flag_fp16">FP16-Arithmetik</string>
+    <string name="ai_readiness_flag_sve">Scalable Vector Extension (SVE)</string>
+    <string name="ai_readiness_disclaimer">Heuristische Schätzung basierend auf CPU-Befehlssatz, RAM und Kernanzahl — kein Benchmark und erkennt keine dedizierte NPU.</string>
 </resources>

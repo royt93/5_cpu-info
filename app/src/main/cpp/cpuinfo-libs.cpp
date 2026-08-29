@@ -353,3 +353,92 @@ Java_com_galaxyjoy_cpuinfo_data_provider_DataNativeProviderCpu_getClusterUarch(J
     const struct cpuinfo_cluster *cluster = cpuinfo_get_cluster((uint32_t) clusterIndex);
     return cluster == nullptr ? 0 : (jint) cluster->uarch;
 }
+
+// --- F10/U12 "AI Readiness Score" additions below ---
+// All of these ISA extension checks are libcpuinfo inline functions already parsed from
+// /proc/cpuinfo "Features" — no new register reads, same safety profile as hasArmNeon() above.
+// They're no-ops (return false) on non-ARM builds (x86 emulator), matching cpuinfo's own guards.
+
+extern "C"
+JNIEXPORT jboolean JNICALL
+Java_com_galaxyjoy_cpuinfo_data_provider_DataNativeProviderCpu_hasArmI8mm(JNIEnv *env,
+                                                                            jobject thiz) {
+    if (!cpuinfo_initialize()) {
+        return false;
+    }
+#if CPUINFO_ARCH_ARM || CPUINFO_ARCH_ARM64
+    return cpuinfo_has_arm_i8mm();
+#else
+    return false;
+#endif
+}
+
+extern "C"
+JNIEXPORT jboolean JNICALL
+Java_com_galaxyjoy_cpuinfo_data_provider_DataNativeProviderCpu_hasArmBf16(JNIEnv *env,
+                                                                            jobject thiz) {
+    if (!cpuinfo_initialize()) {
+        return false;
+    }
+#if CPUINFO_ARCH_ARM || CPUINFO_ARCH_ARM64
+    return cpuinfo_has_arm_bf16();
+#else
+    return false;
+#endif
+}
+
+extern "C"
+JNIEXPORT jboolean JNICALL
+Java_com_galaxyjoy_cpuinfo_data_provider_DataNativeProviderCpu_hasArmNeonDot(JNIEnv *env,
+                                                                               jobject thiz) {
+    if (!cpuinfo_initialize()) {
+        return false;
+    }
+#if CPUINFO_ARCH_ARM || CPUINFO_ARCH_ARM64
+    return cpuinfo_has_arm_neon_dot();
+#else
+    return false;
+#endif
+}
+
+extern "C"
+JNIEXPORT jboolean JNICALL
+Java_com_galaxyjoy_cpuinfo_data_provider_DataNativeProviderCpu_hasArmSve(JNIEnv *env,
+                                                                           jobject thiz) {
+    if (!cpuinfo_initialize()) {
+        return false;
+    }
+#if CPUINFO_ARCH_ARM || CPUINFO_ARCH_ARM64
+    return cpuinfo_has_arm_sve();
+#else
+    return false;
+#endif
+}
+
+extern "C"
+JNIEXPORT jboolean JNICALL
+Java_com_galaxyjoy_cpuinfo_data_provider_DataNativeProviderCpu_hasArmSve2(JNIEnv *env,
+                                                                            jobject thiz) {
+    if (!cpuinfo_initialize()) {
+        return false;
+    }
+#if CPUINFO_ARCH_ARM || CPUINFO_ARCH_ARM64
+    return cpuinfo_has_arm_sve2();
+#else
+    return false;
+#endif
+}
+
+extern "C"
+JNIEXPORT jboolean JNICALL
+Java_com_galaxyjoy_cpuinfo_data_provider_DataNativeProviderCpu_hasArmFp16Arith(JNIEnv *env,
+                                                                                 jobject thiz) {
+    if (!cpuinfo_initialize()) {
+        return false;
+    }
+#if CPUINFO_ARCH_ARM || CPUINFO_ARCH_ARM64
+    return cpuinfo_has_arm_fp16_arith();
+#else
+    return false;
+#endif
+}

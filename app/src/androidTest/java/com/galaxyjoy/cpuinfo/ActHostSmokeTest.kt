@@ -191,4 +191,25 @@ class ActHostSmokeTest {
         composeRule.onNodeWithText("REVIDR_EL1").assertExists()
         composeRule.onNodeWithText(composeRule.activity.getString(R.string.device_truth_share_button)).assertExists()
     }
+
+    @Test
+    fun aiReadinessBarOpensSheetWithScoreAndFlagRows() {
+        // CPU is the default tab, no navigation needed.
+        onView(withId(R.id.menuHardware)).perform(click())
+        composeRule.waitForIdle()
+
+        // Regression guard for F10/U12: proves the 6 new ISA-flag JNI getters don't crash on a
+        // real device and the score/tier + flag rows render — not just that they compile.
+        composeRule.onNodeWithText(composeRule.activity.getString(R.string.ai_readiness_bar_label))
+            .performClick()
+        composeRule.waitForIdle()
+
+        composeRule.onNodeWithText(composeRule.activity.getString(R.string.ai_readiness_title)).assertExists()
+        composeRule.onNodeWithText(composeRule.activity.getString(R.string.ai_readiness_flag_neon_dot)).assertExists()
+        composeRule.onNodeWithText(composeRule.activity.getString(R.string.ai_readiness_flag_i8mm)).assertExists()
+        composeRule.onNodeWithText(composeRule.activity.getString(R.string.ai_readiness_flag_bf16)).assertExists()
+        composeRule.onNodeWithText(composeRule.activity.getString(R.string.ai_readiness_flag_fp16)).assertExists()
+        composeRule.onNodeWithText(composeRule.activity.getString(R.string.ai_readiness_flag_sve)).assertExists()
+        composeRule.onNodeWithText(composeRule.activity.getString(R.string.ai_readiness_disclaimer)).assertExists()
+    }
 }
