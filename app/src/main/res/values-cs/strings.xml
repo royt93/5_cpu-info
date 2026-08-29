@@ -316,4 +316,11 @@
     <string name="app_permissions_summary">%1$d citlivých z celkem %2$d požadovaných oprávnění</string>
     <string name="app_permissions_granted">Uděleno</string>
     <string name="app_permissions_not_granted">Neuděleno</string>
+    <string name="graphics_detail_bar_label">Detail grafiky</string>
+    <string name="graphics_detail_bar_value">GLES %1$s • %2$d rozšíření</string>
+    <string name="graphics_detail_title">Detail grafiky</string>
+    <string name="graphics_detail_vulkan_hardware_level">Úroveň hardwaru Vulkan</string>
+    <string name="graphics_detail_vulkan_compute">Vulkan Compute</string>
+    <string name="graphics_detail_extensions_title">Rozšíření (%1$d)</string>
+    <string name="graphics_detail_no_extensions">Nebyla nahlášena žádná rozšíření.</string>
 </resources>

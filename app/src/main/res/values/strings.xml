@@ -352,4 +352,11 @@
     <string name="app_permissions_summary">%1$d sensitive of %2$d total permissions requested</string>
     <string name="app_permissions_granted">Granted</string>
     <string name="app_permissions_not_granted">Not granted</string>
+    <string name="graphics_detail_bar_label">Graphics Detail</string>
+    <string name="graphics_detail_bar_value">GLES %1$s • %2$d extensions</string>
+    <string name="graphics_detail_title">Graphics Detail</string>
+    <string name="graphics_detail_vulkan_hardware_level">Vulkan Hardware Level</string>
+    <string name="graphics_detail_vulkan_compute">Vulkan Compute</string>
+    <string name="graphics_detail_extensions_title">Extensions (%1$d)</string>
+    <string name="graphics_detail_no_extensions">No extensions reported.</string>
 </resources>

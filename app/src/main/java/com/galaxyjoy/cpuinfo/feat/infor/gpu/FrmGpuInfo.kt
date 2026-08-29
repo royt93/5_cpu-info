@@ -23,11 +23,19 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.viewModels
 import com.galaxyjoy.cpuinfo.R
-import com.galaxyjoy.cpuinfo.databinding.FrmRecyclerViewBinding
+import com.galaxyjoy.cpuinfo.databinding.FrmGpuInfoBinding
+import com.galaxyjoy.cpuinfo.domain.model.GpuData
 import com.galaxyjoy.cpuinfo.feat.infor.base.BaseFrm
+import com.galaxyjoy.cpuinfo.ui.theme.CpuInfoTheme
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
@@ -36,9 +44,12 @@ import javax.microedition.khronos.opengles.GL10
  *
  */
 @AndroidEntryPoint
-class FrmGpuInfo : BaseFrm<FrmRecyclerViewBinding>(R.layout.frm_recycler_view) {
+class FrmGpuInfo : BaseFrm<FrmGpuInfoBinding>(R.layout.frm_gpu_info) {
 
     private val viewModel: VMGpuInfo by viewModels()
+
+    @Inject
+    lateinit var graphicsDetailProvider: GraphicsDetailProvider
 
     private var glSurfaceView: GLSurfaceView? = null
     private val handler = Handler(Looper.getMainLooper())
@@ -77,7 +88,42 @@ class FrmGpuInfo : BaseFrm<FrmRecyclerViewBinding>(R.layout.frm_recycler_view) {
         super.onViewCreated(view, savedInstanceState)
         val controller = GpuInfoEpoxyController(requireContext())
         binding.rv.adapter = controller.adapter
-        viewModel.viewState.observe(viewLifecycleOwner) { controller.setData(it) }
+
+        // F08 — the Compose summary bar/detail sheet needs the same GpuData the Epoxy list
+        // shows, including glExtensions which only arrives once GLSurfaceView's
+        // onSurfaceCreated() callback fires (asynchronous, after first render).
+        val gpuDataState = mutableStateOf<GpuData?>(null)
+        viewModel.viewState.observe(viewLifecycleOwner) { state ->
+            controller.setData(state)
+            gpuDataState.value = state.gpuData
+        }
+
+        val vulkanCapability = graphicsDetailProvider.vulkanCapability()
+        binding.graphicsDetailCompose.apply {
+            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+            setContent {
+                CpuInfoTheme {
+                    var showDetail by remember { mutableStateOf(false) }
+                    val gpuData = gpuDataState.value
+                    if (gpuData != null) {
+                        val extensions = GraphicsExtensionParser.parse(gpuData.glExtensions)
+                        GraphicsDetailBar(
+                            gpuData = gpuData,
+                            extensionCount = extensions.size,
+                            onClick = { showDetail = true },
+                        )
+                        if (showDetail) {
+                            GraphicsDetailBottomSheet(
+                                gpuData = gpuData,
+                                vulkanCapability = vulkanCapability,
+                                extensions = extensions,
+                                onDismiss = { showDetail = false },
+                            )
+                        }
+                    }
+                }
+            }
+        }
     }
 
     override fun onResume() {

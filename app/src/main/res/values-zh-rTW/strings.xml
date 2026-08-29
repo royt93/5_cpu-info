@@ -283,4 +283,11 @@
     <string name="app_permissions_summary">共要求 %2$d 項權限，其中 %1$d 項為敏感權限</string>
     <string name="app_permissions_granted">已授予</string>
     <string name="app_permissions_not_granted">未授予</string>
+    <string name="graphics_detail_bar_label">顯示卡詳情</string>
+    <string name="graphics_detail_bar_value">GLES %1$s • %2$d 項擴充功能</string>
+    <string name="graphics_detail_title">顯示卡詳情</string>
+    <string name="graphics_detail_vulkan_hardware_level">Vulkan 硬體等級</string>
+    <string name="graphics_detail_vulkan_compute">Vulkan Compute</string>
+    <string name="graphics_detail_extensions_title">擴充功能（%1$d）</string>
+    <string name="graphics_detail_no_extensions">未回報任何擴充功能。</string>
 </resources>

@@ -336,4 +336,11 @@
     <string name="app_permissions_summary">%1$d quyền nhạy cảm trong tổng %2$d quyền yêu cầu</string>
     <string name="app_permissions_granted">Đã cấp</string>
     <string name="app_permissions_not_granted">Chưa cấp</string>
+    <string name="graphics_detail_bar_label">Chi tiết đồ họa</string>
+    <string name="graphics_detail_bar_value">GLES %1$s • %2$d extension</string>
+    <string name="graphics_detail_title">Chi tiết đồ họa</string>
+    <string name="graphics_detail_vulkan_hardware_level">Cấp phần cứng Vulkan</string>
+    <string name="graphics_detail_vulkan_compute">Vulkan Compute</string>
+    <string name="graphics_detail_extensions_title">Extension (%1$d)</string>
+    <string name="graphics_detail_no_extensions">Không có extension nào được báo cáo.</string>
 </resources>
