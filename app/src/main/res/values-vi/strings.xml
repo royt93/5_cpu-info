@@ -294,4 +294,14 @@
     <string name="ai_readiness_flag_fp16">Tính toán FP16</string>
     <string name="ai_readiness_flag_sve">Scalable Vector Extension (SVE)</string>
     <string name="ai_readiness_disclaimer">Ước tính dựa trên tập lệnh CPU hỗ trợ, RAM và số nhân — không phải benchmark, và không phát hiện chip NPU riêng.</string>
+    <string name="hardware_snapshot_pref_title">Ảnh chụp phần cứng</string>
+    <string name="hardware_snapshot_pref_summary">Lưu mốc so sánh để phát hiện thay đổi phần cứng hoặc cấu hình theo thời gian</string>
+    <string name="hardware_snapshot_title">Ảnh chụp phần cứng</string>
+    <string name="hardware_snapshot_empty_message">Chưa có mốc so sánh nào. Lưu ảnh chụp ngay bây giờ, rồi quay lại sau để xem có gì thay đổi.</string>
+    <string name="hardware_snapshot_save_button">Lưu hiện tại làm mốc so sánh</string>
+    <string name="hardware_snapshot_save_new_button">Cập nhật mốc so sánh với giá trị hiện tại</string>
+    <string name="hardware_snapshot_last_saved">Lưu lần cuối: %1$s</string>
+    <string name="hardware_snapshot_identity_changed">Các trường định danh đã thay đổi so với lần lưu trước</string>
+    <string name="hardware_snapshot_identity_stable">Không phát hiện thay đổi định danh</string>
+    <string name="hardware_snapshot_disclaimer">So sánh dựa trên giá trị đọc được từ Android — không phải bằng chứng can thiệp. Bộ nhớ, RAM và mức vá bảo mật thường thay đổi theo thời gian.</string>
 </resources>

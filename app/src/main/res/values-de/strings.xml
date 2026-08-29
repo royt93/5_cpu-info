@@ -277,4 +277,14 @@
     <string name="ai_readiness_flag_fp16">FP16-Arithmetik</string>
     <string name="ai_readiness_flag_sve">Scalable Vector Extension (SVE)</string>
     <string name="ai_readiness_disclaimer">Heuristische Schätzung basierend auf CPU-Befehlssatz, RAM und Kernanzahl — kein Benchmark und erkennt keine dedizierte NPU.</string>
+    <string name="hardware_snapshot_pref_title">Hardware-Snapshot</string>
+    <string name="hardware_snapshot_pref_summary">Speichere einen Ausgangswert, um Hardware- oder Konfigurationsänderungen im Zeitverlauf zu erkennen</string>
+    <string name="hardware_snapshot_title">Hardware-Snapshot</string>
+    <string name="hardware_snapshot_empty_message">Noch kein Ausgangswert gespeichert. Speichere jetzt einen Snapshot und schau später nach, was sich geändert hat.</string>
+    <string name="hardware_snapshot_save_button">Aktuellen Zustand als Ausgangswert speichern</string>
+    <string name="hardware_snapshot_save_new_button">Ausgangswert mit aktuellen Werten aktualisieren</string>
+    <string name="hardware_snapshot_last_saved">Zuletzt gespeichert: %1$s</string>
+    <string name="hardware_snapshot_identity_changed">Identitätsfelder haben sich seit dem letzten Snapshot geändert</string>
+    <string name="hardware_snapshot_identity_stable">Keine Identitätsänderungen festgestellt</string>
+    <string name="hardware_snapshot_disclaimer">Bestmöglicher Vergleich basierend auf von Android auslesbaren Werten — kein Manipulationsnachweis. Speicher, RAM und Patch-Level ändern sich normalerweise im Laufe der Zeit.</string>
 </resources>

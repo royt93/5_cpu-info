@@ -241,4 +241,14 @@
     <string name="ai_readiness_flag_fp16">FP16 運算</string>
     <string name="ai_readiness_flag_sve">可擴展向量延伸（SVE）</string>
     <string name="ai_readiness_disclaimer">依 CPU 指令集支援、RAM 與核心數量估算，非效能測試，也無法偵測獨立 NPU 晶片。</string>
+    <string name="hardware_snapshot_pref_title">硬體快照</string>
+    <string name="hardware_snapshot_pref_summary">儲存基準值，以偵測隨時間發生的硬體或設定變更</string>
+    <string name="hardware_snapshot_title">硬體快照</string>
+    <string name="hardware_snapshot_empty_message">尚未儲存基準值。立即儲存快照，稍後再回來查看有哪些變化。</string>
+    <string name="hardware_snapshot_save_button">將目前狀態儲存為基準值</string>
+    <string name="hardware_snapshot_save_new_button">以目前數值更新基準值</string>
+    <string name="hardware_snapshot_last_saved">上次儲存：%1$s</string>
+    <string name="hardware_snapshot_identity_changed">自上次快照以來，識別欄位已變更</string>
+    <string name="hardware_snapshot_identity_stable">未偵測到識別變更</string>
+    <string name="hardware_snapshot_disclaimer">根據 Android 可讀取的數值進行盡力比較——並非竄改的證據。儲存空間、RAM 與修補程式等級通常會隨時間變化。</string>
 </resources>

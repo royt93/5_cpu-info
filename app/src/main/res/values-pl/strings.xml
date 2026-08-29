@@ -278,4 +278,14 @@
     <string name="ai_readiness_flag_fp16">Arytmetyka FP16</string>
     <string name="ai_readiness_flag_sve">Scalable Vector Extension (SVE)</string>
     <string name="ai_readiness_disclaimer">Szacunek na podstawie obsługiwanych instrukcji CPU, RAM i liczby rdzeni — to nie benchmark i nie wykrywa dedykowanego NPU.</string>
+    <string name="hardware_snapshot_pref_title">Migawka sprzętu</string>
+    <string name="hardware_snapshot_pref_summary">Zapisz punkt odniesienia i wykrywaj zmiany sprzętu lub konfiguracji w czasie</string>
+    <string name="hardware_snapshot_title">Migawka sprzętu</string>
+    <string name="hardware_snapshot_empty_message">Nie zapisano jeszcze punktu odniesienia. Zapisz migawkę teraz, a później sprawdź, co się zmieniło.</string>
+    <string name="hardware_snapshot_save_button">Zapisz bieżący stan jako punkt odniesienia</string>
+    <string name="hardware_snapshot_save_new_button">Zaktualizuj punkt odniesienia bieżącymi wartościami</string>
+    <string name="hardware_snapshot_last_saved">Ostatnio zapisano: %1$s</string>
+    <string name="hardware_snapshot_identity_changed">Pola tożsamości zmieniły się od ostatniej migawki</string>
+    <string name="hardware_snapshot_identity_stable">Nie wykryto zmian tożsamości</string>
+    <string name="hardware_snapshot_disclaimer">Porównanie oparte na wartościach odczytywalnych z systemu Android — nie jest dowodem manipulacji. Pamięć, RAM i poziom poprawek zwykle zmieniają się w czasie.</string>
 </resources>

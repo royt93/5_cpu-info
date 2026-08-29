@@ -8,6 +8,7 @@ import androidx.preference.PreferenceFragmentCompat
 import com.galaxyjoy.cpuinfo.BuildConfig
 import com.galaxyjoy.cpuinfo.R
 import com.galaxyjoy.cpuinfo.ext.openBrowserPolicy
+import com.galaxyjoy.cpuinfo.feat.snapshot.HardwareSnapshotBottomSheet
 import com.galaxyjoy.cpuinfo.util.ThemeHelper
 import moreApp
 import rateApp
@@ -61,6 +62,7 @@ class FrmSettings : PreferenceFragmentCompat(),
         wireLanguagePref()
         wireTemperatureUnitPref()
         wireThemePref()
+        wireHardwareSnapshotPref()
 
         listenForBottomSheetResults()
     }
@@ -96,6 +98,16 @@ class FrmSettings : PreferenceFragmentCompat(),
             if (!fm.isStateSaved && fm.findFragmentByTag(ThemePickerBottomSheet.TAG) == null) {
                 ThemePickerBottomSheet.newInstance(currentThemeValue())
                     .show(fm, ThemePickerBottomSheet.TAG)
+            }
+            true
+        }
+    }
+
+    private fun wireHardwareSnapshotPref() {
+        findPreference<Preference>("key_hardware_snapshot")?.setOnPreferenceClickListener {
+            val fm = childFragmentManager
+            if (!fm.isStateSaved && fm.findFragmentByTag(HardwareSnapshotBottomSheet.TAG) == null) {
+                HardwareSnapshotBottomSheet().show(fm, HardwareSnapshotBottomSheet.TAG)
             }
             true
         }

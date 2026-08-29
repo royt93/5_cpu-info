@@ -274,4 +274,14 @@
     <string name="ai_readiness_flag_fp16">Výpočty FP16</string>
     <string name="ai_readiness_flag_sve">Scalable Vector Extension (SVE)</string>
     <string name="ai_readiness_disclaimer">Odhad na základě podporovaných instrukcí CPU, RAM a počtu jader — není to benchmark a nedetekuje samostatný čip NPU.</string>
+    <string name="hardware_snapshot_pref_title">Snímek hardwaru</string>
+    <string name="hardware_snapshot_pref_summary">Uložte výchozí stav a zjistěte změny hardwaru nebo konfigurace v čase</string>
+    <string name="hardware_snapshot_title">Snímek hardwaru</string>
+    <string name="hardware_snapshot_empty_message">Zatím není uložen žádný výchozí stav. Uložte snímek nyní a později se vraťte, co se změnilo.</string>
+    <string name="hardware_snapshot_save_button">Uložit aktuální jako výchozí stav</string>
+    <string name="hardware_snapshot_save_new_button">Aktualizovat výchozí stav aktuálními hodnotami</string>
+    <string name="hardware_snapshot_last_saved">Naposledy uloženo: %1$s</string>
+    <string name="hardware_snapshot_identity_changed">Identifikační pole se od posledního snímku změnila</string>
+    <string name="hardware_snapshot_identity_stable">Žádné identifikační změny nebyly zjištěny</string>
+    <string name="hardware_snapshot_disclaimer">Srovnání založené na hodnotách čitelných z Androidu — není důkazem manipulace. Úložiště, RAM a úroveň záplat se běžně mění v čase.</string>
 </resources>

@@ -26,6 +26,11 @@
             app:key="temperature_unit"
             app:title="@string/temperature_unit" />
 
+        <Preference
+            app:key="key_hardware_snapshot"
+            app:summary="@string/hardware_snapshot_pref_summary"
+            app:title="@string/hardware_snapshot_pref_title" />
+
     </PreferenceCategory>
 
     <PreferenceCategory

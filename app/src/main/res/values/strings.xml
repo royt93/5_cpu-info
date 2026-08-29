@@ -310,4 +310,14 @@
     <string name="ai_readiness_flag_fp16">FP16 arithmetic</string>
     <string name="ai_readiness_flag_sve">Scalable Vector Extension (SVE)</string>
     <string name="ai_readiness_disclaimer">Heuristic estimate based on CPU instruction support, RAM, and core count — not a benchmark, and doesn\'t detect a dedicated NPU.</string>
+    <string name="hardware_snapshot_pref_title">Hardware Snapshot</string>
+    <string name="hardware_snapshot_pref_summary">Save a baseline and detect hardware or config changes over time</string>
+    <string name="hardware_snapshot_title">Hardware Snapshot</string>
+    <string name="hardware_snapshot_empty_message">No baseline saved yet. Save a snapshot now, then check back later to see what changed.</string>
+    <string name="hardware_snapshot_save_button">Save current as baseline</string>
+    <string name="hardware_snapshot_save_new_button">Update baseline with current values</string>
+    <string name="hardware_snapshot_last_saved">Last saved: %1$s</string>
+    <string name="hardware_snapshot_identity_changed">Identity fields changed since last snapshot</string>
+    <string name="hardware_snapshot_identity_stable">No identity changes detected</string>
+    <string name="hardware_snapshot_disclaimer">Best-effort comparison based on values readable from Android — not proof of tampering. Storage, RAM, and patch level normally change over time.</string>
 </resources>

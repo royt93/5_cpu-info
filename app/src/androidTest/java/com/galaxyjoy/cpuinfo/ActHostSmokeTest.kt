@@ -212,4 +212,20 @@ class ActHostSmokeTest {
         composeRule.onNodeWithText(composeRule.activity.getString(R.string.ai_readiness_flag_sve)).assertExists()
         composeRule.onNodeWithText(composeRule.activity.getString(R.string.ai_readiness_disclaimer)).assertExists()
     }
+
+    @Test
+    fun hardwareSnapshotPrefOpensSheetWithoutCrashing() {
+        // Regression guard for U03: proves the preference-screen entry point actually shows
+        // HardwareSnapshotBottomSheet and it renders (via DataStore read + live hardware capture)
+        // without crashing — either the empty-baseline or the diff state, depending on whatever a
+        // prior run/device already persisted, so only the title (present in both states) is
+        // asserted.
+        onView(withId(R.id.menuSettings)).perform(click())
+        composeRule.waitForIdle()
+
+        onView(withText(composeRule.activity.getString(R.string.hardware_snapshot_pref_title))).perform(click())
+        composeRule.waitForIdle()
+
+        composeRule.onNodeWithText(composeRule.activity.getString(R.string.hardware_snapshot_title)).assertExists()
+    }
 }
