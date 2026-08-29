@@ -24,6 +24,17 @@
 | 9 | Fix 5 deprecated API warnings | `Divider` → `HorizontalDivider` (AppScreen.kt). `updateTransition` → `rememberTransition` (DraggableBox.kt). `overridePendingTransition` → `overrideActivityTransition` (SplashActivity.kt, có API gate cho < UDC). AppLovin `mediationProvider` setter + `initializeSdk(listener)` → `AppLovinSdkInitializationConfiguration.builder()` (GalaxyApp.kt). 3 unused Compose params suppress bằng `@Suppress("UNUSED_PARAMETER")` để giữ plumbing cho future swipe-reveal implementation. **Runtime crash fix**: API mới yêu cầu xóa `<meta-data applovin.sdk.key>` khỏi `AndroidManifest.xml` (mutex với key trong config object). |
 | 10 | Xóa ServiceStorageUsage + RamUsageWidgetProvider | Xóa 10 file (`RamUsageWidgetProvider.kt`, `ServiceRefresh.kt`, `ServiceStorageUsage.kt`, `InitializerRamWidget.kt`, `widget_ram_provider.xml`, `vi_widget.xml`, `ic_ram_preview.png`, `bools.xml` x2, `values-v14/dimens.xml`). Xóa 3 manifest entries. Xóa `KEY_RAM_REFRESHING` + `KEY_RAM_CATEGORIES` + RAM PreferenceCategory. Xóa `_shouldStartStorageServiceEvent` + `onUpdatePackageSizeEvent` trong VMApplications, observer trong FrmApplications. **Xóa hẳn EventBus dependency** (TOML + build.gradle.kts) — không còn subscriber nào. Lý do gate: cả 2 feature đều có API gate < O nên ~99% user 2026 không bao giờ chạy. |
 
+## ✅ Implemented — F/U-coded feature sprints (2026-08-29, Sprint 3–14)
+
+Separate loop from the refactor plan above — new user-facing features, tracked via commit
+messages (`feat: ... (Sprint N, <code>)`) rather than this table. See `git log --oneline dev` for
+the full list. Summary: VIP daily check-in streak (U09/U10), Device Truth Score (U01), CPU Cluster
+Topology (F09/U06), Throttling Fingerprint stress test (U02), thermal status + security checklist
+(F02/F04), AI Readiness Score (F10/U12), Hardware Diff/Snapshot (U03), Interactive Sensor Test
+Suite (F07), App Permission & SDK Inventory (F05), Vulkan/GLES Detail (F08), USB/BT Inspector
+(F03), Privacy-preserving Fleet Compare (U04). Also see `doc/quick_win.md` — most of its "đợt 3a"
+bundle (#10/#8/#7/#6/#9) turned out to already be implemented as part of this loop.
+
 ## 🟡 In progress
 *(none)*
 

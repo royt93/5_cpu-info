@@ -12,21 +12,21 @@
 
 | Order | # | Feature | Effort | Status |
 |---|---|---|---|---|
-| 1 | #10 | DRM/Widevine level | 2h | 📋 Picked |
-| 2 | #8 | Media codec capabilities | 0.5d | 📋 Picked |
-| 3 | #7 | Display detail & refresh rate | 0.5d | 📋 Picked |
-| 4 | #6 | Camera capabilities | 0.5d | 📋 Picked |
-| 5 | #9 | Export hardware report | 0.5d | 📋 Picked |
-| 6 | #5 | Network info screen | 1d | 📋 Picked |
-| 7 | #4 | Battery health & analytics | 1d | 📋 Picked |
-| 8 | #1 | Floating system monitor overlay | 3–4d | 📋 Picked |
+| 1 | #10 | DRM/Widevine level | 2h | ✅ Implemented — `feat/infor/drm/` |
+| 2 | #8 | Media codec capabilities | 0.5d | ✅ Implemented — `feat/infor/media/` |
+| 3 | #7 | Display detail & refresh rate | 0.5d | ✅ Implemented — `feat/infor/screen/VMScreenInfo.kt` (HDR, refresh rate, wide color gamut) |
+| 4 | #6 | Camera capabilities | 0.5d | ✅ Implemented — `feat/infor/camera/` |
+| 5 | #9 | Export hardware report | 0.5d | ✅ Implemented — `util/SystemInfoExporter.kt` (JSON/Text via `ACTION_SEND`) |
+| 6 | #5 | Network info screen | 1d | 📋 Picked — genuinely not started, no `feat/infor/network/` package exists |
+| 7 | #4 | Battery health & analytics | 1d | 🟡 Partial — health status enum + basic battery fields already in `feat/infor/hardware/VMHardwareInfo.kt`; cycle count / charging-speed graph / dedicated tab not done |
+| 8 | #1 | Floating system monitor overlay | 3–4d | 📋 Picked — genuinely not started, no `SYSTEM_ALERT_WINDOW`/overlay code anywhere |
+
+> **2026-08-29 status sweep**: this doc predates the F/U-coded feature sprints (Sprint 3–14: VIP streak, Device Truth Score, Cluster Topology, Throttle Fingerprint, thermal status, AI Readiness, Hardware Snapshot, Sensor Test Suite, App Permission Inventory, Vulkan/GLES Detail, USB/BT Inspector, Fleet Compare — see git log). Verified against current codebase rather than assumed; #5 and #1 are the only items from this doc's original bundle still genuinely open.
 
 **Skipped**: #2 Widget v2 (Android O+), #3 CPU stress test / benchmark.
 
-**Đề xuất batching commit**:
-- **Đợt 3a**: #10 + #8 + #7 + #6 + #9 (≈ 2.5d, 5 read-only tab + utility, zero permission risk)
-- **Đợt 3b**: #5 + #4 (≈ 2d, mỗi cái 1 commit vì permission UX cần consent flow riêng)
-- **Đợt 3c**: #1 (≈ 3–4d, signature feature, sẽ kéo dài qua nhiều commit)
+**Đợt 3a hoàn tất** (#10 + #8 + #7 + #6 + #9) — đã ship, không rõ commit nào cụ thể (không track riêng lúc đó), xác nhận qua code hiện tại.
+**Còn lại**: #5 (Network info, 1d, cần permission consent flow) và #1 (Floating overlay, 3-4d, signature feature rủi ro cao nhất).
 
 ---
 
