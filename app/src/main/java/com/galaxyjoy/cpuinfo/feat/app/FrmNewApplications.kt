@@ -72,6 +72,8 @@ class FrmNewApplications : Fragment() {
                         onAppSettingsClicked = viewModel::onAppSettingsClicked,
                         onNativeLibsClicked = viewModel::onNativeLibsClicked,
                         onSystemAppsSwitched = viewModel::onSystemAppsSwitched,
+                        onPermissionsClicked = viewModel::onPermissionsClicked,
+                        onPermissionsDialogDismissed = viewModel::onPermissionsDialogDismissed,
                         onOpenPlayStore = viewModel::onOpenPlayStore,
                         onSortClicked = ::onSortClicked,
                         onRateClicked = { activity?.let { it.rateApp(it.packageName) } },

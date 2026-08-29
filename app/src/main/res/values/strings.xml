@@ -346,4 +346,10 @@
     <string name="sensor_test_instruction_proximity">Cover the sensor near the earpiece with your hand.</string>
     <string name="sensor_test_name_pressure">Barometer</string>
     <string name="sensor_test_instruction_pressure">Gently blow on the device or move it up and down quickly.</string>
+    <string name="app_permissions_action">App Permissions</string>
+    <string name="app_permissions_title">%1$s Permissions</string>
+    <string name="app_permissions_none">This app doesn\'t request any special permissions.</string>
+    <string name="app_permissions_summary">%1$d sensitive of %2$d total permissions requested</string>
+    <string name="app_permissions_granted">Granted</string>
+    <string name="app_permissions_not_granted">Not granted</string>
 </resources>

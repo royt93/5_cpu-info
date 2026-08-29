@@ -330,4 +330,10 @@
     <string name="sensor_test_instruction_proximity">Che cảm biến gần loa thoại bằng tay.</string>
     <string name="sensor_test_name_pressure">Cảm biến áp suất</string>
     <string name="sensor_test_instruction_pressure">Thổi nhẹ vào thiết bị hoặc di chuyển thiết bị lên xuống nhanh.</string>
+    <string name="app_permissions_action">Quyền ứng dụng</string>
+    <string name="app_permissions_title">Quyền của %1$s</string>
+    <string name="app_permissions_none">Ứng dụng này không yêu cầu quyền đặc biệt nào.</string>
+    <string name="app_permissions_summary">%1$d quyền nhạy cảm trong tổng %2$d quyền yêu cầu</string>
+    <string name="app_permissions_granted">Đã cấp</string>
+    <string name="app_permissions_not_granted">Chưa cấp</string>
 </resources>

@@ -277,4 +277,10 @@
     <string name="sensor_test_instruction_proximity">用手遮住聽筒附近的感測器。</string>
     <string name="sensor_test_name_pressure">氣壓計</string>
     <string name="sensor_test_instruction_pressure">輕輕對裝置吹氣，或快速上下移動裝置。</string>
+    <string name="app_permissions_action">應用程式權限</string>
+    <string name="app_permissions_title">%1$s 的權限</string>
+    <string name="app_permissions_none">此應用程式未要求任何特殊權限。</string>
+    <string name="app_permissions_summary">共要求 %2$d 項權限，其中 %1$d 項為敏感權限</string>
+    <string name="app_permissions_granted">已授予</string>
+    <string name="app_permissions_not_granted">未授予</string>
 </resources>

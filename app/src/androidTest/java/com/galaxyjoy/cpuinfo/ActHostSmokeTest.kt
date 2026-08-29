@@ -5,6 +5,8 @@ import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.test.longClick
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -227,6 +229,27 @@ class ActHostSmokeTest {
         composeRule.waitForIdle()
 
         composeRule.onNodeWithText(composeRule.activity.getString(R.string.hardware_snapshot_title)).assertExists()
+    }
+
+    @Test
+    fun appPermissionsActionShowsPermissionsSheet() {
+        // Regression guard for F05: proves long-pressing an app row -> "App Permissions" ->
+        // reads real PackageManager permission data for that app without crashing. Uses this
+        // app's own row (always present) since the installed-app list order is device-dependent.
+        onView(withId(R.id.menuApplications)).perform(click())
+        composeRule.waitForIdle()
+
+        val appName = composeRule.activity.getString(R.string.app_name)
+        composeRule.onNodeWithText(appName).performTouchInput { longClick() }
+        composeRule.waitForIdle()
+
+        composeRule.onNodeWithText(composeRule.activity.getString(R.string.app_permissions_action))
+            .performClick()
+        composeRule.waitForIdle()
+
+        composeRule.onNodeWithText(
+            composeRule.activity.getString(R.string.app_permissions_title, appName),
+        ).assertExists()
     }
 
     @Test

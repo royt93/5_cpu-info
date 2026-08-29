@@ -310,4 +310,10 @@
     <string name="sensor_test_instruction_proximity">Zakryjte rukou senzor u sluchátka.</string>
     <string name="sensor_test_name_pressure">Barometr</string>
     <string name="sensor_test_instruction_pressure">Jemně foukněte na zařízení nebo s ním rychle pohněte nahoru a dolů.</string>
+    <string name="app_permissions_action">Oprávnění aplikace</string>
+    <string name="app_permissions_title">Oprávnění aplikace %1$s</string>
+    <string name="app_permissions_none">Tato aplikace nevyžaduje žádná zvláštní oprávnění.</string>
+    <string name="app_permissions_summary">%1$d citlivých z celkem %2$d požadovaných oprávnění</string>
+    <string name="app_permissions_granted">Uděleno</string>
+    <string name="app_permissions_not_granted">Neuděleno</string>
 </resources>

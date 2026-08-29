@@ -27,6 +27,7 @@ import javax.inject.Inject
 class VMNewApplications @Inject constructor(
     private val observableApplicationsData: ObservableApplicationsData,
     private val interactorGetPackageName: InteractorGetPackageName,
+    private val appPermissionProvider: AppPermissionProvider,
 ) : ViewModel() {
 
     private val _uiStateFlow = MutableStateFlow(UiState())
@@ -92,6 +93,19 @@ class VMNewApplications @Inject constructor(
         }
     }
 
+    fun onPermissionsClicked(packageName: String, appName: String) {
+        _uiStateFlow.update {
+            it.copy(
+                permissionsDialogAppName = appName,
+                permissionsDialogResult = appPermissionProvider.evaluate(packageName),
+            )
+        }
+    }
+
+    fun onPermissionsDialogDismissed() {
+        _uiStateFlow.update { it.copy(permissionsDialogAppName = null, permissionsDialogResult = null) }
+    }
+
     fun onNativeLibsClicked(nativeLibraryDir: String) {
         val nativeDirFile = File(nativeLibraryDir)
         val libs = nativeDirFile.listFiles()?.map { it.name } ?: emptyList()
@@ -143,5 +157,7 @@ class VMNewApplications @Inject constructor(
         val applications: ImmutableList<ExtendedApplicationData> = persistentListOf(),
         val snackbarMessage: Int = -1,
         val revealedCardId: String? = null,
+        val permissionsDialogAppName: String? = null,
+        val permissionsDialogResult: AppPermissionEvaluator.Result? = null,
     )
 }

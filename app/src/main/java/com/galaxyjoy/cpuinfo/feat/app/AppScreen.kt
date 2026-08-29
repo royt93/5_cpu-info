@@ -8,11 +8,14 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
@@ -74,6 +77,8 @@ fun ApplicationsScreen(
     onAppSettingsClicked: (id: String) -> Unit,
     onNativeLibsClicked: (nativeLibraryDir: String) -> Unit,
     onSystemAppsSwitched: (enabled: Boolean) -> Unit,
+    onPermissionsClicked: (packageName: String, appName: String) -> Unit = { _, _ -> },
+    onPermissionsDialogDismissed: () -> Unit = {},
     onOpenPlayStore: (packageName: String) -> Unit = {},
     onSortClicked: () -> Unit = {},
     onRateClicked: () -> Unit = {},
@@ -134,6 +139,7 @@ fun ApplicationsScreen(
                 onAppUninstallClicked = onAppUninstallClicked,
                 onAppSettingsClicked = onAppSettingsClicked,
                 onNativeLibsClicked = onNativeLibsClicked,
+                onPermissionsClicked = onPermissionsClicked,
                 onOpenPlayStore = onOpenPlayStore,
             )
             PullRefreshIndicator(
@@ -142,6 +148,14 @@ fun ApplicationsScreen(
                 modifier = Modifier.align(Alignment.TopCenter)
             )
         }
+    }
+
+    if (uiState.permissionsDialogResult != null && uiState.permissionsDialogAppName != null) {
+        AppPermissionsBottomSheet(
+            appName = uiState.permissionsDialogAppName,
+            result = uiState.permissionsDialogResult,
+            onDismiss = onPermissionsDialogDismissed,
+        )
     }
 }
 
@@ -266,6 +280,7 @@ private fun ApplicationsList(
     onAppUninstallClicked: (id: String) -> Unit,
     onAppSettingsClicked: (id: String) -> Unit,
     onNativeLibsClicked: (nativeLibraryDir: String) -> Unit,
+    onPermissionsClicked: (packageName: String, appName: String) -> Unit,
     onOpenPlayStore: (packageName: String) -> Unit = {},
 ) {
     val listState = rememberLazyListState()
@@ -292,6 +307,7 @@ private fun ApplicationsList(
                 onBottomSheetDismiss = { showBottomSheetForItem = false },
                 onAppUninstallClicked = onAppUninstallClicked,
                 onAppSettingsClicked = onAppSettingsClicked,
+                onPermissionsClicked = onPermissionsClicked,
                 onOpenPlayStore = onOpenPlayStore,
             )
 
@@ -313,6 +329,7 @@ private fun ApplicationItem(
     onBottomSheetDismiss: () -> Unit,
     onAppUninstallClicked: (packageName: String) -> Unit,
     onAppSettingsClicked: (packageName: String) -> Unit,
+    onPermissionsClicked: (packageName: String, appName: String) -> Unit,
     onOpenPlayStore: (packageName: String) -> Unit,
 ) {
 
@@ -380,6 +397,10 @@ private fun ApplicationItem(
                 onBottomSheetDismiss()
                 onAppSettingsClicked(appData.packageName)
             },
+            onPermissions = {
+                onBottomSheetDismiss()
+                onPermissionsClicked(appData.packageName, appData.name)
+            },
             onUninstall = {
                 onBottomSheetDismiss()
                 onAppUninstallClicked(appData.packageName)
@@ -399,6 +420,7 @@ private fun AppActionsBottomSheet(
     packageName: String,
     onDismiss: () -> Unit,
     onSettings: () -> Unit,
+    onPermissions: () -> Unit,
     onUninstall: () -> Unit,
     onOpenPlayStore: () -> Unit,
 ) {
@@ -448,6 +470,26 @@ private fun AppActionsBottomSheet(
                 )
             }
 
+            // Permissions option (F05)
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable(onClick = onPermissions)
+                    .padding(horizontal = 16.dp, vertical = 16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Lock,
+                    contentDescription = stringResource(R.string.app_permissions_action),
+                    modifier = Modifier.size(24.dp)
+                )
+                Spacer(modifier = Modifier.width(16.dp))
+                Text(
+                    text = stringResource(R.string.app_permissions_action),
+                    style = MaterialTheme.typography.bodyLarge
+                )
+            }
+
             // Uninstall option
             Row(
                 modifier = Modifier
@@ -490,6 +532,97 @@ private fun AppActionsBottomSheet(
                 )
             }
         }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun AppPermissionsBottomSheet(
+    appName: String,
+    result: AppPermissionEvaluator.Result,
+    onDismiss: () -> Unit,
+) {
+    val sheetState = rememberModalBottomSheetState()
+
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        sheetState = sheetState,
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .padding(bottom = 32.dp),
+        ) {
+            Text(
+                text = stringResource(R.string.app_permissions_title, appName),
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.padding(vertical = 8.dp),
+            )
+
+            if (result.totalCount == 0) {
+                Text(
+                    text = stringResource(R.string.app_permissions_none),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(vertical = 12.dp),
+                )
+                return@Column
+            }
+
+            Text(
+                text = stringResource(
+                    R.string.app_permissions_summary,
+                    result.dangerousCount,
+                    result.totalCount,
+                ),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(bottom = 8.dp),
+            )
+
+            LazyColumn(modifier = Modifier.heightIn(max = 420.dp)) {
+                items(items = result.entries, key = { it.name }) { entry ->
+                    PermissionRow(entry)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun PermissionRow(entry: AppPermissionEvaluator.PermissionEntry) {
+    val accentColor = if (entry.isDangerous) {
+        MaterialTheme.colorScheme.error
+    } else {
+        MaterialTheme.colorScheme.onSurfaceVariant
+    }
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Box(
+            modifier = Modifier
+                .size(6.dp)
+                .background(color = accentColor, shape = CircleShape),
+        )
+        Spacer(modifier = Modifier.width(12.dp))
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text = entry.label,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurface,
+            )
+        }
+        Text(
+            text = stringResource(
+                if (entry.isGranted) R.string.app_permissions_granted else R.string.app_permissions_not_granted,
+            ),
+            style = MaterialTheme.typography.bodySmall,
+            color = if (entry.isGranted) accentColor else MaterialTheme.colorScheme.onSurfaceVariant,
+        )
     }
 }
 

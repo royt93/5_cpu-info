@@ -313,4 +313,10 @@
     <string name="sensor_test_instruction_proximity">Verdecke den Sensor beim Hörer mit der Hand.</string>
     <string name="sensor_test_name_pressure">Barometer</string>
     <string name="sensor_test_instruction_pressure">Puste sanft auf das Gerät oder bewege es schnell auf und ab.</string>
+    <string name="app_permissions_action">App-Berechtigungen</string>
+    <string name="app_permissions_title">Berechtigungen von %1$s</string>
+    <string name="app_permissions_none">Diese App fordert keine besonderen Berechtigungen an.</string>
+    <string name="app_permissions_summary">%1$d sensible von insgesamt %2$d angeforderten Berechtigungen</string>
+    <string name="app_permissions_granted">Erteilt</string>
+    <string name="app_permissions_not_granted">Nicht erteilt</string>
 </resources>
