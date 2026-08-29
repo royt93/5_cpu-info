@@ -7,13 +7,28 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:padding="8dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            android:orientation="vertical">
+
+            <!-- F09/U06 — cluster topology summary (Prime/Performance/Efficiency), always
+                 visible above the flat per-core list below rather than replacing it. -->
+            <androidx.compose.ui.platform.ComposeView
+                android:id="@+id/clusterTopologyCompose"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:clipToPadding="false"
+                android:padding="8dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+        </LinearLayout>
 
         <!-- U01 entry point — device authenticity check, contextually belongs on the CPU tab
              rather than the shared toolbar (which already has Shield/VIP/Share). -->

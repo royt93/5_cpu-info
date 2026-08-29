@@ -40,4 +40,19 @@ class DataNativeProviderCpu @Inject constructor() {
 
     /** Raw REVIDR_EL1 via direct register read. -1 if unavailable (non-arm64, or read faulted). */
     external fun getRevidrEl1(): Long
+
+    // --- F09/U06 "CPU Cluster Topology" additions below ---
+
+    external fun getClusterCount(): Int
+
+    /** Index of the first logical core in this cluster, or -1 if out of range. */
+    external fun getClusterCoreStart(clusterIndex: Int): Int
+
+    external fun getClusterCoreCount(clusterIndex: Int): Int
+
+    /** [cpuinfo_vendor] enum ordinal shared by all cores in this cluster. */
+    external fun getClusterVendor(clusterIndex: Int): Int
+
+    /** [cpuinfo_uarch] enum value shared by all cores in this cluster. */
+    external fun getClusterUarch(clusterIndex: Int): Int
 }

@@ -289,3 +289,67 @@ Java_com_galaxyjoy_cpuinfo_data_provider_DataNativeProviderCpu_getRevidrEl1(JNIE
 #endif
     return -1;
 }
+
+// --- F09/U06 "CPU Cluster Topology" additions below ---
+
+extern "C"
+JNIEXPORT jint JNICALL
+Java_com_galaxyjoy_cpuinfo_data_provider_DataNativeProviderCpu_getClusterCount(JNIEnv *env,
+                                                                                 jobject thiz) {
+    if (!cpuinfo_initialize()) {
+        return 0;
+    }
+    return (jint) cpuinfo_get_clusters_count();
+}
+
+extern "C"
+JNIEXPORT jint JNICALL
+Java_com_galaxyjoy_cpuinfo_data_provider_DataNativeProviderCpu_getClusterCoreStart(JNIEnv *env,
+                                                                                     jobject thiz,
+                                                                                     jint clusterIndex) {
+    if (!cpuinfo_initialize() || clusterIndex < 0 ||
+        (uint32_t) clusterIndex >= cpuinfo_get_clusters_count()) {
+        return -1;
+    }
+    const struct cpuinfo_cluster *cluster = cpuinfo_get_cluster((uint32_t) clusterIndex);
+    return cluster == nullptr ? -1 : (jint) cluster->core_start;
+}
+
+extern "C"
+JNIEXPORT jint JNICALL
+Java_com_galaxyjoy_cpuinfo_data_provider_DataNativeProviderCpu_getClusterCoreCount(JNIEnv *env,
+                                                                                     jobject thiz,
+                                                                                     jint clusterIndex) {
+    if (!cpuinfo_initialize() || clusterIndex < 0 ||
+        (uint32_t) clusterIndex >= cpuinfo_get_clusters_count()) {
+        return 0;
+    }
+    const struct cpuinfo_cluster *cluster = cpuinfo_get_cluster((uint32_t) clusterIndex);
+    return cluster == nullptr ? 0 : (jint) cluster->core_count;
+}
+
+extern "C"
+JNIEXPORT jint JNICALL
+Java_com_galaxyjoy_cpuinfo_data_provider_DataNativeProviderCpu_getClusterVendor(JNIEnv *env,
+                                                                                  jobject thiz,
+                                                                                  jint clusterIndex) {
+    if (!cpuinfo_initialize() || clusterIndex < 0 ||
+        (uint32_t) clusterIndex >= cpuinfo_get_clusters_count()) {
+        return 0;
+    }
+    const struct cpuinfo_cluster *cluster = cpuinfo_get_cluster((uint32_t) clusterIndex);
+    return cluster == nullptr ? 0 : (jint) cluster->vendor;
+}
+
+extern "C"
+JNIEXPORT jint JNICALL
+Java_com_galaxyjoy_cpuinfo_data_provider_DataNativeProviderCpu_getClusterUarch(JNIEnv *env,
+                                                                                 jobject thiz,
+                                                                                 jint clusterIndex) {
+    if (!cpuinfo_initialize() || clusterIndex < 0 ||
+        (uint32_t) clusterIndex >= cpuinfo_get_clusters_count()) {
+        return 0;
+    }
+    const struct cpuinfo_cluster *cluster = cpuinfo_get_cluster((uint32_t) clusterIndex);
+    return cluster == nullptr ? 0 : (jint) cluster->uarch;
+}

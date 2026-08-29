@@ -220,4 +220,12 @@
     <string name="device_truth_verdict_mismatch">發現異常 — 詳見下方列表</string>
     <string name="device_truth_disclaimer">僅供參考，並非官方認證。您可自行比對原始暫存器數值以進一步確認。</string>
     <string name="device_truth_share_button">分享結果</string>
+    <!--CPU Cluster Topology (F09/U06)-->
+    <string name="cluster_tier_prime">超大核</string>
+    <string name="cluster_tier_performance">效能核</string>
+    <string name="cluster_tier_efficiency">省電核</string>
+    <string name="cluster_tier_all_cores">全部核心</string>
+    <string name="cluster_tier_unlabeled">叢集</string>
+    <string name="cluster_core_range">%1$d 核心（Core %2$d–%3$d）</string>
+    <string name="cluster_max_freq">最高 %1$d MHz</string>
 </resources>

@@ -289,4 +289,12 @@
     <string name="device_truth_verdict_mismatch">Mismatch found — see the row below for details</string>
     <string name="device_truth_disclaimer">Reference info only, not an official certification. Compare the raw register values yourself for a second opinion.</string>
     <string name="device_truth_share_button">Share result</string>
+    <!--CPU Cluster Topology (F09/U06)-->
+    <string name="cluster_tier_prime">Prime</string>
+    <string name="cluster_tier_performance">Performance</string>
+    <string name="cluster_tier_efficiency">Efficiency</string>
+    <string name="cluster_tier_all_cores">All cores</string>
+    <string name="cluster_tier_unlabeled">Cluster</string>
+    <string name="cluster_core_range">%1$d cores (Core %2$d–%3$d)</string>
+    <string name="cluster_max_freq">Max %1$d MHz</string>
 </resources>

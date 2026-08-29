@@ -253,4 +253,12 @@
     <string name="device_truth_verdict_mismatch">Nalezen nesoulad — podrobnosti viz řádek níže</string>
     <string name="device_truth_disclaimer">Pouze orientační informace, nejde o oficiální certifikaci. Hrubé hodnoty registrů si můžete sami ověřit pro druhý názor.</string>
     <string name="device_truth_share_button">Sdílet výsledek</string>
+    <!--CPU Cluster Topology (F09/U06)-->
+    <string name="cluster_tier_prime">Prime</string>
+    <string name="cluster_tier_performance">Výkonné</string>
+    <string name="cluster_tier_efficiency">Úsporné</string>
+    <string name="cluster_tier_all_cores">Všechna jádra</string>
+    <string name="cluster_tier_unlabeled">Klastr</string>
+    <string name="cluster_core_range">%1$d jader (Core %2$d–%3$d)</string>
+    <string name="cluster_max_freq">Max %1$d MHz</string>
 </resources>

@@ -2,12 +2,15 @@ package com.galaxyjoy.cpuinfo.feat.infor.cpu
 
 import android.os.Bundle
 import android.view.View
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.viewModels
 import com.galaxyjoy.cpuinfo.R
 import com.galaxyjoy.cpuinfo.databinding.FrmCpuInfoBinding
 import com.galaxyjoy.cpuinfo.feat.infor.base.BaseFrm
 import com.galaxyjoy.cpuinfo.feat.truth.DeviceTruthBottomSheet
+import com.galaxyjoy.cpuinfo.ui.theme.CpuInfoTheme
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 /**
  * Displays information about device CPU taken form /proc/cpuinfo file
@@ -19,6 +22,9 @@ class FrmCpuInfo : BaseFrm<FrmCpuInfoBinding>(R.layout.frm_cpu_info) {
 
     private val viewModel: ViewModelCpuInfo by viewModels()
 
+    @Inject
+    lateinit var clusterTopologyProvider: ClusterTopologyProvider
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -28,6 +34,15 @@ class FrmCpuInfo : BaseFrm<FrmCpuInfoBinding>(R.layout.frm_cpu_info) {
 
         binding.fabDeviceTruth.setOnClickListener {
             DeviceTruthBottomSheet().show(childFragmentManager, DeviceTruthBottomSheet.TAG)
+        }
+
+        binding.clusterTopologyCompose.apply {
+            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+            setContent {
+                CpuInfoTheme {
+                    ClusterTopologyScreen(clusters = clusterTopologyProvider.clusters())
+                }
+            }
         }
     }
 }

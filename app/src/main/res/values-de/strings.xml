@@ -256,4 +256,12 @@
     <string name="device_truth_verdict_mismatch">Abweichung gefunden — Details siehe Zeile unten</string>
     <string name="device_truth_disclaimer">Nur zur Orientierung, keine offizielle Zertifizierung. Vergleiche die rohen Registerwerte selbst für eine zweite Meinung.</string>
     <string name="device_truth_share_button">Ergebnis teilen</string>
+    <!--CPU Cluster Topology (F09/U06)-->
+    <string name="cluster_tier_prime">Prime</string>
+    <string name="cluster_tier_performance">Leistung</string>
+    <string name="cluster_tier_efficiency">Effizienz</string>
+    <string name="cluster_tier_all_cores">Alle Kerne</string>
+    <string name="cluster_tier_unlabeled">Cluster</string>
+    <string name="cluster_core_range">%1$d Kerne (Core %2$d–%3$d)</string>
+    <string name="cluster_max_freq">Max. %1$d MHz</string>
 </resources>

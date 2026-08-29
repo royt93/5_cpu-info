@@ -273,4 +273,12 @@
     <string name="device_truth_verdict_mismatch">Phát hiện điểm bất thường — xem chi tiết dòng bên dưới</string>
     <string name="device_truth_disclaimer">Chỉ mang tính tham khảo, không phải xác nhận chính thức. Bạn có thể tự đối chiếu giá trị thanh ghi thô để kiểm tra thêm.</string>
     <string name="device_truth_share_button">Chia sẻ kết quả</string>
+    <!--CPU Cluster Topology (F09/U06)-->
+    <string name="cluster_tier_prime">Prime</string>
+    <string name="cluster_tier_performance">Hiệu năng</string>
+    <string name="cluster_tier_efficiency">Tiết kiệm điện</string>
+    <string name="cluster_tier_all_cores">Tất cả nhân</string>
+    <string name="cluster_tier_unlabeled">Cụm</string>
+    <string name="cluster_core_range">%1$d nhân (Core %2$d–%3$d)</string>
+    <string name="cluster_max_freq">Tối đa %1$d MHz</string>
 </resources>
