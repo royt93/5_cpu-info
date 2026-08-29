@@ -198,4 +198,19 @@
     <string name="throttle_share_button">分享結果</string>
     <string name="throttle_done_button">完成</string>
     <string name="throttle_share_text">Throttling Fingerprint — CPU Info\n峰值：%1$d MHz\n穩定：%2$d MHz\n下降：%3$d%%\n最高溫度：%4$d°C</string>
+    <!--Security checklist (F04)-->
+    <string name="security_patch_level">安全性修補程式</string>
+    <string name="selinux_status">SELinux</string>
+    <string name="hardware_keystore">硬體 Keystore</string>
+    <!--Thermal throttle status (F02)-->
+    <string name="thermal_status_title">系統散熱狀態</string>
+    <string name="thermal_status_none">正常</string>
+    <string name="thermal_status_light">輕度降頻</string>
+    <string name="thermal_status_moderate">中度降頻</string>
+    <string name="thermal_status_severe">嚴重降頻</string>
+    <string name="thermal_status_critical">危急 — 即將關機</string>
+    <string name="thermal_status_emergency">緊急 — 隨時可能關機</string>
+    <string name="thermal_status_shutdown">已因過熱關機</string>
+    <string name="thermal_status_unknown">未知</string>
+    <string name="thermal_headroom_label">散熱餘裕（未來 10 秒）：%1$d%%</string>
 </resources>

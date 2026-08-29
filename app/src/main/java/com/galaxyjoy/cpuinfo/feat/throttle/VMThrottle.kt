@@ -13,6 +13,7 @@ import javax.inject.Inject
 class VMThrottle @Inject constructor(
     private val runner: ThrottleTestRunner,
     private val resultPrefs: ThrottleResultPrefs,
+    private val thermalStatusProvider: ThermalStatusProvider,
 ) : ViewModel() {
 
     sealed interface UiState {
@@ -34,6 +35,9 @@ class VMThrottle @Inject constructor(
     private val _uiState = MutableStateFlow<UiState>(Idle())
     val uiState = _uiState.asStateFlow()
 
+    private val _thermalSnapshot = MutableStateFlow(thermalStatusProvider.snapshot())
+    val thermalSnapshot = _thermalSnapshot.asStateFlow()
+
     private var testJob: Job? = null
 
     fun onStartClicked() {
@@ -51,6 +55,7 @@ class VMThrottle @Inject constructor(
                     is ThrottleTestRunner.State.Finished -> {
                         val previous = resultPrefs.getLastResult()
                         resultPrefs.saveResult(state.result)
+                        _thermalSnapshot.value = thermalStatusProvider.snapshot()
                         UiState.Done(state.result, previous)
                     }
                 }
@@ -63,6 +68,7 @@ class VMThrottle @Inject constructor(
     }
 
     fun onDoneClicked() {
+        _thermalSnapshot.value = thermalStatusProvider.snapshot()
         _uiState.value = Idle()
     }
 

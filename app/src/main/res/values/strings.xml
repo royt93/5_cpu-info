@@ -267,4 +267,19 @@
     <string name="throttle_share_button">Share result</string>
     <string name="throttle_done_button">Done</string>
     <string name="throttle_share_text">Throttling Fingerprint — CPU Info\nPeak: %1$d MHz\nSustained: %2$d MHz\nDrop: %3$d%%\nMax temp: %4$d°C</string>
+    <!--Security checklist (F04)-->
+    <string name="security_patch_level">Security patch</string>
+    <string name="selinux_status">SELinux</string>
+    <string name="hardware_keystore">Hardware Keystore</string>
+    <!--Thermal throttle status (F02)-->
+    <string name="thermal_status_title">System thermal status</string>
+    <string name="thermal_status_none">Normal</string>
+    <string name="thermal_status_light">Light throttling</string>
+    <string name="thermal_status_moderate">Moderate throttling</string>
+    <string name="thermal_status_severe">Severe throttling</string>
+    <string name="thermal_status_critical">Critical — near shutdown</string>
+    <string name="thermal_status_emergency">Emergency — shutdown imminent</string>
+    <string name="thermal_status_shutdown">Shutdown</string>
+    <string name="thermal_status_unknown">Unknown</string>
+    <string name="thermal_headroom_label">Thermal headroom (next 10s): %1$d%%</string>
 </resources>

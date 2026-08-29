@@ -126,11 +126,14 @@ private fun LanguageRow(
         LocaleManager.DisplayKey.SystemDefault -> stringResource(R.string.language_system_default)
         null -> option.nativeName.orEmpty()
     }
+    // RadioButton already reserves a 48dp touch target on its own — extra vertical padding
+    // here was stacking on top of that (14dp*2 = 28dp), making each row ~76dp tall. 6dp keeps
+    // rows comfortably tappable (~60dp) without the excess whitespace between options.
     androidx.compose.foundation.layout.Row(
         modifier = Modifier
             .fillMaxWidth()
             .selectable(selected = selected, onClick = onClick)
-            .padding(horizontal = 24.dp, vertical = 14.dp),
+            .padding(horizontal = 24.dp, vertical = 6.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         RadioButton(

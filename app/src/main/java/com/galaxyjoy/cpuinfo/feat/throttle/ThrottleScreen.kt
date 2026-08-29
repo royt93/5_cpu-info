@@ -39,6 +39,7 @@ import java.util.Date
 @Composable
 internal fun ThrottleScreen(
     uiState: VMThrottle.UiState,
+    thermalSnapshot: ThermalStatusProvider.Snapshot,
     onStartClicked: () -> Unit,
     onStopClicked: () -> Unit,
     onDoneClicked: () -> Unit,
@@ -50,10 +51,55 @@ internal fun ThrottleScreen(
             .padding(20.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+        if (thermalSnapshot.statusSupported) {
+            ThermalStatusCard(thermalSnapshot)
+            Spacer(Modifier.height(16.dp))
+        }
         when (uiState) {
             is VMThrottle.UiState.Idle -> IdleContent(uiState.previous, onStartClicked)
             is VMThrottle.UiState.Running -> RunningContent(uiState, onStopClicked)
             is VMThrottle.UiState.Done -> DoneContent(uiState, onDoneClicked, onShareClicked)
+        }
+    }
+}
+
+/**
+ * Passive thermal status (F02) — always visible regardless of [VMThrottle.UiState], distinct
+ * from the active stress-test verdict below it. Hidden entirely on API &lt; 29 where the system
+ * doesn't expose this at all, rather than showing an "unsupported" placeholder.
+ */
+@Composable
+private fun ThermalStatusCard(snapshot: ThermalStatusProvider.Snapshot) {
+    val mapping = ThermalStatusMapper.mappingFor(snapshot.status)
+    val color = when (mapping.severity) {
+        ThermalStatusMapper.Severity.OK -> Color(0xFF4CAF50)
+        ThermalStatusMapper.Severity.WARNING -> Color(0xFFFFA726)
+        ThermalStatusMapper.Severity.DANGER -> MaterialTheme.colorScheme.error
+    }
+    Surface(
+        shape = RoundedCornerShape(12.dp),
+        color = MaterialTheme.colorScheme.surfaceVariant,
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        Column(modifier = Modifier.padding(12.dp)) {
+            Text(
+                text = stringResource(R.string.thermal_status_title),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            Text(
+                text = stringResource(mapping.labelRes),
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.Bold,
+                color = color,
+            )
+            if (snapshot.headroomPercent != null) {
+                Text(
+                    text = stringResource(R.string.thermal_headroom_label, snapshot.headroomPercent),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
         }
     }
 }

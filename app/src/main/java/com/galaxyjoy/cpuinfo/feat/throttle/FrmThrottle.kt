@@ -29,8 +29,10 @@ class FrmThrottle : Fragment() {
         setContent {
             CpuInfoTheme {
                 val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+                val thermalSnapshot by viewModel.thermalSnapshot.collectAsStateWithLifecycle()
                 ThrottleScreen(
                     uiState = uiState,
+                    thermalSnapshot = thermalSnapshot,
                     onStartClicked = viewModel::onStartClicked,
                     onStopClicked = viewModel::onStopClicked,
                     onDoneClicked = viewModel::onDoneClicked,

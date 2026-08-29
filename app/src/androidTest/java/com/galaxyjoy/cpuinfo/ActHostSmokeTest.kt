@@ -5,9 +5,14 @@ import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.action.ViewActions.swipeLeft
+import androidx.test.espresso.action.ViewActions.scrollTo
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.contrib.RecyclerViewActions
+import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -95,16 +100,23 @@ class ActHostSmokeTest {
         // still all resolve and render.
     }
 
+    /**
+     * `com.google.android.material.tabs.TabLayout` extends `HorizontalScrollView`, so Espresso's
+     * built-in `scrollTo()` (designed for ScrollView/HorizontalScrollView ancestors) brings the
+     * target tab fully into view regardless of label width or locale — no need to guess a swipe
+     * count or direction, which proved unreliable across devices (a fixed swipe count landed the
+     * tab only partially visible on some screens, failing click()'s ≥90%-visible requirement).
+     */
+    private fun clickTabByText(label: String) {
+        onView(withText(label)).perform(scrollTo(), click())
+    }
+
     @Test
     fun throttleTestTabRunsFullCycleAndShowsResult() {
         onView(withId(R.id.menuHardware)).perform(click())
         composeRule.waitForIdle()
 
-        // "Stress Test" is the last tab in AdtInfoContainerState — the TabLayout is scrollable,
-        // so swipe it into view before clicking by its label.
-        repeat(4) { onView(withId(R.id.tabs)).perform(swipeLeft()) }
-        composeRule.waitForIdle()
-        onView(withText(composeRule.activity.getString(R.string.throttle))).perform(click())
+        clickTabByText(composeRule.activity.getString(R.string.throttle))
         composeRule.waitForIdle()
 
         composeRule.onNodeWithText(composeRule.activity.getString(R.string.throttle_start_button))
@@ -120,5 +132,44 @@ class ActHostSmokeTest {
 
         composeRule.onNodeWithText(composeRule.activity.getString(R.string.throttle_done_button)).assertExists()
         composeRule.onNodeWithText(composeRule.activity.getString(R.string.throttle_share_button)).assertExists()
+    }
+
+    @Test
+    fun thermalStatusCardShowsOnThrottleTab() {
+        onView(withId(R.id.menuHardware)).perform(click())
+        composeRule.waitForIdle()
+
+        clickTabByText(composeRule.activity.getString(R.string.throttle))
+        composeRule.waitForIdle()
+
+        // F02 — passive PowerManager thermal status, independent of the active stress test below
+        // it. Real device is API 29+, so the card must render rather than stay hidden.
+        composeRule.onNodeWithText(composeRule.activity.getString(R.string.thermal_status_title)).assertExists()
+    }
+
+    @Test
+    fun androidTabShowsSecurityChecklistRows() {
+        onView(withId(R.id.menuHardware)).perform(click())
+        composeRule.waitForIdle()
+
+        clickTabByText(composeRule.activity.getString(R.string.android))
+        composeRule.waitForIdle()
+
+        // F04 — regression guard for the 3 new security checklist rows added to VMAndroidInfo.
+        // They sit below Build/root/encryption/StrongBox data in the plain (non-Compose)
+        // RecyclerView — RecyclerViewActions.scrollTo() scrolls each into view precisely instead
+        // of guessing a swipe count (which previously either under- or over-shot the target).
+        scrollAndroidInfoListTo(composeRule.activity.getString(R.string.security_patch_level))
+        onView(withText(composeRule.activity.getString(R.string.security_patch_level))).check(matches(isDisplayed()))
+        scrollAndroidInfoListTo(composeRule.activity.getString(R.string.selinux_status))
+        onView(withText(composeRule.activity.getString(R.string.selinux_status))).check(matches(isDisplayed()))
+        scrollAndroidInfoListTo(composeRule.activity.getString(R.string.hardware_keystore))
+        onView(withText(composeRule.activity.getString(R.string.hardware_keystore))).check(matches(isDisplayed()))
+    }
+
+    private fun scrollAndroidInfoListTo(label: String) {
+        onView(withId(R.id.rv)).perform(
+            RecyclerViewActions.scrollTo<RecyclerView.ViewHolder>(hasDescendant(withText(label)))
+        )
     }
 }

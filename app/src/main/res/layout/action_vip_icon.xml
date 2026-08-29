@@ -19,10 +19,13 @@
         android:background="@drawable/bg_crown_glow_gold"
         android:visibility="gone" />
 
+    <!-- 24dp matches the vector's own intrinsic size (see ic_crown_premium_v2.xml) and the
+         other toolbar action icons (Shield 24dp, Share default ~24dp) — was 26dp, upscaling
+         past its native size made it read visibly larger/bulkier than its neighbors. -->
     <ImageView
         android:id="@+id/actionVipIcon"
-        android:layout_width="26dp"
-        android:layout_height="26dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_gravity="center"
         android:contentDescription="@string/vip_menu_title"
         android:src="@drawable/ic_crown_premium_v2" />

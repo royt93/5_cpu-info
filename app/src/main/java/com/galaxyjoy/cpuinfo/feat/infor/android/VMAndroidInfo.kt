@@ -9,6 +9,10 @@ import android.content.res.Resources
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
+import android.security.keystore.KeyGenParameterSpec
+import android.security.keystore.KeyInfo
+import android.security.keystore.KeyProperties
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.AndroidViewModel
 import com.galaxyjoy.cpuinfo.R
 import com.galaxyjoy.cpuinfo.util.lifecycle.ListLiveData
@@ -16,7 +20,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import java.io.BufferedReader
 import java.io.File
 import java.io.InputStreamReader
+import java.security.KeyStore
 import java.security.Security
+import javax.crypto.KeyGenerator
+import javax.crypto.SecretKeyFactory
 import javax.inject.Inject
 
 /**
@@ -51,6 +58,9 @@ class VMAndroidInfo @Inject constructor(
         getRootData()
         getDeviceEncryptionStatus()
         getStrongBoxData()
+        getSecurityPatchData()
+        getSelinuxData()
+        getHardwareKeystoreData()
         getSecurityData()
     }
 
@@ -192,11 +202,82 @@ class VMAndroidInfo @Inject constructor(
         resources.getString(R.string.no)
     }
 
+    /**
+     * Security patch level (F04) — public API since 23, always present at minSdk 24.
+     */
+    private fun getSecurityPatchData() {
+        listLiveData.add(Pair(resources.getString(R.string.security_patch_level), Build.VERSION.SECURITY_PATCH))
+    }
+
+    /**
+     * SELinux enforcing status (F04). No public framework API exists for this (`android.os.SELinux`
+     * is a hidden/restricted class, unreliable across API levels) — read the sysfs node directly,
+     * same approach the codebase already uses for CPU temperature (see [com.galaxyjoy.cpuinfo.feat.temp.TemperatureProvider]).
+     */
+    private fun getSelinuxData() {
+        listLiveData.add(Pair(resources.getString(R.string.selinux_status), readSelinuxStatus()))
+    }
+
+    private fun readSelinuxStatus(): String = try {
+        val raw = File(SELINUX_ENFORCE_PATH).takeIf { it.canRead() }
+            ?.bufferedReader()?.use { it.readLine() }
+        parseSelinuxStatus(raw)
+    } catch (_: Exception) {
+        SELINUX_UNKNOWN
+    }
+
+    /**
+     * Hardware-backed Keystore check (F04) — StrongBox (above) only covers the dedicated secure
+     * chip; most devices instead back keys with a TEE, which [KeyInfo.isInsideSecureHardware]
+     * detects. Generates and immediately deletes a throwaway key — no lasting side effect.
+     */
+    private fun getHardwareKeystoreData() {
+        listLiveData.add(Pair(resources.getString(R.string.hardware_keystore), getYesNoString(isHardwareBackedKeystoreAvailable())))
+    }
+
+    private fun isHardwareBackedKeystoreAvailable(): Boolean {
+        return try {
+            val keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore")
+            keyGenerator.init(
+                KeyGenParameterSpec.Builder(
+                    HARDWARE_KEYSTORE_PROBE_ALIAS,
+                    KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT,
+                ).setBlockModes(KeyProperties.BLOCK_MODE_GCM)
+                    .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
+                    .build(),
+            )
+            val secretKey = keyGenerator.generateKey()
+            val factory = SecretKeyFactory.getInstance(secretKey.algorithm, "AndroidKeyStore")
+            val keyInfo = factory.getKeySpec(secretKey, KeyInfo::class.java) as KeyInfo
+            keyInfo.isInsideSecureHardware
+        } catch (_: Exception) {
+            false
+        } finally {
+            try {
+                KeyStore.getInstance("AndroidKeyStore").apply { load(null) }.deleteEntry(HARDWARE_KEYSTORE_PROBE_ALIAS)
+            } catch (_: Exception) {
+            }
+        }
+    }
+
     companion object {
         private const val ENCRYPTION_STATUS_UNSUPPORTED = "UNSUPPORTED"
         private const val ENCRYPTION_STATUS_INACTIVE = "INACTIVE"
         private const val ENCRYPTION_STATUS_ACTIVATING = "ACTIVATING"
         private const val ENCRYPTION_STATUS_ACTIVE = "ACTIVE"
         private const val ENCRYPTION_STATUS_ACTIVE_PER_USER = "ACTIVE_PER_USER"
+
+        private const val SELINUX_ENFORCE_PATH = "/sys/fs/selinux/enforce"
+        private const val SELINUX_ENFORCING = "Enforcing"
+        private const val SELINUX_PERMISSIVE = "Permissive"
+        private const val SELINUX_UNKNOWN = "Unknown"
+        private const val HARDWARE_KEYSTORE_PROBE_ALIAS = "cpuinfo_hw_keystore_probe"
+
+        @VisibleForTesting
+        fun parseSelinuxStatus(raw: String?): String = when (raw?.trim()) {
+            "1" -> SELINUX_ENFORCING
+            "0" -> SELINUX_PERMISSIVE
+            else -> SELINUX_UNKNOWN
+        }
     }
 }

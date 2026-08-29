@@ -214,6 +214,21 @@
     <string name="throttle_share_button">Ergebnis teilen</string>
     <string name="throttle_done_button">Fertig</string>
     <string name="throttle_share_text">Throttling Fingerprint — CPU Info\nSpitze: %1$d MHz\nDauertakt: %2$d MHz\nAbfall: %3$d %%\nMax. Temp.: %4$d°C</string>
+    <!--Security checklist (F04)-->
+    <string name="security_patch_level">Sicherheitspatch</string>
+    <string name="selinux_status">SELinux</string>
+    <string name="hardware_keystore">Hardware-Keystore</string>
+    <!--Thermal throttle status (F02)-->
+    <string name="thermal_status_title">Thermischer Systemstatus</string>
+    <string name="thermal_status_none">Normal</string>
+    <string name="thermal_status_light">Leichte Drosselung</string>
+    <string name="thermal_status_moderate">Mäßige Drosselung</string>
+    <string name="thermal_status_severe">Starke Drosselung</string>
+    <string name="thermal_status_critical">Kritisch — kurz vor Abschaltung</string>
+    <string name="thermal_status_emergency">Notfall — Abschaltung droht</string>
+    <string name="thermal_status_shutdown">Wegen Überhitzung abgeschaltet</string>
+    <string name="thermal_status_unknown">Unbekannt</string>
+    <string name="thermal_headroom_label">Thermischer Spielraum (nächste 10 s): %1$d %%</string>
     <string name="apps_more_options">Weitere Optionen</string>
     <string name="shield_score_menu_title">Shield Score</string>
     <string name="shield_score_title">Shield Score</string>

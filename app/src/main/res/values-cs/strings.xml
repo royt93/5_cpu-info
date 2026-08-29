@@ -211,6 +211,21 @@
     <string name="throttle_share_button">Sdílet výsledek</string>
     <string name="throttle_done_button">Hotovo</string>
     <string name="throttle_share_text">Throttling Fingerprint — CPU Info\nŠpička: %1$d MHz\nUstálená: %2$d MHz\nPokles: %3$d %%\nMax. teplota: %4$d°C</string>
+    <!--Security checklist (F04)-->
+    <string name="security_patch_level">Bezpečnostní záplata</string>
+    <string name="selinux_status">SELinux</string>
+    <string name="hardware_keystore">Hardwarový Keystore</string>
+    <!--Thermal throttle status (F02)-->
+    <string name="thermal_status_title">Tepelný stav systému</string>
+    <string name="thermal_status_none">Normální</string>
+    <string name="thermal_status_light">Mírné omezení výkonu</string>
+    <string name="thermal_status_moderate">Střední omezení výkonu</string>
+    <string name="thermal_status_severe">Silné omezení výkonu</string>
+    <string name="thermal_status_critical">Kritické — blízko vypnutí</string>
+    <string name="thermal_status_emergency">Nouzové — vypnutí hrozí</string>
+    <string name="thermal_status_shutdown">Vypnuto kvůli přehřátí</string>
+    <string name="thermal_status_unknown">Neznámé</string>
+    <string name="thermal_headroom_label">Tepelná rezerva (příštích 10 s): %1$d %%</string>
     <string name="apps_more_options">Další možnosti</string>
     <string name="shield_score_menu_title">Shield Score</string>
     <string name="shield_score_title">Shield Score</string>
