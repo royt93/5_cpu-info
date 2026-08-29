@@ -343,4 +343,17 @@
     <string name="graphics_detail_vulkan_compute">Vulkan Compute</string>
     <string name="graphics_detail_extensions_title">Extension (%1$d)</string>
     <string name="graphics_detail_no_extensions">Không có extension nào được báo cáo.</string>
+    <string name="usb_bt_pref_title">USB &amp; Bluetooth</string>
+    <string name="usb_bt_pref_summary">Thiết bị USB đang cắm và trạng thái Bluetooth</string>
+    <string name="usb_bt_title">USB &amp; Bluetooth</string>
+    <string name="usb_bt_bluetooth_section">Bluetooth</string>
+    <string name="usb_bt_usb_section">Thiết bị USB (%1$d)</string>
+    <string name="usb_bt_no_usb_devices">Hiện không có thiết bị USB nào được cắm.</string>
+    <string name="usb_bt_bluetooth_supported">Hỗ trợ</string>
+    <string name="usb_bt_bluetooth_enabled">Đang bật</string>
+    <string name="usb_bt_bluetooth_paired_count">Thiết bị đã ghép nối</string>
+    <string name="usb_bt_bluetooth_paired_unavailable">Không khả dụng</string>
+    <string name="usb_bt_vendor_product_id">Vendor:Product ID</string>
+    <string name="usb_bt_device_class">Loại thiết bị</string>
+    <string name="usb_bt_interface_count">Số interface</string>
 </resources>

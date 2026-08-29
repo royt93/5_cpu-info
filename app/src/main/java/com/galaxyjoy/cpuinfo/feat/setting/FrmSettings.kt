@@ -9,6 +9,7 @@ import com.galaxyjoy.cpuinfo.BuildConfig
 import com.galaxyjoy.cpuinfo.R
 import com.galaxyjoy.cpuinfo.ext.openBrowserPolicy
 import com.galaxyjoy.cpuinfo.feat.snapshot.HardwareSnapshotBottomSheet
+import com.galaxyjoy.cpuinfo.feat.usbbt.UsbBluetoothBottomSheet
 import com.galaxyjoy.cpuinfo.util.ThemeHelper
 import moreApp
 import rateApp
@@ -63,6 +64,7 @@ class FrmSettings : PreferenceFragmentCompat(),
         wireTemperatureUnitPref()
         wireThemePref()
         wireHardwareSnapshotPref()
+        wireUsbBluetoothPref()
 
         listenForBottomSheetResults()
     }
@@ -108,6 +110,16 @@ class FrmSettings : PreferenceFragmentCompat(),
             val fm = childFragmentManager
             if (!fm.isStateSaved && fm.findFragmentByTag(HardwareSnapshotBottomSheet.TAG) == null) {
                 HardwareSnapshotBottomSheet().show(fm, HardwareSnapshotBottomSheet.TAG)
+            }
+            true
+        }
+    }
+
+    private fun wireUsbBluetoothPref() {
+        findPreference<Preference>("key_usb_bt")?.setOnPreferenceClickListener {
+            val fm = childFragmentManager
+            if (!fm.isStateSaved && fm.findFragmentByTag(UsbBluetoothBottomSheet.TAG) == null) {
+                UsbBluetoothBottomSheet().show(fm, UsbBluetoothBottomSheet.TAG)
             }
             true
         }

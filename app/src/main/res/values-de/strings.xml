@@ -326,4 +326,17 @@
     <string name="graphics_detail_vulkan_compute">Vulkan Compute</string>
     <string name="graphics_detail_extensions_title">Erweiterungen (%1$d)</string>
     <string name="graphics_detail_no_extensions">Keine Erweiterungen gemeldet.</string>
+    <string name="usb_bt_pref_title">USB &amp; Bluetooth</string>
+    <string name="usb_bt_pref_summary">Angeschlossene USB-Geräte und Bluetooth-Adapterstatus</string>
+    <string name="usb_bt_title">USB &amp; Bluetooth</string>
+    <string name="usb_bt_bluetooth_section">Bluetooth</string>
+    <string name="usb_bt_usb_section">USB-Geräte (%1$d)</string>
+    <string name="usb_bt_no_usb_devices">Derzeit sind keine USB-Geräte angeschlossen.</string>
+    <string name="usb_bt_bluetooth_supported">Unterstützt</string>
+    <string name="usb_bt_bluetooth_enabled">Aktiviert</string>
+    <string name="usb_bt_bluetooth_paired_count">Gekoppelte Geräte</string>
+    <string name="usb_bt_bluetooth_paired_unavailable">Nicht verfügbar</string>
+    <string name="usb_bt_vendor_product_id">Vendor:Product ID</string>
+    <string name="usb_bt_device_class">Geräteklasse</string>
+    <string name="usb_bt_interface_count">Schnittstellen</string>
 </resources>

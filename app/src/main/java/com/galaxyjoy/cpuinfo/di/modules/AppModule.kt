@@ -3,6 +3,7 @@ package com.galaxyjoy.cpuinfo.di.modules
 import android.annotation.SuppressLint
 import android.app.ActivityManager
 import android.app.admin.DevicePolicyManager
+import android.bluetooth.BluetoothManager
 import android.content.ContentResolver
 import android.content.Context
 import android.content.SharedPreferences
@@ -12,6 +13,7 @@ import android.hardware.ConsumerIrManager
 import android.hardware.SensorManager
 import android.hardware.camera2.CameraManager
 import android.hardware.display.DisplayManager
+import android.hardware.usb.UsbManager
 import android.net.wifi.WifiManager
 import android.os.storage.StorageManager
 import android.view.WindowManager
@@ -75,6 +77,16 @@ class AppModule {
     @Singleton
     fun provideCameraManager(@ApplicationContext appContext: Context): CameraManager =
         appContext.getSystemService(Context.CAMERA_SERVICE) as CameraManager
+
+    @Provides
+    @Singleton
+    fun provideUsbManager(@ApplicationContext appContext: Context): UsbManager =
+        appContext.getSystemService(Context.USB_SERVICE) as UsbManager
+
+    @Provides
+    @Singleton
+    fun provideBluetoothManager(@ApplicationContext appContext: Context): BluetoothManager =
+        appContext.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
 
     @Provides
     @Singleton
