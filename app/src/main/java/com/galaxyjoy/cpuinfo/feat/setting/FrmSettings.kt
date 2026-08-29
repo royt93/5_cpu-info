@@ -8,6 +8,7 @@ import androidx.preference.PreferenceFragmentCompat
 import com.galaxyjoy.cpuinfo.BuildConfig
 import com.galaxyjoy.cpuinfo.R
 import com.galaxyjoy.cpuinfo.ext.openBrowserPolicy
+import com.galaxyjoy.cpuinfo.feat.fleet.FleetCompareBottomSheet
 import com.galaxyjoy.cpuinfo.feat.snapshot.HardwareSnapshotBottomSheet
 import com.galaxyjoy.cpuinfo.feat.usbbt.UsbBluetoothBottomSheet
 import com.galaxyjoy.cpuinfo.util.ThemeHelper
@@ -65,6 +66,7 @@ class FrmSettings : PreferenceFragmentCompat(),
         wireThemePref()
         wireHardwareSnapshotPref()
         wireUsbBluetoothPref()
+        wireFleetComparePref()
 
         listenForBottomSheetResults()
     }
@@ -120,6 +122,16 @@ class FrmSettings : PreferenceFragmentCompat(),
             val fm = childFragmentManager
             if (!fm.isStateSaved && fm.findFragmentByTag(UsbBluetoothBottomSheet.TAG) == null) {
                 UsbBluetoothBottomSheet().show(fm, UsbBluetoothBottomSheet.TAG)
+            }
+            true
+        }
+    }
+
+    private fun wireFleetComparePref() {
+        findPreference<Preference>("key_fleet_compare")?.setOnPreferenceClickListener {
+            val fm = childFragmentManager
+            if (!fm.isStateSaved && fm.findFragmentByTag(FleetCompareBottomSheet.TAG) == null) {
+                FleetCompareBottomSheet().show(fm, FleetCompareBottomSheet.TAG)
             }
             true
         }

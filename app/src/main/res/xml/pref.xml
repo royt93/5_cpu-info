@@ -36,6 +36,11 @@
             app:summary="@string/usb_bt_pref_summary"
             app:title="@string/usb_bt_pref_title" />
 
+        <Preference
+            app:key="key_fleet_compare"
+            app:summary="@string/fleet_compare_pref_summary"
+            app:title="@string/fleet_compare_pref_title" />
+
     </PreferenceCategory>
 
     <PreferenceCategory

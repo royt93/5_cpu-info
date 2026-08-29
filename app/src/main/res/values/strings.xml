@@ -372,4 +372,16 @@
     <string name="usb_bt_vendor_product_id">Vendor:Product ID</string>
     <string name="usb_bt_device_class">Device Class</string>
     <string name="usb_bt_interface_count">Interfaces</string>
+    <string name="fleet_compare_pref_title">Fleet Compare</string>
+    <string name="fleet_compare_pref_summary">Check RAM/storage against known specs for this model</string>
+    <string name="fleet_compare_title">Fleet Compare</string>
+    <string name="fleet_compare_verdict_ok">Matches known specs</string>
+    <string name="fleet_compare_verdict_mismatch">Below expected specs</string>
+    <string name="fleet_compare_ram_label">RAM</string>
+    <string name="fleet_compare_storage_label">Storage</string>
+    <string name="fleet_compare_gb_value">%1$d GB</string>
+    <string name="fleet_compare_min_gb_value">min %1$d GB</string>
+    <string name="fleet_compare_no_match">No reference data for \"%1$s\" yet.</string>
+    <string name="fleet_compare_supported_models">Supported: Galaxy S22/S23/S24 Ultra, Pixel 6/7/8/9 Pro.</string>
+    <string name="fleet_compare_disclaimer">Compares your device against a small offline reference table of known models — nothing about your device is ever sent anywhere. Reported RAM/storage is normally somewhat below the marketed figure.</string>
 </resources>

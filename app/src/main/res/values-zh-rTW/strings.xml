@@ -303,4 +303,16 @@
     <string name="usb_bt_vendor_product_id">Vendor:Product ID</string>
     <string name="usb_bt_device_class">裝置類別</string>
     <string name="usb_bt_interface_count">介面數</string>
+    <string name="fleet_compare_pref_title">機型比對</string>
+    <string name="fleet_compare_pref_summary">根據此機型的已知規格檢查 RAM／儲存空間</string>
+    <string name="fleet_compare_title">機型比對</string>
+    <string name="fleet_compare_verdict_ok">符合已知規格</string>
+    <string name="fleet_compare_verdict_mismatch">低於預期規格</string>
+    <string name="fleet_compare_ram_label">RAM</string>
+    <string name="fleet_compare_storage_label">儲存空間</string>
+    <string name="fleet_compare_gb_value">%1$d GB</string>
+    <string name="fleet_compare_min_gb_value">最低 %1$d GB</string>
+    <string name="fleet_compare_no_match">目前尚無「%1$s」的參考資料。</string>
+    <string name="fleet_compare_supported_models">支援機型：Galaxy S22/S23/S24 Ultra、Pixel 6/7/8/9 Pro。</string>
+    <string name="fleet_compare_disclaimer">將您的裝置與內建的小型離線參考表（已知機型）比對——您的裝置資料不會傳送到任何地方。回報的 RAM／儲存空間通常會略低於宣傳數值。</string>
 </resources>

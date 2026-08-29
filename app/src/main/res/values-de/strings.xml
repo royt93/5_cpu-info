@@ -339,4 +339,16 @@
     <string name="usb_bt_vendor_product_id">Vendor:Product ID</string>
     <string name="usb_bt_device_class">Geräteklasse</string>
     <string name="usb_bt_interface_count">Schnittstellen</string>
+    <string name="fleet_compare_pref_title">Fleet-Vergleich</string>
+    <string name="fleet_compare_pref_summary">RAM/Speicher mit bekannten Spezifikationen dieses Modells vergleichen</string>
+    <string name="fleet_compare_title">Fleet-Vergleich</string>
+    <string name="fleet_compare_verdict_ok">Entspricht bekannten Spezifikationen</string>
+    <string name="fleet_compare_verdict_mismatch">Unter den erwarteten Spezifikationen</string>
+    <string name="fleet_compare_ram_label">RAM</string>
+    <string name="fleet_compare_storage_label">Speicher</string>
+    <string name="fleet_compare_gb_value">%1$d GB</string>
+    <string name="fleet_compare_min_gb_value">min. %1$d GB</string>
+    <string name="fleet_compare_no_match">Noch keine Referenzdaten für „%1$s“.</string>
+    <string name="fleet_compare_supported_models">Unterstützt: Galaxy S22/S23/S24 Ultra, Pixel 6/7/8/9 Pro.</string>
+    <string name="fleet_compare_disclaimer">Vergleicht dein Gerät mit einer kleinen, offline gespeicherten Referenztabelle bekannter Modelle — es werden keine Daten über dein Gerät irgendwohin gesendet. Gemeldeter RAM/Speicher liegt normalerweise etwas unter dem beworbenen Wert.</string>
 </resources>

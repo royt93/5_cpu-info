@@ -340,4 +340,16 @@
     <string name="usb_bt_vendor_product_id">Vendor:Product ID</string>
     <string name="usb_bt_device_class">Klasa urządzenia</string>
     <string name="usb_bt_interface_count">Interfejsy</string>
+    <string name="fleet_compare_pref_title">Porównanie z flotą</string>
+    <string name="fleet_compare_pref_summary">Sprawdź RAM/pamięć względem znanych specyfikacji tego modelu</string>
+    <string name="fleet_compare_title">Porównanie z flotą</string>
+    <string name="fleet_compare_verdict_ok">Zgodne ze znanymi specyfikacjami</string>
+    <string name="fleet_compare_verdict_mismatch">Poniżej oczekiwanych specyfikacji</string>
+    <string name="fleet_compare_ram_label">RAM</string>
+    <string name="fleet_compare_storage_label">Pamięć</string>
+    <string name="fleet_compare_gb_value">%1$d GB</string>
+    <string name="fleet_compare_min_gb_value">min. %1$d GB</string>
+    <string name="fleet_compare_no_match">Brak jeszcze danych referencyjnych dla „%1$s”.</string>
+    <string name="fleet_compare_supported_models">Obsługiwane: Galaxy S22/S23/S24 Ultra, Pixel 6/7/8/9 Pro.</string>
+    <string name="fleet_compare_disclaimer">Porównuje Twoje urządzenie z małą, offline\'ową tabelą referencyjną znanych modeli — żadne dane o Twoim urządzeniu nigdzie nie są wysyłane. Zgłaszana pamięć RAM/pamięć masowa jest zwykle nieco niższa niż podana wartość reklamowa.</string>
 </resources>

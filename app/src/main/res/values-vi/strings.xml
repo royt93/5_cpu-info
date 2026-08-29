@@ -356,4 +356,16 @@
     <string name="usb_bt_vendor_product_id">Vendor:Product ID</string>
     <string name="usb_bt_device_class">Loại thiết bị</string>
     <string name="usb_bt_interface_count">Số interface</string>
+    <string name="fleet_compare_pref_title">So sánh cùng dòng máy</string>
+    <string name="fleet_compare_pref_summary">Kiểm tra RAM/bộ nhớ so với thông số gốc của dòng máy này</string>
+    <string name="fleet_compare_title">So sánh cùng dòng máy</string>
+    <string name="fleet_compare_verdict_ok">Khớp thông số gốc</string>
+    <string name="fleet_compare_verdict_mismatch">Thấp hơn thông số kỳ vọng</string>
+    <string name="fleet_compare_ram_label">RAM</string>
+    <string name="fleet_compare_storage_label">Bộ nhớ</string>
+    <string name="fleet_compare_gb_value">%1$d GB</string>
+    <string name="fleet_compare_min_gb_value">tối thiểu %1$d GB</string>
+    <string name="fleet_compare_no_match">Chưa có dữ liệu tham chiếu cho \"%1$s\".</string>
+    <string name="fleet_compare_supported_models">Hỗ trợ: Galaxy S22/S23/S24 Ultra, Pixel 6/7/8/9 Pro.</string>
+    <string name="fleet_compare_disclaimer">So sánh máy của bạn với bảng tham chiếu offline nhỏ cho các dòng máy đã biết — không có dữ liệu nào của máy bạn được gửi đi. RAM/bộ nhớ thực tế thường thấp hơn thông số quảng cáo một chút.</string>
 </resources>
