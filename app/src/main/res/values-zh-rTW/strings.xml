@@ -213,4 +213,11 @@
     <string name="thermal_status_shutdown">已因過熱關機</string>
     <string name="thermal_status_unknown">未知</string>
     <string name="thermal_headroom_label">散熱餘裕（未來 10 秒）：%1$d%%</string>
+    <!--Device Truth Score (U01)-->
+    <string name="device_truth_fab_label">驗證裝置</string>
+    <string name="device_truth_title">裝置真偽檢測</string>
+    <string name="device_truth_verdict_ok">未發現異常 — 晶片識別資訊與裝置宣稱相符</string>
+    <string name="device_truth_verdict_mismatch">發現異常 — 詳見下方列表</string>
+    <string name="device_truth_disclaimer">僅供參考，並非官方認證。您可自行比對原始暫存器數值以進一步確認。</string>
+    <string name="device_truth_share_button">分享結果</string>
 </resources>

@@ -246,4 +246,11 @@
     <string name="streak_claim_button_double">Sledovat reklamu → získat 2 dny VIP</string>
     <string name="streak_claimed_toast">VIP uděleno — děkujeme za vaši věrnost!</string>
     <string name="streak_no_milestone_yet">Otevírejte aplikaci denně a získejte VIP zdarma.</string>
+    <!--Device Truth Score (U01)-->
+    <string name="device_truth_fab_label">Ověřit zařízení</string>
+    <string name="device_truth_title">Kontrola pravosti zařízení</string>
+    <string name="device_truth_verdict_ok">Žádný nesoulad nenalezen — identita čipu odpovídá deklarovaným údajům</string>
+    <string name="device_truth_verdict_mismatch">Nalezen nesoulad — podrobnosti viz řádek níže</string>
+    <string name="device_truth_disclaimer">Pouze orientační informace, nejde o oficiální certifikaci. Hrubé hodnoty registrů si můžete sami ověřit pro druhý názor.</string>
+    <string name="device_truth_share_button">Sdílet výsledek</string>
 </resources>

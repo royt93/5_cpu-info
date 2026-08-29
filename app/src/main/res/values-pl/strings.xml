@@ -250,4 +250,11 @@
     <string name="thermal_status_shutdown">Wyłączono z powodu przegrzania</string>
     <string name="thermal_status_unknown">Nieznany</string>
     <string name="thermal_headroom_label">Zapas termiczny (kolejne 10 s): %1$d%%</string>
+    <!--Device Truth Score (U01)-->
+    <string name="device_truth_fab_label">Zweryfikuj urządzenie</string>
+    <string name="device_truth_title">Weryfikacja autentyczności urządzenia</string>
+    <string name="device_truth_verdict_ok">Nie znaleziono niezgodności — tożsamość chipu zgadza się z deklaracją urządzenia</string>
+    <string name="device_truth_verdict_mismatch">Znaleziono niezgodność — szczegóły w wierszu poniżej</string>
+    <string name="device_truth_disclaimer">Informacje wyłącznie poglądowe, nie stanowią oficjalnej certyfikacji. Możesz samodzielnie porównać surowe wartości rejestrów dla drugiej opinii.</string>
+    <string name="device_truth_share_button">Udostępnij wynik</string>
 </resources>

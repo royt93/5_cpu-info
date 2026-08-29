@@ -282,4 +282,11 @@
     <string name="thermal_status_shutdown">Shutdown</string>
     <string name="thermal_status_unknown">Unknown</string>
     <string name="thermal_headroom_label">Thermal headroom (next 10s): %1$d%%</string>
+    <!--Device Truth Score (U01)-->
+    <string name="device_truth_fab_label">Verify device</string>
+    <string name="device_truth_title">Device authenticity check</string>
+    <string name="device_truth_verdict_ok">No mismatch found — chip identity matches what your device claims</string>
+    <string name="device_truth_verdict_mismatch">Mismatch found — see the row below for details</string>
+    <string name="device_truth_disclaimer">Reference info only, not an official certification. Compare the raw register values yourself for a second opinion.</string>
+    <string name="device_truth_share_button">Share result</string>
 </resources>

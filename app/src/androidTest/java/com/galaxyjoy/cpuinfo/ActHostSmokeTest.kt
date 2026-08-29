@@ -172,4 +172,23 @@ class ActHostSmokeTest {
             RecyclerViewActions.scrollTo<RecyclerView.ViewHolder>(hasDescendant(withText(label)))
         )
     }
+
+    @Test
+    fun deviceTruthFabOpensSheetWithEvidenceRows() {
+        // CPU is the default tab, no navigation needed.
+        onView(withId(R.id.menuHardware)).perform(click())
+        composeRule.waitForIdle()
+
+        // Regression guard for U01: proves the native JNI additions (vendor/uarch/MIDR + the
+        // signal-guarded MPIDR/REVIDR reads) don't crash on a real device and produce a rendered
+        // verdict + evidence list — not just that they compile.
+        onView(withId(R.id.fabDeviceTruth)).perform(click())
+        composeRule.waitForIdle()
+
+        composeRule.onNodeWithText(composeRule.activity.getString(R.string.device_truth_title)).assertExists()
+        composeRule.onNodeWithText("MIDR_EL1").assertExists()
+        composeRule.onNodeWithText("MPIDR_EL1").assertExists()
+        composeRule.onNodeWithText("REVIDR_EL1").assertExists()
+        composeRule.onNodeWithText(composeRule.activity.getString(R.string.device_truth_share_button)).assertExists()
+    }
 }

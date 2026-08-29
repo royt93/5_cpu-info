@@ -4,8 +4,9 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import com.galaxyjoy.cpuinfo.R
-import com.galaxyjoy.cpuinfo.databinding.FrmRecyclerViewBinding
+import com.galaxyjoy.cpuinfo.databinding.FrmCpuInfoBinding
 import com.galaxyjoy.cpuinfo.feat.infor.base.BaseFrm
+import com.galaxyjoy.cpuinfo.feat.truth.DeviceTruthBottomSheet
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -14,7 +15,7 @@ import dagger.hilt.android.AndroidEntryPoint
  * @author galaxyjoy
  */
 @AndroidEntryPoint
-class FrmCpuInfo : BaseFrm<FrmRecyclerViewBinding>(R.layout.frm_recycler_view) {
+class FrmCpuInfo : BaseFrm<FrmCpuInfoBinding>(R.layout.frm_cpu_info) {
 
     private val viewModel: ViewModelCpuInfo by viewModels()
 
@@ -24,5 +25,9 @@ class FrmCpuInfo : BaseFrm<FrmRecyclerViewBinding>(R.layout.frm_recycler_view) {
         val controller = CpuInfoEpoxyController(requireContext())
         binding.rv.adapter = controller.adapter
         viewModel.viewState.observe(viewLifecycleOwner) { controller.setData(it) }
+
+        binding.fabDeviceTruth.setOnClickListener {
+            DeviceTruthBottomSheet().show(childFragmentManager, DeviceTruthBottomSheet.TAG)
+        }
     }
 }

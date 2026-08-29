@@ -249,4 +249,11 @@
     <string name="streak_claim_button_double">Anzeige ansehen → 2 Tage VIP erhalten</string>
     <string name="streak_claimed_toast">VIP gewährt — danke fürs tägliche Vorbeischauen!</string>
     <string name="streak_no_milestone_yet">Öffne die App täglich, um kostenlose VIP-Zeit zu verdienen.</string>
+    <!--Device Truth Score (U01)-->
+    <string name="device_truth_fab_label">Gerät prüfen</string>
+    <string name="device_truth_title">Geräte-Echtheitsprüfung</string>
+    <string name="device_truth_verdict_ok">Keine Abweichung gefunden — Chip-Identität stimmt mit den Angaben überein</string>
+    <string name="device_truth_verdict_mismatch">Abweichung gefunden — Details siehe Zeile unten</string>
+    <string name="device_truth_disclaimer">Nur zur Orientierung, keine offizielle Zertifizierung. Vergleiche die rohen Registerwerte selbst für eine zweite Meinung.</string>
+    <string name="device_truth_share_button">Ergebnis teilen</string>
 </resources>

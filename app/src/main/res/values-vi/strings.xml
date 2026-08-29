@@ -266,4 +266,11 @@
     <string name="throttle_share_button">Chia sẻ kết quả</string>
     <string name="throttle_done_button">Xong</string>
     <string name="throttle_share_text">Throttling Fingerprint — CPU Info\nXung đỉnh: %1$d MHz\nXung ổn định: %2$d MHz\nĐộ tụt: %3$d%%\nNhiệt độ tối đa: %4$d°C</string>
+    <!--Device Truth Score (U01)-->
+    <string name="device_truth_fab_label">Kiểm tra thiết bị</string>
+    <string name="device_truth_title">Kiểm tra tính xác thực thiết bị</string>
+    <string name="device_truth_verdict_ok">Không phát hiện bất thường — thông tin chip khớp với khai báo của máy</string>
+    <string name="device_truth_verdict_mismatch">Phát hiện điểm bất thường — xem chi tiết dòng bên dưới</string>
+    <string name="device_truth_disclaimer">Chỉ mang tính tham khảo, không phải xác nhận chính thức. Bạn có thể tự đối chiếu giá trị thanh ghi thô để kiểm tra thêm.</string>
+    <string name="device_truth_share_button">Chia sẻ kết quả</string>
 </resources>
