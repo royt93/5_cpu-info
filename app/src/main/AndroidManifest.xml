@@ -132,6 +132,28 @@
             </intent-filter>
         </service>
 
+        <service
+            android:name=".feat.batterytile.ServiceBatteryTile"
+            android:exported="true"
+            android:icon="@drawable/ic_battery_high"
+            android:label="Battery"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".feat.networktile.ServiceNetworkTile"
+            android:exported="true"
+            android:icon="@drawable/ic_network_on"
+            android:label="Network"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
     </application>
 
 </manifest>
