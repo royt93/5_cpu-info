@@ -7,7 +7,10 @@ import android.content.IntentFilter
 import android.os.Handler
 import android.os.Looper
 import androidx.fragment.app.viewModels
+import com.galaxyjoy.cpuinfo.R
+import com.galaxyjoy.cpuinfo.domain.model.StorageData
 import com.galaxyjoy.cpuinfo.feat.infor.base.BaseRvFragment
+import com.galaxyjoy.cpuinfo.util.lifecycle.ListLiveData
 import com.galaxyjoy.cpuinfo.util.lifecycle.ListLiveDataObserver
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -26,6 +29,8 @@ class FrmStorageInfo : BaseRvFragment() {
     }
 
     private val viewModel: StorageInfoViewModel by viewModels()
+
+    private val displayItems = ListLiveData<StorageItem>()
 
     override fun onResume() {
         super.onResume()
@@ -59,11 +64,28 @@ class FrmStorageInfo : BaseRvFragment() {
     }
 
     override fun setupRecyclerViewAdapter() {
-        val adtStorage = AdtStorage(viewModel.listLiveData)
-        viewModel.listLiveData.listStatusChangeNotificator.observe(
+        val adtStorage = AdtStorage(displayItems)
+        displayItems.listStatusChangeNotificator.observe(
             viewLifecycleOwner,
             ListLiveDataObserver(adtStorage)
         )
+        viewModel.viewState.observe(viewLifecycleOwner) { state ->
+            displayItems.replace(toDisplayItems(state.storageData))
+        }
         recyclerView.adapter = adtStorage
+    }
+
+    private fun toDisplayItems(data: StorageData): List<StorageItem> {
+        val items = mutableListOf<StorageItem>()
+        items.add(
+            StorageItem(getString(R.string.internal), R.drawable.ic_root, data.internal.totalBytes, data.internal.usedBytes)
+        )
+        data.external?.let {
+            items.add(StorageItem(getString(R.string.external), R.drawable.ic_folder, it.totalBytes, it.usedBytes))
+        }
+        data.sdCard?.let {
+            items.add(StorageItem(getString(R.string.external), R.drawable.ic_sdcard, it.totalBytes, it.usedBytes))
+        }
+        return items
     }
 }
