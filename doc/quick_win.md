@@ -17,16 +17,23 @@
 | 3 | #7 | Display detail & refresh rate | 0.5d | ✅ Implemented — `feat/infor/screen/VMScreenInfo.kt` (HDR, refresh rate, wide color gamut) |
 | 4 | #6 | Camera capabilities | 0.5d | ✅ Implemented — `feat/infor/camera/` |
 | 5 | #9 | Export hardware report | 0.5d | ✅ Implemented — `util/SystemInfoExporter.kt` (JSON/Text via `ACTION_SEND`) |
-| 6 | #5 | Network info screen | 1d | 📋 Picked — genuinely not started, no `feat/infor/network/` package exists |
+| 6 | #5 | Network info screen | 1d | ✅ Implemented (2026-08-30, Sprint 15) — `feat/infor/network/` |
 | 7 | #4 | Battery health & analytics | 1d | 🟡 Partial — health status enum + basic battery fields already in `feat/infor/hardware/VMHardwareInfo.kt`; cycle count / charging-speed graph / dedicated tab not done |
-| 8 | #1 | Floating system monitor overlay | 3–4d | 📋 Picked — genuinely not started, no `SYSTEM_ALERT_WINDOW`/overlay code anywhere |
+| 8 | #1 | Floating system monitor overlay | 3–4d | ❌ Skipped (2026-08-30, user decision) — see rationale below |
 
-> **2026-08-29 status sweep**: this doc predates the F/U-coded feature sprints (Sprint 3–14: VIP streak, Device Truth Score, Cluster Topology, Throttle Fingerprint, thermal status, AI Readiness, Hardware Snapshot, Sensor Test Suite, App Permission Inventory, Vulkan/GLES Detail, USB/BT Inspector, Fleet Compare — see git log). Verified against current codebase rather than assumed; #5 and #1 are the only items from this doc's original bundle still genuinely open.
+> **2026-08-29 status sweep**: this doc predates the F/U-coded feature sprints (Sprint 3–14: VIP streak, Device Truth Score, Cluster Topology, Throttle Fingerprint, thermal status, AI Readiness, Hardware Snapshot, Sensor Test Suite, App Permission Inventory, Vulkan/GLES Detail, USB/BT Inspector, Fleet Compare — see git log). Verified against current codebase rather than assumed; #5 and #1 were the only items from this doc's original bundle still genuinely open at that point.
 
 **Skipped**: #2 Widget v2 (Android O+), #3 CPU stress test / benchmark.
 
+**❌ #1 Floating overlay — skipped, 2026-08-30**: no code was written for this item (research/exploration only, via read-only `grep`/`find` — nothing to revert). Reason: this app is a live, published Play Store app (per root `CLAUDE.md`). The feature needs two "special" surfaces Play Store reviews strictly —
+> - `SYSTEM_ALERT_WINDOW` ("draw over other apps"), and
+> - a foreground service that (from Android 14/API 34) must declare `foregroundServiceType="specialUse"` with a `PROPERTY_SPECIAL_USE_FGS_SUBTYPE` justification in the manifest, which Play Console then requires a written justification for at submission time.
+>
+> Presented this tradeoff to the user (build-and-accept-review-risk vs. skip) — user chose to skip rather than take on Play Console review/rejection risk for a differentiator feature. Revisit if the product decides the signature-feature value is worth that review overhead; the tech plan below is still valid, just not started.
+
 **Đợt 3a hoàn tất** (#10 + #8 + #7 + #6 + #9) — đã ship, không rõ commit nào cụ thể (không track riêng lúc đó), xác nhận qua code hiện tại.
-**Còn lại**: #5 (Network info, 1d, cần permission consent flow) và #1 (Floating overlay, 3-4d, signature feature rủi ro cao nhất).
+**#5 hoàn tất** (Sprint 15, 2026-08-30) — Network Info tab, permission consent flow đầu tiên của app.
+**Còn lại thật sự mở**: #4 (Battery health, partial → có thể mở rộng), #1 (đã skip, xem lý do trên).
 
 ---
 
