@@ -1,67 +1,58 @@
 package com.galaxyjoy.cpuinfo.feat.temp
 
-import android.content.res.Resources
-import androidx.annotation.VisibleForTesting
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.galaxyjoy.cpuinfo.R
-import com.galaxyjoy.cpuinfo.feat.temp.list.TemperatureItem
+import androidx.lifecycle.viewModelScope
+import com.galaxyjoy.cpuinfo.domain.model.TemperatureData
+import com.galaxyjoy.cpuinfo.domain.observable.ObservableTemperatureData
+import com.galaxyjoy.cpuinfo.domain.observe
 import com.galaxyjoy.cpuinfo.util.NonNullMutableLiveData
-import com.galaxyjoy.cpuinfo.util.Prefs
-import com.galaxyjoy.cpuinfo.util.lifecycle.ListLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.disposables.Disposable
-import io.reactivex.rxjava3.schedulers.Schedulers
-import timber.log.Timber
-import java.util.concurrent.TimeUnit
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.coroutines.coroutineContext
-import android.content.Context
-import android.os.Build
-import android.util.Log
-import java.io.File
 
 /**
  * ViewModel for [FrmTemperature]
- *
  */
 @HiltViewModel
 class TemperatureVM @Inject constructor(
-    private val prefs: Prefs,
-    private val resources: Resources,
-    private val temperatureIconProvider: TemperatureIconProvider,
-    private val temperatureProvider: TemperatureProvider
+    private val observableTemperatureData: ObservableTemperatureData,
 ) : ViewModel() {
 
-    companion object {
-        private const val CPU_TEMP_RESULT_KEY = "temp_result_key"
-    }
-
-    // Binding fields
+    // Bound directly in frm_temperature.xml
     val isLoading = NonNullMutableLiveData(false)
     val isError = NonNullMutableLiveData(false)
 
-    val temperatureListLiveData = ListLiveData<TemperatureItem>()
+    val temperatureData = MutableLiveData<TemperatureData.Available>()
 
-    private var temperatureDisposable: Disposable? = null
-    private var refreshingDisposable: Disposable? = null
-    private var cpuTemperatureResult: TemperatureProvider.CpuTemperatureResult? = null
-    private var isBatteryTemperatureAvailable = false
+    private var refreshingJob: Job? = null
 
     /**
      * Start temperature getting process. It also validates all temperatures availability.
      */
     fun startTemperatureRefreshing() {
-        Timber.i("startTemperatureRefreshing()")
-        if (prefs.contains(CPU_TEMP_RESULT_KEY)) {
-            cpuTemperatureResult = prefs.get(
-                CPU_TEMP_RESULT_KEY,
-                TemperatureProvider.CpuTemperatureResult()
-            )
-            verifyTemperaturesAvailability()
-        } else {
-            temperatureDisposable = getCpuAvailabilityTest()
+        refreshingJob?.cancel()
+        refreshingJob = viewModelScope.launch {
+            observableTemperatureData.observe().collect { state ->
+                when (state) {
+                    TemperatureData.Probing -> {
+                        isLoading.value = true
+                        isError.value = false
+                    }
+
+                    is TemperatureData.Available -> {
+                        isLoading.value = false
+                        isError.value = false
+                        temperatureData.value = state
+                    }
+
+                    TemperatureData.Unavailable -> {
+                        isLoading.value = false
+                        isError.value = true
+                    }
+                }
+            }
         }
     }
 
@@ -69,108 +60,6 @@ class TemperatureVM @Inject constructor(
      * Stop temperature getting process
      */
     fun stopTemperatureRefreshing() {
-        Timber.i("stopTemperatureRefreshing()")
-        refreshingDisposable?.dispose()
+        refreshingJob?.cancel()
     }
-
-    /**
-     * Try to find path with CPU temperature. If success try validate temperatures and schedule
-     * refreshing process.
-     */
-    private fun getCpuAvailabilityTest(): Disposable {
-        return temperatureProvider.getCpuTemperatureFinder()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe {
-                isLoading.value = true
-                isError.value = false
-            }
-            .doFinally {
-                isLoading.value = false
-                verifyTemperaturesAvailability()
-            }
-            .subscribe({ temperatureResult ->
-                prefs.insert(CPU_TEMP_RESULT_KEY, temperatureResult)
-                cpuTemperatureResult = temperatureResult
-            }, Timber::e, { Timber.i("List scan complete") })
-    }
-
-    /**
-     * Verify which temperatures are available and schedule refreshing. If we don't have any
-     * temperature info set isError flag to true
-     */
-    private fun verifyTemperaturesAvailability() {
-        if (!isBatteryTemperatureAvailable) {
-            val batteryTemp = temperatureProvider.getBatteryTemperature()
-            if (batteryTemp != 0) {
-                isBatteryTemperatureAvailable = true
-            }
-        }
-
-        if (isBatteryTemperatureAvailable || cpuTemperatureResult != null) {
-            scheduleRefreshing()
-        } else {
-            isError.value = true
-        }
-    }
-
-    /**
-     * Schedule refreshing process (for 3s)
-     */
-    private fun scheduleRefreshing() {
-        refreshingDisposable?.dispose()
-        refreshingDisposable = getRefreshingInvoker()
-            .map {
-                var batteryTemp: Int? = null
-                if (isBatteryTemperatureAvailable) {
-                    batteryTemp = temperatureProvider.getBatteryTemperature()
-                }
-                var cpuTemp: Float? = null
-                if (cpuTemperatureResult != null) {
-                    cpuTemp = temperatureProvider.getCpuTemp(cpuTemperatureResult!!.filePath)
-                }
-                TempContainer(cpuTemp, batteryTemp)
-            }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ (cpuTemp, batteryTemp) ->
-                val temporaryTempList = ArrayList<TemperatureItem>()
-//                Log.d("roy93~", "cpuTemp ${cpuTemp}")
-                temporaryTempList.add(
-                    TemperatureItem(
-                        iconRes = temperatureIconProvider.getIcon(
-                            TemperatureIconProvider.Type.CPU
-                        ),
-                        name = resources.getString(R.string.cpu),
-                        temperature = cpuTemp
-                    )
-                )
-                temporaryTempList.add(
-                    TemperatureItem(
-                        iconRes = temperatureIconProvider.getIcon(
-                            TemperatureIconProvider.Type.BATTERY
-                        ),
-                        name = resources.getString(R.string.battery),
-                        temperature = batteryTemp?.toFloat()
-                    )
-                )
-                temperatureListLiveData.replace(temporaryTempList)
-            }, Timber::e)
-    }
-
-    /**
-     * Return refreshing invoker
-     */
-    @VisibleForTesting(otherwise = VisibleForTesting.PACKAGE_PRIVATE)
-    internal fun getRefreshingInvoker(): Observable<Long> =
-        Observable.interval(0, 3, TimeUnit.SECONDS)
-
-    override fun onCleared() {
-        super.onCleared()
-        Timber.i("onCleared()")
-        temperatureDisposable?.dispose()
-        refreshingDisposable?.dispose()
-    }
-
-    private data class TempContainer(val cpuTemp: Float?, val batteryTemp: Int?)
 }

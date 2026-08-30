@@ -7,8 +7,7 @@ import com.galaxyjoy.cpuinfo.databinding.ViItemTemperatureBinding
 import com.galaxyjoy.cpuinfo.feat.temp.TemperatureFormatter
 
 /**
- * Temperature list adapter which observe temperatureListLiveData
- *
+ * Temperature list adapter, fed a fresh list on each change notification from its caller.
  */
 class AdtTemperature(
     private val temperatureFormatter: TemperatureFormatter,
