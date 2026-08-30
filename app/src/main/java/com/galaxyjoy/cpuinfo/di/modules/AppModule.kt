@@ -14,7 +14,9 @@ import android.hardware.SensorManager
 import android.hardware.camera2.CameraManager
 import android.hardware.display.DisplayManager
 import android.hardware.usb.UsbManager
+import android.net.ConnectivityManager
 import android.net.wifi.WifiManager
+import android.telephony.TelephonyManager
 import android.os.storage.StorageManager
 import android.view.WindowManager
 import androidx.datastore.core.DataStore
@@ -87,6 +89,16 @@ class AppModule {
     @Singleton
     fun provideBluetoothManager(@ApplicationContext appContext: Context): BluetoothManager =
         appContext.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
+
+    @Provides
+    @Singleton
+    fun provideConnectivityManager(@ApplicationContext appContext: Context): ConnectivityManager =
+        appContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+    @Provides
+    @Singleton
+    fun provideTelephonyManager(@ApplicationContext appContext: Context): TelephonyManager =
+        appContext.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
 
     @Provides
     @Singleton

@@ -18,6 +18,7 @@
     <string name="sensors">Sensors</string>
     <string name="drm" translatable="false">DRM</string>
     <string name="media">Media</string>
+    <string name="network">Network</string>
     <string name="export_format_title">Export format</string>
     <string name="export_as_text">Plain text</string>
     <string name="export_as_json" translatable="false">JSON</string>
@@ -384,4 +385,29 @@
     <string name="fleet_compare_no_match">No reference data for \"%1$s\" yet.</string>
     <string name="fleet_compare_supported_models">Supported: Galaxy S22/S23/S24 Ultra, Pixel 6/7/8/9 Pro.</string>
     <string name="fleet_compare_disclaimer">Compares your device against a small offline reference table of known models — nothing about your device is ever sent anywhere. Reported RAM/storage is normally somewhat below the marketed figure.</string>
+    <string name="network_wifi_section">Wi-Fi</string>
+    <string name="network_status">Status</string>
+    <string name="network_disconnected">Not connected</string>
+    <string name="network_connected">Connected</string>
+    <string name="network_ssid">Network Name (SSID)</string>
+    <string name="network_bssid">Access Point (BSSID)</string>
+    <string name="network_ip_address">IP Address</string>
+    <string name="network_gateway">Gateway</string>
+    <string name="network_dns">DNS Servers</string>
+    <string name="network_signal_strength">Signal Strength</string>
+    <string name="network_link_speed">Link Speed</string>
+    <string name="network_mbps_value">%1$d Mbps</string>
+    <string name="network_band">Band</string>
+    <string name="network_mobile_section">Mobile</string>
+    <string name="network_carrier">Carrier</string>
+    <string name="network_vpn_section">VPN</string>
+    <string name="network_active">Active</string>
+    <string name="network_inactive">Inactive</string>
+    <string name="network_permission_rationale">Grant Wi-Fi access to see your network name and access point address.</string>
+    <string name="network_grant_permission_button">Grant Access</string>
+    <string name="network_open_settings_button">Open Settings</string>
+    <string name="network_signal_excellent">Excellent</string>
+    <string name="network_signal_good">Good</string>
+    <string name="network_signal_fair">Fair</string>
+    <string name="network_signal_poor">Poor</string>
 </resources>

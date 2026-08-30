@@ -10,6 +10,7 @@ import com.galaxyjoy.cpuinfo.feat.infor.drm.FrmDrmInfo
 import com.galaxyjoy.cpuinfo.feat.infor.gpu.FrmGpuInfo
 import com.galaxyjoy.cpuinfo.feat.infor.hardware.FrmHardwareInfo
 import com.galaxyjoy.cpuinfo.feat.infor.media.FrmMediaInfo
+import com.galaxyjoy.cpuinfo.feat.infor.network.FrmNetworkInfo
 import com.galaxyjoy.cpuinfo.feat.infor.ram.FrmRamInfo
 import com.galaxyjoy.cpuinfo.feat.infor.screen.FrmScreenInfo
 import com.galaxyjoy.cpuinfo.feat.infor.sensor.FrmSensorsInfo
@@ -35,6 +36,7 @@ class AdtInfoContainerState(fragment: Fragment) : FragmentStateAdapter(fragment)
             MEDIA_POS -> FrmMediaInfo()
             CAMERA_POS -> FrmCameraInfo()
             THROTTLE_POS -> FrmThrottle()
+            NETWORK_POS -> FrmNetworkInfo()
             else -> throw IllegalArgumentException("Unknown position for ViewPager2")
         }
 
@@ -53,6 +55,7 @@ class AdtInfoContainerState(fragment: Fragment) : FragmentStateAdapter(fragment)
         MEDIA_POS -> R.string.media
         CAMERA_POS -> R.string.camera
         THROTTLE_POS -> R.string.throttle
+        NETWORK_POS -> R.string.network
         else -> throw IllegalArgumentException("Unknown position for ViewPager2")
     }
 
@@ -69,7 +72,8 @@ class AdtInfoContainerState(fragment: Fragment) : FragmentStateAdapter(fragment)
         private const val MEDIA_POS = 9
         private const val CAMERA_POS = 10
         private const val THROTTLE_POS = 11
+        private const val NETWORK_POS = 12
 
-        private const val INFO_PAGE_AMOUNT = 12
+        private const val INFO_PAGE_AMOUNT = 13
     }
 }

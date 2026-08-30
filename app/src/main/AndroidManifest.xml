@@ -20,6 +20,17 @@
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="28"
         tools:ignore="ScopedStorage" />
+    <!-- Network Info tab: Wi-Fi SSID/BSSID are only readable with a location-adjacent runtime
+         permission. Pre-API33 that's ACCESS_FINE_LOCATION; API33+ prefers NEARBY_WIFI_DEVICES
+         with neverForLocation, which grants the same SSID/BSSID access without implying the app
+         derives physical location from it (it doesn't). -->
+    <uses-permission
+        android:name="android.permission.ACCESS_FINE_LOCATION"
+        android:maxSdkVersion="32" />
+    <uses-permission
+        android:name="android.permission.NEARBY_WIFI_DEVICES"
+        android:usesPermissionFlags="neverForLocation"
+        tools:targetApi="33" />
     <!--    <uses-permission-->
     <!--        android:name="android.permission.QUERY_ALL_PACKAGES"-->
     <!--        tools:ignore="QueryAllPackagesPermission" />-->

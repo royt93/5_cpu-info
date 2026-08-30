@@ -59,6 +59,7 @@
     <string name="display_cutout_rects">%1$d Rechteck(e)</string>
     <string name="action_gc">Garbage Collector</string>
     <string name="media">Medien</string>
+    <string name="network">Netzwerk</string>
     <string name="cpu_soc_name">SoC-Name</string>
     <string name="cpu_cores">Kerne</string>
     <string name="cpu_frequency_stopped">Kern %1$d: Gestoppt</string>
@@ -351,4 +352,29 @@
     <string name="fleet_compare_no_match">Noch keine Referenzdaten für „%1$s“.</string>
     <string name="fleet_compare_supported_models">Unterstützt: Galaxy S22/S23/S24 Ultra, Pixel 6/7/8/9 Pro.</string>
     <string name="fleet_compare_disclaimer">Vergleicht dein Gerät mit einer kleinen, offline gespeicherten Referenztabelle bekannter Modelle — es werden keine Daten über dein Gerät irgendwohin gesendet. Gemeldeter RAM/Speicher liegt normalerweise etwas unter dem beworbenen Wert.</string>
+    <string name="network_wifi_section">WLAN</string>
+    <string name="network_status">Status</string>
+    <string name="network_disconnected">Nicht verbunden</string>
+    <string name="network_connected">Verbunden</string>
+    <string name="network_ssid">Netzwerkname (SSID)</string>
+    <string name="network_bssid">Zugangspunkt (BSSID)</string>
+    <string name="network_ip_address">IP-Adresse</string>
+    <string name="network_gateway">Gateway</string>
+    <string name="network_dns">DNS-Server</string>
+    <string name="network_signal_strength">Signalstärke</string>
+    <string name="network_link_speed">Verbindungsgeschwindigkeit</string>
+    <string name="network_mbps_value">%1$d Mbit/s</string>
+    <string name="network_band">Band</string>
+    <string name="network_mobile_section">Mobilfunk</string>
+    <string name="network_carrier">Anbieter</string>
+    <string name="network_vpn_section">VPN</string>
+    <string name="network_active">Aktiv</string>
+    <string name="network_inactive">Inaktiv</string>
+    <string name="network_permission_rationale">Gewähre WLAN-Zugriff, um Netzwerkname und Zugangspunkt-Adresse zu sehen.</string>
+    <string name="network_grant_permission_button">Zugriff gewähren</string>
+    <string name="network_open_settings_button">Einstellungen öffnen</string>
+    <string name="network_signal_excellent">Ausgezeichnet</string>
+    <string name="network_signal_good">Gut</string>
+    <string name="network_signal_fair">Mittel</string>
+    <string name="network_signal_poor">Schwach</string>
 </resources>

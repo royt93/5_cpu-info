@@ -17,6 +17,7 @@
     <string name="hardware">Phần cứng</string>
     <string name="sensors">Cảm biến</string>
     <string name="media">Đa phương tiện</string>
+    <string name="network">Mạng</string>
     <string name="export_format_title">Định dạng xuất</string>
     <string name="export_as_text">Văn bản thuần</string>
     <string name="language">Ngôn ngữ</string>
@@ -368,4 +369,29 @@
     <string name="fleet_compare_no_match">Chưa có dữ liệu tham chiếu cho \"%1$s\".</string>
     <string name="fleet_compare_supported_models">Hỗ trợ: Galaxy S22/S23/S24 Ultra, Pixel 6/7/8/9 Pro.</string>
     <string name="fleet_compare_disclaimer">So sánh máy của bạn với bảng tham chiếu offline nhỏ cho các dòng máy đã biết — không có dữ liệu nào của máy bạn được gửi đi. RAM/bộ nhớ thực tế thường thấp hơn thông số quảng cáo một chút.</string>
+    <string name="network_wifi_section">Wi-Fi</string>
+    <string name="network_status">Trạng thái</string>
+    <string name="network_disconnected">Chưa kết nối</string>
+    <string name="network_connected">Đã kết nối</string>
+    <string name="network_ssid">Tên mạng (SSID)</string>
+    <string name="network_bssid">Điểm truy cập (BSSID)</string>
+    <string name="network_ip_address">Địa chỉ IP</string>
+    <string name="network_gateway">Gateway</string>
+    <string name="network_dns">Máy chủ DNS</string>
+    <string name="network_signal_strength">Cường độ tín hiệu</string>
+    <string name="network_link_speed">Tốc độ kết nối</string>
+    <string name="network_mbps_value">%1$d Mbps</string>
+    <string name="network_band">Băng tần</string>
+    <string name="network_mobile_section">Di động</string>
+    <string name="network_carrier">Nhà mạng</string>
+    <string name="network_vpn_section">VPN</string>
+    <string name="network_active">Đang bật</string>
+    <string name="network_inactive">Không hoạt động</string>
+    <string name="network_permission_rationale">Cấp quyền truy cập Wi-Fi để xem tên mạng và địa chỉ điểm truy cập.</string>
+    <string name="network_grant_permission_button">Cấp quyền</string>
+    <string name="network_open_settings_button">Mở Cài đặt</string>
+    <string name="network_signal_excellent">Rất tốt</string>
+    <string name="network_signal_good">Tốt</string>
+    <string name="network_signal_fair">Trung bình</string>
+    <string name="network_signal_poor">Yếu</string>
 </resources>

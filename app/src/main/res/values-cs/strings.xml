@@ -59,6 +59,7 @@
     <string name="display_cutout_rects">%1$d obdélníků</string>
     <string name="action_gc">Sběrač odpadu</string>
     <string name="media">Média</string>
+    <string name="network">Síť</string>
     <string name="cpu_soc_name">Název SoC</string>
     <string name="cpu_cores">Jádra</string>
     <string name="cpu_frequency_stopped">Jádro %1$d: Zastaveno</string>
@@ -348,4 +349,29 @@
     <string name="fleet_compare_no_match">Zatím nejsou k dispozici referenční data pro „%1$s“.</string>
     <string name="fleet_compare_supported_models">Podporováno: Galaxy S22/S23/S24 Ultra, Pixel 6/7/8/9 Pro.</string>
     <string name="fleet_compare_disclaimer">Porovnává vaše zařízení s malou offline referenční tabulkou známých modelů — žádná data o vašem zařízení se nikam neodesílají. Hlášená RAM/úložiště je obvykle o něco nižší než uváděná hodnota.</string>
+    <string name="network_wifi_section">Wi-Fi</string>
+    <string name="network_status">Stav</string>
+    <string name="network_disconnected">Nepřipojeno</string>
+    <string name="network_connected">Připojeno</string>
+    <string name="network_ssid">Název sítě (SSID)</string>
+    <string name="network_bssid">Přístupový bod (BSSID)</string>
+    <string name="network_ip_address">IP adresa</string>
+    <string name="network_gateway">Brána</string>
+    <string name="network_dns">DNS servery</string>
+    <string name="network_signal_strength">Síla signálu</string>
+    <string name="network_link_speed">Rychlost připojení</string>
+    <string name="network_mbps_value">%1$d Mb/s</string>
+    <string name="network_band">Pásmo</string>
+    <string name="network_mobile_section">Mobilní síť</string>
+    <string name="network_carrier">Operátor</string>
+    <string name="network_vpn_section">VPN</string>
+    <string name="network_active">Aktivní</string>
+    <string name="network_inactive">Neaktivní</string>
+    <string name="network_permission_rationale">Udělte přístup k Wi-Fi, abyste viděli název sítě a adresu přístupového bodu.</string>
+    <string name="network_grant_permission_button">Udělit přístup</string>
+    <string name="network_open_settings_button">Otevřít nastavení</string>
+    <string name="network_signal_excellent">Vynikající</string>
+    <string name="network_signal_good">Dobrý</string>
+    <string name="network_signal_fair">Průměrný</string>
+    <string name="network_signal_poor">Slabý</string>
 </resources>

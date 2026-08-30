@@ -59,6 +59,7 @@
     <string name="display_cutout_rects">%1$d obszarów</string>
     <string name="action_gc">Garbage collector</string>
     <string name="media">Multimedia</string>
+    <string name="network">Sieć</string>
     <string name="cpu_soc_name">Nazwa SoC</string>
     <string name="cpu_cores">Rdzenie</string>
     <string name="cpu_frequency_stopped">Rdzeń %1$d: Zatrzymany</string>
@@ -352,4 +353,29 @@
     <string name="fleet_compare_no_match">Brak jeszcze danych referencyjnych dla „%1$s”.</string>
     <string name="fleet_compare_supported_models">Obsługiwane: Galaxy S22/S23/S24 Ultra, Pixel 6/7/8/9 Pro.</string>
     <string name="fleet_compare_disclaimer">Porównuje Twoje urządzenie z małą, offline\'ową tabelą referencyjną znanych modeli — żadne dane o Twoim urządzeniu nigdzie nie są wysyłane. Zgłaszana pamięć RAM/pamięć masowa jest zwykle nieco niższa niż podana wartość reklamowa.</string>
+    <string name="network_wifi_section">Wi-Fi</string>
+    <string name="network_status">Stan</string>
+    <string name="network_disconnected">Niepołączono</string>
+    <string name="network_connected">Połączono</string>
+    <string name="network_ssid">Nazwa sieci (SSID)</string>
+    <string name="network_bssid">Punkt dostępu (BSSID)</string>
+    <string name="network_ip_address">Adres IP</string>
+    <string name="network_gateway">Brama</string>
+    <string name="network_dns">Serwery DNS</string>
+    <string name="network_signal_strength">Siła sygnału</string>
+    <string name="network_link_speed">Prędkość połączenia</string>
+    <string name="network_mbps_value">%1$d Mb/s</string>
+    <string name="network_band">Pasmo</string>
+    <string name="network_mobile_section">Sieć komórkowa</string>
+    <string name="network_carrier">Operator</string>
+    <string name="network_vpn_section">VPN</string>
+    <string name="network_active">Aktywne</string>
+    <string name="network_inactive">Nieaktywne</string>
+    <string name="network_permission_rationale">Przyznaj dostęp do Wi-Fi, aby zobaczyć nazwę sieci i adres punktu dostępu.</string>
+    <string name="network_grant_permission_button">Przyznaj dostęp</string>
+    <string name="network_open_settings_button">Otwórz ustawienia</string>
+    <string name="network_signal_excellent">Doskonały</string>
+    <string name="network_signal_good">Dobry</string>
+    <string name="network_signal_fair">Przeciętny</string>
+    <string name="network_signal_poor">Słaby</string>
 </resources>

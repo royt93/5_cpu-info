@@ -61,6 +61,7 @@
     <string name="display_cutout_rects">%1$d 個區域</string>
     <string name="action_gc">垃圾回收</string>
     <string name="media">媒體</string>
+    <string name="network">網路</string>
     <string name="cpu_soc_name">SoC 名稱</string>
     <string name="cpu_cores">核心數</string>
     <string name="cpu_frequency_stopped">核心 %1$d: 已停止</string>
@@ -315,4 +316,29 @@
     <string name="fleet_compare_no_match">目前尚無「%1$s」的參考資料。</string>
     <string name="fleet_compare_supported_models">支援機型：Galaxy S22/S23/S24 Ultra、Pixel 6/7/8/9 Pro。</string>
     <string name="fleet_compare_disclaimer">將您的裝置與內建的小型離線參考表（已知機型）比對——您的裝置資料不會傳送到任何地方。回報的 RAM／儲存空間通常會略低於宣傳數值。</string>
+    <string name="network_wifi_section">Wi-Fi</string>
+    <string name="network_status">狀態</string>
+    <string name="network_disconnected">未連線</string>
+    <string name="network_connected">已連線</string>
+    <string name="network_ssid">網路名稱（SSID）</string>
+    <string name="network_bssid">存取點（BSSID）</string>
+    <string name="network_ip_address">IP 位址</string>
+    <string name="network_gateway">閘道</string>
+    <string name="network_dns">DNS 伺服器</string>
+    <string name="network_signal_strength">訊號強度</string>
+    <string name="network_link_speed">連線速度</string>
+    <string name="network_mbps_value">%1$d Mbps</string>
+    <string name="network_band">頻段</string>
+    <string name="network_mobile_section">行動網路</string>
+    <string name="network_carrier">電信業者</string>
+    <string name="network_vpn_section">VPN</string>
+    <string name="network_active">已啟用</string>
+    <string name="network_inactive">未啟用</string>
+    <string name="network_permission_rationale">授予 Wi-Fi 存取權限，以查看網路名稱與存取點位址。</string>
+    <string name="network_grant_permission_button">授予權限</string>
+    <string name="network_open_settings_button">開啟設定</string>
+    <string name="network_signal_excellent">極佳</string>
+    <string name="network_signal_good">良好</string>
+    <string name="network_signal_fair">普通</string>
+    <string name="network_signal_poor">較弱</string>
 </resources>
