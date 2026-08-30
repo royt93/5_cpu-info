@@ -424,4 +424,18 @@
     <string name="audio_device_sample_rates">Supported sample rates</string>
     <string name="audio_device_encodings">Supported formats</string>
     <string name="audio_hz_value" translatable="false">%1$s Hz</string>
+    <!-- Battery -->
+    <string name="battery_charging_wireless">Wireless</string>
+    <string name="battery_section_capacity">Capacity</string>
+    <string name="battery_designed_capacity">Designed capacity</string>
+    <string name="battery_charge_counter">Charge remaining</string>
+    <string name="battery_energy_counter">Energy remaining</string>
+    <string name="battery_cycle_count">Cycle count</string>
+    <string name="battery_section_session">This session</string>
+    <string name="battery_current_now">Current now</string>
+    <string name="battery_session_min_current">Session min current</string>
+    <string name="battery_session_max_current">Session max current</string>
+    <string name="battery_ma_value" translatable="false">%1$s mA</string>
+    <string name="battery_mah_value" translatable="false">%1$s mAh</string>
+    <string name="battery_mwh_value" translatable="false">%1$s mWh</string>
 </resources>

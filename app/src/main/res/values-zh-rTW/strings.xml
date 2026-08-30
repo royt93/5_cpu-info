@@ -354,4 +354,15 @@
     <string name="audio_device_channels">聲道數</string>
     <string name="audio_device_sample_rates">支援的取樣率</string>
     <string name="audio_device_encodings">支援的格式</string>
+    <!-- Battery -->
+    <string name="battery_charging_wireless">無線</string>
+    <string name="battery_section_capacity">電量</string>
+    <string name="battery_designed_capacity">設計容量</string>
+    <string name="battery_charge_counter">剩餘電量</string>
+    <string name="battery_energy_counter">剩餘能量</string>
+    <string name="battery_cycle_count">充電循環次數</string>
+    <string name="battery_section_session">本次工作階段</string>
+    <string name="battery_current_now">目前電流</string>
+    <string name="battery_session_min_current">工作階段最小電流</string>
+    <string name="battery_session_max_current">工作階段最大電流</string>
 </resources>

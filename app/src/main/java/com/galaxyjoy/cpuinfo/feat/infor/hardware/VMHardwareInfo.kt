@@ -4,22 +4,14 @@ package com.galaxyjoy.cpuinfo.feat.infor.hardware
 
 import android.annotation.SuppressLint
 import android.content.ContentResolver
-import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.hardware.ConsumerIrManager
 import android.net.wifi.WifiManager
-import android.os.BatteryManager
 import androidx.lifecycle.ViewModel
 import com.galaxyjoy.cpuinfo.R
-import com.galaxyjoy.cpuinfo.feat.setting.FrmSettings
-import com.galaxyjoy.cpuinfo.feat.temp.TemperatureFormatter
-import com.galaxyjoy.cpuinfo.feat.temp.TemperatureProvider
-import com.galaxyjoy.cpuinfo.util.Utils
 import com.galaxyjoy.cpuinfo.util.lifecycle.ListLiveData
-import com.galaxyjoy.cpuinfo.util.round2
 import dagger.hilt.android.lifecycle.HiltViewModel
-import timber.log.Timber
 import java.io.RandomAccessFile
 import javax.inject.Inject
 
@@ -30,26 +22,21 @@ import javax.inject.Inject
 @HiltViewModel
 class VMHardwareInfo @Inject constructor(
     private val resources: Resources,
-    private val temperatureProvider: TemperatureProvider,
-    private val temperatureFormatter: TemperatureFormatter,
-    private val sharedPreferences: SharedPreferences,
     private val packageManager: PackageManager,
     private val contentResolver: ContentResolver,
-    private val batteryStatusProvider: BatteryStatusProvider,
     private val wifiManager: WifiManager,
     private val irManager: ConsumerIrManager?,
-) : ViewModel(), SharedPreferences.OnSharedPreferenceChangeListener {
+) : ViewModel() {
 
     val listLiveData = ListLiveData<Pair<String, String>>()
 
     init {
-        sharedPreferences.registerOnSharedPreferenceChangeListener(this)
         refreshHardwareInfo()
     }
 
     /**
-     * Refresh all info connected with hardware like: battery, wireless connection (Wi-Fi,
-     * Bluetooth), sound card and camera
+     * Refresh all info connected with hardware: wireless connection (Wi-Fi, Bluetooth, NFC, IR)
+     * and USB
      */
     @Synchronized
     fun refreshHardwareInfo() {
@@ -57,129 +44,13 @@ class VMHardwareInfo @Inject constructor(
             listLiveData.clear()
         }
 
-        listLiveData.add(Pair(resources.getString(R.string.battery), ""))
-        listLiveData.addAll(getBatteryStatus())
-
+        // Battery info moved to the dedicated Battery tab (VMBatteryInfo) — richer capacity/
+        // current diagnostics than fit here, and it polls live instead of only on power-connect.
         // Camera info moved to the dedicated Camera tab (VMCameraInfo, Camera2 API) — this
         // section used the deprecated android.hardware.Camera API and duplicated that tab.
 
         listLiveData.addAll(getWirelessInfo())
         listLiveData.addAll(getUsbInfo())
-    }
-
-    /**
-     * Collect information about battery
-     */
-    private fun getBatteryStatus(): ArrayList<Pair<String, String>> {
-        val functionsList = ArrayList<Pair<String, String>>()
-
-        val batteryStatus = batteryStatusProvider.getBatteryStatusIntent()
-
-        if (batteryStatus != null) {
-            // Level
-            val level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1)
-            val scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1)
-
-            if (level != -1 && scale != -1) {
-                val batteryPct = level / scale.toFloat() * 100.0
-                functionsList.add(
-                    Pair(
-                        resources.getString(R.string.level),
-                        "${batteryPct.round2()}%"
-                    )
-                )
-            }
-
-            // Health
-            val health = batteryStatus.getIntExtra(BatteryManager.EXTRA_HEALTH, -1)
-            if (health != -1) {
-                functionsList.add(
-                    Pair(
-                        resources.getString(R.string.battery_health),
-                        getBatteryHealthStatus(health)
-                    )
-                )
-            }
-
-            // Voltage
-            val voltage = batteryStatus.getIntExtra(BatteryManager.EXTRA_VOLTAGE, -1)
-            if (voltage > 0) {
-                functionsList.add(
-                    Pair(
-                        resources.getString(R.string.voltage),
-                        "${voltage / 1000.0}V"
-                    )
-                )
-            }
-        }
-
-        // Temperature
-        val temperature = temperatureProvider.getBatteryTemperature()
-        if (temperature > 0) {
-            functionsList.add(
-                Pair(
-                    resources.getString(R.string.temperature),
-                    temperatureFormatter.format(temperature.toFloat())
-                )
-            )
-        }
-
-        // Capacity
-        val capacity = batteryStatusProvider.getBatteryCapacity().round2()
-        if (capacity != -1.0) {
-            functionsList.add(Pair(resources.getString(R.string.capacity), "${capacity}mAh"))
-        }
-
-        if (batteryStatus != null) {
-            // Technology
-            val technology = batteryStatus.getStringExtra(BatteryManager.EXTRA_TECHNOLOGY)
-            Utils.addPairIfExists(
-                functionsList,
-                resources.getString(R.string.technology),
-                technology
-            )
-
-            // Are we charging / is charged?
-            val status = batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1)
-            val isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING ||
-                    status == BatteryManager.BATTERY_STATUS_FULL
-
-            // How we charging?
-            val chargePlug = batteryStatus.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1)
-            val usbCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_USB
-            val acCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_AC
-
-            val charging =
-                if (isCharging) resources.getString(R.string.yes)
-                else resources.getString(R.string.no)
-            functionsList.add(Pair(resources.getString(R.string.is_charging), charging))
-            if (isCharging) {
-                val chargingType: String = when {
-                    usbCharge -> "USB"
-                    acCharge -> "AC"
-                    else -> resources.getString(R.string.unknown)
-                }
-                functionsList.add(Pair(resources.getString(R.string.charging_type), chargingType))
-            }
-        }
-
-        return functionsList
-    }
-
-    /**
-     * @return battery health status as a string
-     */
-    private fun getBatteryHealthStatus(healthInt: Int): String {
-        return when (healthInt) {
-            BatteryManager.BATTERY_HEALTH_COLD -> resources.getString(R.string.battery_cold)
-            BatteryManager.BATTERY_HEALTH_GOOD -> resources.getString(R.string.battery_good)
-            BatteryManager.BATTERY_HEALTH_DEAD -> resources.getString(R.string.battery_dead)
-            BatteryManager.BATTERY_HEALTH_OVERHEAT -> resources.getString(R.string.battery_overheat)
-            BatteryManager.BATTERY_HEALTH_OVER_VOLTAGE -> resources.getString(R.string.battery_overvoltage)
-            BatteryManager.BATTERY_HEALTH_UNKNOWN -> resources.getString(R.string.battery_unknown)
-            BatteryManager.BATTERY_HEALTH_UNSPECIFIED_FAILURE -> resources.getString(R.string.battery_unspecified_failure)
-            else -> resources.getString(R.string.battery_unknown)
-        }
     }
 
     /**
@@ -282,16 +153,5 @@ class VMHardwareInfo @Inject constructor(
         resources.getString(R.string.yes)
     } else {
         resources.getString(R.string.no)
-    }
-
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String?) {
-        if (key == FrmSettings.KEY_TEMPERATURE_UNIT) {
-            refreshHardwareInfo()
-        }
-    }
-
-    override fun onCleared() {
-        sharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
-        super.onCleared()
     }
 }

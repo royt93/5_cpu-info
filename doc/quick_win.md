@@ -18,7 +18,7 @@
 | 4 | #6 | Camera capabilities | 0.5d | ✅ Implemented — `feat/infor/camera/` |
 | 5 | #9 | Export hardware report | 0.5d | ✅ Implemented — `util/SystemInfoExporter.kt` (JSON/Text via `ACTION_SEND`) |
 | 6 | #5 | Network info screen | 1d | ✅ Implemented (2026-08-30, Sprint 15) — `feat/infor/network/` |
-| 7 | #4 | Battery health & analytics | 1d | 🟡 Partial — health status enum + basic battery fields already in `feat/infor/hardware/VMHardwareInfo.kt`; cycle count / charging-speed graph / dedicated tab not done |
+| 7 | #4 | Battery health & analytics | 1d | ✅ Implemented (2026-08-30, Sprint 17) — `feat/infor/battery/` |
 | 8 | #1 | Floating system monitor overlay | 3–4d | ❌ Skipped (2026-08-30, user decision) — see rationale below |
 
 > **2026-08-29 status sweep**: this doc predates the F/U-coded feature sprints (Sprint 3–14: VIP streak, Device Truth Score, Cluster Topology, Throttle Fingerprint, thermal status, AI Readiness, Hardware Snapshot, Sensor Test Suite, App Permission Inventory, Vulkan/GLES Detail, USB/BT Inspector, Fleet Compare — see git log). Verified against current codebase rather than assumed; #5 and #1 were the only items from this doc's original bundle still genuinely open at that point.
@@ -33,7 +33,8 @@
 
 **Đợt 3a hoàn tất** (#10 + #8 + #7 + #6 + #9) — đã ship, không rõ commit nào cụ thể (không track riêng lúc đó), xác nhận qua code hiện tại.
 **#5 hoàn tất** (Sprint 15, 2026-08-30) — Network Info tab, permission consent flow đầu tiên của app.
-**Còn lại thật sự mở**: #4 (Battery health, partial → có thể mở rộng), #1 (đã skip, xem lý do trên).
+**#4 hoàn tất** (Sprint 17, 2026-08-30) — tab Battery riêng, thay hẳn phần battery basic cũ trong Hardware tab.
+**Còn lại thật sự mở**: #1 (đã skip, xem lý do trên).
 
 ---
 
@@ -85,18 +86,20 @@
 
 ---
 
-## 🟠 #4 — Battery health & analytics (1 ngày)
+## ✅ #4 — Battery health & analytics (1 ngày) — Đã xong
 
-**Mô tả**: Mở rộng `feat/infor/hardware` (hiện chỉ có battery basic) thành tab riêng `feat/infor/battery`.
+**Đã làm (Sprint 17, 2026-08-30)**: tab riêng `feat/infor/battery` (`FrmBatteryInfo`/`VMBatteryInfo`), thay hẳn phần battery basic cũ trong `feat/infor/hardware` (đã xoá `getBatteryStatus()`/`getBatteryHealthStatus()` khỏi `VMHardwareInfo`, cùng broadcast receiver `ACTION_POWER_CONNECTED/DISCONNECTED` không còn cần nữa).
 
-**Tech**:
-- `BatteryManager.BATTERY_PROPERTY_*` (CHARGE_COUNTER, CAPACITY, ENERGY_COUNTER, CURRENT_NOW)
-- Designed capacity vs current qua reflection `BatteryStats`
-- Cycle count (Android 14+, `BatteryManager.BATTERY_PROPERTY_CYCLE_COUNT`)
-- Charging speed graph 5–10 phút gần nhất (session-only, không persist)
-- Health status enum (good/cold/overheat/dead/over_voltage/unspecified_failure)
+**Tech đã dùng**:
+- `BatteryManager.BATTERY_PROPERTY_*` (CHARGE_COUNTER, ENERGY_COUNTER, CURRENT_NOW) qua `getLongProperty`
+- Designed capacity qua reflection `PowerProfile` có sẵn (`BatteryStatusProvider`, không phải `BatteryStats` như dự kiến ban đầu)
+- Cycle count (Android 14+) — **sửa lại so với plan**: đây là extra `BatteryManager.EXTRA_CYCLE_COUNT` trên intent `ACTION_BATTERY_CHANGED`, không phải `BATTERY_PROPERTY_CYCLE_COUNT` (constant đó không tồn tại — phát hiện lúc build, compile lỗi "Unresolved reference")
+- Poll mỗi 3s qua `viewModelScope` + coroutine (thay cho broadcast receiver) → charging state/current now/cycle count đều live, tự cancel khi ViewModel cleared, không leak
+- Session min/max current: **scope hẹp hơn plan** — chỉ text (không phải graph vẽ đường) vì app chưa có chart component nào để tái dùng (xem F01), tự dựng 1 chart riêng cho 1 dòng dữ liệu không đáng effort
+- Health status enum (good/cold/overheat/dead/over_voltage/unspecified_failure) — giữ nguyên logic cũ từ `VMHardwareInfo`
+- Thêm luôn charging type "Wireless" (`BATTERY_PLUGGED_WIRELESS`) — code cũ chỉ nhận diện USB/AC
 
-**Risk**: Reflection vào `BatteryStats` có thể fail trên một số OEM; cycle count chỉ available Android 14+.
+**Risk đã gặp**: không có OEM crash trong lúc test; charge counter/energy counter tự ẩn nếu thiết bị trả `Long.MIN_VALUE` (không hỗ trợ). **Bug thật phát hiện lúc smoke test trên máy thật (Galaxy S24 Ultra)**: `BATTERY_PROPERTY_CURRENT_NOW`/`CURRENT_AVERAGE` theo tài liệu AOSP trả về µA, nhưng máy này trả thẳng mA (đối chiếu `adb shell dumpsys battery` → `current now: 1039` khớp raw value app đọc được) — code ban đầu chia /1000 theo chuẩn µA nên hiển thị sai lệch 1000 lần (~1.0 mA thay vì ~1000 mA thật). Đã vá bằng `microAmpsToMa()` — raw value có biên độ dưới `ALREADY_MA_THRESHOLD` (20,000) được coi là đã ở đơn vị mA (dòng điện máy thật không bao giờ dưới ~10mA khi đang polling), ngược lại mới chia /1000. Verify lại trên máy thật: Current now đã hiển thị đúng 1021 mA (khớp `dumpsys`).
 
 **Value**: 🌟🌟🌟 mọi user đều care về battery health.
 

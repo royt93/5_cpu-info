@@ -387,4 +387,15 @@
     <string name="audio_device_channels">Počet kanálů</string>
     <string name="audio_device_sample_rates">Podporované vzorkovací frekvence</string>
     <string name="audio_device_encodings">Podporované formáty</string>
+    <!-- Battery -->
+    <string name="battery_charging_wireless">Bezdrátové</string>
+    <string name="battery_section_capacity">Kapacita</string>
+    <string name="battery_designed_capacity">Jmenovitá kapacita</string>
+    <string name="battery_charge_counter">Zbývající náboj</string>
+    <string name="battery_energy_counter">Zbývající energie</string>
+    <string name="battery_cycle_count">Počet cyklů</string>
+    <string name="battery_section_session">Tato relace</string>
+    <string name="battery_current_now">Aktuální proud</string>
+    <string name="battery_session_min_current">Minimální proud (relace)</string>
+    <string name="battery_session_max_current">Maximální proud (relace)</string>
 </resources>

@@ -390,4 +390,15 @@
     <string name="audio_device_channels">Kanalanzahl</string>
     <string name="audio_device_sample_rates">Unterstützte Abtastraten</string>
     <string name="audio_device_encodings">Unterstützte Formate</string>
+    <!-- Battery -->
+    <string name="battery_charging_wireless">Kabellos</string>
+    <string name="battery_section_capacity">Kapazität</string>
+    <string name="battery_designed_capacity">Nennkapazität</string>
+    <string name="battery_charge_counter">Verbleibende Ladung</string>
+    <string name="battery_energy_counter">Verbleibende Energie</string>
+    <string name="battery_cycle_count">Ladezyklen</string>
+    <string name="battery_section_session">Diese Sitzung</string>
+    <string name="battery_current_now">Aktueller Strom</string>
+    <string name="battery_session_min_current">Minimaler Strom (Sitzung)</string>
+    <string name="battery_session_max_current">Maximaler Strom (Sitzung)</string>
 </resources>

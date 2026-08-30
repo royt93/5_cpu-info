@@ -391,4 +391,15 @@
     <string name="audio_device_channels">Liczba kanałów</string>
     <string name="audio_device_sample_rates">Obsługiwane częstotliwości próbkowania</string>
     <string name="audio_device_encodings">Obsługiwane formaty</string>
+    <!-- Battery -->
+    <string name="battery_charging_wireless">Bezprzewodowe</string>
+    <string name="battery_section_capacity">Pojemność</string>
+    <string name="battery_designed_capacity">Pojemność znamionowa</string>
+    <string name="battery_charge_counter">Pozostały ładunek</string>
+    <string name="battery_energy_counter">Pozostała energia</string>
+    <string name="battery_cycle_count">Liczba cykli</string>
+    <string name="battery_section_session">Ta sesja</string>
+    <string name="battery_current_now">Aktualny prąd</string>
+    <string name="battery_session_min_current">Min. prąd (sesja)</string>
+    <string name="battery_session_max_current">Maks. prąd (sesja)</string>
 </resources>

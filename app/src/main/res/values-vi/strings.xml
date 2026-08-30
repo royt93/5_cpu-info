@@ -407,4 +407,15 @@
     <string name="audio_device_channels">Số kênh</string>
     <string name="audio_device_sample_rates">Tần số lấy mẫu hỗ trợ</string>
     <string name="audio_device_encodings">Định dạng hỗ trợ</string>
+    <!-- Battery -->
+    <string name="battery_charging_wireless">Không dây</string>
+    <string name="battery_section_capacity">Dung lượng</string>
+    <string name="battery_designed_capacity">Dung lượng thiết kế</string>
+    <string name="battery_charge_counter">Điện lượng còn lại</string>
+    <string name="battery_energy_counter">Năng lượng còn lại</string>
+    <string name="battery_cycle_count">Số chu kỳ sạc</string>
+    <string name="battery_section_session">Phiên hiện tại</string>
+    <string name="battery_current_now">Dòng điện hiện tại</string>
+    <string name="battery_session_min_current">Dòng điện thấp nhất</string>
+    <string name="battery_session_max_current">Dòng điện cao nhất</string>
 </resources>

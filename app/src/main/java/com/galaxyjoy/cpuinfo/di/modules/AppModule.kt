@@ -17,6 +17,7 @@ import android.hardware.usb.UsbManager
 import android.media.AudioManager
 import android.net.ConnectivityManager
 import android.net.wifi.WifiManager
+import android.os.BatteryManager
 import android.os.storage.StorageManager
 import android.telephony.TelephonyManager
 import android.view.WindowManager
@@ -140,6 +141,11 @@ class AppModule {
     @Singleton
     fun provideAudioManager(@ApplicationContext appContext: Context): AudioManager =
         appContext.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+
+    @Provides
+    @Singleton
+    fun provideBatteryManager(@ApplicationContext appContext: Context): BatteryManager =
+        appContext.getSystemService(Context.BATTERY_SERVICE) as BatteryManager
 
     companion object {
         const val USER_PREFERENCES_NAME = "user_preferences"
