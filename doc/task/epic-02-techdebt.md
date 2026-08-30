@@ -4,14 +4,14 @@
 
 ## Story 1 — Hoàn tất hoặc dứt điểm migration Interactor/Observable
 
-**Trạng thái thật**: chỉ **3/12 vùng feature** (`cpu`, `gpu`, `ram` trong `feat/infor`, cộng Applications ở dạng chưa wire) dùng pattern mới (`Frm → VM → Observable*Data(Interactor) → DataProvider`) end-to-end. Còn lại `storage`, `hardware`, `sensor`, `camera`, `screen`, `android`, `drm`, `media`, `processes`, `temp` vẫn 100% pattern cũ (ViewModel gọi thẳng Android API/RxJava).
+**Trạng thái thật**: **4/12 vùng feature** (`cpu`, `gpu`, `ram`, `hardware` trong `feat/infor`, cộng Applications ở dạng chưa wire) dùng pattern mới (`Frm → VM → Observable*Data(Interactor) → DataProvider`) end-to-end. Còn lại `storage`, `sensor`, `camera`, `screen`, `android`, `drm`, `media`, `processes` (đã xoá, xem T2.10b), `temp` vẫn 100% pattern cũ (ViewModel gọi thẳng Android API/RxJava).
 
 **Rủi ro để dang dở lâu**: chi phí duplicate tăng dần (case Applications ở B03), dev mới dễ sửa nhầm chỗ chết (`DataProviderStorage.kt` rỗng nhưng tưởng có tác dụng), 2 mô hình threading (Rx + Flow) tăng rủi ro sửa nhầm.
 
 **Task**:
 - T2.1 — ✅ **Đã xong (2026-08-28)**: xoá `FrmApplications`/`VMApplications`/`AdtApp`/`ExtendedAppInfo` (cũ), wire `FrmNewApplications` vào `nav_graph.xml` thay thế. Đã fix chung B03b. **Phát hiện lúc làm**: bản Compose ban đầu thiếu nút Sort (không hoạt động) + 4 action (Rate/More/Share/Policy) + mất 1 vị trí quảng cáo Interstitial — đã hỏi user, chọn hoàn thiện đầy đủ trước khi chuyển thay vì chấp nhận mất tính năng. Verify bằng `assembleDevDebug` full build — L
 - T2.2 — Migrate `storage` sang Interactor/Observable pattern, xoá `DataProviderStorage.kt` stub rỗng hoặc implement thật — M
-- T2.3 — Migrate `hardware` (`VMHardwareInfo.kt` 432 dòng, đang gộp 5-6 domain concern: battery/camera/audio/wireless/usb — tách domain layer) — L
+- T2.3 — ✅ **Đã xong (Sprint 19, 2026-08-30)**: migrate `hardware` sang pattern mới — `DataProviderHardware` (data/provider) + `HardwareData` (domain/model) + `ObservableHardwareData` (domain/observable, emit 1 lần vì toàn field tĩnh, không cần polling loop như CPU/RAM) + `VMHardwareInfo` giờ chỉ còn wiring (`observe().map{}.asLiveData()`), format hiển thị chuyển xuống `FrmHardwareInfo`. **Sizing L trong doc đã lỗi thời**: `VMHardwareInfo.kt` thực tế chỉ 157 dòng lúc bắt đầu sprint này (không phải 432) — battery đã tách ra `VMBatteryInfo` (Sprint 17), camera đã tách ra `VMCameraInfo` từ trước, nên phần còn lại chỉ có wireless + USB, không cần polling, không có RxJava — effort thực tế gần S/M hơn L. Nhân tiện fix `RandomAccessFile` đọc Wi-Fi MAC leak FD nếu `readLine()` throw (dùng `.use{}`). Verify: unit test + build xanh, smoke test thật trên emulator (API cao, Pixel 10 Pro XL AVD) — data hiển thị đúng y hệt bản cũ, re-render đúng sau khi rời tab và quay lại, không crash, logcat sạch — S/M
 - T2.4 — Migrate `temp` (đang RxJava) sang Coroutine/Flow — M
 - T2.10b — ✅ **Đã xong (2026-08-28)** Xoá hẳn `feat/processes/` (`FrmProcesses`, `ProcessesVM`, `PsProvider`, `AdtProcesses`) — tab này đã bị ẩn 100% người dùng thật (`ActHost.kt:88` ẩn khi `SDK_INT > M`/API 23, trong khi `minSdk=24`) và đọc `/system/bin/ps` bị SELinux chặn từ Android 7+ nên dữ liệu vốn không đáng tin ngay cả khi hiện. Xoá thay vì fix B11-B13 — giảm size APK, giảm nợ kỹ thuật thay vì tăng — S
 
