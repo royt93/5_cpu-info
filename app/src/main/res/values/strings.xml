@@ -19,6 +19,7 @@
     <string name="drm" translatable="false">DRM</string>
     <string name="media">Media</string>
     <string name="network">Network</string>
+    <string name="audio">Audio</string>
     <string name="export_format_title">Export format</string>
     <string name="export_as_text">Plain text</string>
     <string name="export_as_json" translatable="false">JSON</string>
@@ -124,7 +125,6 @@
     <!--Hardware-->
     <string name="battery">Battery</string>
     <string name="wireless">Wireless</string>
-    <string name="sound_card">Sound card</string>
     <string name="level">Level</string>
     <string name="voltage">Voltage</string>
     <string name="temperature">Temperature</string>
@@ -136,8 +136,6 @@
     <string name="bluetooth" translatable="false">Bluetooth</string>
     <string name="bluetooth_le" translatable="false">Bluetooth LE</string>
     <string name="bluetooth_mac">Bluetooth Mac</string>
-    <string name="amount">Amount</string>
-    <string name="card">Card</string>
     <string name="cameras">Cameras</string>
     <string name="camera">Camera</string>
     <string name="type">Type</string>
@@ -410,4 +408,20 @@
     <string name="network_signal_good">Good</string>
     <string name="network_signal_fair">Fair</string>
     <string name="network_signal_poor">Poor</string>
+    <!-- Audio -->
+    <string name="audio_section_general">General</string>
+    <string name="audio_native_sample_rate">Native sample rate</string>
+    <string name="audio_native_buffer_size">Native buffer size (frames)</string>
+    <string name="audio_low_latency_support">Low-latency audio</string>
+    <string name="audio_pro_audio_support">Pro audio</string>
+    <string name="audio_microphone_count">Microphones</string>
+    <string name="audio_max_music_volume_steps">Music volume steps</string>
+    <string name="audio_section_spatial">Spatial audio</string>
+    <string name="audio_spatial_available">Available</string>
+    <string name="audio_spatial_enabled">Enabled</string>
+    <string name="audio_spatial_head_tracker">Head tracker</string>
+    <string name="audio_device_channels">Channel counts</string>
+    <string name="audio_device_sample_rates">Supported sample rates</string>
+    <string name="audio_device_encodings">Supported formats</string>
+    <string name="audio_hz_value" translatable="false">%1$s Hz</string>
 </resources>

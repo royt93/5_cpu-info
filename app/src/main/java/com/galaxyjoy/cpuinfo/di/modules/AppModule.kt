@@ -14,10 +14,11 @@ import android.hardware.SensorManager
 import android.hardware.camera2.CameraManager
 import android.hardware.display.DisplayManager
 import android.hardware.usb.UsbManager
+import android.media.AudioManager
 import android.net.ConnectivityManager
 import android.net.wifi.WifiManager
-import android.telephony.TelephonyManager
 import android.os.storage.StorageManager
+import android.telephony.TelephonyManager
 import android.view.WindowManager
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
@@ -134,6 +135,11 @@ class AppModule {
     @Singleton
     fun provideIrManager(@ApplicationContext appContext: Context): ConsumerIrManager? =
         appContext.getSystemService(Context.CONSUMER_IR_SERVICE) as? ConsumerIrManager?
+
+    @Provides
+    @Singleton
+    fun provideAudioManager(@ApplicationContext appContext: Context): AudioManager =
+        appContext.getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
     companion object {
         const val USER_PREFERENCES_NAME = "user_preferences"

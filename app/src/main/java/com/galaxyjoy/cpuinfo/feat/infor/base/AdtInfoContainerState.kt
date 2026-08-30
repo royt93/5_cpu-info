@@ -4,6 +4,7 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.galaxyjoy.cpuinfo.R
 import com.galaxyjoy.cpuinfo.feat.infor.android.FrmAndroidInfo
+import com.galaxyjoy.cpuinfo.feat.infor.audio.FrmAudioInfo
 import com.galaxyjoy.cpuinfo.feat.infor.camera.FrmCameraInfo
 import com.galaxyjoy.cpuinfo.feat.infor.cpu.FrmCpuInfo
 import com.galaxyjoy.cpuinfo.feat.infor.drm.FrmDrmInfo
@@ -37,6 +38,7 @@ class AdtInfoContainerState(fragment: Fragment) : FragmentStateAdapter(fragment)
             CAMERA_POS -> FrmCameraInfo()
             THROTTLE_POS -> FrmThrottle()
             NETWORK_POS -> FrmNetworkInfo()
+            AUDIO_POS -> FrmAudioInfo()
             else -> throw IllegalArgumentException("Unknown position for ViewPager2")
         }
 
@@ -56,6 +58,7 @@ class AdtInfoContainerState(fragment: Fragment) : FragmentStateAdapter(fragment)
         CAMERA_POS -> R.string.camera
         THROTTLE_POS -> R.string.throttle
         NETWORK_POS -> R.string.network
+        AUDIO_POS -> R.string.audio
         else -> throw IllegalArgumentException("Unknown position for ViewPager2")
     }
 
@@ -73,7 +76,8 @@ class AdtInfoContainerState(fragment: Fragment) : FragmentStateAdapter(fragment)
         private const val CAMERA_POS = 10
         private const val THROTTLE_POS = 11
         private const val NETWORK_POS = 12
+        private const val AUDIO_POS = 13
 
-        private const val INFO_PAGE_AMOUNT = 13
+        private const val INFO_PAGE_AMOUNT = 14
     }
 }

@@ -18,6 +18,7 @@
     <string name="sensors">Cảm biến</string>
     <string name="media">Đa phương tiện</string>
     <string name="network">Mạng</string>
+    <string name="audio">Âm thanh</string>
     <string name="export_format_title">Định dạng xuất</string>
     <string name="export_as_text">Văn bản thuần</string>
     <string name="language">Ngôn ngữ</string>
@@ -113,7 +114,6 @@
     <!--Hardware-->
     <string name="battery">Pin</string>
     <string name="wireless">Không dây</string>
-    <string name="sound_card">Card âm thanh</string>
     <string name="level">Mức</string>
     <string name="voltage">Điện áp</string>
     <string name="temperature">Nhiệt độ</string>
@@ -123,8 +123,6 @@
     <string name="charging_type">Loại sạc</string>
     <string name="wifi_mac">Wi-Fi MAC</string>
     <string name="bluetooth_mac">Bluetooth MAC</string>
-    <string name="amount">Số lượng</string>
-    <string name="card">Thẻ</string>
     <string name="cameras">Camera</string>
     <string name="camera">Camera</string>
     <string name="type">Loại</string>
@@ -394,4 +392,19 @@
     <string name="network_signal_good">Tốt</string>
     <string name="network_signal_fair">Trung bình</string>
     <string name="network_signal_poor">Yếu</string>
+    <!-- Audio -->
+    <string name="audio_section_general">Chung</string>
+    <string name="audio_native_sample_rate">Tần số lấy mẫu gốc</string>
+    <string name="audio_native_buffer_size">Kích thước bộ đệm gốc (frame)</string>
+    <string name="audio_low_latency_support">Âm thanh độ trễ thấp</string>
+    <string name="audio_pro_audio_support">Âm thanh chuyên nghiệp</string>
+    <string name="audio_microphone_count">Micro</string>
+    <string name="audio_max_music_volume_steps">Số nấc âm lượng nhạc</string>
+    <string name="audio_section_spatial">Âm thanh không gian</string>
+    <string name="audio_spatial_available">Khả dụng</string>
+    <string name="audio_spatial_enabled">Đang bật</string>
+    <string name="audio_spatial_head_tracker">Theo dõi chuyển động đầu</string>
+    <string name="audio_device_channels">Số kênh</string>
+    <string name="audio_device_sample_rates">Tần số lấy mẫu hỗ trợ</string>
+    <string name="audio_device_encodings">Định dạng hỗ trợ</string>
 </resources>

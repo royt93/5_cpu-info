@@ -62,6 +62,7 @@
     <string name="action_gc">垃圾回收</string>
     <string name="media">媒體</string>
     <string name="network">網路</string>
+    <string name="audio">音訊</string>
     <string name="cpu_soc_name">SoC 名稱</string>
     <string name="cpu_cores">核心數</string>
     <string name="cpu_frequency_stopped">核心 %1$d: 已停止</string>
@@ -114,7 +115,6 @@
     <!--Hardware-->
     <string name="battery">電池</string>
     <string name="wireless">無線</string>
-    <string name="sound_card">音效卡</string>
     <string name="level">電量</string>
     <string name="voltage">電壓</string>
     <string name="temperature">溫度</string>
@@ -126,8 +126,6 @@
     <string name="bluetooth" translatable="false">Bluetooth</string>
     <string name="bluetooth_le" translatable="false">Bluetooth LE</string>
     <string name="bluetooth_mac">藍牙 Mac 位址</string>
-    <string name="amount">數量</string>
-    <string name="card">卡</string>
     <string name="cameras">相機</string>
     <string name="camera">相機</string>
     <string name="type">種類</string>
@@ -341,4 +339,19 @@
     <string name="network_signal_good">良好</string>
     <string name="network_signal_fair">普通</string>
     <string name="network_signal_poor">較弱</string>
+    <!-- Audio -->
+    <string name="audio_section_general">一般</string>
+    <string name="audio_native_sample_rate">原生取樣率</string>
+    <string name="audio_native_buffer_size">原生緩衝區大小（訊框）</string>
+    <string name="audio_low_latency_support">低延遲音訊</string>
+    <string name="audio_pro_audio_support">專業音訊</string>
+    <string name="audio_microphone_count">麥克風</string>
+    <string name="audio_max_music_volume_steps">音樂音量段數</string>
+    <string name="audio_section_spatial">空間音訊</string>
+    <string name="audio_spatial_available">可用</string>
+    <string name="audio_spatial_enabled">已啟用</string>
+    <string name="audio_spatial_head_tracker">頭部追蹤</string>
+    <string name="audio_device_channels">聲道數</string>
+    <string name="audio_device_sample_rates">支援的取樣率</string>
+    <string name="audio_device_encodings">支援的格式</string>
 </resources>

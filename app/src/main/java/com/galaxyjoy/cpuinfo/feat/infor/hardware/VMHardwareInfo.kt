@@ -20,10 +20,7 @@ import com.galaxyjoy.cpuinfo.util.lifecycle.ListLiveData
 import com.galaxyjoy.cpuinfo.util.round2
 import dagger.hilt.android.lifecycle.HiltViewModel
 import timber.log.Timber
-import java.io.File
-import java.io.FileFilter
 import java.io.RandomAccessFile
-import java.util.regex.Pattern
 import javax.inject.Inject
 
 /**
@@ -66,8 +63,6 @@ class VMHardwareInfo @Inject constructor(
         // Camera info moved to the dedicated Camera tab (VMCameraInfo, Camera2 API) — this
         // section used the deprecated android.hardware.Camera API and duplicated that tab.
 
-        listLiveData.add(Pair(resources.getString(R.string.sound_card), ""))
-        listLiveData.addAll(getSoundCardInfo())
         listLiveData.addAll(getWirelessInfo())
         listLiveData.addAll(getUsbInfo())
     }
@@ -281,88 +276,6 @@ class VMHardwareInfo @Inject constructor(
             )
         )
         return featureList
-    }
-
-    /**
-     * @return number of the sound card in device - default is 1
-     */
-    private fun getSoundCardNumber(): Int {
-        class AudioFilter : FileFilter {
-            // http://alsa.opensrc.org/Proc_asound_documentation
-            override fun accept(pathname: File): Boolean =
-                Pattern.matches("card[0-7]+", pathname.name)
-        }
-
-        return try {
-            File("/proc/asound/").listFiles(AudioFilter())?.size ?: 1
-        } catch (_: Exception) {
-            1
-        }
-    }
-
-    /**
-     * Get available data connected with sound card like ALSA version etc.
-     */
-    private fun getSoundCardInfo(): List<Pair<String, String>> {
-        val functionsList = mutableListOf<Pair<String, String>>()
-
-        val soundCardNumber = getSoundCardNumber()
-        functionsList.add(Pair(resources.getString(R.string.amount), soundCardNumber.toString()))
-        for (i in 0 until soundCardNumber) {
-            functionsList.add(
-                Pair(
-                    "     ${resources.getString(R.string.card)} $i",
-                    tryToGetSoundCardId(i)
-                )
-            )
-        }
-        // ALSA
-        val alsa = tryToGetAlsa()
-        Utils.addPairIfExists(functionsList, "ALSA", alsa)
-
-        return functionsList
-    }
-
-    /**
-     * Try to read id of the sound card.
-     *
-     * @param cardPosition position of the sound card in files
-     * @return id from "id" file
-     */
-    private fun tryToGetSoundCardId(cardPosition: Int): String {
-        var id = resources.getString(R.string.unknown)
-        val filePath = "/proc/asound/card$cardPosition/id"
-
-        var reader: RandomAccessFile? = null
-        try {
-            reader = RandomAccessFile(filePath, "r")
-            id = reader.readLine()
-        } catch (_: Exception) {
-        } finally {
-            reader?.close()
-        }
-
-        return id
-    }
-
-    /**
-     * @return ALSA version if exists, otherwise null
-     */
-    private fun tryToGetAlsa(): String? {
-        var alsa: String? = null
-        val filePath = "/proc/asound/version"
-
-        var reader: RandomAccessFile? = null
-        try {
-            reader = RandomAccessFile(filePath, "r")
-            val version = reader.readLine()
-            alsa = version
-        } catch (_: Exception) {
-        } finally {
-            reader?.close()
-        }
-
-        return alsa
     }
 
     private fun getYesNoString(yesValue: Boolean) = if (yesValue) {

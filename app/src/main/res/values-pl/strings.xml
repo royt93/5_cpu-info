@@ -60,6 +60,7 @@
     <string name="action_gc">Garbage collector</string>
     <string name="media">Multimedia</string>
     <string name="network">Sieć</string>
+    <string name="audio">Dźwięk</string>
     <string name="cpu_soc_name">Nazwa SoC</string>
     <string name="cpu_cores">Rdzenie</string>
     <string name="cpu_frequency_stopped">Rdzeń %1$d: Zatrzymany</string>
@@ -116,7 +117,6 @@
     <!--Hardware-->
     <string name="battery">Bateria</string>
     <string name="wireless">Komunikacja bezprzewodowa</string>
-    <string name="sound_card">Karta dźwiękowa</string>
     <string name="level">Poziom</string>
     <string name="voltage">Napięcie</string>
     <string name="temperature">Temperatura</string>
@@ -126,8 +126,6 @@
     <string name="charging_type">Typ ładowania</string>
     <string name="wifi_mac">Wi-Fi Mac</string>
     <string name="bluetooth_mac">Bluetooth Mac</string>
-    <string name="amount">Ilość</string>
-    <string name="card">Karta</string>
     <string name="cameras">Aparaty</string>
     <string name="camera">Aparat</string>
     <string name="type">Typ</string>
@@ -378,4 +376,19 @@
     <string name="network_signal_good">Dobry</string>
     <string name="network_signal_fair">Przeciętny</string>
     <string name="network_signal_poor">Słaby</string>
+    <!-- Audio -->
+    <string name="audio_section_general">Ogólne</string>
+    <string name="audio_native_sample_rate">Natywna częstotliwość próbkowania</string>
+    <string name="audio_native_buffer_size">Natywny rozmiar bufora (ramki)</string>
+    <string name="audio_low_latency_support">Dźwięk o niskim opóźnieniu</string>
+    <string name="audio_pro_audio_support">Dźwięk profesjonalny</string>
+    <string name="audio_microphone_count">Mikrofony</string>
+    <string name="audio_max_music_volume_steps">Poziomy głośności muzyki</string>
+    <string name="audio_section_spatial">Dźwięk przestrzenny</string>
+    <string name="audio_spatial_available">Dostępny</string>
+    <string name="audio_spatial_enabled">Włączony</string>
+    <string name="audio_spatial_head_tracker">Śledzenie ruchu głowy</string>
+    <string name="audio_device_channels">Liczba kanałów</string>
+    <string name="audio_device_sample_rates">Obsługiwane częstotliwości próbkowania</string>
+    <string name="audio_device_encodings">Obsługiwane formaty</string>
 </resources>

@@ -60,6 +60,7 @@
     <string name="action_gc">Garbage Collector</string>
     <string name="media">Medien</string>
     <string name="network">Netzwerk</string>
+    <string name="audio">Audio</string>
     <string name="cpu_soc_name">SoC-Name</string>
     <string name="cpu_cores">Kerne</string>
     <string name="cpu_frequency_stopped">Kern %1$d: Gestoppt</string>
@@ -113,7 +114,6 @@
     <!--Hardware-->
     <string name="battery">Batterie</string>
     <string name="wireless">Kabellos</string>
-    <string name="sound_card">Soundkarte</string>
     <string name="level">Ladestand</string>
     <string name="voltage">Spannung</string>
     <string name="temperature">Temperatur</string>
@@ -125,8 +125,6 @@
     <string name="bluetooth" translatable="false">Bluetooth</string>
     <string name="bluetooth_le" translatable="false">Bluetooth LE</string>
     <string name="bluetooth_mac">Bluetooth MAC</string>
-    <string name="amount">Anzahl</string>
-    <string name="card">Karte</string>
     <string name="cameras">Kameras</string>
     <string name="camera">Kamera</string>
     <string name="type">Typ</string>
@@ -377,4 +375,19 @@
     <string name="network_signal_good">Gut</string>
     <string name="network_signal_fair">Mittel</string>
     <string name="network_signal_poor">Schwach</string>
+    <!-- Audio -->
+    <string name="audio_section_general">Allgemein</string>
+    <string name="audio_native_sample_rate">Native Abtastrate</string>
+    <string name="audio_native_buffer_size">Native Puffergröße (Frames)</string>
+    <string name="audio_low_latency_support">Niedrige Audio-Latenz</string>
+    <string name="audio_pro_audio_support">Pro-Audio</string>
+    <string name="audio_microphone_count">Mikrofone</string>
+    <string name="audio_max_music_volume_steps">Lautstärkestufen (Musik)</string>
+    <string name="audio_section_spatial">Räumliches Audio</string>
+    <string name="audio_spatial_available">Verfügbar</string>
+    <string name="audio_spatial_enabled">Aktiviert</string>
+    <string name="audio_spatial_head_tracker">Kopf-Tracking</string>
+    <string name="audio_device_channels">Kanalanzahl</string>
+    <string name="audio_device_sample_rates">Unterstützte Abtastraten</string>
+    <string name="audio_device_encodings">Unterstützte Formate</string>
 </resources>
