@@ -438,4 +438,22 @@
     <string name="dashboard_battery_temp_title">電池溫度（°C）</string>
     <string name="dashboard_empty_state">正在收集即時資料…</string>
     <string name="dashboard_disclaimer">僅限本次工作階段 — 離開此分頁後記錄將消失。</string>
+    <!--Storage/CPU Benchmark (F06)-->
+    <string name="storage_bench">儲存效能測試</string>
+    <string name="storage_bench_disclaimer_title">開始之前</string>
+    <string name="storage_bench_disclaimer_body">此測試會在應用程式自己的快取中寫入並讀取一個暫存檔案以測量儲存速度，接著簡短雜湊資料以測量 CPU 效能。測試結束後會刪除該檔案。</string>
+    <string name="storage_bench_start_button">開始測試</string>
+    <string name="storage_bench_running_label">執行中：%1$s</string>
+    <string name="storage_bench_phase_seq_write">循序寫入</string>
+    <string name="storage_bench_phase_seq_read">循序讀取</string>
+    <string name="storage_bench_phase_random_write">隨機寫入</string>
+    <string name="storage_bench_phase_random_read">隨機讀取</string>
+    <string name="storage_bench_phase_hash">雜湊（SHA-256）</string>
+    <string name="storage_bench_stop_button">停止</string>
+    <string name="storage_bench_aborted_overheat">已略過測試 — 裝置目前過熱，請待裝置降溫後再試一次。</string>
+    <string name="storage_bench_previous_summary">上次測試：%1$s · 循序寫入 %2$s MB/s · 循序讀取 %3$s MB/s</string>
+    <string name="storage_bench_no_previous">尚無先前結果</string>
+    <string name="storage_bench_done_button">完成</string>
+    <string name="storage_bench_share_button">分享</string>
+    <string name="storage_bench_share_text">儲存效能測試 — 循序寫入：%1$s MB/s · 循序讀取：%2$s MB/s · 隨機寫入：%3$s ops/s · 隨機讀取：%4$s ops/s · 雜湊：%5$s MB/s</string>
 </resources>

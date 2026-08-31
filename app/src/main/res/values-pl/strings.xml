@@ -436,4 +436,22 @@
     <string name="dashboard_battery_temp_title">Temperatura baterii (°C)</string>
     <string name="dashboard_empty_state">Zbieranie danych na żywo…</string>
     <string name="dashboard_disclaimer">Tylko dla tej sesji — historia znika po opuszczeniu karty.</string>
+    <!--Storage/CPU Benchmark (F06)-->
+    <string name="storage_bench">Test pamięci masowej</string>
+    <string name="storage_bench_disclaimer_title">Zanim zaczniesz</string>
+    <string name="storage_bench_disclaimer_body">Ten test zapisuje i odczytuje tymczasowy plik we własnej pamięci podręcznej aplikacji, aby zmierzyć szybkość pamięci masowej, a następnie krótko haszuje dane, aby zmierzyć wydajność CPU. Plik jest usuwany po zakończeniu testu.</string>
+    <string name="storage_bench_start_button">Rozpocznij test</string>
+    <string name="storage_bench_running_label">Trwa: %1$s</string>
+    <string name="storage_bench_phase_seq_write">Zapis sekwencyjny</string>
+    <string name="storage_bench_phase_seq_read">Odczyt sekwencyjny</string>
+    <string name="storage_bench_phase_random_write">Zapis losowy</string>
+    <string name="storage_bench_phase_random_read">Odczyt losowy</string>
+    <string name="storage_bench_phase_hash">Hash (SHA-256)</string>
+    <string name="storage_bench_stop_button">Zatrzymaj</string>
+    <string name="storage_bench_aborted_overheat">Test pominięty — urządzenie jest teraz zbyt ciepłe. Spróbuj ponownie po ostygnięciu.</string>
+    <string name="storage_bench_previous_summary">Ostatni test: %1$s · zapis seq. %2$s MB/s · odczyt seq. %3$s MB/s</string>
+    <string name="storage_bench_no_previous">Brak wcześniejszego wyniku</string>
+    <string name="storage_bench_done_button">Gotowe</string>
+    <string name="storage_bench_share_button">Udostępnij</string>
+    <string name="storage_bench_share_text">Test pamięci masowej — Zapis seq.: %1$s MB/s · Odczyt seq.: %2$s MB/s · Zapis losowy: %3$s ops/s · Odczyt losowy: %4$s ops/s · Hash: %5$s MB/s</string>
 </resources>

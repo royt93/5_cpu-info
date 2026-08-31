@@ -463,4 +463,22 @@
     <string name="dashboard_battery_temp_title">Battery Temp (°C)</string>
     <string name="dashboard_empty_state">Collecting live data…</string>
     <string name="dashboard_disclaimer">Session-only — history clears when you leave this tab.</string>
+    <!--Storage/CPU Benchmark (F06)-->
+    <string name="storage_bench">Storage Benchmark</string>
+    <string name="storage_bench_disclaimer_title">Before you start</string>
+    <string name="storage_bench_disclaimer_body">This test writes and reads a temporary file in the app’s own cache to measure storage speed, then briefly hashes data to measure CPU throughput. The file is deleted when the test ends.</string>
+    <string name="storage_bench_start_button">Start test</string>
+    <string name="storage_bench_running_label">Running: %1$s</string>
+    <string name="storage_bench_phase_seq_write">Sequential Write</string>
+    <string name="storage_bench_phase_seq_read">Sequential Read</string>
+    <string name="storage_bench_phase_random_write">Random Write</string>
+    <string name="storage_bench_phase_random_read">Random Read</string>
+    <string name="storage_bench_phase_hash">Hash (SHA-256)</string>
+    <string name="storage_bench_stop_button">Stop</string>
+    <string name="storage_bench_aborted_overheat">Test skipped — device is too warm right now. Try again once it cools down.</string>
+    <string name="storage_bench_previous_summary">Last test: %1$s · seq write %2$s MB/s · seq read %3$s MB/s</string>
+    <string name="storage_bench_no_previous">No previous result yet</string>
+    <string name="storage_bench_done_button">Done</string>
+    <string name="storage_bench_share_button">Share</string>
+    <string name="storage_bench_share_text">Storage benchmark — Seq write: %1$s MB/s · Seq read: %2$s MB/s · Random write: %3$s ops/s · Random read: %4$s ops/s · Hash: %5$s MB/s</string>
 </resources>

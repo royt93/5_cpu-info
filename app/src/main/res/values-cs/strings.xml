@@ -436,4 +436,22 @@
     <string name="dashboard_battery_temp_title">Teplota baterie (°C)</string>
     <string name="dashboard_empty_state">Sbírání živých dat…</string>
     <string name="dashboard_disclaimer">Pouze pro toto sezení — historie zmizí po opuštění karty.</string>
+    <!--Storage/CPU Benchmark (F06)-->
+    <string name="storage_bench">Test úložiště</string>
+    <string name="storage_bench_disclaimer_title">Než začnete</string>
+    <string name="storage_bench_disclaimer_body">Tento test zapisuje a čte dočasný soubor ve vlastní mezipaměti aplikace pro měření rychlosti úložiště, poté krátce hashuje data pro měření výkonu CPU. Soubor se po testu smaže.</string>
+    <string name="storage_bench_start_button">Spustit test</string>
+    <string name="storage_bench_running_label">Probíhá: %1$s</string>
+    <string name="storage_bench_phase_seq_write">Sekvenční zápis</string>
+    <string name="storage_bench_phase_seq_read">Sekvenční čtení</string>
+    <string name="storage_bench_phase_random_write">Náhodný zápis</string>
+    <string name="storage_bench_phase_random_read">Náhodné čtení</string>
+    <string name="storage_bench_phase_hash">Hash (SHA-256)</string>
+    <string name="storage_bench_stop_button">Zastavit</string>
+    <string name="storage_bench_aborted_overheat">Test přeskočen — zařízení je teď příliš teplé. Zkuste to znovu po vychladnutí.</string>
+    <string name="storage_bench_previous_summary">Poslední test: %1$s · sekv. zápis %2$s MB/s · sekv. čtení %3$s MB/s</string>
+    <string name="storage_bench_no_previous">Zatím žádný předchozí výsledek</string>
+    <string name="storage_bench_done_button">Hotovo</string>
+    <string name="storage_bench_share_button">Sdílet</string>
+    <string name="storage_bench_share_text">Test úložiště — Sekv. zápis: %1$s MB/s · Sekv. čtení: %2$s MB/s · Náhodný zápis: %3$s ops/s · Náhodné čtení: %4$s ops/s · Hash: %5$s MB/s</string>
 </resources>

@@ -442,4 +442,22 @@
     <string name="dashboard_battery_temp_title">Nhiệt độ pin (°C)</string>
     <string name="dashboard_empty_state">Đang thu thập dữ liệu trực tiếp…</string>
     <string name="dashboard_disclaimer">Chỉ trong phiên này — lịch sử mất khi rời tab.</string>
+    <!--Storage/CPU Benchmark (F06)-->
+    <string name="storage_bench">Đo hiệu năng lưu trữ</string>
+    <string name="storage_bench_disclaimer_title">Trước khi bắt đầu</string>
+    <string name="storage_bench_disclaimer_body">Bài test ghi và đọc 1 file tạm trong cache riêng của app để đo tốc độ lưu trữ, sau đó băm dữ liệu ngắn để đo hiệu năng CPU. File tạm sẽ bị xóa khi test kết thúc.</string>
+    <string name="storage_bench_start_button">Bắt đầu</string>
+    <string name="storage_bench_running_label">Đang chạy: %1$s</string>
+    <string name="storage_bench_phase_seq_write">Ghi tuần tự</string>
+    <string name="storage_bench_phase_seq_read">Đọc tuần tự</string>
+    <string name="storage_bench_phase_random_write">Ghi ngẫu nhiên</string>
+    <string name="storage_bench_phase_random_read">Đọc ngẫu nhiên</string>
+    <string name="storage_bench_phase_hash">Băm (SHA-256)</string>
+    <string name="storage_bench_stop_button">Dừng</string>
+    <string name="storage_bench_aborted_overheat">Đã bỏ qua test — máy đang hơi nóng. Thử lại sau khi máy nguội.</string>
+    <string name="storage_bench_previous_summary">Lần trước: %1$s · ghi tuần tự %2$s MB/s · đọc tuần tự %3$s MB/s</string>
+    <string name="storage_bench_no_previous">Chưa có kết quả trước đó</string>
+    <string name="storage_bench_done_button">Xong</string>
+    <string name="storage_bench_share_button">Chia sẻ</string>
+    <string name="storage_bench_share_text">Đo hiệu năng lưu trữ — Ghi tuần tự: %1$s MB/s · Đọc tuần tự: %2$s MB/s · Ghi ngẫu nhiên: %3$s ops/s · Đọc ngẫu nhiên: %4$s ops/s · Băm: %5$s MB/s</string>
 </resources>

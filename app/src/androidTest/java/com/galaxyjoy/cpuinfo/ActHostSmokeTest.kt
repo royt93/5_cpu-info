@@ -49,8 +49,18 @@ class ActHostSmokeTest {
     fun dismissFirstLaunchLanguagePickerIfShown() {
         composeRule.waitForIdle()
         val systemDefaultLabel = composeRule.activity.getString(R.string.language_system_default)
-        val isShown = composeRule.onAllNodesWithText(systemDefaultLabel).fetchSemanticsNodes().isNotEmpty()
-        if (isShown) {
+
+        // maybeShowFirstLaunchLanguagePicker() reads the "already picked" flag from DataStore
+        // asynchronously (lifecycleScope.launch { ... .first() }), so the sheet can still be a
+        // beat away from actually showing right after launch — poll briefly instead of checking
+        // only once, otherwise it can pop up mid-test and cover whatever the test clicks next.
+        val appeared = runCatching {
+            composeRule.waitUntil(timeoutMillis = 2_000) {
+                composeRule.onAllNodesWithText(systemDefaultLabel).fetchSemanticsNodes().isNotEmpty()
+            }
+        }.isSuccess
+
+        if (appeared) {
             composeRule.onNodeWithText(systemDefaultLabel).performClick()
             composeRule.waitForIdle()
         }
@@ -395,14 +405,17 @@ class ActHostSmokeTest {
             .check(matches(hasDescendant(isAssignableFrom(IconRoundCornerProgressBar::class.java))))
     }
 
-    // No instrumented test for the Dashboard tab (F01): navigating to it reproducibly triggers
-    // "Cannot run onActivity since Activity has been destroyed already" from ActivityScenario's
-    // own teardown, even with zero assertions past composeRule.waitForIdle(). Confirmed via a live
-    // logcat capture that this is NOT an app crash (no FATAL EXCEPTION; the process exits 0,
-    // normal "make process inactive" transition) — it's a test-harness teardown timing issue,
-    // most likely composeRule.waitForIdle() never settling against a screen whose ViewModel
-    // updates state on a steady 1s timer (VMDashboard's CPU collector). Coverage for this feature
-    // instead comes from VMDashboardTest/HistoryBufferTest (unit) and a clean assembleDevDebug/
-    // lintDevDebug with the new MPAndroidChart dependency wired in.
+    // No instrumented test for the Dashboard (F01) or Storage Benchmark (F06) tabs: navigating to
+    // either reproducibly trips test-harness-level failures, not app crashes. Confirmed via live
+    // logcat capture on 2 different devices: TECNO KJ7 throws "Cannot run onActivity since
+    // Activity has been destroyed already" from ActivityScenario's own teardown for BOTH tabs
+    // (no FATAL EXCEPTION; process exits 0, normal "make process inactive" transition), while a
+    // Pixel 7 Pro throws a completely different error for the same test
+    // (NoSuchMethodException: android.hardware.input.InputManager.getInstance, a known
+    // Espresso/Android-API-version compatibility issue in Espresso.onIdle() internals) — two
+    // devices, two unrelated harness failures, zero app crashes, which rules out the app code.
+    // Coverage for both features instead comes from their unit tests (VMDashboardTest/
+    // HistoryBufferTest, StorageBenchmarkTest) and a clean assembleDevDebug/lintDevDebug with
+    // MPAndroidChart wired in.
 }
 
