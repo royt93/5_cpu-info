@@ -5,6 +5,16 @@
 Còn lại B03/B03b/B11/B12/B13 — để dành Sprint 2 vì gắn liền quyết định kiến trúc (giữ bản Applications nào, xoá `feat/processes`).
 B31 hoá ra không phải bug thật (đã verify khi đọc code) — chỉ dọn code chết, không đổi hành vi.
 
+## ✅ Sprint 4 (2026-09-01) — `ActHostSmokeTest` reliability + F01 unit tests
+
+Trong lúc thêm test cho F01 (realtime dashboard), phát hiện `ActHostSmokeTest` không robust với **genuinely fresh install**: `ActHost.maybeShowFirstLaunchLanguagePicker()` tự show bottom sheet chọn ngôn ngữ lần đầu (DataStore flag `hasPickedLanguage` chưa set) — sheet này che hết toolbar/bottom-nav, làm MỌI test click `menuHardware`/`menuApplications`/... fail với `NoMatchingViewException` ngay từ bước đầu. Xác nhận qua screenshot lỗi thật (`view-op-error-1.png`) + đọc code, không phải crash. Đây là hành vi app đúng ý (first-launch UX), chỉ là test-suite thiếu robust — đã thêm `@Before dismissFirstLaunchLanguagePickerIfShown()` dùng chung cho toàn bộ class, dismiss sheet nếu đang hiện trước khi mỗi test chạy.
+
+**Sau khi fix, 4 test vẫn fail độc lập với nguyên nhân riêng** (không liên quan bugfix Epic 1/2 hay F01):
+- `aiReadinessBarOpensSheetWithScoreAndFlagRows` — root cause đã xác nhận: matcher `assertExists()` trên text chứa "Độ sẵn sàng AI" ambiguous thật (khớp cả AiReadinessBar tóm tắt trên màn chính lẫn title bottom sheet, cả 2 cùng hiện một lúc) — lỗi trong bài test, không phải code app.
+- `canMyDeviceBarOpensSheetWithRulesAndDisclaimer`, `appPermissionsActionShowsPermissionsSheet`, `languagePickerPrefOpensBottomSheetWithAllSupportedLocales` — vẫn fail nhưng chưa root-cause riêng từng cái (nằm ngoài phạm vi phiên này).
+
+Không sửa 4 test này — để dành 1 sprint dọn test riêng.
+
 ## ✅ Sprint 3 hoàn thành (2026-08-31) — dọn nốt P1/P2 còn sót
 
 Verify lại toàn bộ B15-B26 trên code hiện tại (3 ngày sau audit gốc, nhiều sprint feature đã chạy giữa chừng nên vài bug đã tự stale do refactor khác) trước khi sửa:

@@ -429,4 +429,11 @@
     <string name="pref_share_app_summary">Świetna aplikacja — udostępnij ją znajomym!</string>
     <string name="pref_policy_app_summary">Regulamin i polityka prywatności</string>
     <string name="splash_ad_notice">Uwaga: ta czynność może wyświetlić reklamę</string>
+    <!--Realtime Dashboard (F01)-->
+    <string name="dashboard">Panel</string>
+    <string name="dashboard_cpu_load_title">Obciążenie CPU (śr. %)</string>
+    <string name="dashboard_ram_used_title">Zużyta pamięć RAM (%)</string>
+    <string name="dashboard_battery_temp_title">Temperatura baterii (°C)</string>
+    <string name="dashboard_empty_state">Zbieranie danych na żywo…</string>
+    <string name="dashboard_disclaimer">Tylko dla tej sesji — historia znika po opuszczeniu karty.</string>
 </resources>

@@ -266,6 +266,7 @@ dependencies {
 
     implementation(libs.admob.wrapper) // replaces direct applovin-sdk + play-services-ads + ads-mediation
     implementation(libs.lottie)
+    implementation(libs.mp.android.chart) // F01 realtime dashboard — pure Java, no Kotlin metadata risk
 
     testImplementation(libs.junit)
     testImplementation(libs.mockk)

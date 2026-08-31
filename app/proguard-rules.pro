@@ -262,3 +262,7 @@ public *;
 -dontwarn com.yalantis.ucrop**
 -keep class com.yalantis.ucrop** { *; }
 -keep interface com.yalantis.ucrop** { *; }
+
+# MPAndroidChart (F01 realtime dashboard) — no bundled consumer rules, keep everything.
+-keep class com.github.mikephil.charting.** { *; }
+-dontwarn com.github.mikephil.charting.**

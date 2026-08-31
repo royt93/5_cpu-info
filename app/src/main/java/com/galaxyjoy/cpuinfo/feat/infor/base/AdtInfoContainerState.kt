@@ -8,6 +8,7 @@ import com.galaxyjoy.cpuinfo.feat.infor.audio.FrmAudioInfo
 import com.galaxyjoy.cpuinfo.feat.infor.battery.FrmBatteryInfo
 import com.galaxyjoy.cpuinfo.feat.infor.camera.FrmCameraInfo
 import com.galaxyjoy.cpuinfo.feat.infor.cpu.FrmCpuInfo
+import com.galaxyjoy.cpuinfo.feat.infor.dashboard.FrmDashboard
 import com.galaxyjoy.cpuinfo.feat.infor.drm.FrmDrmInfo
 import com.galaxyjoy.cpuinfo.feat.infor.gpu.FrmGpuInfo
 import com.galaxyjoy.cpuinfo.feat.infor.hardware.FrmHardwareInfo
@@ -41,6 +42,7 @@ class AdtInfoContainerState(fragment: Fragment) : FragmentStateAdapter(fragment)
             NETWORK_POS -> FrmNetworkInfo()
             AUDIO_POS -> FrmAudioInfo()
             BATTERY_POS -> FrmBatteryInfo()
+            DASHBOARD_POS -> FrmDashboard()
             else -> throw IllegalArgumentException("Unknown position for ViewPager2")
         }
 
@@ -62,6 +64,7 @@ class AdtInfoContainerState(fragment: Fragment) : FragmentStateAdapter(fragment)
         NETWORK_POS -> R.string.network
         AUDIO_POS -> R.string.audio
         BATTERY_POS -> R.string.battery
+        DASHBOARD_POS -> R.string.dashboard
         else -> throw IllegalArgumentException("Unknown position for ViewPager2")
     }
 
@@ -81,7 +84,8 @@ class AdtInfoContainerState(fragment: Fragment) : FragmentStateAdapter(fragment)
         private const val NETWORK_POS = 12
         private const val AUDIO_POS = 13
         private const val BATTERY_POS = 14
+        private const val DASHBOARD_POS = 15
 
-        private const val INFO_PAGE_AMOUNT = 15
+        private const val INFO_PAGE_AMOUNT = 16
     }
 }

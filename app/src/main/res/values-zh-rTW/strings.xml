@@ -431,4 +431,11 @@
     <string name="pref_share_app_summary">這是一款實用的應用程式 — 立即分享給朋友吧！</string>
     <string name="pref_policy_app_summary">應用程式服務條款與隱私權政策</string>
     <string name="splash_ad_notice">請注意：此操作可能會顯示廣告</string>
+    <!--Realtime Dashboard (F01)-->
+    <string name="dashboard">儀表板</string>
+    <string name="dashboard_cpu_load_title">CPU 使用率（平均 %）</string>
+    <string name="dashboard_ram_used_title">已用記憶體（%）</string>
+    <string name="dashboard_battery_temp_title">電池溫度（°C）</string>
+    <string name="dashboard_empty_state">正在收集即時資料…</string>
+    <string name="dashboard_disclaimer">僅限本次工作階段 — 離開此分頁後記錄將消失。</string>
 </resources>

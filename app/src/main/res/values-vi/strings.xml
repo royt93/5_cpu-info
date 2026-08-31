@@ -435,4 +435,11 @@
     <string name="pref_share_app_summary">Ứng dụng rất hữu ích — chia sẻ với bạn bè để cùng trải nghiệm!</string>
     <string name="pref_policy_app_summary">Điều khoản ứng dụng &amp; Chính sách bảo mật</string>
     <string name="splash_ad_notice">Lưu ý: thao tác này có thể xuất hiện quảng cáo</string>
+    <!--Realtime Dashboard (F01)-->
+    <string name="dashboard">Bảng điều khiển</string>
+    <string name="dashboard_cpu_load_title">Tải CPU trung bình (%)</string>
+    <string name="dashboard_ram_used_title">RAM đã dùng (%)</string>
+    <string name="dashboard_battery_temp_title">Nhiệt độ pin (°C)</string>
+    <string name="dashboard_empty_state">Đang thu thập dữ liệu trực tiếp…</string>
+    <string name="dashboard_disclaimer">Chỉ trong phiên này — lịch sử mất khi rời tab.</string>
 </resources>

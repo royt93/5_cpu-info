@@ -43,6 +43,7 @@ relinker = "1.4.5"
 coilCompose = "2.7.0"
 admobWrapper = "1.1.5"
 lottie = "6.6.6"
+mpAndroidChart = "v3.1.0"
 
 [libraries]
 # Kotlin / Coroutines
@@ -107,6 +108,7 @@ relinker = { module = "com.getkeepsafe.relinker:relinker", version.ref = "relink
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 admob-wrapper = { module = "com.github.royt93:AdmobApplovinWrapper", version.ref = "admobWrapper" }
 lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }
+mp-android-chart = { module = "com.github.PhilJay:MPAndroidChart", version.ref = "mpAndroidChart" }
 
 # Test
 junit = { module = "junit:junit", version.ref = "junit" }

@@ -22,6 +22,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.galaxyjoy.cpuinfo.feat.ActHost
 import com.galaxyjoy.cpuinfo.widget.progress.IconRoundCornerProgressBar
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -36,6 +37,24 @@ class ActHostSmokeTest {
 
     @get:Rule
     val composeRule = createAndroidComposeRule<ActHost>()
+
+    /**
+     * `ActHost` auto-shows a one-time language picker on a genuinely fresh install (no
+     * `hasPickedLanguage` DataStore flag yet — see `maybeShowFirstLaunchLanguagePicker()`). Every
+     * test below assumes it's landing on the normal toolbar/tab UI, so dismiss it first if the
+     * install this test runs against happens to be fresh (real device installs aren't always
+     * fresh across runs, so this only fires when the sheet is actually present).
+     */
+    @Before
+    fun dismissFirstLaunchLanguagePickerIfShown() {
+        composeRule.waitForIdle()
+        val systemDefaultLabel = composeRule.activity.getString(R.string.language_system_default)
+        val isShown = composeRule.onAllNodesWithText(systemDefaultLabel).fetchSemanticsNodes().isNotEmpty()
+        if (isShown) {
+            composeRule.onNodeWithText(systemDefaultLabel).performClick()
+            composeRule.waitForIdle()
+        }
+    }
 
     @Test
     fun appLaunchesToHardwareTabWithoutCrashing() {
@@ -375,5 +394,15 @@ class ActHostSmokeTest {
         onView(withId(R.id.rv))
             .check(matches(hasDescendant(isAssignableFrom(IconRoundCornerProgressBar::class.java))))
     }
+
+    // No instrumented test for the Dashboard tab (F01): navigating to it reproducibly triggers
+    // "Cannot run onActivity since Activity has been destroyed already" from ActivityScenario's
+    // own teardown, even with zero assertions past composeRule.waitForIdle(). Confirmed via a live
+    // logcat capture that this is NOT an app crash (no FATAL EXCEPTION; the process exits 0,
+    // normal "make process inactive" transition) — it's a test-harness teardown timing issue,
+    // most likely composeRule.waitForIdle() never settling against a screen whose ViewModel
+    // updates state on a steady 1s timer (VMDashboard's CPU collector). Coverage for this feature
+    // instead comes from VMDashboardTest/HistoryBufferTest (unit) and a clean assembleDevDebug/
+    // lintDevDebug with the new MPAndroidChart dependency wired in.
 }
 

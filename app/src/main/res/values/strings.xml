@@ -456,4 +456,11 @@
     <string name="pref_share_app_summary">This app is amazing—share it with everyone to enjoy together!</string>
     <string name="pref_policy_app_summary">App Terms and Privacy Services</string>
     <string name="splash_ad_notice">Please note: this action may show ads</string>
+    <!--Realtime Dashboard (F01)-->
+    <string name="dashboard">Dashboard</string>
+    <string name="dashboard_cpu_load_title">CPU Utilization (avg %)</string>
+    <string name="dashboard_ram_used_title">RAM Used (%)</string>
+    <string name="dashboard_battery_temp_title">Battery Temp (°C)</string>
+    <string name="dashboard_empty_state">Collecting live data…</string>
+    <string name="dashboard_disclaimer">Session-only — history clears when you leave this tab.</string>
 </resources>

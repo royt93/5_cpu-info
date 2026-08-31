@@ -432,4 +432,11 @@
     <string name="pref_share_app_summary">Diese App ist großartig — teilen Sie sie mit Ihren Freunden!</string>
     <string name="pref_policy_app_summary">Nutzungsbedingungen und Datenschutzrichtlinie</string>
     <string name="splash_ad_notice">Hinweis: Bei dieser Aktion wird möglicherweise Werbung angezeigt</string>
+    <!--Realtime Dashboard (F01)-->
+    <string name="dashboard">Übersicht</string>
+    <string name="dashboard_cpu_load_title">CPU-Auslastung (Durchschnitt %)</string>
+    <string name="dashboard_ram_used_title">RAM belegt (%)</string>
+    <string name="dashboard_battery_temp_title">Akkutemperatur (°C)</string>
+    <string name="dashboard_empty_state">Live-Daten werden gesammelt…</string>
+    <string name="dashboard_disclaimer">Nur für diese Sitzung — Verlauf geht beim Verlassen verloren.</string>
 </resources>
