@@ -21,7 +21,7 @@ Tất cả lệnh chạy ở repo root. Project có hai product flavors (`dev`, 
 | Install lên thiết bị | `./gradlew installDevDebug` |
 | Clean | `./gradlew clean` |
 
-Release signing đọc từ `gradle.properties` (`STORE_FILE`, `STORE_PASSWORD`, `KEY_ALIAS`, `KEY_PASSWORD`); keystore là `app/keystore.jks`.
+Release signing đọc trực tiếp từ private sibling repo `../../../../myKeyStore/com.galaxyjoy.cpuinfo/keystore.properties`; `storeFile` resolve tương đối từ folder đó. Thiếu vault vẫn build debug được nhưng mọi release task sẽ fail với hướng dẫn setup.
 
 ## Toolchain (bị pin chặt — đừng tự nâng)
 
@@ -35,7 +35,7 @@ Release signing đọc từ `gradle.properties` (`STORE_FILE`, `STORE_PASSWORD`,
 ### Gradle layout
 - Một module ứng dụng duy nhất `:app`.
 - **Version catalog**: `gradle/libs.versions.toml` là single source of truth cho mọi version + library + plugin. Khi thêm dependency mới, thêm vào TOML rồi reference qua `libs.xxx` ở `app/build.gradle.kts`.
-- `buildSrc/src/main/java/{DependencyUpdates,SigningConfig}.kt` — code helper còn lại sau khi đã migrate sang TOML. `DependencyUpdates.kt` được dùng bởi task `:dependencyUpdates` (filter pre-release versions). `SigningConfig.kt` không được dùng active (signing đọc trực tiếp từ `gradle.properties`).
+- `buildSrc/src/main/java/{DependencyUpdates,SigningConfig}.kt` — code helper còn lại sau khi đã migrate sang TOML. `DependencyUpdates.kt` được dùng bởi task `:dependencyUpdates` (filter pre-release versions). `SigningConfig.kt` không được dùng active; signing đọc trực tiếp từ private sibling `myKeyStore`.
 - `settings.gradle.kts` có `pluginManagement { repositories { ... } }` cho `alias(libs.plugins.xxx)` và `dependencyResolutionManagement.repositoriesMode = PREFER_PROJECT` để cho phép `allprojects { repositories { ... } }` ở root.
 - `external/cpuinfo/` — prebuilt static lib `libcpuinfo.a` cho 4 ABI, được CMake link vào shared lib `cpuinfo-libs` (xem `app/src/main/cpp/CMakeLists.txt`). Native lib load qua **ReLinker** (`com.getkeepsafe.relinker`), không phải `System.loadLibrary` thuần.
 - Linker flag `-Wl,-z,max-page-size=16384` đã bật để tương thích thiết bị 16KB page size (Android 15+).

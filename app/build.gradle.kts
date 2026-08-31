@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -5,6 +7,32 @@ plugins {
     alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
+}
+
+val releaseKeystorePropertiesFile =
+    rootProject.file("../../../../myKeyStore/com.galaxyjoy.cpuinfo/keystore.properties")
+val releaseKeystorePropertiesText = providers.fileContents(
+    layout.file(providers.provider { releaseKeystorePropertiesFile })
+).asText.orNull
+val releaseKeystoreProperties = Properties().apply {
+    if (releaseKeystorePropertiesText != null) {
+        releaseKeystorePropertiesText.reader().use(::load)
+    }
+}
+val releaseTaskRequested = gradle.startParameter.taskNames.any { requestedTask ->
+    val taskName = requestedTask.substringAfterLast(':')
+    taskName.contains("release", ignoreCase = true) ||
+        taskName.equals("build", ignoreCase = true) ||
+        taskName.equals("assemble", ignoreCase = true) ||
+        taskName.equals("bundle", ignoreCase = true)
+}
+
+if (releaseTaskRequested && !releaseKeystorePropertiesFile.isFile) {
+    throw GradleException(
+        "Release signing configuration is missing. Clone the private royt93/myKeyStore " +
+            "repository to ${releaseKeystorePropertiesFile.parentFile.parentFile.parentFile} " +
+            "and ensure com.galaxyjoy.cpuinfo/keystore.properties exists."
+    )
 }
 
 kapt {
@@ -59,19 +87,24 @@ android {
 //            keyPassword = debugSigningConfig.getProperty(SigningConfig.KEY_PASS)
 //            storePassword = debugSigningConfig.getProperty(SigningConfig.KEY_PASS)
         }
-        create("release") {
+        if (releaseKeystorePropertiesFile.isFile) create("release") {
 //            val releaseSigningConfig = SigningConfig.getReleaseProperties(rootProject.rootDir)
 //            storeFile = file(releaseSigningConfig.getProperty(SigningConfig.KEY_PATH))
 //            keyAlias = releaseSigningConfig.getProperty(SigningConfig.KEY_ALIAS)
 //            keyPassword = releaseSigningConfig.getProperty(SigningConfig.KEY_PASS)
 //            storePassword = releaseSigningConfig.getProperty(SigningConfig.KEY_PASS)
 
-            // Release keystore is backed up in the private royt93/myKeyStore repo,
-            // cloned at the documented sibling path under @mckimquyen.
-            storeFile = rootProject.file("../../../../myKeyStore/com.galaxyjoy.cpuinfo/keystore.jks")
-            storePassword = project.properties["STORE_PASSWORD"] as String
-            keyAlias = project.properties["KEY_ALIAS"] as String
-            keyPassword = project.properties["KEY_PASSWORD"] as String
+            fun requiredSigningProperty(name: String): String =
+                releaseKeystoreProperties.getProperty(name)?.takeIf(String::isNotBlank)
+                    ?: throw GradleException(
+                        "Missing '$name' in ${releaseKeystorePropertiesFile.absolutePath}"
+                    )
+
+            val configuredStoreFile = requiredSigningProperty("storeFile")
+            storeFile = releaseKeystorePropertiesFile.parentFile.resolve(configuredStoreFile)
+            storePassword = requiredSigningProperty("storePassword")
+            keyAlias = requiredSigningProperty("keyAlias")
+            keyPassword = requiredSigningProperty("keyPassword")
         }
     }
 
@@ -98,7 +131,7 @@ android {
             buildConfigField("String", "ADMOB_REWARDED_ID", "\"ca-app-pub-3940256099942544/5224354917\"")
             buildConfigField("Boolean", "IS_ENABLE_ADMOB", "false") // false = AppLovin MAX
 
-            signingConfig = signingConfigs.getByName("release")
+            signingConfig = signingConfigs.findByName("release")
             isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }

@@ -35,6 +35,16 @@ Suite (F07), App Permission & SDK Inventory (F05), Vulkan/GLES Detail (F08), USB
 (F03), Privacy-preserving Fleet Compare (U04). Also see `doc/quick_win.md` — most of its "đợt 3a"
 bundle (#10/#8/#7/#6/#9) turned out to already be implemented as part of this loop.
 
+## ✅ Implemented — signing security (2026-08-31)
+
+| Mục | Outcome |
+|---|---|
+| Private signing bundle | `keystore.jks` và plaintext `keystore.properties` được lưu đầy đủ tại private repo `royt93/myKeyStore`, folder `com.galaxyjoy.cpuinfo/`, đồng thời có local clone ở `/Users/loitran/AndroidStudioProjects/@mckimquyen/myKeyStore`. |
+| Sanitize app HEAD | Xóa signing password/alias/path khỏi tracked `gradle.properties`; ignore `app/keystore.jks` và root `keystore.properties`. |
+| Gradle integration | Release signing đọc trực tiếp sibling `myKeyStore/com.galaxyjoy.cpuinfo/keystore.properties`; `storeFile` resolve tương đối từ folder bundle. Thiếu vault vẫn sync/debug được nhưng release task fail với hướng dẫn setup. |
+| Verification | `signingReport` và `apksigner` xác nhận certificate SHA-256 không đổi; `assembleProductionRelease` ký thành công khi bỏ qua `lintVitalAnalyzeProductionRelease`. Full release hiện còn bị chặn bởi lỗi có sẵn trong detector `NullSafeMutableLiveData` (`IncompatibleClassChangeError`), không liên quan signing. |
+| Accepted risks | Theo lựa chọn của user: giữ upload key hiện tại, không rewrite Git history, không mã hóa thêm private vault, không ký release trên CI. Keystore/password cũ vẫn tồn tại trong lịch sử public và phải được xem là đã từng lộ. |
+
 ## 🟡 In progress
 *(none)*
 
@@ -87,7 +97,6 @@ testImplementation(kotlin("test"))
 
 ## ⏸️ Deferred
 
-- **Security cleanup** (gỡ password/keystore khỏi repo) — user pick: skip, repo private
 - **Merge `feat/` ↔ `features/`** — scope lớn, để đợt sau
 - **Tech stack consolidation** (bỏ EventBus, RxJava→Coroutines) — scope rất lớn, cần plan riêng
 - **Bỏ Epoxy** — Airbnb đã deprecated, nhưng scope migration sang RecyclerView/LazyColumn lớn, defer

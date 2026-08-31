@@ -11,3 +11,4 @@ captures/
 # Claude Code local settings (YOLO/bypassPermissions — không commit)
 .claude/settings.local.json
 /app/keystore.jks
+/keystore.properties
