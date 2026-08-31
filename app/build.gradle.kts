@@ -66,7 +66,9 @@ android {
 //            keyPassword = releaseSigningConfig.getProperty(SigningConfig.KEY_PASS)
 //            storePassword = releaseSigningConfig.getProperty(SigningConfig.KEY_PASS)
 
-            storeFile = file(project.properties["STORE_FILE"] as String)
+            // Release keystore is backed up in the private royt93/myKeyStore repo,
+            // cloned at the documented sibling path under @mckimquyen.
+            storeFile = rootProject.file("../../../../myKeyStore/com.galaxyjoy.cpuinfo/keystore.jks")
             storePassword = project.properties["STORE_PASSWORD"] as String
             keyAlias = project.properties["KEY_ALIAS"] as String
             keyPassword = project.properties["KEY_PASSWORD"] as String
