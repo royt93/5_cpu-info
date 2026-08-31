@@ -22,9 +22,9 @@ class GalaxyApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        Log.d(TAG, "onCreate → setupAd + initializers")
-        setupAd()
+        Log.d(TAG, "onCreate → initializers + setupAd")
         initializers.init(this)
+        setupAd()
     }
 
     private fun setupAd() {

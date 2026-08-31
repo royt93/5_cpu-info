@@ -12,7 +12,7 @@ Tất cả lệnh chạy ở repo root. Project có hai product flavors (`dev`, 
 
 | Việc | Lệnh |
 |------|------|
-| Unit tests (CI sử dụng) | `./gradlew testDebugUnitTest` |
+| Unit tests (CI sử dụng) | `./gradlew testDevDebugUnitTest` |
 | Test variant cụ thể | `./gradlew :app:testDevDebugUnitTest` |
 | Test một class | `./gradlew :app:testDevDebugUnitTest --tests "com.galaxyjoy.cpuinfo.data.provider.DataProviderRamTest"` |
 | Lint | `./gradlew lintDevDebug` (đã set `abortOnError = false`) |
@@ -64,7 +64,7 @@ Chi tiết đầy đủ ở `doc/AD.MD`. Tóm tắt:
 
 ## CI
 
-`.github/workflows/build_and_test.yml` — chạy `./gradlew testDebugUnitTest` trên JDK 17 cho mọi PR và push lên `master`. Branch hiện tại là `dev` (PR target → `master`).
+`.github/workflows/build_and_test.yml` — chạy `testDevDebugUnitTest` + `lintDevDebug` + `assembleDevDebug` trên JDK 17 cho mọi PR và push lên `master`. Branch hiện tại là `dev` (PR target → `master`). **Lưu ý (2026-08-31)**: workflow chỉ active trên default branch (`master`) — trên fork hiện tại chưa từng merge lên `master` nên GitHub chưa từng chạy CI thật lần nào; đồng thời task cũ `testDebugUnitTest` (không chỉ định flavor) bị lỗi "ambiguous" thật với 2 flavor `dev`/`production` — đã sửa thành `testDevDebugUnitTest`.
 
 ## Test setup hiện tại
 

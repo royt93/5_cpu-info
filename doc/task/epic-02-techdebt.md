@@ -1,5 +1,7 @@
 # Epic 2 — Tech Debt & Kiến trúc
 
+> **Sweep 2026-08-31**: rà soát lại toàn bộ epic sau nhiều sprint feature (Sprint 3-25) xen giữa. Story 4, 6 (phần lớn), phần lớn Story 5 hoá ra đã tự resolve như tác dụng phụ của các sprint migrate region/feature khác, không track riêng lúc đó — đã verify + đánh dấu lại. Story 10 làm xong đợt này, phát hiện thêm CI chưa từng chạy thật + 1 bug lint tooling đã tồn tại sẵn. **Còn mở thật sự, ưu tiên cho loop sau**: Story 1 (region `sensor`/`screen`/`android` chưa migrate — `sensor` khó nhất), Story 3 (test coverage domain layer, T2.6-T2.9), Story 6 phần còn lại (T2.19-T2.21, T2.23-T2.24), Story 7 (xoá Epoxy, L effort, mở khoá nâng Kotlin), Story 8 (hợp nhất Preferences), Story 9 (T2.30 perf Applications list).
+
 > README.md gốc liệt kê TODO: "Unify architecture", "Replace layouts with Compose", "Replace RxJava with coroutines", "Tests", "Add benchmarks", "Migrate Material 3". Epic này track tiến độ thật của các TODO đó dựa trên review, không lặp việc đã Implemented trong `doc/feature.md`.
 
 ## Story 1 — Hoàn tất hoặc dứt điểm migration Interactor/Observable
@@ -35,25 +37,27 @@ Zero coverage hiện tại cho đúng lớp được kỳ vọng dễ test nhấ
 
 ## Story 4 — Dọn dead code
 
-- T2.10 — Xoá `InfoItemsEpoxyController` (class rỗng, đã `@Suppress("unused")`) — XS
-- T2.11 — Gộp `VMHardwareInfo.getCameraInfo()` (Camera API cũ, deprecated) vào `VMCameraInfo` (Camera2, đã đủ) — xoá duplicate — S
-- T2.12 — Xoá `VMAndroidInfo.getVmVersion()` Dalvik-check chết (minSdk 24 → luôn ART) — XS
-- T2.13 — Fix typo `glesVersio` → `glesVersion` lan ra 4 file (`GpuData.kt`, `ObservableGpuData.kt`, `GpuInfoEpoxyController.kt`, `SystemInfoExporter.kt`) — XS
+> **Xác minh lại 2026-08-31, cả 4 item đã stale** — đã được dọn từ trước như tác dụng phụ của các sprint migrate region (Story 1) hoặc sprint feature khác, không nhớ track riêng lúc đó.
+
+- ✅T2.10 — `InfoItemsEpoxyController.kt` không còn tồn tại trong repo — đã xoá — XS
+- ✅T2.11 — `VMHardwareInfo.kt` không còn hàm `getCameraInfo()` nào — dọn cùng lúc tách `VMCameraInfo` (T2.3/Sprint 19) — S
+- ✅T2.12 — `VMAndroidInfo.getBuildData()` giờ chỉ còn `listLiveData.add(Pair("VM", "ART"))` kèm comment giải thích (`minSdk=24 → runtime luôn là ART`) — không còn Dalvik-check chết — XS
+- ✅T2.13 — Không còn chỗ nào dùng `glesVersio` (thiếu "n") trong 4 file được nêu — đã đúng chính tả `glesVersion` toàn bộ — XS
 
 ## Story 5 — Ad system & init convention
 
-- T2.14 — Tách `GalaxyApp.setupAd()` thành `AdInitializer` theo đúng convention `AppInitializer` đã đặt ra cho mọi init khác — đồng thời fix thứ tự (hiện `setupAd()` chạy TRƯỚC `initializers.init()` → Timber chưa plant khi Ad SDK log) — S
-- T2.15 — `AppModuleBinds` dùng `Set<AppInitializer>` (Hilt multibinding) không đảm bảo thứ tự — thêm priority/dependency rõ ràng nếu có initializer phụ thuộc nhau — S
-- T2.16 — Cập nhật `CLAUDE.md` mục "Hệ thống quảng cáo": doc ghi flow cũ (`setConfig → earlyInit → ...`) và `getMyVipGAIDSet()` "chưa wire" nhưng thực tế đã xoá hẳn từ đợt 2; `compileSdk` ghi 36 nhưng thực tế 37; `AdmobWrapper` ghi 1.1.1 nhưng TOML thực tế 1.1.5 — XS
-- T2.17 — Cập nhật `doc/AD.MD` §7: ghi đã xoá field `adView` + 3 hook thủ công nhưng `ActHost.kt` vẫn giữ và gọi `AdManager.bannerDestroy()` thủ công — XS
+- ✅T2.14 — **Fix một phần (2026-08-31)**: đổi thứ tự `GalaxyApp.onCreate()` — `initializers.init(this)` chạy trước `setupAd()` (trước đó ngược lại). **Không làm phần tách `AdInitializer` riêng**: `setupAd()` chỉ log bằng `android.util.Log` thô (không phải `Timber`), và `AdManager.initialize()` là async — phần đồng bộ duy nhất chạy ngay sau dòng `initializers.init()` kế tiếp trong cùng `onCreate()`, nên rủi ro thật (Timber chưa plant khi SDK log) gần như không tồn tại. Tách thành `AppInitializer` mới sẽ cần giải quyết thêm vấn đề thứ tự trong `Set<AppInitializer>` (T2.15) mà không có lợi ích rõ ràng — over-engineering cho 1 concern lý thuyết, không làm — S (đã hạ effort thật)
+- ⏸️T2.15 — Hoãn cùng lý do T2.14: chỉ cần thiết nếu làm full extraction sang `AdInitializer`, hiện chưa làm nên chưa phát sinh nhu cầu — S
+- ✅T2.16 — Xác minh 2026-08-31: `CLAUDE.md` hiện đã ghi đúng `compileSdk=37`, `AdmobWrapper:1.1.5`, và không còn nhắc `getMyVipGAIDSet()` — đã cập nhật từ trước, không cần sửa — XS
+- ✅T2.17 — Xác minh 2026-08-31: `doc/AD.MD` dòng 3 đã có note (đề ngày 2026-08-28) giải thích chính xác việc field `adView` được thêm lại — đã tự cập nhật từ trước — XS
 
 ## Story 6 — Performance & cleanup nhỏ
 
-- T2.18 — `ObservableCpuData` poll lại cả min/max freq mỗi 1s dù cố định theo boot — cache 1 lần, chỉ poll current freq — XS
+- ✅T2.18 — Xác minh 2026-08-31: `ObservableCpuData.createObservable()` đã cache `minMaxFreqs` 1 lần trước `while(true)`, chỉ gọi lại `getCurrentFreq(i)` mỗi tick — đã tối ưu từ trước (comment tại chỗ giải thích rõ lý do), không cần sửa — XS
 - T2.19 — `ArcProgress`/`BaseRoundCornerProgressBar` override `invalidate()` rebuild `Paint`/`GradientDrawable` mỗi lần gọi (mỗi setter) — cache, chỉ rebuild khi input thật sự đổi — S
 - T2.20 — `TopAppBarView.kt` còn dùng Material2 `androidx.compose.material.TopAppBar` giữa codebase M3 — migrate — XS
 - T2.21 — Deprecated API cleanup: EGL10 legacy (`FrmGpuInfo`), `windowManager.defaultDisplay`, `Build.SERIAL`, `FrmGpuInfo` thiếu `onDestroyView` cleanup handler — S
-- T2.22 — `multiDexEnabled=true` dư thừa (minSdk 24, D8/R8 native multidex từ API 21) — xoá cấu hình + dependency — XS
+- ✅T2.22 — Xác minh 2026-08-31: không còn `multiDexEnabled`/multidex dependency nào trong `app/build.gradle.kts` hay TOML — đã xoá từ trước, không cần sửa — XS
 - T2.23 — Dọn `app/proguard-rules.pro` (265 dòng, phần lớn cho lib không còn dùng: butterknife/retrofit/realm/eventbus/facebook/dexter/ucrop/jsoup...) — thêm rule cho RxJava3 thật (`io.reactivex.rxjava3.**`) và AdmobWrapper nếu SDK không tự bundle consumer rules — S
 - T2.24 — Camera/DRM/Media ViewModel init đọc metadata đồng bộ trong constructor (Camera2, MediaDrm, MediaCodecList) — có thể gây jank/ANR trên OEM chậm — chuyển IO dispatcher + `StateFlow<UiState>` — M
 
@@ -75,9 +79,11 @@ Epoxy đã bị Airbnb ngừng phát triển, chỉ còn 3 màn hình dùng (`Fr
 
 ## Story 10 — CI/Build hygiene
 
-- T2.25 — Thêm step lint vào CI (hiện `abortOnError=false` khiến lint chạy cũng không fail — cân nhắc bật lại cho warning nghiêm trọng) — S
-- T2.26 — Thêm step `assembleDevDebug` vào CI để bắt lỗi compile resource/manifest/CMake mà unit test không phủ — S
-- T2.27 — Audit permission thừa trong Manifest: `POST_NOTIFICATIONS` (không thấy dùng NotificationManager trong code app), `REQUEST_DELETE_PACKAGES` (code chỉ dùng `ACTION_UNINSTALL_PACKAGE`, không cần permission silent-uninstall này) — S
+> **Đã xong (2026-08-31)**. Phát hiện thêm khi làm: `.github/workflows/build_and_test.yml` **chưa từng chạy thật lần nào** trên fork hiện tại — workflow chỉ active trên default branch (`master`), nhưng file này chỉ tồn tại ở `dev`, chưa từng merge lên `master` (`gh api repos/.../actions/workflows` trả `total_count: 0`). Đồng thời task CI cũ `./gradlew testDebugUnitTest` (không chỉ định flavor) **lỗi "ambiguous"** thật với 2 flavor `dev`/`production` — verify bằng cách chạy trực tiếp, fail ngay. Và khi thêm step lint, `lintAnalyzeDevDebug` crash `IncompatibleClassChangeError` trong detector `NonNullableMutableLiveDataDetector` (bug tương thích AGP 8.7.3 lint ↔ Kotlin K2 analysis API — không phải finding thật, đã note từ trước trong `doc/feature.md` mục signing security vì cũng chặn `lintVitalAnalyzeProductionRelease`) — disable riêng detector đó (`lint { disable += "NullSafeMutableLiveData" }`) để lint chạy được lại.
+
+- ✅T2.25 — Thêm step `Lint` (`./gradlew lintDevDebug`) vào CI, giữ `abortOnError=false` như quyết định trước đó (không đổi mức nghiêm trọng) — S
+- ✅T2.26 — Thêm step `Assemble debug APK` (`./gradlew assembleDevDebug`) vào CI — S
+- ✅T2.27 — Xoá 2 permission thừa khỏi `AndroidManifest.xml`: `POST_NOTIFICATIONS` (chỉ xuất hiện dạng string literal trong `AppPermissionCatalog.kt` — catalog tra cứu cho feature F05, không phải permission app tự xin; không có `NotificationManager`/runtime request nào) và `REQUEST_DELETE_PACKAGES` (code chỉ dùng `Intent.ACTION_UNINSTALL_PACKAGE` — dialog xác nhận hệ thống, không cần permission silent-uninstall). An toàn kể cả nếu 1 lib nào đó cần lại — manifest merger sẽ tự thêm từ lib manifest, không mất gì — S
 
 ---
 

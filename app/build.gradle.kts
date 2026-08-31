@@ -162,6 +162,11 @@ android {
 
     lint {
         abortOnError = false
+        // AGP 8.7.3's bundled lint crashes with IncompatibleClassChangeError inside this specific
+        // detector against our Kotlin/K2 analysis API version — a lint-tooling bug, not a real
+        // finding (see doc/feature.md "signing security" entry, discovered when it also blocked
+        // lintVitalAnalyzeProductionRelease on release builds). Disable until an AGP bump fixes it.
+        disable += "NullSafeMutableLiveData"
     }
 
     compileOptions {

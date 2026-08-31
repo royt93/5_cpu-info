@@ -3,13 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.GET_PACKAGE_SIZE" />
     <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
-    <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
     <!-- F03 USB/BT Inspector: normal permission, no runtime dialog, only needed pre-API31 to read
          paired-device count. API31+ requires the dangerous BLUETOOTH_CONNECT permission, which
          we deliberately don't request — the feature just omits the paired-device count there. -->
