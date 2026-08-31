@@ -69,9 +69,14 @@ Epoxy đã bị Airbnb ngừng phát triển, chỉ còn 3 màn hình dùng (`Fr
 
 ## Story 8 — Hợp nhất hệ thống Preferences (Gemini CLI)
 
-Đang phân mảnh 4 hệ thống lưu cấu hình song song: `UserPreferencesRepository` (DataStore), `Prefs.kt` (Gson SharedPrefs), `VipPrefs.kt`, `defaultSharedPreferences` trong `FrmSettings`. Phát hiện cụ thể: `UserPreferencesRepository.setApplicationsSortingOrder` bị bỏ hoang không dùng, trong khi `VMApplications` lại đọc sort order từ `Prefs.kt` — 2 nguồn sự thật cho cùng 1 setting.
-
-- T2.29 — Quy tụ về Jetpack DataStore duy nhất, xoá `Prefs.kt` (Gson SharedPrefs) — làm sau/song song Story 1 vì đụng `VMApplications`/`VMNewApplications` — M
+> **Đánh giá lại 2026-09-01 — bức tranh khác hẳn audit gốc (2026-08-28)**: cái gọi là "4 hệ thống phân mảnh" hoá ra phần lớn KHÔNG phải nợ kỹ thuật thật khi soi lại code hiện tại:
+> - `Prefs.kt` (Gson SharedPrefs) giờ chỉ còn 1 việc: cache path sysfs nhiệt độ CPU (`ObservableTemperatureData`, `TemperatureFormatter`) — phạm vi hẹp, đúng chỗ, không phải "cấu hình app" chung.
+> - `VipPrefs`/`ThrottleResultPrefs`/`StorageBenchResultPrefs`/`CheckInStreakPrefs` mỗi cái là 1 file SharedPreferences riêng cho đúng 1 feature — pattern hợp lý (mỗi feature tự quản lý state của mình), không phải trùng lặp cùng 1 setting ở nhiều nơi.
+> - `FrmSettings` dùng `SharedPreferences` qua Android Preference library (chuẩn cho màn Settings dùng `PreferenceFragmentCompat`) — đây là pattern platform-chuẩn, không cần "hợp nhất" vào DataStore chỉ vì tính nhất quán hình thức (`androidx.preference` vốn thiết kế quanh SharedPreferences).
+>
+> **Bug thật duy nhất còn sót, đã fix (2026-09-01)**: `UserPreferencesRepository.setApplicationsSortingOrder`/`userPreferencesFlow` (DataStore) đã được XÂY nhưng chưa từng NỐI dây — `VMNewApplications` (bản Compose hiện tại, thay `VMApplications` cũ đã xoá ở T2.1) giữ `isSortAscending` thuần in-memory trong `UiState`, reset về mặc định mỗi lần mở lại app. Đã wire: đọc `userPreferencesFlow.first()` lúc `init{}`, ghi qua `setApplicationsSortingOrder()` trong `onSortOrderChange()`. Xoá 2 `@Suppress("unused")` giờ không còn cần. Verify: `assembleDevDebug`/`lintDevDebug`/`testDevDebugUnitTest` xanh — không thêm test riêng cho phần nối dây này (chỉ là gọi lại 2 method DataStore đã có sẵn logic, không có nhánh mới cần test, cùng lý do đã bỏ qua `InteractorGetPackageName` ở T2.7).
+>
+> **Không làm phần "quy tụ vào 1 DataStore" của T2.29 gốc** — không còn source-of-truth nào bị trùng lặp thật để hợp nhất; các hệ thống còn lại đều đã tách đúng theo scope.
 
 ## Story 9 — Performance khác (Gemini CLI)
 

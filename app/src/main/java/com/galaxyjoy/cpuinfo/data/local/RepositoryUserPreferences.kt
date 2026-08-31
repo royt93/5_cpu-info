@@ -23,7 +23,6 @@ class UserPreferencesRepository @Inject constructor(
         val EXPORT_FORMAT = stringPreferencesKey("export_format")
     }
 
-    @Suppress("unused")
     val userPreferencesFlow: Flow<UserPreferences> = dataStore.data
         .catch { exception ->
             if (exception is IOException) {
@@ -36,7 +35,6 @@ class UserPreferencesRepository @Inject constructor(
             mapUserPreferences(preferences)
         }
 
-    @Suppress("unused")
     suspend fun setApplicationsSortingOrder(isAscending: Boolean) {
         dataStore.edit { preferences ->
             preferences[PreferencesKeys.SORTING_APPS] = isAscending

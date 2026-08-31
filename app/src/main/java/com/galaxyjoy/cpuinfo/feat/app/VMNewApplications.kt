@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.galaxyjoy.cpuinfo.R
+import com.galaxyjoy.cpuinfo.data.local.UserPreferencesRepository
 import com.galaxyjoy.cpuinfo.domain.model.ExtendedApplicationData
 import com.galaxyjoy.cpuinfo.domain.model.sortOrderFromBoolean
 import com.galaxyjoy.cpuinfo.domain.observable.ObservableApplicationsData
@@ -16,6 +17,7 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
@@ -28,6 +30,7 @@ class VMNewApplications @Inject constructor(
     private val observableApplicationsData: ObservableApplicationsData,
     private val interactorGetPackageName: InteractorGetPackageName,
     private val appPermissionProvider: AppPermissionProvider,
+    private val userPreferencesRepository: UserPreferencesRepository,
 ) : ViewModel() {
 
     private val _uiStateFlow = MutableStateFlow(UiState())
@@ -40,7 +43,14 @@ class VMNewApplications @Inject constructor(
         observableApplicationsData.observe()
             .onEach(::handleApplicationsResult)
             .launchIn(viewModelScope)
-        onRefreshApplications()
+        viewModelScope.launch {
+            // Sort order previously lived only in in-memory UiState (reset to ASCENDING on every
+            // app restart) — this was built (DataStore key + read/write methods already existed)
+            // but never wired up. Read the persisted value once at startup instead.
+            val isAscending = userPreferencesRepository.userPreferencesFlow.first().isApplicationsSortingAscending
+            _uiStateFlow.update { it.copy(isSortAscending = isAscending) }
+            onRefreshApplications()
+        }
     }
 
     fun onRefreshApplications() {
@@ -127,6 +137,7 @@ class VMNewApplications @Inject constructor(
     fun onSortOrderChange(isAscending: Boolean) {
         _uiStateFlow.update { it.copy(isSortAscending = isAscending) }
         onRefreshApplications()
+        viewModelScope.launch { userPreferencesRepository.setApplicationsSortingOrder(isAscending) }
     }
 
     private fun handleApplicationsResult(result: MyResult<List<ExtendedApplicationData>>) {
