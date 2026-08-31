@@ -17,14 +17,22 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class FrmInfoContainer : BaseFrm<FrmInfoBinding>(R.layout.frm_info) {
 
+    private var tabLayoutMediator: TabLayoutMediator? = null
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val adapter = AdtInfoContainerState(this)
         binding.vp.adapter = adapter
-        TabLayoutMediator(binding.tabs, binding.vp) { tab: TabLayout.Tab, position: Int ->
+        tabLayoutMediator = TabLayoutMediator(binding.tabs, binding.vp) { tab: TabLayout.Tab, position: Int ->
             tab.text = resources.getText(adapter.getTitleRes(position))
-        }.attach()
+        }.also { it.attach() }
+    }
+
+    override fun onDestroyView() {
+        tabLayoutMediator?.detach()
+        tabLayoutMediator = null
+        super.onDestroyView()
     }
 }
 

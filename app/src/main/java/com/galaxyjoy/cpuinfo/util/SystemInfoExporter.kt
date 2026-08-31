@@ -21,6 +21,7 @@ import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONObject
 import timber.log.Timber
+import java.util.Locale
 import java.util.UUID
 import javax.inject.Inject
 
@@ -84,15 +85,15 @@ class SystemInfoExporter @Inject constructor(
         appendLine("💾 RAM")
         val totalRam = dataProviderRam.getTotalBytes() / GIGA
         val availRam = dataProviderRam.getAvailableBytes() / GIGA
-        appendLine("Total: ${"%.2f".format(totalRam)}GB")
-        appendLine("Available: ${"%.2f".format(availRam)}GB")
+        appendLine("Total: ${formatTwoDecimals(totalRam)}GB")
+        appendLine("Available: ${formatTwoDecimals(availRam)}GB")
         appendLine("Usage: ${100 - dataProviderRam.getAvailablePercentage()}%")
         appendLine()
 
         appendLine("💿 STORAGE")
         val internalPath = Environment.getDataDirectory()
-        appendLine("Internal Total: ${"%.2f".format(internalPath.totalSpace / GIGA)}GB")
-        appendLine("Internal Free: ${"%.2f".format(internalPath.usableSpace / GIGA)}GB")
+        appendLine("Internal Total: ${formatTwoDecimals(internalPath.totalSpace / GIGA)}GB")
+        appendLine("Internal Free: ${formatTwoDecimals(internalPath.usableSpace / GIGA)}GB")
         appendLine()
 
         appendLine("🎮 GPU")
@@ -103,7 +104,7 @@ class SystemInfoExporter @Inject constructor(
         appendLine("🖥️ DISPLAY")
         val display = displayManager.getDisplay(Display.DEFAULT_DISPLAY)
         if (display != null) {
-            appendLine("Refresh rate: ${"%.2f".format(display.refreshRate)} Hz")
+            appendLine("Refresh rate: ${formatTwoDecimals(display.refreshRate.toDouble())} Hz")
             appendLine("Supported modes: ${display.supportedModes.size}")
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 val hdr = display.hdrCapabilities?.supportedHdrTypes ?: intArrayOf()
@@ -252,6 +253,9 @@ class SystemInfoExporter @Inject constructor(
     }
 
     private fun Boolean.yesNo() = if (this) "Yes" else "No"
+
+    /** Always renders with a "." decimal point, regardless of the device's default locale. */
+    internal fun formatTwoDecimals(value: Double): String = "%.2f".format(Locale.US, value)
 
     companion object {
         private const val GIGA = 1024.0 * 1024.0 * 1024.0

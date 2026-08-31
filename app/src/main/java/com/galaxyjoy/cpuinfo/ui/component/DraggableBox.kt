@@ -1,6 +1,5 @@
 package com.galaxyjoy.cpuinfo.ui.component
 
-import android.annotation.SuppressLint
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -21,7 +20,6 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.IntOffset
 import kotlin.math.roundToInt
 
-@SuppressLint("UnusedTransitionTargetStateParameter")
 @Composable
 fun DraggableBox(
     isRevealed: Boolean,
@@ -33,15 +31,10 @@ fun DraggableBox(
 ) {
     var offsetX by remember { mutableStateOf(0f) }
     var actionRowOffset by remember { mutableStateOf(0) }
-    val transitionState = remember {
-        MutableTransitionState(isRevealed).apply {
-            targetState = !isRevealed
-        }
-    }
-    val transition = rememberTransition(transitionState, "boxTransition")
+    val transition = updateTransition(isRevealed, label = "boxTransition")
     val offsetTransition by transition.animateFloat(
         label = "boxOffsetTransition",
-        targetValueByState = { if (isRevealed) offsetX - actionRowOffset else -offsetX },
+        targetValueByState = { revealed -> if (revealed) offsetX - actionRowOffset else -offsetX },
     )
     Box(
         contentAlignment = Alignment.CenterEnd,

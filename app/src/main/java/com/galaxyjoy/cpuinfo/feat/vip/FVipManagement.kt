@@ -42,6 +42,7 @@ class FVipManagement : Fragment() {
     private var confettiAnimatorListener: android.animation.AnimatorListenerAdapter? = null
     private var countUpAnimator: ValueAnimator? = null
     private var lastMinute: Int? = null
+    private var scrollToRedeemSectionRunnable: Runnable? = null
     /** True khi confetti đang chạy → bindUi không restart shimmer (tránh race rotate). */
     private var isConfettiRunning: Boolean = false
 
@@ -100,8 +101,9 @@ class FVipManagement : Fragment() {
      */
     private fun scrollToRedeemSection() {
         // Post delayed để keyboard có thời gian show + ScrollView resize trước khi scroll.
-        binding.btnRedeemKey.postDelayed({
-            if (_binding == null) return@postDelayed
+        scrollToRedeemSectionRunnable?.let { binding.btnRedeemKey.removeCallbacks(it) }
+        val runnable = Runnable {
+            if (_binding == null) return@Runnable
             val extraPaddingPx = (16 * resources.displayMetrics.density).toInt()
             val rect = android.graphics.Rect(
                 0,
@@ -110,7 +112,9 @@ class FVipManagement : Fragment() {
                 binding.btnRedeemKey.height + extraPaddingPx,
             )
             binding.btnRedeemKey.requestRectangleOnScreen(rect, false)
-        }, 300L)
+        }
+        scrollToRedeemSectionRunnable = runnable
+        binding.btnRedeemKey.postDelayed(runnable, 300L)
     }
 
     private fun onRedeemClick() {
@@ -562,6 +566,8 @@ class FVipManagement : Fragment() {
             removeAllAnimatorListeners()
             cancelAnimation()
         }
+        scrollToRedeemSectionRunnable?.let { binding.btnRedeemKey.removeCallbacks(it) }
+        scrollToRedeemSectionRunnable = null
         countDownTimer?.cancel(); countDownTimer = null
         pulseAnimator?.cancel()
         pulseAnimator?.removeAllUpdateListeners()

@@ -9,16 +9,19 @@ import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.longClick
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
+import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.galaxyjoy.cpuinfo.feat.ActHost
+import com.galaxyjoy.cpuinfo.widget.progress.IconRoundCornerProgressBar
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -321,6 +324,56 @@ class ActHostSmokeTest {
 
         composeRule.onNodeWithText(composeRule.activity.getString(R.string.can_my_device_title)).assertExists()
         composeRule.onNodeWithText(composeRule.activity.getString(R.string.can_my_device_disclaimer)).assertExists()
+    }
+
+    @Test
+    fun cpuFrequencyProgressBarsRenderOnDefaultTab() {
+        // Regression guard for B20: `IconRoundCornerProgressBar`'s old `max/progress` formula
+        // could divide by zero and produce NaN/Infinity width when a core reports max freq = 0
+        // (unreadable cpufreq sysfs on some OEMs) — this exercises the bar with this real
+        // device's actual frequency values, not a synthetic 0/0 case, since that specific reading
+        // is device/kernel-state dependent and can't be forced from a test.
+        composeRule.waitForIdle()
+        onView(withId(R.id.rv))
+            .check(matches(hasDescendant(isAssignableFrom(IconRoundCornerProgressBar::class.java))))
+    }
+
+    @Test
+    fun hardwareTabAndBackRepeatedlyDoesNotCrash() {
+        // Regression guard for B16: `FrmInfoContainer` now detaches its `TabLayoutMediator` in
+        // onDestroyView() instead of leaking it. Each Hardware <-> Applications round trip
+        // destroys/recreates FrmInfoContainer's view — repeating it several times is a stress
+        // proxy for the leak fix (an actual leak isn't observable via Espresso, only via a
+        // memory profiler, so this only proves the fix doesn't regress crash-free navigation).
+        repeat(4) {
+            onView(withId(R.id.menuHardware)).perform(click())
+            composeRule.waitForIdle()
+            onView(withId(R.id.menuApplications)).perform(click())
+            composeRule.waitForIdle()
+        }
+        onView(withId(R.id.menuHardware)).perform(click())
+        composeRule.waitForIdle()
+        onView(withId(R.id.rv))
+            .check(matches(hasDescendant(isAssignableFrom(IconRoundCornerProgressBar::class.java))))
+    }
+
+    @Test
+    fun vipRedeemFieldFocusThenImmediateBackDoesNotCrash() {
+        // Regression guard for B21: `scrollToRedeemSection()`'s postDelayed(300ms) used to leak
+        // its Runnable past onDestroyView(). Focusing the field posts that delayed scroll; back
+        // then destroys the fragment's view before the 300ms elapses — exactly the race the fix
+        // cancels via removeCallbacks() in onDestroyView(). Two presses because the first one
+        // only dismisses the soft keyboard the focus click opened (standard Android behavior),
+        // the second actually finishes ActVip and returns to ActHost.
+        onView(withId(R.id.actionVipIcon)).perform(click())
+        onView(withId(R.id.etRedeemKey)).perform(click())
+        pressBack()
+        pressBack()
+        composeRule.waitForIdle()
+
+        // Back on ActHost without a crash — the CPU tab (default) is still there.
+        onView(withId(R.id.rv))
+            .check(matches(hasDescendant(isAssignableFrom(IconRoundCornerProgressBar::class.java))))
     }
 }
 

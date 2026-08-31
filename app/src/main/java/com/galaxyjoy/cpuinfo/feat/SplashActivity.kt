@@ -6,8 +6,8 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.galaxyjoy.cpuinfo.BaseActivity
 import com.galaxyjoy.cpuinfo.databinding.ActivitySplashBinding
 import com.roy.sdkadbmob.AdManager
 import com.roy.sdkadbmob.ExperimentalAdApi
@@ -16,7 +16,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 @SuppressLint("CustomSplashScreen")
-class SplashActivity : AppCompatActivity() {
+class SplashActivity : BaseActivity() {
 
     companion object {
         private const val TAG = "roy93~Splash"

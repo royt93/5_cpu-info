@@ -5,6 +5,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Density
 
 private val LightColors = lightColorScheme(
     primary = md_theme_light_primary,
@@ -81,9 +84,20 @@ fun CpuInfoTheme(
         DarkColors
     }
 
-    MaterialTheme(
-        colorScheme = colors,
-        typography = CpuInfoTypography,
-        content = content,
+    // Lock text scale to the app's own sizing regardless of the device's system font size —
+    // `BaseActivity.applyOverrideConfiguration()` handles this for classic Views, but Compose
+    // dialogs/bottom sheets don't reliably inherit that Activity-level override, so it's pinned
+    // again here at the Compose theme root (density itself is left untouched, only fontScale).
+    val fixedFontScaleDensity = Density(
+        density = LocalDensity.current.density,
+        fontScale = 1f,
     )
+
+    CompositionLocalProvider(LocalDensity provides fixedFontScaleDensity) {
+        MaterialTheme(
+            colorScheme = colors,
+            typography = CpuInfoTypography,
+            content = content,
+        )
+    }
 }

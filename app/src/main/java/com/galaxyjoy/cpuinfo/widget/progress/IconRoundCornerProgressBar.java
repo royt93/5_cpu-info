@@ -113,8 +113,9 @@ public class IconRoundCornerProgressBar extends AnimatedRoundCornerProgressBar {
         }
         layoutProgress.setBackground(progressDrawable);
 
-        float ratio = max / progress;
-        int progressWidth = (int) ((totalWidth - ((padding * 2) + ivProgressIcon.getWidth())) / ratio);
+        int progressWidth = (max <= 0f || progress <= 0f)
+                ? 0
+                : (int) ((totalWidth - ((padding * 2) + ivProgressIcon.getWidth())) * progress / max);
         ViewGroup.MarginLayoutParams progressParams = (ViewGroup.MarginLayoutParams) layoutProgress.getLayoutParams();
         if (isReverse) {
             if (padding + (progressWidth / 2) < radius) {

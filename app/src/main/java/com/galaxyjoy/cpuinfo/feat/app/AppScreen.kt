@@ -40,7 +40,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -61,7 +60,6 @@ import com.galaxyjoy.cpuinfo.ui.theme.rowActionIconSize
 import com.galaxyjoy.cpuinfo.ui.theme.spacingSmall
 import com.galaxyjoy.cpuinfo.ui.theme.spacingXSmall
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.coroutines.launch
 import com.galaxyjoy.cpuinfo.R
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -87,18 +85,15 @@ fun ApplicationsScreen(
     onPolicyClicked: () -> Unit = {},
 ) {
     val context = LocalContext.current
-    val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(uiState.snackbarMessage) {
-        scope.launch {
-            if (uiState.snackbarMessage != -1) {
-                val result = snackbarHostState.showSnackbar(
-                    context.getString(uiState.snackbarMessage)
-                )
-                if (result == SnackbarResult.Dismissed) {
-                    onSnackbarDismissed()
-                }
+        if (uiState.snackbarMessage != -1) {
+            val result = snackbarHostState.showSnackbar(
+                context.getString(uiState.snackbarMessage)
+            )
+            if (result == SnackbarResult.Dismissed) {
+                onSnackbarDismissed()
             }
         }
     }

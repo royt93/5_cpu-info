@@ -12,5 +12,4 @@ data class ExtendedApplicationData(
     val nativeLibraryDir: String?,
     val hasNativeLibs: Boolean,
     @Stable val appIconUri: Uri,
-    val appSize: Long = 0
 )

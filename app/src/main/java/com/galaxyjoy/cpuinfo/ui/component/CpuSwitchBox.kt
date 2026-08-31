@@ -47,7 +47,7 @@ fun CpuSwitchBox(
 @Composable
 fun CpuSwitchBoxPreview() {
     CpuInfoTheme {
-        CpuCheckbox(
+        CpuSwitchBox(
             text = "Test",
             isChecked = true,
             onCheckedChange = {}
