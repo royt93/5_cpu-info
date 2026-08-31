@@ -78,9 +78,9 @@ Epoxy đã bị Airbnb ngừng phát triển, chỉ còn 3 màn hình dùng (`Fr
 >
 > **Không làm phần "quy tụ vào 1 DataStore" của T2.29 gốc** — không còn source-of-truth nào bị trùng lặp thật để hợp nhất; các hệ thống còn lại đều đã tách đúng theo scope.
 
-## Story 9 — Performance khác (Gemini CLI)
+## Story 9 — Performance khác (Gemini CLI) ✅ DONE (2026-09-01)
 
-- T2.30 — `VMApplications`/`ObservableApplicationsData` load danh sách app: với mỗi app gọi thêm `packageManager.getPackageInfo()` chỉ để lấy icon resource ID dù `ApplicationInfo` đã có sẵn field cần thiết — với máy 200+ app tạo hàng trăm Binder IPC call dư thừa, có thể gây đơ UI khi mở tab. Loại bỏ call thừa + batch trên `Dispatchers.IO` — M (làm chung T2.1)
+- T2.30 — ~~`VMApplications`/`ObservableApplicationsData` load danh sách app: với mỗi app gọi thêm `packageManager.getPackageInfo()` chỉ để lấy icon resource ID dù `ApplicationInfo` đã có sẵn field cần thiết — với máy 200+ app tạo hàng trăm Binder IPC call dư thừa, có thể gây đơ UI khi mở tab. Loại bỏ call thừa + batch trên `Dispatchers.IO` — M (làm chung T2.1)~~ **DONE**: xoá hẳn `getResourceId()`/IPC thừa, dùng thẳng `ApplicationInfo.icon` đã có sẵn từ `getInstalledApplications()`. Phần "batch trên `Dispatchers.IO`" của scope gốc thành thừa luôn — không còn IPC chặn nào để batch (map giờ chỉ build `Uri` thuần, không I/O). Logic build Uri tách thành top-level `internal fun buildAppIconUri()` để test được: `android.net.Uri.Builder` không mock được trên JVM unit test stub (`isReturnDefaultValues=true` khiến mọi fluent setter trả null, NPE khi chain) — cover bằng 2 instrumented test (`ObservableApplicationsDataInstrumentedTest`, chạy trên `android.net.Uri` thật) thay vì unit test. Smoke test trên TECNO KJ7: tab Applications load, icon tất cả app hiển thị đúng, không vỡ.
 
 ## Story 10 — CI/Build hygiene
 

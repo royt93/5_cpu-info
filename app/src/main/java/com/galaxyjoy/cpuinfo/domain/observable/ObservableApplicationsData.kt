@@ -2,10 +2,8 @@ package com.galaxyjoy.cpuinfo.domain.observable
 
 import android.content.ContentResolver
 import android.content.pm.ApplicationInfo
-import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.net.Uri
-import android.os.Build
 import com.galaxyjoy.cpuinfo.data.provider.DataProviderApplications
 import com.galaxyjoy.cpuinfo.domain.MutableInteractor
 import com.galaxyjoy.cpuinfo.domain.model.ExtendedApplicationData
@@ -35,7 +33,7 @@ class ObservableApplicationsData @Inject constructor(
                         sourceDir = it.sourceDir,
                         nativeLibraryDir = it.nativeLibraryDir,
                         hasNativeLibs = it.hasNativeLibs(),
-                        appIconUri = getAppIconUri(it.packageName)
+                        appIconUri = buildAppIconUri(it.packageName, it.icon)
                     )
                 }
             when (params.sortOrder) {
@@ -56,34 +54,27 @@ class ObservableApplicationsData @Inject constructor(
         }
     }
 
-    private fun getAppIconUri(packageName: String): Uri {
-        return Uri.Builder()
-            .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
-            .authority(packageName)
-            .path(getResourceId(packageName).toString())
-            .build()
-    }
-
-    @Suppress("DEPRECATION")
-    private fun getResourceId(packageName: String): Int {
-        val packageInfo: PackageInfo
-        try {
-            packageInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                packageManager.getPackageInfo(
-                    /* packageName = */ packageName,
-                    /* flags = */ PackageManager.PackageInfoFlags.of(0)
-                )
-            } else {
-                packageManager.getPackageInfo(packageName, 0)
-            }
-        } catch (_: PackageManager.NameNotFoundException) {
-            return 0
-        }
-        return packageInfo.applicationInfo?.icon ?: 0
-    }
-
     data class Params(
         val withSystemApps: Boolean,
         val sortOrder: SortOrder = SortOrder.NONE,
     )
+}
+
+/**
+ * T2.30: [iconResId] comes straight off the [ApplicationInfo] already returned by
+ * [DataProviderApplications.getInstalledApplications] — this used to re-fetch it via a
+ * separate [PackageManager.getPackageInfo] Binder call per app (hundreds of redundant IPCs
+ * on a 200+-app device) even though the exact same `icon` field was already in hand.
+ *
+ * Top-level (not a class member) and `internal` so it can be exercised directly from an
+ * instrumented test: `Uri.Builder` is unmockable on the JVM unit-test stub (every fluent
+ * setter returns null under `isReturnDefaultValues = true`), so this can only be verified
+ * against the real `android.net.Uri` implementation on-device.
+ */
+internal fun buildAppIconUri(packageName: String, iconResId: Int): Uri {
+    return Uri.Builder()
+        .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
+        .authority(packageName)
+        .path(iconResId.toString())
+        .build()
 }
