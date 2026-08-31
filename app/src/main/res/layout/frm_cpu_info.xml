@@ -25,21 +25,26 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:clipToPadding="false"
-                android:padding="8dp"
+                android:paddingStart="8dp"
+                android:paddingTop="8dp"
+                android:paddingEnd="8dp"
+                android:paddingBottom="72dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
         </LinearLayout>
 
         <!-- U01 entry point — device authenticity check, contextually belongs on the CPU tab
-             rather than the shared toolbar (which already has Shield/VIP/Share). -->
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+             rather than the shared toolbar (which already has Shield/VIP/Share). Icon-only mini
+             FAB (not Extended/pill) so it doesn't dominate the screen or cover list content. -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fabDeviceTruth"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_margin="16dp"
-            android:text="@string/device_truth_fab_label"
-            app:icon="@drawable/ic_device_truth" />
+            android:contentDescription="@string/device_truth_fab_label"
+            app:fabSize="mini"
+            app:srcCompat="@drawable/ic_device_truth" />
 
     </FrameLayout>
 
