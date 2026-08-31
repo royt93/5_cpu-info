@@ -10,6 +10,9 @@ import com.galaxyjoy.cpuinfo.databinding.FrmCpuInfoBinding
 import com.galaxyjoy.cpuinfo.feat.airead.AiReadinessBar
 import com.galaxyjoy.cpuinfo.feat.airead.AiReadinessBottomSheet
 import com.galaxyjoy.cpuinfo.feat.airead.AiReadinessProvider
+import com.galaxyjoy.cpuinfo.feat.canmydevice.CanMyDeviceBar
+import com.galaxyjoy.cpuinfo.feat.canmydevice.CanMyDeviceBottomSheet
+import com.galaxyjoy.cpuinfo.feat.canmydevice.CanMyDeviceProvider
 import com.galaxyjoy.cpuinfo.feat.infor.base.BaseFrm
 import com.galaxyjoy.cpuinfo.feat.truth.DeviceTruthBottomSheet
 import com.galaxyjoy.cpuinfo.ui.theme.CpuInfoTheme
@@ -32,6 +35,9 @@ class FrmCpuInfo : BaseFrm<FrmCpuInfoBinding>(R.layout.frm_cpu_info) {
     @Inject
     lateinit var aiReadinessProvider: AiReadinessProvider
 
+    @Inject
+    lateinit var canMyDeviceProvider: CanMyDeviceProvider
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -51,6 +57,9 @@ class FrmCpuInfo : BaseFrm<FrmCpuInfoBinding>(R.layout.frm_cpu_info) {
                         ClusterTopologyScreen(clusters = clusterTopologyProvider.clusters())
                         AiReadinessBar(result = aiReadinessProvider.evaluate()) {
                             AiReadinessBottomSheet().show(childFragmentManager, AiReadinessBottomSheet.TAG)
+                        }
+                        CanMyDeviceBar(result = canMyDeviceProvider.evaluate()) {
+                            CanMyDeviceBottomSheet().show(childFragmentManager, CanMyDeviceBottomSheet.TAG)
                         }
                     }
                 }

@@ -309,6 +309,19 @@
     <string name="ai_readiness_flag_fp16">FP16 arithmetic</string>
     <string name="ai_readiness_flag_sve">Scalable Vector Extension (SVE)</string>
     <string name="ai_readiness_disclaimer">Heuristic estimate based on CPU instruction support, RAM, and core count — not a benchmark, and doesn\'t detect a dedicated NPU.</string>
+    <!--Can My Device? rule engine (U05)-->
+    <string name="can_my_device_bar_label">Can My Device?</string>
+    <string name="can_my_device_title">Can My Device?</string>
+    <string name="can_my_device_disclaimer">Based on capability data this device reports (DRM, camera, Vulkan, AI Readiness) — actual app behavior can still vary by OS version and installed app.</string>
+    <string name="can_my_device_verdict_yes">Yes</string>
+    <string name="can_my_device_verdict_no">No</string>
+    <string name="can_my_device_verdict_partial">Partial</string>
+    <string name="can_my_device_q_netflix_hd">Stream Netflix/Disney+ in HD or better?</string>
+    <string name="can_my_device_q_hdcp_4k">Stream 4K DRM-protected content (Netflix 4K)?</string>
+    <string name="can_my_device_q_camera_raw">Shoot RAW (DNG) photos?</string>
+    <string name="can_my_device_q_slow_motion">Record 240fps+ slow motion video?</string>
+    <string name="can_my_device_q_vulkan_gaming">Play heavy-graphics games via Vulkan?</string>
+    <string name="can_my_device_q_on_device_ai">Run a small LLM/AI model on-device?</string>
     <string name="hardware_snapshot_pref_title">Hardware Snapshot</string>
     <string name="hardware_snapshot_pref_summary">Save a baseline and detect hardware or config changes over time</string>
     <string name="hardware_snapshot_title">Hardware Snapshot</string>
