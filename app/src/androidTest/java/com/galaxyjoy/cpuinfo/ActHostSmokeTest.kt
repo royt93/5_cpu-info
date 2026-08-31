@@ -287,4 +287,40 @@ class ActHostSmokeTest {
 
         composeRule.onNodeWithText(doneLabel).assertExists()
     }
+
+    @Test
+    fun languagePickerPrefOpensBottomSheetWithAllSupportedLocales() {
+        onView(withId(R.id.menuSettings)).perform(click())
+        composeRule.waitForIdle()
+
+        onView(withText(composeRule.activity.getString(R.string.language_change))).perform(click())
+        composeRule.waitForIdle()
+
+        composeRule.onNodeWithText(composeRule.activity.getString(R.string.language_picker_title)).assertExists()
+        composeRule.onNodeWithText(composeRule.activity.getString(R.string.language_system_default)).assertExists()
+        composeRule.onNodeWithText("English").assertExists()
+        composeRule.onNodeWithText("Tiếng Việt").assertExists()
+        composeRule.onNodeWithText("Čeština").assertExists()
+        composeRule.onNodeWithText("Deutsch").assertExists()
+        composeRule.onNodeWithText("Polski").assertExists()
+        composeRule.onNodeWithText("繁體中文").assertExists()
+    }
+
+    @Test
+    fun canMyDeviceBarOpensSheetWithRulesAndDisclaimer() {
+        onView(withId(R.id.menuHardware)).perform(click())
+        composeRule.waitForIdle()
+
+        // DRM is in the tab list
+        clickTabByText(composeRule.activity.getString(R.string.drm))
+        composeRule.waitForIdle()
+
+        composeRule.onNodeWithText(composeRule.activity.getString(R.string.can_my_device_bar_label))
+            .performClick()
+        composeRule.waitForIdle()
+
+        composeRule.onNodeWithText(composeRule.activity.getString(R.string.can_my_device_title)).assertExists()
+        composeRule.onNodeWithText(composeRule.activity.getString(R.string.can_my_device_disclaimer)).assertExists()
+    }
 }
+

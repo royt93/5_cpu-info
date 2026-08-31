@@ -107,8 +107,8 @@
     <string name="manufacturer">Výrobce</string>
     <string name="board">Základní deska</string>
     <string name="serial">Sériové číslo</string>
-    <string name="rooted">Rooted</string>
-    <string name="encrypted_storage">Encrypted Storage</string>
+    <string name="rooted">Rootováno</string>
+    <string name="encrypted_storage">Šifrované úložiště</string>
     <string name="security_providers">Poskytovatelé zabezpečení</string>
     <!--Hardware-->
     <string name="battery">Akumulátor</string>
@@ -226,8 +226,8 @@
     <string name="thermal_status_unknown">Neznámé</string>
     <string name="thermal_headroom_label">Tepelná rezerva (příštích 10 s): %1$d %%</string>
     <string name="apps_more_options">Další možnosti</string>
-    <string name="shield_score_menu_title">Shield Score</string>
-    <string name="shield_score_title">Shield Score</string>
+    <string name="shield_score_menu_title">Skóre stavu zařízení</string>
+    <string name="shield_score_title">Skóre stavu zařízení</string>
     <string name="shield_score_ram_label">RAM</string>
     <string name="shield_score_storage_label">Úložiště</string>
     <string name="shield_score_battery_label">Baterie</string>
@@ -398,4 +398,35 @@
     <string name="battery_current_now">Aktuální proud</string>
     <string name="battery_session_min_current">Minimální proud (relace)</string>
     <string name="battery_session_max_current">Maximální proud (relace)</string>
+    <string name="open_app">Otevřít</string>
+    <string name="app_settings">Nastavení</string>
+    <string name="uninstall">Odinstalovat</string>
+    <string name="view_in_play_store">Zobrazit v Obchodě Play</string>
+    <string name="rate_app">Ohodnotit aplikaci</string>
+    <string name="more_app">Další aplikace</string>
+    <string name="share_app">Sdílet aplikaci</string>
+    <string name="share_apk">Sdílet APK</string>
+    <string name="term_policy">Podmínky a zásady</string>
+    <string name="app_share_error">Soubor APK nelze sdílet</string>
+    <string name="apps_show_system_apps">Zobrazit systémové aplikace</string>
+    <string name="apps_sort_order">Řazení</string>
+    <string name="clear">Vymazat</string>
+    <string name="vulkan_version">Verze Vulkan</string>
+    <string name="can_my_device_bar_label">Schopnosti zařízení</string>
+    <string name="can_my_device_title">Schopnosti zařízení</string>
+    <string name="can_my_device_disclaimer">Na základě údajů o schopnostech zařízení (DRM, fotoaparát, Vulkan, připravenost na AI) — skutečné chování se může lišit podle verze OS a aplikace.</string>
+    <string name="can_my_device_verdict_yes">Ano</string>
+    <string name="can_my_device_verdict_no">Ne</string>
+    <string name="can_my_device_verdict_partial">Částečně</string>
+    <string name="can_my_device_q_netflix_hd">Streamovat Netflix/Disney+ v HD nebo vyšší kvalitě?</string>
+    <string name="can_my_device_q_hdcp_4k">Streamovat 4K obsah chráněný DRM (Netflix 4K)?</string>
+    <string name="can_my_device_q_camera_raw">Fotografovat do formátu RAW (DNG)?</string>
+    <string name="can_my_device_q_slow_motion">Nahrávat zpomalené video 240fps+?</string>
+    <string name="can_my_device_q_vulkan_gaming">Hrát graficky náročné hry přes Vulkan?</string>
+    <string name="can_my_device_q_on_device_ai">Spustit malý model AI/LLM přímo v zařízení?</string>
+    <string name="pref_rate_app_summary">Pokud se vám aplikace líbí, oceníme vaše 5hvězdičkové hodnocení!</string>
+    <string name="pref_more_app_summary">Objevte další skvělé aplikace od nás na Google Play!</string>
+    <string name="pref_share_app_summary">Tato aplikace je skvělá — sdílejte ji s přáteli!</string>
+    <string name="pref_policy_app_summary">Smluvní podmínky a ochrana soukromí</string>
+    <string name="splash_ad_notice">Upozornění: tato akce může zobrazit reklamy</string>
 </resources>

@@ -451,4 +451,9 @@
     <string name="battery_ma_value" translatable="false">%1$s mA</string>
     <string name="battery_mah_value" translatable="false">%1$s mAh</string>
     <string name="battery_mwh_value" translatable="false">%1$s mWh</string>
+    <string name="pref_rate_app_summary">If you enjoy the app, we\'d greatly appreciate a 5-star rating!</string>
+    <string name="pref_more_app_summary">Discover more exciting apps from us—download them on the Play Store now!</string>
+    <string name="pref_share_app_summary">This app is amazing—share it with everyone to enjoy together!</string>
+    <string name="pref_policy_app_summary">App Terms and Privacy Services</string>
+    <string name="splash_ad_notice">Please note: this action may show ads</string>
 </resources>

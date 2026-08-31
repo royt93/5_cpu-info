@@ -28,7 +28,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Please note: this action may show ads"
+        android:text="@string/splash_ad_notice"
         android:textColor="#ffffff"
         android:textSize="16dp"
         android:textStyle="bold" />

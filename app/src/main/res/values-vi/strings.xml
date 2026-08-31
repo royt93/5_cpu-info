@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string name="action_sorting">Sắp xếp</string>
-    <string name="action_gc">Bộ thu gom rác</string>
+    <string name="action_gc">Dọn dẹp bộ nhớ (GC)</string>
     <string name="action_not_supported">Thao tác không khả dụng</string>
     <string name="close_drawer" tools:ignore="PrivateResource">Đóng ngăn</string>
     <string name="yes">Có</string>
@@ -29,7 +29,7 @@
     <string name="applications">Ứng dụng</string>
     <string name="temp">Nhiệt độ</string>
     <string name="settings">Cài đặt</string>
-    <string name="running_gc">Đang chạy Garbage Collector</string>
+    <string name="running_gc">Đang dọn dẹp bộ nhớ (GC)…</string>
     <string name="text_copied">Đã sao chép giá trị</string>
     <!-- CPU -->
     <string name="cpu_frequency_stopped">Lõi %1$d: Dừng</string>
@@ -45,8 +45,8 @@
     <string name="apps_show_system_apps">Hiện ứng dụng hệ thống</string>
     <string name="apps_sort_order">Thứ tự sắp xếp</string>
     <string name="apps_more_options">Tùy chọn khác</string>
-    <string name="shield_score_menu_title">Điểm sức khỏe</string>
-    <string name="shield_score_title">Shield Score</string>
+    <string name="shield_score_menu_title">Điểm sức khỏe thiết bị</string>
+    <string name="shield_score_title">Điểm sức khỏe thiết bị</string>
     <string name="shield_score_ram_label">RAM</string>
     <string name="shield_score_storage_label">Bộ nhớ</string>
     <string name="shield_score_battery_label">Pin</string>
@@ -126,8 +126,8 @@
     <string name="cameras">Camera</string>
     <string name="camera">Camera</string>
     <string name="type">Loại</string>
-    <string name="front">Trước</string>
-    <string name="back">Sau</string>
+    <string name="front">Camera trước</string>
+    <string name="back">Camera sau</string>
     <string name="battery_health">Tình trạng</string>
     <string name="battery_cold">Lạnh</string>
     <string name="battery_good">Tốt</string>
@@ -169,7 +169,7 @@
     <string name="display_hdr_support">Hỗ trợ HDR</string>
     <string name="display_hdr_none">Không</string>
     <string name="display_wide_color">Gam màu rộng</string>
-    <string name="display_cutout">Khoét màn hình</string>
+    <string name="display_cutout">Vùng đục lỗ / Tai thỏ</string>
     <string name="display_cutout_none">Không có</string>
     <string name="display_cutout_rects">%1$d vùng</string>
     <!--Prefs-->
@@ -186,7 +186,7 @@
     <string name="cpu_temperature">Nhiệt độ CPU</string>
     <string name="no_temp_data">Xin lỗi, không tìm thấy cảm biến nhiệt độ :-(</string>
     <string name="rate_app">Đánh giá ứng dụng</string>
-    <string name="more_app">Ứng dụng khác</string>
+    <string name="more_app">Ứng dụng khác từ nhà phát triển</string>
     <string name="share_app">Chia sẻ ứng dụng</string>
     <string name="term_policy"><![CDATA[Điều khoản & Chính sách]]></string>
 
@@ -242,7 +242,7 @@
     <string name="thermal_status_unknown">Không xác định</string>
     <string name="thermal_headroom_label">Dự báo tải nhiệt (10s tới): %1$d%%</string>
     <!--Throttling Fingerprint (U02)-->
-    <string name="throttle">Test tải</string>
+    <string name="throttle">Kiểm tra nhiệt &amp; giảm xung (Throttling)</string>
     <string name="throttle_disclaimer_title">Trước khi bắt đầu</string>
     <string name="throttle_disclaimer_body">Bài test sẽ cho CPU chạy hết công suất tối đa 30 giây để đo mức giảm xung khi máy nóng lên. Máy có thể ấm hơn bình thường. Test sẽ tự dừng nếu nhiệt độ vượt ngưỡng an toàn.</string>
     <string name="throttle_previous_summary">Lần trước: %1$s · tụt xung %2$d%% · đỉnh %3$d MHz</string>
@@ -418,4 +418,21 @@
     <string name="battery_current_now">Dòng điện hiện tại</string>
     <string name="battery_session_min_current">Dòng điện thấp nhất</string>
     <string name="battery_session_max_current">Dòng điện cao nhất</string>
+    <string name="can_my_device_bar_label">Khả năng thiết bị</string>
+    <string name="can_my_device_title">Khả năng thiết bị</string>
+    <string name="can_my_device_disclaimer">Dựa trên dữ liệu năng lực phần cứng máy báo cáo (DRM, camera, Vulkan, Độ sẵn sàng AI) — hành vi thực tế có thể thay đổi tùy phiên bản HĐH và ứng dụng.</string>
+    <string name="can_my_device_verdict_yes">Có</string>
+    <string name="can_my_device_verdict_no">Không</string>
+    <string name="can_my_device_verdict_partial">Một phần</string>
+    <string name="can_my_device_q_netflix_hd">Xem Netflix/Disney+ ở độ phân giải HD trở lên?</string>
+    <string name="can_my_device_q_hdcp_4k">Phát nội dung 4K bảo vệ DRM (Netflix 4K)?</string>
+    <string name="can_my_device_q_camera_raw">Chụp ảnh định dạng RAW (DNG)?</string>
+    <string name="can_my_device_q_slow_motion">Quay video chuyển động chậm (Slow-motion 240fps+)?</string>
+    <string name="can_my_device_q_vulkan_gaming">Chơi game đồ họa nặng qua Vulkan?</string>
+    <string name="can_my_device_q_on_device_ai">Chạy mô hình AI/LLM nhỏ trực tiếp trên máy?</string>
+    <string name="pref_rate_app_summary">Nếu bạn thích ứng dụng này, hãy ủng hộ chúng tôi đánh giá 5 sao nhé!</string>
+    <string name="pref_more_app_summary">Khám phá thêm các ứng dụng thú vị khác từ chúng tôi trên Play Store!</string>
+    <string name="pref_share_app_summary">Ứng dụng rất hữu ích — chia sẻ với bạn bè để cùng trải nghiệm!</string>
+    <string name="pref_policy_app_summary">Điều khoản ứng dụng &amp; Chính sách bảo mật</string>
+    <string name="splash_ad_notice">Lưu ý: thao tác này có thể xuất hiện quảng cáo</string>
 </resources>

@@ -14,11 +14,9 @@ import java.util.Calendar
 
 open class BaseActivity : AppCompatActivity() {
 
-    override fun attachBaseContext(context: Context) {
-        val override = Configuration(context.resources.configuration)
-        override.fontScale = 1.0f
-        applyOverrideConfiguration(override)
-        super.attachBaseContext(context)
+    override fun applyOverrideConfiguration(overrideConfiguration: Configuration?) {
+        overrideConfiguration?.fontScale = 1.0f
+        super.applyOverrideConfiguration(overrideConfiguration)
     }
 
     override fun onResume() {

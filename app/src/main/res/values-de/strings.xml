@@ -108,8 +108,8 @@
     <string name="manufacturer">Hersteller</string>
     <string name="board">Board</string>
     <string name="serial">Seriennummer</string>
-    <string name="rooted">Rooted</string>
-    <string name="encrypted_storage">Encrypted Storage</string>
+    <string name="rooted">Gerootet</string>
+    <string name="encrypted_storage">Verschlüsselter Speicher</string>
     <string name="security_providers">Sicherheitsprovider</string>
     <!--Hardware-->
     <string name="battery">Batterie</string>
@@ -401,4 +401,35 @@
     <string name="battery_current_now">Aktueller Strom</string>
     <string name="battery_session_min_current">Minimaler Strom (Sitzung)</string>
     <string name="battery_session_max_current">Maximaler Strom (Sitzung)</string>
+    <string name="open_app">Öffnen</string>
+    <string name="app_settings">Einstellungen</string>
+    <string name="uninstall">Deinstallieren</string>
+    <string name="view_in_play_store">Im Play Store anzeigen</string>
+    <string name="rate_app">App bewerten</string>
+    <string name="more_app">Weitere Apps</string>
+    <string name="share_app">App teilen</string>
+    <string name="share_apk">APK teilen</string>
+    <string name="term_policy">Nutzungsbedingungen &amp; Richtlinien</string>
+    <string name="app_share_error">APK-Datei kann nicht geteilt werden</string>
+    <string name="apps_show_system_apps">System-Apps anzeigen</string>
+    <string name="apps_sort_order">Sortierreihenfolge</string>
+    <string name="clear">Löschen</string>
+    <string name="vulkan_version">Vulkan-Version</string>
+    <string name="can_my_device_bar_label">Gerätefähigkeiten</string>
+    <string name="can_my_device_title">Gerätefähigkeiten</string>
+    <string name="can_my_device_disclaimer">Basierend auf gemeldeten Funktionsdaten (DRM, Kamera, Vulkan, KI-Bereitschaft) — tatsächliches App-Verhalten kann je nach Betriebssystemversion und App variieren.</string>
+    <string name="can_my_device_verdict_yes">Ja</string>
+    <string name="can_my_device_verdict_no">Nein</string>
+    <string name="can_my_device_verdict_partial">Teilweise</string>
+    <string name="can_my_device_q_netflix_hd">Netflix/Disney+ in HD oder besser streamen?</string>
+    <string name="can_my_device_q_hdcp_4k">4K DRM-geschützte Inhalte (Netflix 4K) streamen?</string>
+    <string name="can_my_device_q_camera_raw">RAW (DNG) Fotos aufnehmen?</string>
+    <string name="can_my_device_q_slow_motion">240fps+ Zeitlupenvideos aufnehmen?</string>
+    <string name="can_my_device_q_vulkan_gaming">Grafikintensive Spiele über Vulkan spielen?</string>
+    <string name="can_my_device_q_on_device_ai">Kleines LLM/KI-Modell lokal auf dem Gerät ausführen?</string>
+    <string name="pref_rate_app_summary">Wenn Ihnen die App gefällt, freuen wir uns über eine 5-Sterne-Bewertung!</string>
+    <string name="pref_more_app_summary">Entdecken Sie weitere spannende Apps von uns im Play Store!</string>
+    <string name="pref_share_app_summary">Diese App ist großartig — teilen Sie sie mit Ihren Freunden!</string>
+    <string name="pref_policy_app_summary">Nutzungsbedingungen und Datenschutzrichtlinie</string>
+    <string name="splash_ad_notice">Hinweis: Bei dieser Aktion wird möglicherweise Werbung angezeigt</string>
 </resources>

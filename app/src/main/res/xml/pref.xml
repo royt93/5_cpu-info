@@ -69,7 +69,7 @@
         <Preference
             app:defaultValue="default"
             app:key="key_rate_app"
-            app:title="If you enjoy the app, we’d greatly appreciate a 5-star rating!" />
+            app:title="@string/pref_rate_app_summary" />
 
     </PreferenceCategory>
 
@@ -78,7 +78,7 @@
         <Preference
             app:defaultValue="default"
             app:key="key_more_app"
-            app:title="Discover more exciting apps from us—download them on the Play Store now!" />
+            app:title="@string/pref_more_app_summary" />
 
     </PreferenceCategory>
     <PreferenceCategory app:title="@string/share_app">
@@ -86,7 +86,7 @@
         <Preference
             app:defaultValue="default"
             app:key="key_share_app"
-            app:title="This app is amazing—share it with everyone to enjoy together!" />
+            app:title="@string/pref_share_app_summary" />
 
     </PreferenceCategory>
     <PreferenceCategory app:title="@string/term_policy">
@@ -94,7 +94,7 @@
         <Preference
             app:defaultValue="default"
             app:key="key_policy_app"
-            app:title="App Terms and Privacy Services" />
+            app:title="@string/pref_policy_app_summary" />
 
     </PreferenceCategory>
 
