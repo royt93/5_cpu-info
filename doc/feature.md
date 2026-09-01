@@ -110,6 +110,14 @@ testImplementation(kotlin("test"))
 
 **Verify**: 2 instrumented test (`AppScreenPullToRefreshTest`) cho nửa ViewModel-state-driven (isLoading → hiện/ẩn indicator). Nửa còn lại (thao tác vuốt tay thật) không tự động hoá được — cả Compose test gesture injection lẫn `adb shell input swipe`/`draganddrop` đều không kích hoạt được cơ chế nested-scroll overscroll này (giới hạn tooling, không phải bug) — verify bằng vuốt tay thật trên TECNO KJ7, xác nhận spinner hiện/biến mất đúng.
 
+## ✅ Implemented — Bench native cpuinfo lib khởi tạo time (2026-09-01)
+
+**Đã làm**: `NativeToolsInitializer.init()` bọc `ReLinker.loadLibrary()` + `dataNativeProviderCpu.initLibrary()` bằng `kotlin.system.measureTimeMillis` (stdlib, không cần helper riêng), log kết quả.
+
+**Phát hiện lúc làm**: log ban đầu dùng `Timber` không hề xuất hiện trên logcat thật — root cause: `NativeToolsInitializer` bind **trước** `InitializerTimber` trong `AppModuleBinds.kt` (`@IntoSet` theo thứ tự khai báo), nên `Timber.plant()` chưa chạy tới lúc initializer này log — Timber câm lặng, không throw lỗi. Đây là bug tiềm ẩn có sẵn từ trước (ảnh hưởng cả dòng `Timber.e()` cũ trong catch block), không phải do thay đổi này tạo ra. Sửa cục bộ trong đúng file này: đổi cả 2 dòng log sang `android.util.Log` trực tiếp (không phụ thuộc thứ tự plant) — không đổi thứ tự binding trong `AppModuleBinds.kt` (tránh ảnh hưởng phạm vi rộng hơn ngoài scope nhỏ này).
+
+**Verify**: build/lint xanh. Smoke test thật trên TECNO — force-stop + relaunch 3 lần, logcat hiện đúng dòng `NativeToolsInitializer: cpuinfo-libs loaded + initialized in ~80-140ms` mỗi lần.
+
 ## 💭 Ideas
-- Bench native cpuinfo lib khởi tạo time
+*(none — backlog trống, xem epic-04-unique-ideas.md U07 nếu cần ý tưởng feature lớn mới)*
 - Tách `widget/swiperv/` thành module riêng (port code, không nên đụng)
