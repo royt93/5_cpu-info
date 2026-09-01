@@ -20,7 +20,6 @@ import android.net.wifi.WifiManager
 import android.os.BatteryManager
 import android.os.storage.StorageManager
 import android.telephony.TelephonyManager
-import android.view.WindowManager
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
@@ -66,11 +65,6 @@ class AppModule {
     @Singleton
     fun provideContentResolver(@ApplicationContext appContext: Context): ContentResolver =
         appContext.contentResolver
-
-    @Provides
-    @Singleton
-    fun provideWindowManager(@ApplicationContext appContext: Context): WindowManager =
-        appContext.getSystemService(Context.WINDOW_SERVICE) as WindowManager
 
     @Provides
     @Singleton

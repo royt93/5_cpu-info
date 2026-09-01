@@ -38,6 +38,10 @@ public abstract class BaseRoundCornerProgressBar extends LinearLayout {
 
     protected GradientDrawable progressDrawable;
     protected GradientDrawable secondaryProgressDrawable;
+    // T2.19: cached and mutated in place (setColor/setCornerRadii) instead of being
+    // reallocated on every drawBackgroundProgress() call — invalidate() unconditionally
+    // triggers drawAll(), so a naive `new GradientDrawable()` here re-allocates on every redraw.
+    private GradientDrawable backgroundDrawable;
 
     protected int radius;
     protected int padding;
@@ -178,10 +182,14 @@ public abstract class BaseRoundCornerProgressBar extends LinearLayout {
 
     // Draw progress background
     private void drawBackgroundProgress() {
-        GradientDrawable backgroundDrawable = createGradientDrawable(backgroundColor);
+        if (backgroundDrawable == null) {
+            backgroundDrawable = createGradientDrawable(backgroundColor);
+            layoutBackground.setBackground(backgroundDrawable);
+        } else {
+            backgroundDrawable.setColor(backgroundColor);
+        }
         int newRadius = radius - (padding / 2);
         backgroundDrawable.setCornerRadii(new float[]{newRadius, newRadius, newRadius, newRadius, newRadius, newRadius, newRadius, newRadius});
-        layoutBackground.setBackground(backgroundDrawable);
     }
 
     // Create an color rectangle gradient drawable

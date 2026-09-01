@@ -6,7 +6,6 @@ import android.hardware.display.DisplayManager
 import android.os.Build
 import android.util.DisplayMetrics
 import android.view.Display
-import android.view.WindowManager
 import androidx.lifecycle.ViewModel
 import com.galaxyjoy.cpuinfo.R
 import com.galaxyjoy.cpuinfo.util.lifecycle.ListLiveData
@@ -21,7 +20,6 @@ import javax.inject.Inject
 @HiltViewModel
 class VMScreenInfo @Inject constructor(
     private val resources: Resources,
-    private val windowManager: WindowManager,
     private val displayManager: DisplayManager,
 ) : ViewModel() {
 
@@ -106,7 +104,10 @@ class VMScreenInfo @Inject constructor(
     private fun getInfoFromDisplayMetrics(): List<Pair<String, String>> {
         val functionsList = mutableListOf<Pair<String, String>>()
 
-        val display = windowManager.defaultDisplay
+        // T2.21: WindowManager.defaultDisplay is deprecated since API 30 with no direct
+        // WindowManager-based replacement for a non-Activity context; DisplayManager (already
+        // used by getExtendedDisplayInfo() below) covers the same DEFAULT_DISPLAY without it.
+        val display = displayManager.getDisplay(Display.DEFAULT_DISPLAY) ?: return functionsList
 
         val metrics = DisplayMetrics()
         try {
