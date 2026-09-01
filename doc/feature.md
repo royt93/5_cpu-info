@@ -104,7 +104,12 @@ testImplementation(kotlin("test"))
 ## ❌ Skipped
 - Full Hilt test runner + Espresso UI test (chọn smoke test thay thế)
 
+## ✅ Implemented — Material2 → Material3 migration (2026-09-01)
+
+**Đã làm**: rà soát toàn bộ `app/src/main` — chỉ đúng 1 chỗ dùng Material2 component thật (`AppScreen.kt`'s pull-to-refresh: `rememberPullRefreshState`/`PullRefreshIndicator`), 6 file còn lại chỉ import `androidx.compose.material.icons.*` (artifact icon riêng, không thuộc M2 theming, không cần đổi — M3 không có bộ icon riêng của mình). Migrate sang M3 1.2.1's `rememberPullToRefreshState`/`PullToRefreshContainer` + `Modifier.nestedScroll`, wiring `isLoading` qua `LaunchedEffect`. Xoá hẳn dependency `androidx.compose.material:material` (full M2 artifact) khỏi `build.gradle.kts`/TOML — `Icons`/icons-core vẫn resolve OK qua transitive dependency của `material3`.
+
+**Verify**: 2 instrumented test (`AppScreenPullToRefreshTest`) cho nửa ViewModel-state-driven (isLoading → hiện/ẩn indicator). Nửa còn lại (thao tác vuốt tay thật) không tự động hoá được — cả Compose test gesture injection lẫn `adb shell input swipe`/`draganddrop` đều không kích hoạt được cơ chế nested-scroll overscroll này (giới hạn tooling, không phải bug) — verify bằng vuốt tay thật trên TECNO KJ7, xác nhận spinner hiện/biến mất đúng.
+
 ## 💭 Ideas
-- Migrate Material 2 → Material 3 dynamic colors (TODO trong README)
 - Bench native cpuinfo lib khởi tạo time
 - Tách `widget/swiperv/` thành module riêng (port code, không nên đụng)

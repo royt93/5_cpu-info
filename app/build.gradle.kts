@@ -230,7 +230,6 @@ dependencies {
     implementation(libs.androidx.navigation.ui.ktx)
 
     implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.compose.material)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.animation)
     implementation(libs.androidx.compose.ui.tooling.preview)
