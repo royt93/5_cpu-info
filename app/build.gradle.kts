@@ -246,9 +246,6 @@ dependencies {
     implementation(libs.glide)
     ksp(libs.glide.ksp)
 
-    implementation(libs.rxjava)
-    implementation(libs.rxandroid)
-
     implementation(libs.timber)
     implementation(libs.relinker)
     implementation(libs.coil.compose)

@@ -46,7 +46,7 @@ Release signing đọc trực tiếp từ private sibling repo `../../../../myKe
 - `data/{provider,local}` — `DataProvider*` cho từng loại thông tin (CPU/GPU/RAM/Storage/Applications) + `RepositoryUserPreferences` (DataStore).
 - `domain/{model,observable,action,result}` + `Interactor.kt` — kiến trúc Interactor/Observable (Frm → VM → Observable*Data(Interactor) → DataProvider), **12/12 vùng `feat/infor` đã migrate xong** (Story 1, 2026-09-01).
 - `di/modules/{AppModule,AppModuleBinds}.kt` — Hilt graph. App entry: `GalaxyApp.kt` (`@HiltAndroidApp`).
-- `appinitializers/` — pattern: `InitializersApp` orchestrate một list các `AppInitializer` (Timber, Theme, Rx, NativeTools). Khi cần init thứ gì lúc app start, **thêm 1 `AppInitializer` mới**, đừng nhồi vào `GalaxyApp.onCreate`.
+- `appinitializers/` — pattern: `InitializersApp` orchestrate một list các `AppInitializer` (Timber, Theme, NativeTools). Khi cần init thứ gì lúc app start, **thêm 1 `AppInitializer` mới**, đừng nhồi vào `GalaxyApp.onCreate`.
 - `widget/` — custom view (arc, progress, swipe reveal). `widget/swiperv/` là port của SwipeRevealLayout, code nguyên trạng — không phải nơi nên refactor.
 - `ui/{component,theme}` — Compose components và theme (Material3, đang migrate dần).
 - `ext/` — extension functions cho Context/Activity.

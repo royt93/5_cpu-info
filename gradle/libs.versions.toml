@@ -9,8 +9,6 @@ composeCompiler = "1.5.15"
 lifecycle = "2.8.7"
 navigation = "2.8.7"
 glide = "4.16.0"
-rxjava = "3.1.6"
-rxandroid = "3.0.2"
 dependencyUpdates = "0.47.0"
 junit = "4.13.2"
 mockk = "1.13.13"
@@ -91,10 +89,6 @@ hilt-android-testing = { module = "com.google.dagger:hilt-android-testing", vers
 # Glide
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 glide-ksp = { module = "com.github.bumptech.glide:ksp", version.ref = "glide" }
-
-# Rx
-rxjava = { module = "io.reactivex.rxjava3:rxjava", version.ref = "rxjava" }
-rxandroid = { module = "io.reactivex.rxjava3:rxandroid", version.ref = "rxandroid" }
 
 # Misc
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }

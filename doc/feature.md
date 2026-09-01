@@ -98,7 +98,7 @@ testImplementation(kotlin("test"))
 ## ⏸️ Deferred
 
 - **Merge `feat/` ↔ `features/`** — scope lớn, để đợt sau
-- **Tech stack consolidation** (bỏ EventBus, RxJava→Coroutines) — scope rất lớn, cần plan riêng
+- **Tech stack consolidation** (bỏ EventBus) — RxJava→Coroutines đã xong (Epic 2 Story 2, 2026-09-01); EventBus removal scope vẫn còn, cần plan riêng
 - **Bỏ Epoxy** — Airbnb đã deprecated, nhưng scope migration sang RecyclerView/LazyColumn lớn, defer
 
 ## ❌ Skipped
