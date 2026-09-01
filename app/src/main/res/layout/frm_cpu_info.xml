@@ -34,17 +34,18 @@
         </LinearLayout>
 
         <!-- U01 entry point — device authenticity check, contextually belongs on the CPU tab
-             rather than the shared toolbar (which already has Shield/VIP/Share). Icon-only mini
-             FAB (not Extended/pill) so it doesn't dominate the screen or cover list content. -->
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
+             rather than the shared toolbar (which already has Shield/VIP/Share). Extended FAB,
+             same shrink-on-scroll style as the Sensors tab's FAB (see FabScrollBehavior.kt):
+             shows its label at rest, shrinks to an icon-only pill while the list scrolls so it
+             never permanently dominates the screen or covers content. -->
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/fabDeviceTruth"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_margin="16dp"
-            android:contentDescription="@string/device_truth_fab_label"
-            app:fabSize="mini"
-            app:srcCompat="@drawable/ic_device_truth" />
+            android:text="@string/device_truth_fab_label"
+            app:icon="@drawable/ic_device_truth" />
 
     </FrameLayout>
 

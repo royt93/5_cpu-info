@@ -7,12 +7,12 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.galaxyjoy.cpuinfo.R
 import com.galaxyjoy.cpuinfo.databinding.FrmSensorsInfoBinding
 import com.galaxyjoy.cpuinfo.feat.infor.base.AdtInfoItems
 import com.galaxyjoy.cpuinfo.feat.infor.base.BaseFrm
+import com.galaxyjoy.cpuinfo.feat.infor.base.shrinkFabOnScroll
 import com.galaxyjoy.cpuinfo.util.DividerItemDecoration
 import com.galaxyjoy.cpuinfo.util.lifecycle.ListLiveDataObserver
 import com.google.android.material.snackbar.Snackbar
@@ -47,17 +47,7 @@ class FrmSensorsInfo :
             SensorTestBottomSheet().show(childFragmentManager, SensorTestBottomSheet.TAG)
         }
 
-        // Full-width extended FAB dominates the screen on long locale strings — shrink to an
-        // icon-only pill while scrolling through the sensor list, extend back at rest.
-        binding.rv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                if (dy > 0) {
-                    binding.fabSensorTest.shrink()
-                } else if (dy < 0) {
-                    binding.fabSensorTest.extend()
-                }
-            }
-        })
+        binding.rv.shrinkFabOnScroll(binding.fabSensorTest)
     }
 
     override fun onStart() {

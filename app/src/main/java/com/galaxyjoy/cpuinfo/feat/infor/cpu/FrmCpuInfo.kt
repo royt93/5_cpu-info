@@ -21,6 +21,7 @@ import com.galaxyjoy.cpuinfo.feat.canmydevice.CanMyDeviceBottomSheet
 import com.galaxyjoy.cpuinfo.feat.canmydevice.CanMyDeviceProvider
 import com.galaxyjoy.cpuinfo.feat.infor.base.AdtInfoItems
 import com.galaxyjoy.cpuinfo.feat.infor.base.BaseFrm
+import com.galaxyjoy.cpuinfo.feat.infor.base.shrinkFabOnScroll
 import com.galaxyjoy.cpuinfo.feat.truth.DeviceTruthBottomSheet
 import com.galaxyjoy.cpuinfo.ui.theme.CpuInfoTheme
 import com.galaxyjoy.cpuinfo.util.DividerItemDecoration
@@ -72,6 +73,7 @@ class FrmCpuInfo : BaseFrm<FrmCpuInfoBinding>(R.layout.frm_cpu_info), AdtInfoIte
         binding.fabDeviceTruth.setOnClickListener {
             DeviceTruthBottomSheet().show(childFragmentManager, DeviceTruthBottomSheet.TAG)
         }
+        binding.rv.shrinkFabOnScroll(binding.fabDeviceTruth)
 
         binding.clusterTopologyCompose.apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
