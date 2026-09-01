@@ -16,9 +16,6 @@
 
 package com.galaxyjoy.cpuinfo.feat.infor.base
 
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -27,7 +24,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
-import com.google.android.material.snackbar.Snackbar
 import com.galaxyjoy.cpuinfo.R
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -75,13 +71,6 @@ abstract class BaseRvFragment : Fragment(), AdtInfoItems.OnClickListener {
     abstract fun setupRecyclerViewAdapter()
 
     override fun onItemLongPressed(item: Pair<String, String>) {
-        val clipboard = requireContext().getSystemService(Context.CLIPBOARD_SERVICE)
-                as ClipboardManager
-        val clip = ClipData.newPlainText(
-            requireContext().getString(R.string.app_name),
-            item.second
-        )
-        clipboard.setPrimaryClip(clip)
-        Snackbar.make(mainContainer, R.string.text_copied, Snackbar.LENGTH_SHORT).show()
+        copyToClipboardAndNotify(mainContainer, item.second)
     }
 }

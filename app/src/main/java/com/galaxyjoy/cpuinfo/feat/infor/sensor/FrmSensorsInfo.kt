@@ -1,8 +1,5 @@
 package com.galaxyjoy.cpuinfo.feat.infor.sensor
 
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
@@ -12,10 +9,10 @@ import com.galaxyjoy.cpuinfo.R
 import com.galaxyjoy.cpuinfo.databinding.FrmSensorsInfoBinding
 import com.galaxyjoy.cpuinfo.feat.infor.base.AdtInfoItems
 import com.galaxyjoy.cpuinfo.feat.infor.base.BaseFrm
+import com.galaxyjoy.cpuinfo.feat.infor.base.copyToClipboardAndNotify
 import com.galaxyjoy.cpuinfo.feat.infor.base.shrinkFabOnScroll
 import com.galaxyjoy.cpuinfo.util.DividerItemDecoration
 import com.galaxyjoy.cpuinfo.util.lifecycle.ListLiveDataObserver
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -66,9 +63,6 @@ class FrmSensorsInfo :
     }
 
     override fun onItemLongPressed(item: Pair<String, String>) {
-        val clipboard = requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        val clip = ClipData.newPlainText(requireContext().getString(R.string.app_name), item.second)
-        clipboard.setPrimaryClip(clip)
-        Snackbar.make(binding.mainContainer, R.string.text_copied, Snackbar.LENGTH_SHORT).show()
+        copyToClipboardAndNotify(binding.mainContainer, item.second)
     }
 }

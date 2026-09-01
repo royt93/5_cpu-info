@@ -1,8 +1,5 @@
 package com.galaxyjoy.cpuinfo.feat.infor.ram
 
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -20,6 +17,7 @@ import com.galaxyjoy.cpuinfo.databinding.FrmRecyclerViewBinding
 import com.galaxyjoy.cpuinfo.domain.model.RamData
 import com.galaxyjoy.cpuinfo.feat.infor.base.AdtInfoItems
 import com.galaxyjoy.cpuinfo.feat.infor.base.BaseFrm
+import com.galaxyjoy.cpuinfo.feat.infor.base.copyToClipboardAndNotify
 import com.galaxyjoy.cpuinfo.util.DividerItemDecoration
 import com.galaxyjoy.cpuinfo.util.Utils
 import com.galaxyjoy.cpuinfo.util.lifecycle.ListLiveData
@@ -89,9 +87,6 @@ class FrmRamInfo : BaseFrm<FrmRecyclerViewBinding>(R.layout.frm_recycler_view),
     )
 
     override fun onItemLongPressed(item: Pair<String, String>) {
-        val clipboard = requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        val clip = ClipData.newPlainText(getString(R.string.app_name), item.second)
-        clipboard.setPrimaryClip(clip)
-        Snackbar.make(binding.mainContainer, R.string.text_copied, Snackbar.LENGTH_SHORT).show()
+        copyToClipboardAndNotify(binding.mainContainer, item.second)
     }
 }
