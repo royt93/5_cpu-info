@@ -23,7 +23,7 @@
 
 > **2026-08-29 status sweep**: this doc predates the F/U-coded feature sprints (Sprint 3–14: VIP streak, Device Truth Score, Cluster Topology, Throttle Fingerprint, thermal status, AI Readiness, Hardware Snapshot, Sensor Test Suite, App Permission Inventory, Vulkan/GLES Detail, USB/BT Inspector, Fleet Compare — see git log). Verified against current codebase rather than assumed; #5 and #1 were the only items from this doc's original bundle still genuinely open at that point.
 
-**Skipped**: #2 Widget v2 (Android O+), #3 CPU stress test / benchmark.
+**Skipped**: #3 CPU stress test / benchmark. **#2 Widget v2 đã làm xong (2026-09-01)** — xem chi tiết bên dưới.
 
 **❌ #1 Floating overlay — skipped, 2026-08-30**: no code was written for this item (research/exploration only, via read-only `grep`/`find` — nothing to revert). Reason: this app is a live, published Play Store app (per root `CLAUDE.md`). The feature needs two "special" surfaces Play Store reviews strictly —
 > - `SYSTEM_ALERT_WINDOW` ("draw over other apps"), and
@@ -54,19 +54,17 @@
 
 ---
 
-## 🔴 #2 — RAM widget rewrite cho Android O+ (2 ngày)
+## ✅ #2 — RAM widget rewrite cho Android O+ (2 ngày) — Đã xong (2026-09-01)
 
-**Mô tả**: Thay thế widget legacy vừa xoá (chỉ chạy Android < O) bằng implementation modern hỗ trợ Android 8+.
+**Mô tả**: Thay thế widget legacy vừa xoá (chỉ chạy Android < O) bằng implementation modern, minSdk=24 trở lên (bỏ qua ràng buộc "O+" gốc — không còn cần thiết khi dùng WorkManager thay vì JobScheduler/foreground service trực tiếp).
 
-**Tech**:
-- `AppWidgetProvider` + `WorkManager` periodic (min 15 phút) hoặc Foreground service cho realtime
-- `JobScheduler` cho background refresh
-- Quick action button "kill background apps" (permission `KILL_BACKGROUND_PROCESSES` đã có)
-- Configurable update interval qua widget config activity
+**Đã làm**: `feat/ramwidget/RamWidgetProvider.kt` (AppWidgetProvider) + `RamWidgetUpdateWorker.kt` (CoroutineWorker, WorkManager periodic 15 phút — floor của WorkManager). Nút "Dọn RAM" tái dùng `RamCleanupAction`/`DataProviderRam` có sẵn (không qua Hilt — 2 class này constructor thuần framework, không đáng thêm `HiltWorkerFactory` vào `GalaxyApp`). Layout `widget_ram.xml` (RemoteViews chuẩn, không DataBinding/custom View), theme sáng/tối tự động qua `@color/surface`/`onSurface`/`accent` có sẵn.
 
-**Risk**: Android battery optimization aggresively kill widget services trên OEM khác nhau.
+**Đã bỏ khỏi scope gốc** (đơn giản hoá có chủ đích): "Configurable update interval qua widget config activity" — cố định 15 phút (floor WorkManager), không thêm activity cấu hình riêng — giá trị thấp so với effort, có thể thêm sau nếu có yêu cầu thật. "Foreground service cho realtime" — không cần, WorkManager đủ.
 
-**Value**: 🌟🌟 user request phổ biến nhưng đã có alternative (third-party widget apps).
+**Risk đã note đúng**: chỉ ảnh hưởng periodic refresh (15p), không ảnh hưởng nút "Dọn RAM" (chạy ngay khi tap, không phụ thuộc battery optimization).
+
+**Verify**: unit test (WorkManager schedule/cancel + cleanup-rồi-refresh) + instrumented test (RemoteViews render đúng số liệu thật + edge case percentage>100) + smoke test thật trên TECNO — đặt widget lên home screen thật qua launcher picker, hiển thị đúng RAM sống (khớp tab RAM trong app), tap "Dọn RAM" xác nhận qua logcat GC thật chạy, xoá widget sạch không crash.
 
 ---
 

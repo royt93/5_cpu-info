@@ -246,6 +246,8 @@ dependencies {
     implementation(libs.glide)
     ksp(libs.glide.ksp)
 
+    implementation(libs.work.runtime.ktx)
+
     implementation(libs.timber)
     implementation(libs.relinker)
     implementation(libs.coil.compose)

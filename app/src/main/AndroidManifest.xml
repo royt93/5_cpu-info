@@ -162,6 +162,18 @@
             </intent-filter>
         </service>
 
+        <receiver
+            android:name=".feat.ramwidget.RamWidgetProvider"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.galaxyjoy.cpuinfo.action.WIDGET_CLEAN_RAM" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/ram_widget_info" />
+        </receiver>
+
     </application>
 
 </manifest>

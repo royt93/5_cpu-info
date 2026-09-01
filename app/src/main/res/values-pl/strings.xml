@@ -85,6 +85,10 @@
     <string name="available_memory">Dostępna pamięć</string>
     <string name="threshold">Próg</string>
     <string name="clear">Wyczyść</string>
+    <string name="ram_widget_label">Monitor RAM</string>
+    <string name="ram_widget_description">Zobacz dostępną pamięć RAM i wyczyść ją prosto z ekranu głównego</string>
+    <string name="ram_widget_clean_action">Wyczyść RAM</string>
+    <string name="ram_widget_detail_format">%1$s wolne z %2$s</string>
     <!--Storage-->
     <string name="internal">Wewnętrzna</string>
     <string name="external">Zewnętrzna</string>

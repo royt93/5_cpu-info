@@ -81,6 +81,10 @@
     <string name="total_memory">Paměť celkem</string>
     <string name="available_memory">Volná paměť</string>
     <string name="threshold">Hranice minima</string>
+    <string name="ram_widget_label">Sledování RAM</string>
+    <string name="ram_widget_description">Zobrazte dostupnou RAM a vyčistěte ji přímo z plochy</string>
+    <string name="ram_widget_clean_action">Vyčistit RAM</string>
+    <string name="ram_widget_detail_format">%1$s volných z %2$s</string>
     <!--Storage-->
     <string name="internal">Vestavěné</string>
     <string name="external">Rozšiřující</string>

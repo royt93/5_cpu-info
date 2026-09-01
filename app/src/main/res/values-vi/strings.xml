@@ -82,6 +82,10 @@
     <string name="available_memory">Bộ nhớ khả dụng</string>
     <string name="threshold">Ngưỡng</string>
     <string name="clear">Xóa</string>
+    <string name="ram_widget_label">Giám sát RAM</string>
+    <string name="ram_widget_description">Xem RAM khả dụng và dọn RAM nhanh ngay trên màn hình chính</string>
+    <string name="ram_widget_clean_action">Dọn RAM</string>
+    <string name="ram_widget_detail_format">%1$s trống / %2$s</string>
     <!--Storage-->
     <string name="internal">Trong máy</string>
     <string name="external">Ngoài</string>
