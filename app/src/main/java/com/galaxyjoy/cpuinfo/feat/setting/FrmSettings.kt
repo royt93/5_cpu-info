@@ -11,7 +11,10 @@ import com.galaxyjoy.cpuinfo.ext.openBrowserPolicy
 import com.galaxyjoy.cpuinfo.feat.fleet.FleetCompareBottomSheet
 import com.galaxyjoy.cpuinfo.feat.snapshot.HardwareSnapshotBottomSheet
 import com.galaxyjoy.cpuinfo.feat.usbbt.UsbBluetoothBottomSheet
+import com.galaxyjoy.cpuinfo.feat.vip.ActVip
+import com.galaxyjoy.cpuinfo.feat.vipreport.VipDiagnosticReportBottomSheet
 import com.galaxyjoy.cpuinfo.util.ThemeHelper
+import com.roy.sdkadbmob.AdManager
 import moreApp
 import rateApp
 import shareApp
@@ -28,7 +31,7 @@ class FrmSettings : PreferenceFragmentCompat(),
         addPreferencesFromResource(R.xml.pref)
 
         findPreference<Preference>("key_vip_management")?.setOnPreferenceClickListener {
-            activity?.let { com.galaxyjoy.cpuinfo.feat.vip.ActVip.start(it) }
+            activity?.let { ActVip.start(it) }
             true
         }
 
@@ -67,6 +70,7 @@ class FrmSettings : PreferenceFragmentCompat(),
         wireHardwareSnapshotPref()
         wireUsbBluetoothPref()
         wireFleetComparePref()
+        wireVipDiagnosticHistoryPref()
 
         listenForBottomSheetResults()
     }
@@ -132,6 +136,25 @@ class FrmSettings : PreferenceFragmentCompat(),
             val fm = childFragmentManager
             if (!fm.isStateSaved && fm.findFragmentByTag(FleetCompareBottomSheet.TAG) == null) {
                 FleetCompareBottomSheet().show(fm, FleetCompareBottomSheet.TAG)
+            }
+            true
+        }
+    }
+
+    /**
+     * U07 — the only content feature in the app actually gated on live VIP status (everywhere
+     * else `AdManager.isVipByKeyActive()` only affects ad display / the VIP screen itself). Not a
+     * VIP member -> route straight to [ActVip] to upsell, same as tapping "VIP Management".
+     */
+    private fun wireVipDiagnosticHistoryPref() {
+        findPreference<Preference>("key_vip_diagnostic_history")?.setOnPreferenceClickListener {
+            if (!AdManager.isVipByKeyActive()) {
+                activity?.let { ActVip.start(it) }
+                return@setOnPreferenceClickListener true
+            }
+            val fm = childFragmentManager
+            if (!fm.isStateSaved && fm.findFragmentByTag(VipDiagnosticReportBottomSheet.TAG) == null) {
+                VipDiagnosticReportBottomSheet().show(fm, VipDiagnosticReportBottomSheet.TAG)
             }
             true
         }

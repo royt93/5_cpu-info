@@ -1,10 +1,13 @@
 package com.galaxyjoy.cpuinfo
 
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.longClick
 import androidx.recyclerview.widget.RecyclerView
@@ -22,6 +25,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.galaxyjoy.cpuinfo.feat.ActHost
+import com.galaxyjoy.cpuinfo.feat.app.APPLICATIONS_LIST_TAG
 import com.galaxyjoy.cpuinfo.widget.progress.IconRoundCornerProgressBar
 import org.junit.Before
 import org.junit.Rule
@@ -279,13 +283,47 @@ class ActHostSmokeTest {
     }
 
     @Test
+    fun vipDiagnosticHistoryPrefRoutesSomewhereWithoutCrashing() {
+        // Regression guard for U07: the pref click branches on this test device's real
+        // AdManager.isVipByKeyActive() — non-VIP routes to ActVip, a SEPARATE Activity that
+        // replaces ActHost entirely. Deliberately does not call composeRule.waitForIdle() after
+        // the click: composeRule is bound to ActHost specifically, and once ActVip launches and
+        // destroys it, waitForIdle() throws "Cannot run onActivity since Activity has been
+        // destroyed already" — a predictable consequence of the navigation succeeding, not a
+        // crash. Espresso.onIdle() is activity-agnostic and safe either way. The sheet's own
+        // save/history/dedup behavior (the VIP branch) is covered by VipDiagnosticContentTest +
+        // VipDiagnosticReportRepositoryInstrumentedTest, both against a throwaway DataStore file
+        // rather than this real device's actual history.
+        onView(withId(R.id.menuSettings)).perform(click())
+        composeRule.waitForIdle()
+
+        onView(withText(composeRule.activity.getString(R.string.vip_diagnostic_pref_title))).perform(click())
+        Espresso.onIdle()
+
+        // Return to ActHost regardless of which branch fired, so later tests in this class don't
+        // inherit a backgrounded/replaced Activity.
+        pressBack()
+    }
+
+    @Test
     fun appPermissionsActionShowsPermissionsSheet() {
         // Regression guard for F05: proves long-pressing an app row -> "App Permissions" ->
         // reads real PackageManager permission data for that app without crashing. Uses this
         // app's own row (always present) since the installed-app list order is device-dependent.
+        // A real daily-driver phone (unlike a lean dev/test device) has far more installed apps
+        // to enumerate via PackageManager, so VMNewApplications' list load is slower and this
+        // row isn't necessarily in the data set (let alone composed) within a short fixed wait —
+        // confirmed on a real S24 Ultra: the list was still empty (maxValue=0 scroll range) when
+        // a 5s wait + single performScrollToNode() attempt ran. Retry the scroll-to-node itself
+        // inside waitUntil so it self-heals regardless of whether the row is merely off-screen or
+        // the list is still loading.
         onView(withId(R.id.menuApplications)).perform(click())
         val appName = composeRule.activity.getString(R.string.app_name)
-        waitForComposeText(appName)
+        composeRule.waitUntil(timeoutMillis = 15_000) {
+            runCatching {
+                composeRule.onNodeWithTag(APPLICATIONS_LIST_TAG).performScrollToNode(hasText(appName))
+            }.isSuccess
+        }
 
         composeRule.onNodeWithText(appName).performTouchInput { longClick() }
         val permissionsAction = composeRule.activity.getString(R.string.app_permissions_action)

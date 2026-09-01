@@ -458,4 +458,16 @@
     <string name="storage_bench_done_button">Gotowe</string>
     <string name="storage_bench_share_button">Udostępnij</string>
     <string name="storage_bench_share_text">Test pamięci masowej — Zapis seq.: %1$s MB/s · Odczyt seq.: %2$s MB/s · Zapis losowy: %3$s ops/s · Odczyt losowy: %4$s ops/s · Hash: %5$s MB/s</string>
+
+    <string name="vip_diagnostic_pref_title">Historia diagnostyczna VIP</string>
+    <string name="vip_diagnostic_pref_summary">Śledź zużycie baterii/RAM/pamięci przez miesiące (VIP)</string>
+    <string name="vip_diagnostic_title">Historia diagnostyczna</string>
+    <string name="vip_diagnostic_empty_message">Brak zapisanych migawek. Zapisz jedną teraz, a za kilka tygodni sprawdź trend.</string>
+    <string name="vip_diagnostic_save_button">Zapisz dzisiejszą migawkę</string>
+    <string name="vip_diagnostic_disclaimer">Porównania są najbardziej wiarygodne, gdy migawki są wykonywane przy podobnym poziomie naładowania baterii. Tylko informacyjnie.</string>
+    <string name="vip_diagnostic_summary_days_tracked">Śledzone od %1$d dni</string>
+    <string name="vip_diagnostic_summary_cycle_delta">%1$+d cykli ładowania od pierwszej migawki</string>
+    <string name="vip_diagnostic_row_battery_level">Poziom baterii</string>
+    <string name="vip_diagnostic_row_ram_available">Dostępny RAM</string>
+    <string name="vip_diagnostic_row_storage_free">Wolna pamięć</string>
 </resources>

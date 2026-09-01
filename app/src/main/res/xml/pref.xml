@@ -8,6 +8,11 @@
             app:summary="@string/vip_settings_summary"
             app:title="@string/vip_settings_title" />
 
+        <Preference
+            app:key="key_vip_diagnostic_history"
+            app:summary="@string/vip_diagnostic_pref_summary"
+            app:title="@string/vip_diagnostic_pref_title" />
+
     </PreferenceCategory>
     <PreferenceCategory app:title="@string/version">
 

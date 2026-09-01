@@ -460,4 +460,16 @@
     <string name="storage_bench_done_button">完成</string>
     <string name="storage_bench_share_button">分享</string>
     <string name="storage_bench_share_text">儲存效能測試 — 循序寫入：%1$s MB/s · 循序讀取：%2$s MB/s · 隨機寫入：%3$s ops/s · 隨機讀取：%4$s ops/s · 雜湊：%5$s MB/s</string>
+
+    <string name="vip_diagnostic_pref_title">VIP 診斷歷史</string>
+    <string name="vip_diagnostic_pref_summary">追蹤數月內電池/RAM/儲存空間的耗損 (VIP)</string>
+    <string name="vip_diagnostic_title">診斷歷史</string>
+    <string name="vip_diagnostic_empty_message">尚未儲存任何快照。立即儲存一次，幾週後再回來查看趨勢。</string>
+    <string name="vip_diagnostic_save_button">儲存今天的快照</string>
+    <string name="vip_diagnostic_disclaimer">在電池電量相近時拍攝的快照比較起來最有意義。僅供參考。</string>
+    <string name="vip_diagnostic_summary_days_tracked">已追蹤 %1$d 天</string>
+    <string name="vip_diagnostic_summary_cycle_delta">自第一次快照以來充電循環 %1$+d 次</string>
+    <string name="vip_diagnostic_row_battery_level">電池電量</string>
+    <string name="vip_diagnostic_row_ram_available">可用 RAM</string>
+    <string name="vip_diagnostic_row_storage_free">可用儲存空間</string>
 </resources>

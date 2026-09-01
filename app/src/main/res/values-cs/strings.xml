@@ -458,4 +458,16 @@
     <string name="storage_bench_done_button">Hotovo</string>
     <string name="storage_bench_share_button">Sdílet</string>
     <string name="storage_bench_share_text">Test úložiště — Sekv. zápis: %1$s MB/s · Sekv. čtení: %2$s MB/s · Náhodný zápis: %3$s ops/s · Náhodné čtení: %4$s ops/s · Hash: %5$s MB/s</string>
+
+    <string name="vip_diagnostic_pref_title">Historie diagnostiky VIP</string>
+    <string name="vip_diagnostic_pref_summary">Sledujte opotřebení baterie/RAM/úložiště v průběhu měsíců (VIP)</string>
+    <string name="vip_diagnostic_title">Historie diagnostiky</string>
+    <string name="vip_diagnostic_empty_message">Zatím nejsou uloženy žádné snímky. Uložte jeden nyní a za pár týdnů se podívejte na trend.</string>
+    <string name="vip_diagnostic_save_button">Uložit dnešní snímek</string>
+    <string name="vip_diagnostic_disclaimer">Porovnání jsou nejvýznamnější, pokud jsou snímky pořízeny při podobné úrovni nabití baterie. Pouze orientační informace.</string>
+    <string name="vip_diagnostic_summary_days_tracked">Sledováno %1$d dní</string>
+    <string name="vip_diagnostic_summary_cycle_delta">%1$+d nabíjecích cyklů od prvního snímku</string>
+    <string name="vip_diagnostic_row_battery_level">Úroveň baterie</string>
+    <string name="vip_diagnostic_row_ram_available">Dostupná RAM</string>
+    <string name="vip_diagnostic_row_storage_free">Volné úložiště</string>
 </resources>

@@ -464,4 +464,16 @@
     <string name="storage_bench_done_button">Xong</string>
     <string name="storage_bench_share_button">Chia sẻ</string>
     <string name="storage_bench_share_text">Đo hiệu năng lưu trữ — Ghi tuần tự: %1$s MB/s · Đọc tuần tự: %2$s MB/s · Ghi ngẫu nhiên: %3$s ops/s · Đọc ngẫu nhiên: %4$s ops/s · Băm: %5$s MB/s</string>
+
+    <string name="vip_diagnostic_pref_title">Lịch sử chẩn đoán VIP</string>
+    <string name="vip_diagnostic_pref_summary">Theo dõi hao mòn pin/RAM/bộ nhớ qua nhiều tháng (VIP)</string>
+    <string name="vip_diagnostic_title">Lịch sử chẩn đoán</string>
+    <string name="vip_diagnostic_empty_message">Chưa có bản lưu nào. Lưu ngay bây giờ, rồi quay lại sau vài tuần để xem xu hướng.</string>
+    <string name="vip_diagnostic_save_button">Lưu bản chụp hôm nay</string>
+    <string name="vip_diagnostic_disclaimer">So sánh có ý nghĩa nhất khi các lần lưu ở mức sạc pin tương tự nhau. Chỉ mang tính tham khảo.</string>
+    <string name="vip_diagnostic_summary_days_tracked">Đã theo dõi %1$d ngày</string>
+    <string name="vip_diagnostic_summary_cycle_delta">%1$+d chu kỳ sạc kể từ lần lưu đầu tiên</string>
+    <string name="vip_diagnostic_row_battery_level">Mức pin</string>
+    <string name="vip_diagnostic_row_ram_available">RAM khả dụng</string>
+    <string name="vip_diagnostic_row_storage_free">Bộ nhớ trống</string>
 </resources>
