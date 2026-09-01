@@ -417,7 +417,7 @@
     <string name="clear">Vymazat</string>
     <string name="vulkan_version">Verze Vulkan</string>
     <string name="can_my_device_bar_label">Schopnosti zařízení</string>
-    <string name="can_my_device_title">Schopnosti zařízení</string>
+    <string name="can_my_device_title">Schopnosti zařízení – výsledky</string>
     <string name="can_my_device_disclaimer">Na základě údajů o schopnostech zařízení (DRM, fotoaparát, Vulkan, připravenost na AI) — skutečné chování se může lišit podle verze OS a aplikace.</string>
     <string name="can_my_device_verdict_yes">Ano</string>
     <string name="can_my_device_verdict_no">Ne</string>

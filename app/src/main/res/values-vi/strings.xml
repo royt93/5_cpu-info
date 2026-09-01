@@ -286,7 +286,7 @@
     <string name="cluster_max_freq">Tối đa %1$d MHz</string>
     <!--AI Readiness Score (F10/U12)-->
     <string name="ai_readiness_bar_label">Độ sẵn sàng AI</string>
-    <string name="ai_readiness_title">Độ sẵn sàng AI</string>
+    <string name="ai_readiness_title">Điểm sẵn sàng AI</string>
     <string name="ai_readiness_tier_not_ready">Chưa sẵn sàng chạy AI trên máy</string>
     <string name="ai_readiness_tier_basic">Cơ bản — AI nhẹ (OCR, giọng nói)</string>
     <string name="ai_readiness_tier_capable">Khá tốt — chạy được model nhỏ gọn (~1–3B)</string>
@@ -423,7 +423,7 @@
     <string name="battery_session_min_current">Dòng điện thấp nhất</string>
     <string name="battery_session_max_current">Dòng điện cao nhất</string>
     <string name="can_my_device_bar_label">Khả năng thiết bị</string>
-    <string name="can_my_device_title">Khả năng thiết bị</string>
+    <string name="can_my_device_title">Kết quả khả năng thiết bị</string>
     <string name="can_my_device_disclaimer">Dựa trên dữ liệu năng lực phần cứng máy báo cáo (DRM, camera, Vulkan, Độ sẵn sàng AI) — hành vi thực tế có thể thay đổi tùy phiên bản HĐH và ứng dụng.</string>
     <string name="can_my_device_verdict_yes">Có</string>
     <string name="can_my_device_verdict_no">Không</string>

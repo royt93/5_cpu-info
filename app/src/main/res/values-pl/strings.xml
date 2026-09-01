@@ -417,7 +417,7 @@
     <string name="term_policy">Regulamin i polityka prywatności</string>
     <string name="app_share_error">Nie można udostępnić pliku APK</string>
     <string name="can_my_device_bar_label">Możliwości urządzenia</string>
-    <string name="can_my_device_title">Możliwości urządzenia</string>
+    <string name="can_my_device_title">Możliwości urządzenia – wyniki</string>
     <string name="can_my_device_disclaimer">Na podstawie danych o możliwościach urządzenia (DRM, aparat, Vulkan, gotowość na AI) — rzeczywiste działanie może się różnić w zależności od wersji systemu i aplikacji.</string>
     <string name="can_my_device_verdict_yes">Tak</string>
     <string name="can_my_device_verdict_no">Nie</string>

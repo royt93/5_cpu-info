@@ -420,7 +420,7 @@
     <string name="clear">Löschen</string>
     <string name="vulkan_version">Vulkan-Version</string>
     <string name="can_my_device_bar_label">Gerätefähigkeiten</string>
-    <string name="can_my_device_title">Gerätefähigkeiten</string>
+    <string name="can_my_device_title">Gerätefähigkeiten – Ergebnisse</string>
     <string name="can_my_device_disclaimer">Basierend auf gemeldeten Funktionsdaten (DRM, Kamera, Vulkan, KI-Bereitschaft) — tatsächliches App-Verhalten kann je nach Betriebssystemversion und App variieren.</string>
     <string name="can_my_device_verdict_yes">Ja</string>
     <string name="can_my_device_verdict_no">Nein</string>

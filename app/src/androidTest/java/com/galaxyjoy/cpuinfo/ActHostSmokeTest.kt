@@ -8,6 +8,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.longClick
 import androidx.recyclerview.widget.RecyclerView
+import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions.click
@@ -145,6 +146,20 @@ class ActHostSmokeTest {
         onView(withText(label)).perform(scrollTo(), click())
     }
 
+    /**
+     * `ViewPager2`'s tab-switch and Espresso's `withText(...).perform(click())` are plain-View
+     * operations, not driven by Compose's clock — `composeRule.waitForIdle()` alone doesn't
+     * reliably wait for a newly-swapped-in tab's Fragment to finish attaching its ComposeView (a
+     * genuine, reproducible race, not device flakiness: confirmed via logcat showing zero
+     * external app interference yet still hitting "No compose hierarchies found" right after a
+     * tab switch). Poll for the expected label instead of a single fixed wait.
+     */
+    private fun waitForComposeText(label: String, timeoutMillis: Long = 5_000) {
+        composeRule.waitUntil(timeoutMillis = timeoutMillis) {
+            composeRule.onAllNodesWithText(label).fetchSemanticsNodes().isNotEmpty()
+        }
+    }
+
     @Test
     fun throttleTestTabRunsFullCycleAndShowsResult() {
         onView(withId(R.id.menuHardware)).perform(click())
@@ -269,19 +284,18 @@ class ActHostSmokeTest {
         // reads real PackageManager permission data for that app without crashing. Uses this
         // app's own row (always present) since the installed-app list order is device-dependent.
         onView(withId(R.id.menuApplications)).perform(click())
-        composeRule.waitForIdle()
-
         val appName = composeRule.activity.getString(R.string.app_name)
+        waitForComposeText(appName)
+
         composeRule.onNodeWithText(appName).performTouchInput { longClick() }
-        composeRule.waitForIdle()
+        val permissionsAction = composeRule.activity.getString(R.string.app_permissions_action)
+        waitForComposeText(permissionsAction)
 
-        composeRule.onNodeWithText(composeRule.activity.getString(R.string.app_permissions_action))
-            .performClick()
-        composeRule.waitForIdle()
+        composeRule.onNodeWithText(permissionsAction).performClick()
 
-        composeRule.onNodeWithText(
-            composeRule.activity.getString(R.string.app_permissions_title, appName),
-        ).assertExists()
+        val title = composeRule.activity.getString(R.string.app_permissions_title, appName)
+        waitForComposeText(title)
+        composeRule.onNodeWithText(title).assertExists()
     }
 
     @Test
@@ -323,12 +337,22 @@ class ActHostSmokeTest {
     @Test
     fun languagePickerPrefOpensBottomSheetWithAllSupportedLocales() {
         onView(withId(R.id.menuSettings)).perform(click())
-        composeRule.waitForIdle()
+        Espresso.onIdle()
 
-        onView(withText(composeRule.activity.getString(R.string.language_change))).perform(click())
-        composeRule.waitForIdle()
+        // Settings is a plain PreferenceFragmentCompat backed by a lazily-bound RecyclerView — the
+        // "Change language" row isn't necessarily laid out yet if it sits below the fold (real
+        // root cause found via view-hierarchy dump: the row genuinely wasn't among the ~8 bound
+        // children at failure time), same class of fix as scrollAndroidInfoListTo() elsewhere in
+        // this file.
+        val changeLabel = composeRule.activity.getString(R.string.language_change)
+        onView(isAssignableFrom(RecyclerView::class.java)).perform(
+            RecyclerViewActions.scrollTo<RecyclerView.ViewHolder>(hasDescendant(withText(changeLabel)))
+        )
+        onView(withText(changeLabel)).perform(click())
+        val title = composeRule.activity.getString(R.string.language_picker_title)
+        waitForComposeText(title)
 
-        composeRule.onNodeWithText(composeRule.activity.getString(R.string.language_picker_title)).assertExists()
+        composeRule.onNodeWithText(title).assertExists()
         composeRule.onNodeWithText(composeRule.activity.getString(R.string.language_system_default)).assertExists()
         composeRule.onNodeWithText("English").assertExists()
         composeRule.onNodeWithText("Tiếng Việt").assertExists()
@@ -340,18 +364,18 @@ class ActHostSmokeTest {
 
     @Test
     fun canMyDeviceBarOpensSheetWithRulesAndDisclaimer() {
+        // CanMyDeviceBar lives on the CPU tab (FrmCpuInfo.kt), which is the default sub-tab — no
+        // tab switch needed. The old `clickTabByText(drm)` here was a real bug: it navigated away
+        // to a tab that never contains this bar at all, so the node search could never succeed.
         onView(withId(R.id.menuHardware)).perform(click())
-        composeRule.waitForIdle()
+        val barLabel = composeRule.activity.getString(R.string.can_my_device_bar_label)
+        waitForComposeText(barLabel)
 
-        // DRM is in the tab list
-        clickTabByText(composeRule.activity.getString(R.string.drm))
-        composeRule.waitForIdle()
+        composeRule.onNodeWithText(barLabel).performClick()
 
-        composeRule.onNodeWithText(composeRule.activity.getString(R.string.can_my_device_bar_label))
-            .performClick()
-        composeRule.waitForIdle()
-
-        composeRule.onNodeWithText(composeRule.activity.getString(R.string.can_my_device_title)).assertExists()
+        val title = composeRule.activity.getString(R.string.can_my_device_title)
+        waitForComposeText(title)
+        composeRule.onNodeWithText(title).assertExists()
         composeRule.onNodeWithText(composeRule.activity.getString(R.string.can_my_device_disclaimer)).assertExists()
     }
 

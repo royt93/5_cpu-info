@@ -15,6 +15,17 @@ Trong lúc thêm test cho F01 (realtime dashboard), phát hiện `ActHostSmokeTe
 
 Không sửa 4 test này — để dành 1 sprint dọn test riêng.
 
+## ✅ Sprint 5 (2026-09-01) — dọn nốt 4 test flaky của Sprint 4
+
+Root-cause + fix từng test, không chỉ thêm retry/sleep:
+
+- **`aiReadinessBarOpensSheetWithScoreAndFlagRows`** — bug thật, không chỉ riêng bài test: `values-vi/strings.xml` có `ai_readiness_title` trùng y hệt `ai_readiness_bar_label` ("Độ sẵn sàng AI") — mọi locale khác (en/cs/de/pl/zh) đều phân biệt rõ 2 chuỗi bằng hậu tố "Score"/"Skóre"/"Wynik"/... chỉ riêng bản dịch tiếng Việt bị thiếu. Sửa `ai_readiness_title` (vi) → "Điểm sẵn sàng AI".
+- **`canMyDeviceBarOpensSheetWithRulesAndDisclaimer`** — 2 bug thật chồng nhau: (1) test tự navigate sai — `clickTabByText(drm)` đưa qua tab DRM trong khi `CanMyDeviceBar` thực tế nằm ở tab CPU (`FrmCpuInfo.kt`, tab mặc định, không cần chuyển tab) — xoá bước chuyển tab sai. (2) `can_my_device_title` trùng y hệt `can_my_device_bar_label` ("Can My Device?") ở **toàn bộ 6 locale** (không riêng vi như bug #1) — khác quy ước `device_truth_fab_label`/`device_truth_title` đã phân biệt đúng từ đầu. Sửa cả 6 file `strings.xml` thêm hậu tố "Results"/"– Ergebnisse"/"– wyniki"/"– výsledky"/"Kết quả "/"結果" cho `can_my_device_title`.
+- **`languagePickerPrefOpensBottomSheetWithAllSupportedLocales`** — bug thật trong test: màn Settings (`PreferenceFragmentCompat`, RecyclerView thuần, không phải Compose) — dòng "Change language" nằm dưới fold, chưa được bind vào RecyclerView tại thời điểm test click (xác nhận qua view-hierarchy dump: chỉ 8 children đã bind, không có dòng này) → thiếu bước scroll, cùng lớp lỗi với `scrollAndroidInfoListTo()` đã có sẵn trong file — thêm `RecyclerViewActions.scrollTo()` trước khi click.
+- Thêm helper `waitForComposeText()` (poll bằng `composeRule.waitUntil`, không phải `waitForIdle()` đơn lẻ) cho các bước sau khi chuyển tab qua `ViewPager2`/Espresso — `composeRule.waitForIdle()` không đảm bảo đợi xong Fragment transaction gắn `ComposeView` mới, gây race "No compose hierarchies found" ngẫu nhiên (xác nhận qua logcat: không có app nào khác chen ngang, riêng lúc đó compose tree đã biến mất).
+- **Phát hiện ngoài phạm vi (không sửa)**: trong lúc điều tra, xác nhận máy TECNO KJ7 dùng chung với 1 tiến trình test khác (app `atomicPeriodicTable`, một app khác của cùng user) đang chạy song song — `dumpsys activity activities` cho thấy app đó liên tục cướp `topResumedActivity`, làm `ActHost` bị pause/destroy giữa chừng. Đây là nguyên nhân của một phần các lần fail ngẫu nhiên gặp phải khi điều tra (không phải bug code) — 2 test dài hơi khác (`throttleTestTabRunsFullCycleAndShowsResult`, `sensorTestFabRunsThroughAllStepsToADoneScreen`, 30s+) cũng from fail rồi pass lại khi máy rảnh, xác nhận cùng nguyên nhân, không phải regression từ sprint này.
+- Verify: `testDevDebugUnitTest`/`assembleDevDebug` xanh. Full `ActHostSmokeTest` (18 test) chạy sạch 18/18 pass trên TECNO khi máy không bị tranh chấp.
+
 ## ✅ Sprint 3 hoàn thành (2026-08-31) — dọn nốt P1/P2 còn sót
 
 Verify lại toàn bộ B15-B26 trên code hiện tại (3 ngày sau audit gốc, nhiều sprint feature đã chạy giữa chừng nên vài bug đã tự stale do refactor khác) trước khi sửa:

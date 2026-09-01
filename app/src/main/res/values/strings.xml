@@ -316,7 +316,7 @@
     <string name="ai_readiness_disclaimer">Heuristic estimate based on CPU instruction support, RAM, and core count — not a benchmark, and doesn\'t detect a dedicated NPU.</string>
     <!--Can My Device? rule engine (U05)-->
     <string name="can_my_device_bar_label">Can My Device?</string>
-    <string name="can_my_device_title">Can My Device?</string>
+    <string name="can_my_device_title">Can My Device? Results</string>
     <string name="can_my_device_disclaimer">Based on capability data this device reports (DRM, camera, Vulkan, AI Readiness) — actual app behavior can still vary by OS version and installed app.</string>
     <string name="can_my_device_verdict_yes">Yes</string>
     <string name="can_my_device_verdict_no">No</string>

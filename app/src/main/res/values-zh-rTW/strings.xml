@@ -419,7 +419,7 @@
     <string name="vip_restore_locked">恢復購買 — 即將推出</string>
     <string name="vip_privacy_policy">隱私權政策</string>
     <string name="can_my_device_bar_label">裝置能力診斷</string>
-    <string name="can_my_device_title">裝置能力診斷</string>
+    <string name="can_my_device_title">裝置能力診斷結果</string>
     <string name="can_my_device_disclaimer">根據此裝置報告的能力資料（DRM、相機、Vulkan、AI 支援度）評估 — 實際表現可能因系統版本及安裝的應用程式而異。</string>
     <string name="can_my_device_verdict_yes">支援</string>
     <string name="can_my_device_verdict_no">不支援</string>
