@@ -50,6 +50,19 @@ class ActHostSmokeTest {
      * test below assumes it's landing on the normal toolbar/tab UI, so dismiss it first if the
      * install this test runs against happens to be fresh (real device installs aren't always
      * fresh across runs, so this only fires when the sheet is actually present).
+     *
+     * Dismiss via back-press, NOT by selecting a language (even "System default"): root-caused a
+     * flake on 2026-09-02 where selecting anything in that sheet calls
+     * `LocaleManager.applyNoFlicker()`, a deliberate finish()+startActivity() locale-apply
+     * mechanism (see its kdoc) that creates a genuinely NEW ActHost instance. ComposeTestRule's
+     * ActivityScenario only ever tracks the ONE instance it originally launched, so it doesn't
+     * adopt the replacement — every later composeRule call then throws "Cannot run onActivity
+     * since Activity has been destroyed already". Confirmed unrelated to any UI change by
+     * reproducing identically against `git stash` (unmodified baseline). Back-press cancels the
+     * BottomSheetDialogFragment without invoking the selection callback, so no locale gets
+     * applied and no Activity swap happens — the flag also never gets persisted this way, so
+     * this can fire again on a later test in the same run; that's fine, this hook handles it
+     * every time regardless.
      */
     @Before
     fun dismissFirstLaunchLanguagePickerIfShown() {
@@ -67,7 +80,7 @@ class ActHostSmokeTest {
         }.isSuccess
 
         if (appeared) {
-            composeRule.onNodeWithText(systemDefaultLabel).performClick()
+            pressBack()
             composeRule.waitForIdle()
         }
     }
@@ -293,9 +306,17 @@ class ActHostSmokeTest {
         // prior run/device already persisted, so only the title (present in both states) is
         // asserted.
         onView(withId(R.id.menuSettings)).perform(click())
-        composeRule.waitForIdle()
+        Espresso.onIdle()
 
-        onView(withText(composeRule.activity.getString(R.string.hardware_snapshot_pref_title))).perform(click())
+        // Same class of fix as languagePickerPrefOpensBottomSheetWithAllSupportedLocales(): the
+        // Settings PreferenceFragmentCompat's RecyclerView doesn't necessarily have this row bound
+        // yet if it sits below the fold — worse on a device with a large font_scale (e.g. TECNO
+        // KJ7 at 1.45), where every row is taller and pushes later items further off-screen.
+        val hardwareSnapshotLabel = composeRule.activity.getString(R.string.hardware_snapshot_pref_title)
+        onView(isAssignableFrom(RecyclerView::class.java)).perform(
+            RecyclerViewActions.scrollTo<RecyclerView.ViewHolder>(hasDescendant(withText(hardwareSnapshotLabel)))
+        )
+        onView(withText(hardwareSnapshotLabel)).perform(click())
         composeRule.waitForIdle()
 
         composeRule.onNodeWithText(composeRule.activity.getString(R.string.hardware_snapshot_title)).assertExists()

@@ -14,7 +14,8 @@
             android:layout_height="wrap_content"
             android:elevation="8dp"
             app:tabGravity="fill"
-            app:tabMode="scrollable" />
+            app:tabMode="scrollable"
+            app:tabTextAppearance="@style/TabTextAppearance" />
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/vp"

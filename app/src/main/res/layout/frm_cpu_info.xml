@@ -45,6 +45,7 @@
             android:layout_gravity="bottom|end"
             android:layout_margin="16dp"
             android:text="@string/device_truth_fab_label"
+            android:textAllCaps="false"
             app:icon="@drawable/ic_device_truth" />
 
     </FrameLayout>

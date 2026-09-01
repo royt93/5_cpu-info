@@ -77,6 +77,16 @@
         <item name="android:textSize">12sp</item>
     </style>
 
+    <!-- Overrides Material Components v1's TextAppearance.Design.Tab default (textAllCaps=true) —
+         combined with a large system font scale, all-caps + the default bold letter-spacing made
+         tab labels look disproportionately bulky next to sentence-case body text at the same sp
+         size (real user report). NOTE: TextAppearance.Design.Tab sets the AppCompat custom
+         "textAllCaps" item (no android: prefix), not the framework android:textAllCaps — must
+         override the same unprefixed attribute or it silently has no effect. -->
+    <style name="TabTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="textAllCaps">false</item>
+    </style>
+
     <style name="TextAnnotation2" parent="BaseText">
         <item name="android:textSize">10sp</item>
     </style>
