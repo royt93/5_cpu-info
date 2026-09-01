@@ -16,6 +16,7 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.scrollTo
+import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
@@ -137,6 +138,24 @@ class ActHostSmokeTest {
         // No assertion beyond "didn't throw" — this is the regression guard for deleting
         // feat/processes (B11) and its nav_graph/menu_nav entries: the remaining tabs must
         // still all resolve and render.
+    }
+
+    @Test
+    fun temperatureTabNeverShowsTheOldHardcodedUnsupportedSentence() {
+        // Regression guard: AdtTemperature.kt used to hardcode a verbose, non-localized English
+        // sentence for a row whose reading isn't available on this device/API level (shipped
+        // since 2024-12-11 per git blame, unrelated to any recent change). Replaced with a short,
+        // localized string + a non-bold, smaller text style — the old bold TextH7 heading style
+        // (sized for a short reading like "32°C") rendered this sentence as a giant bold
+        // paragraph, which is the actual bug report this guards against.
+        onView(withId(R.id.menuTemperature)).perform(click())
+        composeRule.waitForIdle()
+
+        onView(
+            withText(
+                "Your device does not support providing the necessary information, so I am unable to retrieve the temperature.",
+            ),
+        ).check(doesNotExist())
     }
 
     /**

@@ -470,4 +470,6 @@
     <string name="vip_diagnostic_row_battery_level">Úroveň baterie</string>
     <string name="vip_diagnostic_row_ram_available">Dostupná RAM</string>
     <string name="vip_diagnostic_row_storage_free">Volné úložiště</string>
+
+    <string name="temperature_not_supported">Nedostupné</string>
 </resources>

@@ -476,4 +476,6 @@
     <string name="vip_diagnostic_row_battery_level">Mức pin</string>
     <string name="vip_diagnostic_row_ram_available">RAM khả dụng</string>
     <string name="vip_diagnostic_row_storage_free">Bộ nhớ trống</string>
+
+    <string name="temperature_not_supported">Không khả dụng</string>
 </resources>

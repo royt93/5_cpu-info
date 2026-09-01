@@ -470,4 +470,6 @@
     <string name="vip_diagnostic_row_battery_level">Poziom baterii</string>
     <string name="vip_diagnostic_row_ram_available">Dostępny RAM</string>
     <string name="vip_diagnostic_row_storage_free">Wolna pamięć</string>
+
+    <string name="temperature_not_supported">Niedostępne</string>
 </resources>

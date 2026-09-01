@@ -1,5 +1,11 @@
 # Epic 1 — Bugfix & Stability
 
+## ✅ Sprint 6 (2026-09-02) — fix hardcoded English fallback text, tab Nhiệt độ
+
+User report: "UI bị vỡ tùm lum" trên tab Nhiệt độ (CPU không đọc được nhiệt độ). Root cause: `AdtTemperature.kt` hardcode 1 câu tiếng Anh dài, không qua string resource, tồn tại từ 2024-12-11 (`git blame`, không liên quan bất kỳ commit nào phiên này) — `"Your device does not support providing the necessary information, so I am unable to retrieve the temperature."`. Câu này render bằng style `TextH7` bold (18sp, dùng cho số liệu ngắn kiểu "32°C") nên thành 1 đoạn văn to đậm tràn màn hình. **Phát hiện phụ khi điều tra**: TECNO đang có `font_scale=1.45` (system accessibility), khuếch đại thêm vấn đề — đã set về 1.0 để kiểm tra chính xác, trả lại 1.45 sau khi xong (không phải app bug, ghi chú lại vì làm rõ mức độ "to" quan sát được lúc report).
+
+**Fix**: thêm `R.string.temperature_not_supported` ("Unavailable"/"Không khả dụng", dịch đủ 6 locale, tái dùng đúng tone chuỗi `usb_bt_bluetooth_paired_unavailable` đã có). Đổi style động trong `AdtTemperature.kt`: khi không có nhiệt độ → `TextBody2` (14sp) + `Typeface.NORMAL`; khi có → giữ nguyên `TextH7` bold như cũ. Verify: `testDevDebugUnitTest` xanh, thêm test `temperatureTabNeverShowsTheOldHardcodedUnsupportedSentence` (regression guard, assert câu cũ không còn tồn tại) — pass 20/20 `ActHostSmokeTest` trên cả TECNO (font scale 1.0) và Galaxy S24 Ultra (font scale gốc 1.08, không đổi vì máy cá nhân thật).
+
 ## ✅ Sprint 1 hoàn thành (2026-08-28)
 16 bug đã fix và verify bằng `./gradlew :app:testDevDebugUnitTest` (build + test pass sau mỗi batch): B01, B02, B04, B05, B06, B07, B08, B09, B10, B14, B27, B28, B29, B30, B31, B32.
 Còn lại B03/B03b/B11/B12/B13 — để dành Sprint 2 vì gắn liền quyết định kiến trúc (giữ bản Applications nào, xoá `feat/processes`).

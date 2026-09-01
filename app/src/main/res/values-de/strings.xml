@@ -473,4 +473,6 @@
     <string name="vip_diagnostic_row_battery_level">Akkustand</string>
     <string name="vip_diagnostic_row_ram_available">Verfügbarer RAM</string>
     <string name="vip_diagnostic_row_storage_free">Freier Speicher</string>
+
+    <string name="temperature_not_supported">Nicht verfügbar</string>
 </resources>

@@ -498,4 +498,6 @@
     <string name="vip_diagnostic_row_battery_level">Battery level</string>
     <string name="vip_diagnostic_row_ram_available">RAM available</string>
     <string name="vip_diagnostic_row_storage_free">Storage free</string>
+
+    <string name="temperature_not_supported">Not available</string>
 </resources>

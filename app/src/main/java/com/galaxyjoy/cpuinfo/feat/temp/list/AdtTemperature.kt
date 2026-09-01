@@ -1,8 +1,10 @@
 package com.galaxyjoy.cpuinfo.feat.temp.list
 
+import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.galaxyjoy.cpuinfo.R
 import com.galaxyjoy.cpuinfo.databinding.ViItemTemperatureBinding
 import com.galaxyjoy.cpuinfo.feat.temp.TemperatureFormatter
 
@@ -39,13 +41,18 @@ class AdtTemperature(
             with(binding) {
                 temperatureIv.setImageResource(temperatureItem.iconRes)
                 temperatureTypeTv.text = temperatureItem.name
-                if (temperatureItem.temperature == null) {
-                    temperatureTv.text =
-                        "Your device does not support providing the necessary information, so I am unable to retrieve the temperature."
+                val temperature = temperatureItem.temperature
+                if (temperature == null) {
+                    // The value slot's XML style (TextH7, bold) is sized for a short reading like
+                    // "32°C" — reusing it for this fallback text used to render an oversized bold
+                    // paragraph. Drop to a smaller, non-bold body style for this case only.
+                    temperatureTv.setTextAppearance(R.style.TextBody2)
+                    temperatureTv.setTypeface(temperatureTv.typeface, Typeface.NORMAL)
+                    temperatureTv.text = temperatureTv.context.getString(R.string.temperature_not_supported)
                 } else {
-                    temperatureItem.temperature?.let {
-                        temperatureTv.text = temperatureFormatter.format(it)
-                    }
+                    temperatureTv.setTextAppearance(R.style.TextH7)
+                    temperatureTv.setTypeface(temperatureTv.typeface, Typeface.BOLD)
+                    temperatureTv.text = temperatureFormatter.format(temperature)
                 }
             }
         }
