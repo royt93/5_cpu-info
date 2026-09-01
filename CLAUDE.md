@@ -27,7 +27,7 @@ Release signing đọc trực tiếp từ private sibling repo `../../../../myKe
 
 - AGP **8.7.3**, Kotlin **1.9.25**, Java target **11**, NDK **26.3.11579264**, `compileSdk=37`, `minSdk=24`.
 - `build.gradle.kts` (root) `force()` các phiên bản: `kotlin-stdlib 1.9.25`, `kotlinx-coroutines 1.9.0`, `play-services-ads 23.6.0`. **Đừng xoá block force này** — Compose BOM và transitive deps kéo artifact compiled với Kotlin 2.x mà compiler 1.9.25 không đọc được metadata (max 2.0.0). Nếu bump Kotlin/coroutines phải bump force tương ứng.
-- **KSP** dùng cho Hilt + Glide (`com.google.devtools.ksp:1.9.25-1.0.20`). **kapt** vẫn dùng cho Epoxy (5.1.3 chưa support KSP). Mọi annotation processor mới ưu tiên KSP.
+- **KSP** dùng cho Hilt + Glide (`com.google.devtools.ksp:1.9.25-1.0.20`). **kapt đã bị xoá hoàn toàn** (Story 7/T2.28, 2026-09-01) — Epoxy (annotation processor cuối cùng chưa qua KSP) đã bị loại bỏ khỏi 3 màn CPU/GPU/RAM, chuyển sang `RecyclerView.Adapter` chuẩn. Mọi annotation processor mới ưu tiên KSP.
 - `GlideApp` class không được generate (Glide KSP 4.16.0 chỉ tạo `GeneratedAppGlideModuleImpl`). Dùng `Glide.with()` trực tiếp; `GlideAppModule` hiện rỗng (chỉ đăng ký với Glide qua `@GlideModule`).
 
 ## Cấu trúc cấp cao
@@ -44,9 +44,9 @@ Release signing đọc trực tiếp từ private sibling repo `../../../../myKe
 
 - `feat/` — mỗi feature 1 sub-package (`feat/infor/{cpu,gpu,ram,sensor,storage,screen,hardware,android,camera,drm,media}`, `feat/app`, `feat/temp`, `feat/setting`, `feat/cputile`, `feat/ramtile`). `feat/ActHost.kt` là Activity chính có bottom nav, `feat/SplashActivity.kt` là entry điểm. `feat/processes` đã bị xoá (tab bị ẩn từ lâu, không dùng được — xem `doc/task/epic-01-bugfix.md` B11).
 - `data/{provider,local}` — `DataProvider*` cho từng loại thông tin (CPU/GPU/RAM/Storage/Applications) + `RepositoryUserPreferences` (DataStore).
-- `domain/{model,observable,action,result}` + `Interactor.kt` — kiến trúc đang chuyển sang Interactor / Observable pattern (TODO trong README), chưa hoàn tất.
+- `domain/{model,observable,action,result}` + `Interactor.kt` — kiến trúc Interactor/Observable (Frm → VM → Observable*Data(Interactor) → DataProvider), **12/12 vùng `feat/infor` đã migrate xong** (Story 1, 2026-09-01).
 - `di/modules/{AppModule,AppModuleBinds}.kt` — Hilt graph. App entry: `GalaxyApp.kt` (`@HiltAndroidApp`).
-- `appinitializers/` — pattern: `InitializersApp` orchestrate một list các `AppInitializer` (Timber, Epoxy, Theme, Rx, NativeTools). Khi cần init thứ gì lúc app start, **thêm 1 `AppInitializer` mới**, đừng nhồi vào `GalaxyApp.onCreate`.
+- `appinitializers/` — pattern: `InitializersApp` orchestrate một list các `AppInitializer` (Timber, Theme, Rx, NativeTools). Khi cần init thứ gì lúc app start, **thêm 1 `AppInitializer` mới**, đừng nhồi vào `GalaxyApp.onCreate`.
 - `widget/` — custom view (arc, progress, swipe reveal). `widget/swiperv/` là port của SwipeRevealLayout, code nguyên trạng — không phải nơi nên refactor.
 - `ui/{component,theme}` — Compose components và theme (Material3, đang migrate dần).
 - `ext/` — extension functions cho Context/Activity.

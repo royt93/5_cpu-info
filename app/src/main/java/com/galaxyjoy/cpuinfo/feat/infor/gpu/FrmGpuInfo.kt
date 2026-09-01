@@ -16,6 +16,9 @@
 
 package com.galaxyjoy.cpuinfo.feat.infor.gpu
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.opengl.GLSurfaceView
 import android.os.Bundle
 import android.os.Handler
@@ -29,11 +32,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.galaxyjoy.cpuinfo.R
 import com.galaxyjoy.cpuinfo.databinding.FrmGpuInfoBinding
 import com.galaxyjoy.cpuinfo.domain.model.GpuData
+import com.galaxyjoy.cpuinfo.feat.infor.base.AdtInfoItems
 import com.galaxyjoy.cpuinfo.feat.infor.base.BaseFrm
 import com.galaxyjoy.cpuinfo.ui.theme.CpuInfoTheme
+import com.galaxyjoy.cpuinfo.util.DividerItemDecoration
+import com.galaxyjoy.cpuinfo.util.lifecycle.ListLiveData
+import com.galaxyjoy.cpuinfo.util.lifecycle.ListLiveDataObserver
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import javax.microedition.khronos.egl.EGLConfig
@@ -44,9 +54,11 @@ import javax.microedition.khronos.opengles.GL10
  *
  */
 @AndroidEntryPoint
-class FrmGpuInfo : BaseFrm<FrmGpuInfoBinding>(R.layout.frm_gpu_info) {
+class FrmGpuInfo : BaseFrm<FrmGpuInfoBinding>(R.layout.frm_gpu_info), AdtInfoItems.OnClickListener {
 
     private val viewModel: VMGpuInfo by viewModels()
+
+    private val displayItems = ListLiveData<Pair<String, String>>()
 
     @Inject
     lateinit var graphicsDetailProvider: GraphicsDetailProvider
@@ -86,15 +98,28 @@ class FrmGpuInfo : BaseFrm<FrmGpuInfoBinding>(R.layout.frm_gpu_info) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val controller = GpuInfoEpoxyController(requireContext())
-        binding.rv.adapter = controller.adapter
 
-        // F08 — the Compose summary bar/detail sheet needs the same GpuData the Epoxy list
-        // shows, including glExtensions which only arrives once GLSurfaceView's
-        // onSurfaceCreated() callback fires (asynchronous, after first render).
+        binding.rv.layoutManager = LinearLayoutManager(requireContext())
+        (binding.rv.itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
+        binding.rv.addItemDecoration(DividerItemDecoration(requireContext()))
+
+        val adtInfoItems = AdtInfoItems(
+            itemsObservableList = displayItems,
+            layoutType = AdtInfoItems.LayoutType.HORIZONTAL_LAYOUT,
+            onClickListener = this,
+        )
+        displayItems.listStatusChangeNotificator.observe(
+            viewLifecycleOwner,
+            ListLiveDataObserver(adtInfoItems),
+        )
+        binding.rv.adapter = adtInfoItems
+
+        // F08 — the Compose summary bar/detail sheet needs the same GpuData the list shows,
+        // including glExtensions which only arrives once GLSurfaceView's onSurfaceCreated()
+        // callback fires (asynchronous, after first render).
         val gpuDataState = mutableStateOf<GpuData?>(null)
         viewModel.viewState.observe(viewLifecycleOwner) { state ->
-            controller.setData(state)
+            displayItems.replace(toDisplayItems(state.gpuData))
             gpuDataState.value = state.gpuData
         }
 
@@ -134,5 +159,23 @@ class FrmGpuInfo : BaseFrm<FrmGpuInfoBinding>(R.layout.frm_gpu_info) {
     override fun onPause() {
         glSurfaceView?.onPause()
         super.onPause()
+    }
+
+    private fun toDisplayItems(data: GpuData): List<Pair<String, String>> {
+        val items = mutableListOf(
+            getString(R.string.vulkan_version) to data.vulkanVersion,
+            getString(R.string.gles_version) to data.glesVersion,
+        )
+        data.glVendor?.let { items.add(getString(R.string.vendor) to it) }
+        data.glRenderer?.let { items.add(getString(R.string.renderer) to it) }
+        data.glExtensions?.let { items.add(getString(R.string.extensions) to it) }
+        return items
+    }
+
+    override fun onItemLongPressed(item: Pair<String, String>) {
+        val clipboard = requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clip = ClipData.newPlainText(getString(R.string.app_name), item.second)
+        clipboard.setPrimaryClip(clip)
+        Snackbar.make(binding.mainContainer, R.string.text_copied, Snackbar.LENGTH_SHORT).show()
     }
 }

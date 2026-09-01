@@ -1,7 +1,7 @@
 package com.galaxyjoy.cpuinfo.feat.infor.gpu
 
 /**
- * F08 "Vulkan/GLES Detail" — [GpuInfoEpoxyController] already dumps the raw
+ * F08 "Vulkan/GLES Detail" — [FrmGpuInfo]'s list row already dumps the raw
  * `GL_EXTENSIONS` string (space-separated, driver-defined order, sometimes with duplicates) as
  * one unreadable blob. This turns it into a clean, sorted, deduplicated list for the detail
  * sheet.

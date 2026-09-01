@@ -1,7 +1,6 @@
 package com.galaxyjoy.cpuinfo.di.modules
 
 import com.galaxyjoy.cpuinfo.appinitializers.AppInitializer
-import com.galaxyjoy.cpuinfo.appinitializers.InitializerEpoxy
 import com.galaxyjoy.cpuinfo.appinitializers.NativeToolsInitializer
 import com.galaxyjoy.cpuinfo.appinitializers.InitializerRx
 import com.galaxyjoy.cpuinfo.appinitializers.InitializerTheme
@@ -32,8 +31,4 @@ abstract class AppModuleBinds {
     @Binds
     @IntoSet
     abstract fun provideThemeInitializer(bind: InitializerTheme): AppInitializer
-
-    @Binds
-    @IntoSet
-    abstract fun provideEpoxyInitializer(bind: InitializerEpoxy): AppInitializer
 }
