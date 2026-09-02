@@ -11,15 +11,21 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import com.galaxyjoy.cpuinfo.R
+import com.galaxyjoy.cpuinfo.feat.benchresultcard.BenchResultCardExporter
 import com.galaxyjoy.cpuinfo.ui.theme.CpuInfoTheme
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class FrmAllBench : Fragment() {
 
     private val viewModel: VMAllBench by viewModels()
+
+    @Inject
+    lateinit var benchResultCardExporter: BenchResultCardExporter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,6 +43,7 @@ class FrmAllBench : Fragment() {
                     onStopClicked = viewModel::onStopClicked,
                     onDoneClicked = viewModel::onDoneClicked,
                     onShareClicked = ::shareResults,
+                    onShareImageClicked = { benchResultCardExporter.exportBenchResultCard(lifecycleScope, it) },
                 )
             }
         }

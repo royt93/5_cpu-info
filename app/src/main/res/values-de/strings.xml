@@ -533,6 +533,9 @@
     <string name="all_bench_done_button">Fertig</string>
     <string name="all_bench_share_button">Teilen</string>
     <string name="all_bench_share_text">Vollständiger Test — CPU: %1$d MHz · Speicher: %2$s/%3$s MB/s · RAM: %4$s/%5$s MB/s · GPU: %6$s FPS</string>
+    <string name="bench_result_card_title">Benchmark-Ergebnisse</string>
+    <string name="bench_result_card_share_image_button">Als Bild teilen</string>
+    <string name="bench_result_card_share_button">Ergebniskarte teilen</string>
 
     <string name="vip_diagnostic_pref_title">VIP-Diagnoseverlauf</string>
     <string name="vip_diagnostic_pref_summary">Akku-/RAM-/Speicherverschleiß über Monate verfolgen (VIP)</string>

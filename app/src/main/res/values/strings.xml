@@ -560,6 +560,9 @@
     <string name="all_bench_done_button">Done</string>
     <string name="all_bench_share_button">Share</string>
     <string name="all_bench_share_text">Full benchmark — CPU: %1$d MHz · Storage: %2$s/%3$s MB/s · RAM: %4$s/%5$s MB/s · GPU: %6$s FPS</string>
+    <string name="bench_result_card_title">Benchmark results</string>
+    <string name="bench_result_card_share_image_button">Share as image</string>
+    <string name="bench_result_card_share_button">Share benchmark card</string>
 
     <string name="vip_diagnostic_pref_title">VIP Diagnostic History</string>
     <string name="vip_diagnostic_pref_summary">Track battery/RAM/storage drift over months (VIP)</string>

@@ -530,6 +530,9 @@
     <string name="all_bench_done_button">Gotowe</string>
     <string name="all_bench_share_button">Udostępnij</string>
     <string name="all_bench_share_text">Pełny test — CPU: %1$d MHz · Pamięć: %2$s/%3$s MB/s · RAM: %4$s/%5$s MB/s · GPU: %6$s FPS</string>
+    <string name="bench_result_card_title">Wyniki testu wydajności</string>
+    <string name="bench_result_card_share_image_button">Udostępnij jako obraz</string>
+    <string name="bench_result_card_share_button">Udostępnij kartę wyników</string>
 
     <string name="vip_diagnostic_pref_title">Historia diagnostyczna VIP</string>
     <string name="vip_diagnostic_pref_summary">Śledź zużycie baterii/RAM/pamięci przez miesiące (VIP)</string>

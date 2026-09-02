@@ -41,6 +41,7 @@ internal fun AllBenchScreen(
     onStopClicked: () -> Unit,
     onDoneClicked: () -> Unit,
     onShareClicked: (VMAllBench.Results) -> Unit,
+    onShareImageClicked: (VMAllBench.Results) -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -51,7 +52,7 @@ internal fun AllBenchScreen(
         when (uiState) {
             VMAllBench.UiState.Idle -> IdleContent(onStartClicked)
             is VMAllBench.UiState.Running -> RunningContent(uiState.step, onCreateGpuRenderer, onStopClicked)
-            is VMAllBench.UiState.Done -> DoneContent(uiState.results, onDoneClicked, onShareClicked)
+            is VMAllBench.UiState.Done -> DoneContent(uiState.results, onDoneClicked, onShareClicked, onShareImageClicked)
             is VMAllBench.UiState.Aborted -> AbortedContent(uiState.step, onDoneClicked)
         }
     }
@@ -133,6 +134,7 @@ private fun DoneContent(
     results: VMAllBench.Results,
     onDoneClicked: () -> Unit,
     onShareClicked: (VMAllBench.Results) -> Unit,
+    onShareImageClicked: (VMAllBench.Results) -> Unit,
 ) {
     Spacer(Modifier.height(16.dp))
     Icon(imageVector = Icons.Default.CheckCircle, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
@@ -144,14 +146,22 @@ private fun DoneContent(
     ResultRow(stringResource(R.string.all_bench_row_gpu), "${formatDecimal(results.gpu.avgFps)} FPS")
 
     Spacer(Modifier.height(24.dp))
+    // 3 buttons overflowed a single Row on real devices (the 3rd, "Share as image", pushed
+    // "Done" to wrap its label across 2 lines) — split into 2 rows instead of shrinking text or
+    // reaching for a wrapping layout just for 3 buttons.
     Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
         OutlinedButton(onClick = { onShareClicked(results) }) {
             Icon(imageVector = Icons.Default.Share, contentDescription = null, modifier = Modifier.height(18.dp))
             Text(text = stringResource(R.string.all_bench_share_button), modifier = Modifier.padding(start = 8.dp))
         }
-        Button(onClick = onDoneClicked) {
-            Text(text = stringResource(R.string.all_bench_done_button))
+        OutlinedButton(onClick = { onShareImageClicked(results) }) {
+            Icon(imageVector = Icons.Default.Share, contentDescription = null, modifier = Modifier.height(18.dp))
+            Text(text = stringResource(R.string.bench_result_card_share_image_button), modifier = Modifier.padding(start = 8.dp))
         }
+    }
+    Spacer(Modifier.height(12.dp))
+    Button(onClick = onDoneClicked) {
+        Text(text = stringResource(R.string.all_bench_done_button))
     }
 }
 

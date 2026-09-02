@@ -53,7 +53,7 @@ class AllBenchScreenTest {
     @Test
     fun idleState_showsStartButton() {
         composeRule.setContent {
-            CpuInfoTheme { AllBenchScreen(VMAllBench.UiState.Idle, { noOpRenderer }, {}, {}, {}, {}) }
+            CpuInfoTheme { AllBenchScreen(VMAllBench.UiState.Idle, { noOpRenderer }, {}, {}, {}, {}, {}) }
         }
 
         composeRule.onNodeWithText(appContext.getString(R.string.all_bench_start_button)).assertExists()
@@ -65,7 +65,7 @@ class AllBenchScreenTest {
         val state = VMAllBench.UiState.Running(VMAllBench.Step.THROTTLE)
 
         composeRule.setContent {
-            CpuInfoTheme { AllBenchScreen(state, { noOpRenderer }, {}, {}, {}, {}) }
+            CpuInfoTheme { AllBenchScreen(state, { noOpRenderer }, {}, {}, {}, {}, {}) }
         }
 
         val expected = appContext.getString(
@@ -79,7 +79,7 @@ class AllBenchScreenTest {
         val state = VMAllBench.UiState.Running(VMAllBench.Step.GPU)
 
         composeRule.setContent {
-            CpuInfoTheme { AllBenchScreen(state, { noOpRenderer }, {}, {}, {}, {}) }
+            CpuInfoTheme { AllBenchScreen(state, { noOpRenderer }, {}, {}, {}, {}, {}) }
         }
 
         val expected = appContext.getString(
@@ -91,7 +91,7 @@ class AllBenchScreenTest {
     @Test
     fun doneState_showsAllFourResults() {
         composeRule.setContent {
-            CpuInfoTheme { AllBenchScreen(VMAllBench.UiState.Done(sampleResults), { noOpRenderer }, {}, {}, {}, {}) }
+            CpuInfoTheme { AllBenchScreen(VMAllBench.UiState.Done(sampleResults), { noOpRenderer }, {}, {}, {}, {}, {}) }
         }
 
         composeRule.onNodeWithText("2000 MHz").assertExists()
@@ -100,12 +100,23 @@ class AllBenchScreenTest {
         composeRule.onNodeWithText("55.5 FPS").assertExists()
     }
 
+    /** U23 — the "Share as image" button added to `DoneContent` alongside the pre-existing
+     * text-share button. */
+    @Test
+    fun doneState_showsShareAsImageButton() {
+        composeRule.setContent {
+            CpuInfoTheme { AllBenchScreen(VMAllBench.UiState.Done(sampleResults), { noOpRenderer }, {}, {}, {}, {}, {}) }
+        }
+
+        composeRule.onNodeWithText(appContext.getString(R.string.bench_result_card_share_image_button)).assertExists()
+    }
+
     @Test
     fun abortedState_ram_showsRamStepNameInMessage() {
         val state = VMAllBench.UiState.Aborted(VMAllBench.Step.RAM)
 
         composeRule.setContent {
-            CpuInfoTheme { AllBenchScreen(state, { noOpRenderer }, {}, {}, {}, {}) }
+            CpuInfoTheme { AllBenchScreen(state, { noOpRenderer }, {}, {}, {}, {}, {}) }
         }
 
         val expected = appContext.getString(R.string.all_bench_aborted, appContext.getString(R.string.ram_bench))

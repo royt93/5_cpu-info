@@ -536,6 +536,9 @@
     <string name="all_bench_done_button">Xong</string>
     <string name="all_bench_share_button">Chia sẻ</string>
     <string name="all_bench_share_text">Kiểm tra toàn diện — CPU: %1$d MHz · Bộ nhớ: %2$s/%3$s MB/s · RAM: %4$s/%5$s MB/s · GPU: %6$s FPS</string>
+    <string name="bench_result_card_title">Kết quả kiểm tra hiệu năng</string>
+    <string name="bench_result_card_share_image_button">Chia sẻ ảnh</string>
+    <string name="bench_result_card_share_button">Chia sẻ thẻ kết quả</string>
 
     <string name="vip_diagnostic_pref_title">Lịch sử chẩn đoán VIP</string>
     <string name="vip_diagnostic_pref_summary">Theo dõi hao mòn pin/RAM/bộ nhớ qua nhiều tháng (VIP)</string>

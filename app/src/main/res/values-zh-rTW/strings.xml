@@ -532,6 +532,9 @@
     <string name="all_bench_done_button">完成</string>
     <string name="all_bench_share_button">分享</string>
     <string name="all_bench_share_text">完整測試 — CPU：%1$d MHz · 儲存：%2$s/%3$s MB/s · RAM：%4$s/%5$s MB/s · GPU：%6$s FPS</string>
+    <string name="bench_result_card_title">效能測試結果</string>
+    <string name="bench_result_card_share_image_button">分享圖片</string>
+    <string name="bench_result_card_share_button">分享結果卡片</string>
 
     <string name="vip_diagnostic_pref_title">VIP 診斷歷史</string>
     <string name="vip_diagnostic_pref_summary">追蹤數月內電池/RAM/儲存空間的耗損 (VIP)</string>
