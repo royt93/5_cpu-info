@@ -541,6 +541,21 @@
     <string name="gpu_bench_share_text">GPU benchmark — Average: %1$s FPS</string>
     <string name="gpu_bench_fps_label">Average FPS</string>
 
+    <string name="all_bench">Run All</string>
+    <string name="all_bench_disclaimer_title">Full device benchmark</string>
+    <string name="all_bench_disclaimer_body">Runs the CPU, storage, RAM, and GPU tests one after another. Takes about a minute — stops early if the device gets too warm.</string>
+    <string name="all_bench_start_button">Start full test</string>
+    <string name="all_bench_running_label">Step %1$d/4: %2$s</string>
+    <string name="all_bench_stop_button">Stop</string>
+    <string name="all_bench_aborted">Stopped during %1$s — device may be too warm or low on memory. Try again later.</string>
+    <string name="all_bench_row_throttle">CPU (sustained)</string>
+    <string name="all_bench_row_storage">Storage (write/read)</string>
+    <string name="all_bench_row_ram">RAM (write/read)</string>
+    <string name="all_bench_row_gpu">GPU (avg FPS)</string>
+    <string name="all_bench_done_button">Done</string>
+    <string name="all_bench_share_button">Share</string>
+    <string name="all_bench_share_text">Full benchmark — CPU: %1$d MHz · Storage: %2$s/%3$s MB/s · RAM: %4$s/%5$s MB/s · GPU: %6$s FPS</string>
+
     <string name="vip_diagnostic_pref_title">VIP Diagnostic History</string>
     <string name="vip_diagnostic_pref_summary">Track battery/RAM/storage drift over months (VIP)</string>
     <string name="vip_diagnostic_title">Diagnostic History</string>

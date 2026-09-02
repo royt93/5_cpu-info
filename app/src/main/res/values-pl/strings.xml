@@ -511,6 +511,21 @@
     <string name="gpu_bench_share_text">Test GPU — Średnia: %1$s FPS</string>
     <string name="gpu_bench_fps_label">Średnia liczba FPS</string>
 
+    <string name="all_bench">Uruchom wszystko</string>
+    <string name="all_bench_disclaimer_title">Pełny test urządzenia</string>
+    <string name="all_bench_disclaimer_body">Uruchamia kolejno testy CPU, pamięci, RAM i GPU. Zajmuje około minuty — zatrzyma się wcześniej, jeśli urządzenie zbytnio się rozgrzeje.</string>
+    <string name="all_bench_start_button">Rozpocznij pełny test</string>
+    <string name="all_bench_running_label">Krok %1$d/4: %2$s</string>
+    <string name="all_bench_stop_button">Zatrzymaj</string>
+    <string name="all_bench_aborted">Zatrzymano na kroku %1$s — urządzenie może być zbyt ciepłe lub mieć mało pamięci. Spróbuj ponownie później.</string>
+    <string name="all_bench_row_throttle">CPU (trwałe)</string>
+    <string name="all_bench_row_storage">Pamięć (zapis/odczyt)</string>
+    <string name="all_bench_row_ram">RAM (zapis/odczyt)</string>
+    <string name="all_bench_row_gpu">GPU (śr. FPS)</string>
+    <string name="all_bench_done_button">Gotowe</string>
+    <string name="all_bench_share_button">Udostępnij</string>
+    <string name="all_bench_share_text">Pełny test — CPU: %1$d MHz · Pamięć: %2$s/%3$s MB/s · RAM: %4$s/%5$s MB/s · GPU: %6$s FPS</string>
+
     <string name="vip_diagnostic_pref_title">Historia diagnostyczna VIP</string>
     <string name="vip_diagnostic_pref_summary">Śledź zużycie baterii/RAM/pamięci przez miesiące (VIP)</string>
     <string name="vip_diagnostic_title">Historia diagnostyczna</string>

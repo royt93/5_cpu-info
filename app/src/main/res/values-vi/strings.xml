@@ -517,6 +517,21 @@
     <string name="gpu_bench_share_text">Đo hiệu năng GPU — Trung bình: %1$s FPS</string>
     <string name="gpu_bench_fps_label">FPS trung bình</string>
 
+    <string name="all_bench">Chạy tất cả</string>
+    <string name="all_bench_disclaimer_title">Kiểm tra toàn diện máy</string>
+    <string name="all_bench_disclaimer_body">Chạy lần lượt bài test CPU, bộ nhớ, RAM và GPU. Mất khoảng 1 phút — sẽ dừng sớm nếu máy quá nóng.</string>
+    <string name="all_bench_start_button">Bắt đầu kiểm tra toàn diện</string>
+    <string name="all_bench_running_label">Bước %1$d/4: %2$s</string>
+    <string name="all_bench_stop_button">Dừng</string>
+    <string name="all_bench_aborted">Đã dừng ở bước %1$s — máy có thể đang nóng hoặc thiếu bộ nhớ. Thử lại sau.</string>
+    <string name="all_bench_row_throttle">CPU (bền vững)</string>
+    <string name="all_bench_row_storage">Bộ nhớ (ghi/đọc)</string>
+    <string name="all_bench_row_ram">RAM (ghi/đọc)</string>
+    <string name="all_bench_row_gpu">GPU (FPS trung bình)</string>
+    <string name="all_bench_done_button">Xong</string>
+    <string name="all_bench_share_button">Chia sẻ</string>
+    <string name="all_bench_share_text">Kiểm tra toàn diện — CPU: %1$d MHz · Bộ nhớ: %2$s/%3$s MB/s · RAM: %4$s/%5$s MB/s · GPU: %6$s FPS</string>
+
     <string name="vip_diagnostic_pref_title">Lịch sử chẩn đoán VIP</string>
     <string name="vip_diagnostic_pref_summary">Theo dõi hao mòn pin/RAM/bộ nhớ qua nhiều tháng (VIP)</string>
     <string name="vip_diagnostic_title">Lịch sử chẩn đoán</string>

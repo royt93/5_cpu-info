@@ -166,24 +166,6 @@ private fun RunningContent(
     onCreateRenderer: () -> GLSurfaceView.Renderer,
     onStopClicked: () -> Unit,
 ) {
-    val lifecycleOwner = LocalLifecycleOwner.current
-    val glViewRef = remember { mutableStateOf<GLSurfaceView?>(null) }
-
-    DisposableEffect(lifecycleOwner) {
-        val observer = LifecycleEventObserver { _, event ->
-            when (event) {
-                Lifecycle.Event.ON_RESUME -> glViewRef.value?.onResume()
-                Lifecycle.Event.ON_PAUSE -> {
-                    glViewRef.value?.onPause()
-                    onStopClicked()
-                }
-                else -> {}
-            }
-        }
-        lifecycleOwner.lifecycle.addObserver(observer)
-        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
-    }
-
     Spacer(Modifier.height(20.dp))
     Text(
         text = stringResource(
@@ -194,6 +176,38 @@ private fun RunningContent(
         color = MaterialTheme.colorScheme.onSurface,
     )
     Spacer(Modifier.height(16.dp))
+    GpuSurfaceView(onCreateRenderer, onStopClicked)
+    Spacer(Modifier.height(20.dp))
+    OutlinedButton(onClick = onStopClicked) {
+        Text(text = stringResource(R.string.gpu_bench_stop_button))
+    }
+}
+
+/**
+ * The actual `GLSurfaceView` + lifecycle plumbing, shared with U17's `feat.allbench.AllBenchScreen`
+ * (that screen runs this same GPU workload as its 4th step) — extracted here rather than
+ * duplicated since both call sites need the identical pause/resume/interrupt behavior.
+ */
+@Composable
+internal fun GpuSurfaceView(onCreateRenderer: () -> GLSurfaceView.Renderer, onInterrupted: () -> Unit) {
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val glViewRef = remember { mutableStateOf<GLSurfaceView?>(null) }
+
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            when (event) {
+                Lifecycle.Event.ON_RESUME -> glViewRef.value?.onResume()
+                Lifecycle.Event.ON_PAUSE -> {
+                    glViewRef.value?.onPause()
+                    onInterrupted()
+                }
+                else -> {}
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
+    }
+
     AndroidView(
         factory = { context ->
             GLSurfaceView(context).apply {
@@ -206,10 +220,6 @@ private fun RunningContent(
         modifier = Modifier.size(240.dp),
         onRelease = { it.onPause() },
     )
-    Spacer(Modifier.height(20.dp))
-    OutlinedButton(onClick = onStopClicked) {
-        Text(text = stringResource(R.string.gpu_bench_stop_button))
-    }
 }
 
 @Composable

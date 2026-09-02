@@ -18,6 +18,7 @@ import com.galaxyjoy.cpuinfo.feat.infor.ram.FrmRamInfo
 import com.galaxyjoy.cpuinfo.feat.infor.screen.FrmScreenInfo
 import com.galaxyjoy.cpuinfo.feat.infor.sensor.FrmSensorsInfo
 import com.galaxyjoy.cpuinfo.feat.infor.storage.FrmStorageInfo
+import com.galaxyjoy.cpuinfo.feat.allbench.FrmAllBench
 import com.galaxyjoy.cpuinfo.feat.gpubench.FrmGpuBench
 import com.galaxyjoy.cpuinfo.feat.rambench.FrmRamBench
 import com.galaxyjoy.cpuinfo.feat.storagebench.FrmStorageBench
@@ -49,6 +50,7 @@ class AdtInfoContainerState(fragment: Fragment) : FragmentStateAdapter(fragment)
             STORAGE_BENCH_POS -> FrmStorageBench()
             RAM_BENCH_POS -> FrmRamBench()
             GPU_BENCH_POS -> FrmGpuBench()
+            ALL_BENCH_POS -> FrmAllBench()
             else -> throw IllegalArgumentException("Unknown position for ViewPager2")
         }
 
@@ -74,6 +76,7 @@ class AdtInfoContainerState(fragment: Fragment) : FragmentStateAdapter(fragment)
         STORAGE_BENCH_POS -> R.string.storage_bench
         RAM_BENCH_POS -> R.string.ram_bench
         GPU_BENCH_POS -> R.string.gpu_bench
+        ALL_BENCH_POS -> R.string.all_bench
         else -> throw IllegalArgumentException("Unknown position for ViewPager2")
     }
 
@@ -97,7 +100,8 @@ class AdtInfoContainerState(fragment: Fragment) : FragmentStateAdapter(fragment)
         private const val STORAGE_BENCH_POS = 16
         private const val RAM_BENCH_POS = 17
         private const val GPU_BENCH_POS = 18
+        private const val ALL_BENCH_POS = 19
 
-        private const val INFO_PAGE_AMOUNT = 19
+        private const val INFO_PAGE_AMOUNT = 20
     }
 }

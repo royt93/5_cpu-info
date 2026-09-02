@@ -514,6 +514,21 @@
     <string name="gpu_bench_share_text">GPU-Test — Durchschnitt: %1$s FPS</string>
     <string name="gpu_bench_fps_label">Durchschnittliche FPS</string>
 
+    <string name="all_bench">Alle testen</string>
+    <string name="all_bench_disclaimer_title">Vollständiger Gerätetest</string>
+    <string name="all_bench_disclaimer_body">Führt nacheinander die CPU-, Speicher-, RAM- und GPU-Tests aus. Dauert etwa eine Minute — bricht früher ab, wenn das Gerät zu warm wird.</string>
+    <string name="all_bench_start_button">Vollständigen Test starten</string>
+    <string name="all_bench_running_label">Schritt %1$d/4: %2$s</string>
+    <string name="all_bench_stop_button">Stopp</string>
+    <string name="all_bench_aborted">Bei %1$s gestoppt — Gerät ist eventuell zu warm oder hat zu wenig Speicher. Versuche es später erneut.</string>
+    <string name="all_bench_row_throttle">CPU (dauerhaft)</string>
+    <string name="all_bench_row_storage">Speicher (Schreiben/Lesen)</string>
+    <string name="all_bench_row_ram">RAM (Schreiben/Lesen)</string>
+    <string name="all_bench_row_gpu">GPU (Ø FPS)</string>
+    <string name="all_bench_done_button">Fertig</string>
+    <string name="all_bench_share_button">Teilen</string>
+    <string name="all_bench_share_text">Vollständiger Test — CPU: %1$d MHz · Speicher: %2$s/%3$s MB/s · RAM: %4$s/%5$s MB/s · GPU: %6$s FPS</string>
+
     <string name="vip_diagnostic_pref_title">VIP-Diagnoseverlauf</string>
     <string name="vip_diagnostic_pref_summary">Akku-/RAM-/Speicherverschleiß über Monate verfolgen (VIP)</string>
     <string name="vip_diagnostic_title">Diagnoseverlauf</string>

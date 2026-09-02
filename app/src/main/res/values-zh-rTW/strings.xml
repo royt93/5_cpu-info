@@ -513,6 +513,21 @@
     <string name="gpu_bench_share_text">GPU 效能測試 — 平均：%1$s FPS</string>
     <string name="gpu_bench_fps_label">平均 FPS</string>
 
+    <string name="all_bench">全部執行</string>
+    <string name="all_bench_disclaimer_title">完整裝置測試</string>
+    <string name="all_bench_disclaimer_body">依序執行 CPU、儲存空間、RAM 與 GPU 測試，約需 1 分鐘 — 若裝置過熱會提前停止。</string>
+    <string name="all_bench_start_button">開始完整測試</string>
+    <string name="all_bench_running_label">步驟 %1$d/4：%2$s</string>
+    <string name="all_bench_stop_button">停止</string>
+    <string name="all_bench_aborted">已於「%1$s」階段停止 — 裝置可能過熱或記憶體不足，請稍後再試。</string>
+    <string name="all_bench_row_throttle">CPU（持續）</string>
+    <string name="all_bench_row_storage">儲存空間（寫入/讀取）</string>
+    <string name="all_bench_row_ram">RAM（寫入/讀取）</string>
+    <string name="all_bench_row_gpu">GPU（平均 FPS）</string>
+    <string name="all_bench_done_button">完成</string>
+    <string name="all_bench_share_button">分享</string>
+    <string name="all_bench_share_text">完整測試 — CPU：%1$d MHz · 儲存：%2$s/%3$s MB/s · RAM：%4$s/%5$s MB/s · GPU：%6$s FPS</string>
+
     <string name="vip_diagnostic_pref_title">VIP 診斷歷史</string>
     <string name="vip_diagnostic_pref_summary">追蹤數月內電池/RAM/儲存空間的耗損 (VIP)</string>
     <string name="vip_diagnostic_title">診斷歷史</string>

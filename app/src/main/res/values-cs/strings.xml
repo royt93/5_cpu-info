@@ -511,6 +511,21 @@
     <string name="gpu_bench_share_text">Test GPU — Průměr: %1$s FPS</string>
     <string name="gpu_bench_fps_label">Průměrné FPS</string>
 
+    <string name="all_bench">Spustit vše</string>
+    <string name="all_bench_disclaimer_title">Kompletní test zařízení</string>
+    <string name="all_bench_disclaimer_body">Postupně spustí testy CPU, úložiště, RAM a GPU. Trvá zhruba minutu — pokud se zařízení příliš zahřeje, zastaví se dřív.</string>
+    <string name="all_bench_start_button">Spustit kompletní test</string>
+    <string name="all_bench_running_label">Krok %1$d/4: %2$s</string>
+    <string name="all_bench_stop_button">Zastavit</string>
+    <string name="all_bench_aborted">Zastaveno u kroku %1$s — zařízení může být příliš zahřáté nebo má málo paměti. Zkuste to znovu později.</string>
+    <string name="all_bench_row_throttle">CPU (trvalé)</string>
+    <string name="all_bench_row_storage">Úložiště (zápis/čtení)</string>
+    <string name="all_bench_row_ram">RAM (zápis/čtení)</string>
+    <string name="all_bench_row_gpu">GPU (prům. FPS)</string>
+    <string name="all_bench_done_button">Hotovo</string>
+    <string name="all_bench_share_button">Sdílet</string>
+    <string name="all_bench_share_text">Kompletní test — CPU: %1$d MHz · Úložiště: %2$s/%3$s MB/s · RAM: %4$s/%5$s MB/s · GPU: %6$s FPS</string>
+
     <string name="vip_diagnostic_pref_title">Historie diagnostiky VIP</string>
     <string name="vip_diagnostic_pref_summary">Sledujte opotřebení baterie/RAM/úložiště v průběhu měsíců (VIP)</string>
     <string name="vip_diagnostic_title">Historie diagnostiky</string>
