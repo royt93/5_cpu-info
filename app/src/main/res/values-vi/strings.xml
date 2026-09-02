@@ -544,6 +544,7 @@
     <string name="vip_diagnostic_save_button">Lưu bản chụp hôm nay</string>
     <string name="vip_diagnostic_disclaimer">So sánh có ý nghĩa nhất khi các lần lưu ở mức sạc pin tương tự nhau. Chỉ mang tính tham khảo.</string>
     <string name="vip_diagnostic_summary_days_tracked">Đã theo dõi %1$d ngày</string>
+    <string name="vip_diagnostic_battery_chart_title">Xu hướng mức pin</string>
     <string name="vip_diagnostic_summary_cycle_delta">%1$+d chu kỳ sạc kể từ lần lưu đầu tiên</string>
     <string name="vip_diagnostic_row_battery_level">Mức pin</string>
     <string name="vip_diagnostic_row_ram_available">RAM khả dụng</string>

@@ -568,6 +568,7 @@
     <string name="vip_diagnostic_save_button">Save today\'s snapshot</string>
     <string name="vip_diagnostic_disclaimer">Comparisons are most meaningful when snapshots are taken at a similar battery charge level. Reference info only.</string>
     <string name="vip_diagnostic_summary_days_tracked">Tracked for %1$d days</string>
+    <string name="vip_diagnostic_battery_chart_title">Battery level trend</string>
     <string name="vip_diagnostic_summary_cycle_delta">%1$+d charge cycles since the first snapshot</string>
     <string name="vip_diagnostic_row_battery_level">Battery level</string>
     <string name="vip_diagnostic_row_ram_available">RAM available</string>

@@ -2,6 +2,7 @@ package com.galaxyjoy.cpuinfo.feat.vipreport
 
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
+import kotlin.test.assertTrue
 import org.junit.Test
 
 class VipDiagnosticEvaluatorTest {
@@ -9,9 +10,10 @@ class VipDiagnosticEvaluatorTest {
     private fun snapshot(
         dayOffset: Long,
         cycleCount: Int = -1,
+        batteryLevelPercent: Int = 80,
     ): VipDiagnosticSnapshot = VipDiagnosticSnapshot(
         timestampMillis = dayOffset * 24L * 60 * 60 * 1000,
-        batteryLevelPercent = 80,
+        batteryLevelPercent = batteryLevelPercent,
         designedCapacityMah = 5000.0,
         chargeCounterMah = 4000.0,
         cycleCount = cycleCount,
@@ -67,5 +69,32 @@ class VipDiagnosticEvaluatorTest {
 
         val reversed = ascending.asReversed()
         assertEquals(-30, VipDiagnosticEvaluator.summarize(reversed)?.cycleCountDelta)
+    }
+
+    @Test
+    fun `batteryLevelSeries returns empty list for empty history`() {
+        assertTrue(VipDiagnosticEvaluator.batteryLevelSeries(emptyList()).isEmpty())
+    }
+
+    @Test
+    fun `batteryLevelSeries maps each snapshot's battery level in order`() {
+        val history = listOf(
+            snapshot(0, batteryLevelPercent = 90),
+            snapshot(1, batteryLevelPercent = 85),
+            snapshot(2, batteryLevelPercent = 82),
+        )
+
+        assertEquals(listOf(90.0, 85.0, 82.0), VipDiagnosticEvaluator.batteryLevelSeries(history))
+    }
+
+    @Test
+    fun `batteryLevelSeries filters out the -1 sentinel instead of charting it as a real value`() {
+        val history = listOf(
+            snapshot(0, batteryLevelPercent = 90),
+            snapshot(1, batteryLevelPercent = -1),
+            snapshot(2, batteryLevelPercent = 82),
+        )
+
+        assertEquals(listOf(90.0, 82.0), VipDiagnosticEvaluator.batteryLevelSeries(history))
     }
 }

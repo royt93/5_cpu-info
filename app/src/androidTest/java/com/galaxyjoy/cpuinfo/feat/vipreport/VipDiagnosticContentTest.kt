@@ -15,6 +15,7 @@ import com.galaxyjoy.cpuinfo.R
 import com.galaxyjoy.cpuinfo.data.provider.DataProviderRam
 import com.galaxyjoy.cpuinfo.feat.infor.hardware.BatteryStatusProvider
 import com.galaxyjoy.cpuinfo.ui.theme.CpuInfoTheme
+import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -67,6 +68,22 @@ class VipDiagnosticContentTest {
         }
     }
 
+    /** Bypasses [VipDiagnosticReportRepository.captureSnapshot] (would read the real device once,
+     * always today) — seeded directly with an arbitrary [daysAgo] so U20's chart tests can get 2+
+     * distinct-calendar-day entries without waiting for real days to pass or fighting the same-day
+     * dedup in [VipDiagnosticReportRepository.saveSnapshot]. */
+    private fun fakeSnapshot(daysAgo: Long, batteryLevelPercent: Int) = VipDiagnosticSnapshot(
+        timestampMillis = System.currentTimeMillis() - daysAgo * 24L * 60 * 60 * 1000,
+        batteryLevelPercent = batteryLevelPercent,
+        designedCapacityMah = 5000.0,
+        chargeCounterMah = 4000.0,
+        cycleCount = -1,
+        batteryHealth = 2,
+        ramAvailablePercentage = 40,
+        internalStorageFreeBytes = 10L * 1024 * 1024 * 1024,
+        internalStorageTotalBytes = 128L * 1024 * 1024 * 1024,
+    )
+
     @Test
     fun emptyState_showsSaveButtonAndNoHistoryRows() {
         composeRule.setContent {
@@ -117,5 +134,38 @@ class VipDiagnosticContentTest {
         composeRule.onNodeWithText(
             appContext.getString(R.string.vip_diagnostic_summary_days_tracked, 0),
         ).assertDoesNotExist()
+    }
+
+    @Test
+    fun historyWithTwoOrMoreEntries_showsBatteryTrendChartTitle() {
+        runBlocking {
+            repository.saveSnapshot(fakeSnapshot(daysAgo = 2, batteryLevelPercent = 90))
+            repository.saveSnapshot(fakeSnapshot(daysAgo = 0, batteryLevelPercent = 82))
+        }
+
+        composeRule.setContent {
+            CpuInfoTheme { VipDiagnosticContent(repository = repository) }
+        }
+
+        val chartTitle = appContext.getString(R.string.vip_diagnostic_battery_chart_title)
+        waitForText(chartTitle)
+        composeRule.onNodeWithText(chartTitle).assertExists()
+    }
+
+    @Test
+    fun historyWithOnlyOneEntry_hidesBatteryTrendChartTitle() {
+        runBlocking {
+            repository.saveSnapshot(fakeSnapshot(daysAgo = 0, batteryLevelPercent = 90))
+        }
+
+        composeRule.setContent {
+            CpuInfoTheme { VipDiagnosticContent(repository = repository) }
+        }
+
+        val batteryLevelLabel = appContext.getString(R.string.vip_diagnostic_row_battery_level)
+        waitForText(batteryLevelLabel)
+
+        val chartTitle = appContext.getString(R.string.vip_diagnostic_battery_chart_title)
+        composeRule.onNodeWithText(chartTitle).assertDoesNotExist()
     }
 }

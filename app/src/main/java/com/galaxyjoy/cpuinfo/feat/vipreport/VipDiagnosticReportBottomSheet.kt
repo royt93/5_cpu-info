@@ -34,6 +34,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.galaxyjoy.cpuinfo.R
 import com.galaxyjoy.cpuinfo.feat.setting.BaseRoundedBottomSheet
+import com.galaxyjoy.cpuinfo.ui.component.BenchTrendChart
 import com.galaxyjoy.cpuinfo.ui.theme.CpuInfoTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -153,6 +154,19 @@ private fun HistoryState(history: List<VipDiagnosticSnapshot>, onSaveClicked: ()
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
+        Spacer(Modifier.height(20.dp))
+    }
+
+    val batterySeries = remember(history) { VipDiagnosticEvaluator.batteryLevelSeries(history) }
+    if (batterySeries.size >= 2) {
+        Text(
+            text = stringResource(R.string.vip_diagnostic_battery_chart_title),
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.fillMaxWidth(),
+        )
+        Spacer(Modifier.height(8.dp))
+        BenchTrendChart(values = batterySeries)
         Spacer(Modifier.height(20.dp))
     }
 

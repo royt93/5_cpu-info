@@ -45,4 +45,10 @@ object VipDiagnosticEvaluator {
             cycleCountDelta = cycleDelta,
         )
     }
+
+    /** U20 — battery level trend chart input. `batteryLevelPercent` doesn't use the `-1` sentinel
+     * other fields do (it's always readable from the sticky battery intent), but this stays
+     * defensive/consistent with how the other battery fields are guarded throughout this file. */
+    fun batteryLevelSeries(history: List<VipDiagnosticSnapshot>): List<Double> =
+        history.mapNotNull { snapshot -> snapshot.batteryLevelPercent.takeIf { it >= 0 }?.toDouble() }
 }

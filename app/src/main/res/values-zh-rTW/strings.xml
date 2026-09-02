@@ -540,6 +540,7 @@
     <string name="vip_diagnostic_save_button">儲存今天的快照</string>
     <string name="vip_diagnostic_disclaimer">在電池電量相近時拍攝的快照比較起來最有意義。僅供參考。</string>
     <string name="vip_diagnostic_summary_days_tracked">已追蹤 %1$d 天</string>
+    <string name="vip_diagnostic_battery_chart_title">電池電量趨勢</string>
     <string name="vip_diagnostic_summary_cycle_delta">自第一次快照以來充電循環 %1$+d 次</string>
     <string name="vip_diagnostic_row_battery_level">電池電量</string>
     <string name="vip_diagnostic_row_ram_available">可用 RAM</string>

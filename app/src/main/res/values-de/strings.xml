@@ -541,6 +541,7 @@
     <string name="vip_diagnostic_save_button">Heutige Momentaufnahme speichern</string>
     <string name="vip_diagnostic_disclaimer">Vergleiche sind am aussagekräftigsten, wenn die Momentaufnahmen bei ähnlichem Akkuladestand gemacht wurden. Nur zur Referenz.</string>
     <string name="vip_diagnostic_summary_days_tracked">Seit %1$d Tagen verfolgt</string>
+    <string name="vip_diagnostic_battery_chart_title">Akkustand-Trend</string>
     <string name="vip_diagnostic_summary_cycle_delta">%1$+d Ladezyklen seit der ersten Momentaufnahme</string>
     <string name="vip_diagnostic_row_battery_level">Akkustand</string>
     <string name="vip_diagnostic_row_ram_available">Verfügbarer RAM</string>

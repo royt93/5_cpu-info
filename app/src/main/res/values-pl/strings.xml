@@ -538,6 +538,7 @@
     <string name="vip_diagnostic_save_button">Zapisz dzisiejszą migawkę</string>
     <string name="vip_diagnostic_disclaimer">Porównania są najbardziej wiarygodne, gdy migawki są wykonywane przy podobnym poziomie naładowania baterii. Tylko informacyjnie.</string>
     <string name="vip_diagnostic_summary_days_tracked">Śledzone od %1$d dni</string>
+    <string name="vip_diagnostic_battery_chart_title">Trend poziomu baterii</string>
     <string name="vip_diagnostic_summary_cycle_delta">%1$+d cykli ładowania od pierwszej migawki</string>
     <string name="vip_diagnostic_row_battery_level">Poziom baterii</string>
     <string name="vip_diagnostic_row_ram_available">Dostępny RAM</string>
