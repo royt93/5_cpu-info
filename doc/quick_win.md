@@ -25,11 +25,13 @@
 
 **#2 Widget v2 đã làm xong (2026-09-01)**, **#3 CPU stress test đã làm xong (2026-09-02, mở rộng Throttle Test)** — xem chi tiết bên dưới.
 
-**❌ #1 Floating overlay — skipped, 2026-08-30**: no code was written for this item (research/exploration only, via read-only `grep`/`find` — nothing to revert). Reason: this app is a live, published Play Store app (per root `CLAUDE.md`). The feature needs two "special" surfaces Play Store reviews strictly —
-> - `SYSTEM_ALERT_WINDOW` ("draw over other apps"), and
-> - a foreground service that (from Android 14/API 34) must declare `foregroundServiceType="specialUse"` with a `PROPERTY_SPECIAL_USE_FGS_SUBTYPE` justification in the manifest, which Play Console then requires a written justification for at submission time.
+**❌ #1 Floating overlay — skipped, 2026-08-30, reconfirmed 2026-09-02**: no code was written for this item either time (research/exploration only, via read-only `grep`/`find` — nothing to revert). Reason: this app is a live, published Play Store app (per root `CLAUDE.md`), and the feature needs two surfaces Google Play scrutinizes heavily —
+
+> - **`SYSTEM_ALERT_WINDOW`** ("draw over other apps"). This is one of the permissions most associated with malware/adware/click-jacking overlays historically, so Play's automated + manual review flags apps requesting it, especially when the app's stated purpose (a read-only hardware-info utility) doesn't obviously require drawing over other apps. Even if approved once, it's a recurring review-risk surface on every future update (Play re-scans permission usage each release).
+> - **Foreground service `specialUse` type** — mandatory since Android 14/API 34 for any foreground service whose purpose doesn't fit Android's other predefined FGS types (mediaPlayback, location, camera, etc.; a floating system-monitor bubble fits none of them). Declaring `foregroundServiceType="specialUse"` requires a `PROPERTY_SPECIAL_USE_FGS_SUBTYPE` string in the manifest AND a written justification submitted through Play Console's Foreground Service dashboard — Google manually reviews this justification per app, and a weak/generic one is a real rejection or removal risk, not just a formality.
+> - **Compounding risk, not independent**: the app would be requesting BOTH a highly-scrutinized special permission AND a manually-reviewed special-use declaration for the SAME feature, on an app whose core positioning ("CPU Info", read-only diagnostics) doesn't organically explain needing either — this combination is what specifically worried the user, more than either risk alone.
 >
-> Presented this tradeoff to the user (build-and-accept-review-risk vs. skip) — user chose to skip rather than take on Play Console review/rejection risk for a differentiator feature. Revisit if the product decides the signature-feature value is worth that review overhead; the tech plan below is still valid, just not started.
+> Presented this tradeoff to the user twice now (2026-08-30 and 2026-09-02) — both times the user chose to skip rather than take on Play Console review/rejection/removal risk for a differentiator feature on a live app. Revisit only if the product decides the signature-feature value is worth that review overhead; the tech plan below is still valid, just not started, and no code exists to clean up.
 
 **Đợt 3a hoàn tất** (#10 + #8 + #7 + #6 + #9) — đã ship, không rõ commit nào cụ thể (không track riêng lúc đó), xác nhận qua code hiện tại.
 **#5 hoàn tất** (Sprint 15, 2026-08-30) — Network Info tab, permission consent flow đầu tiên của app.
