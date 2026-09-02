@@ -85,6 +85,9 @@
     <string name="ram_widget_label">Giám sát RAM</string>
     <string name="ram_widget_description">Xem RAM khả dụng và dọn RAM nhanh ngay trên màn hình chính</string>
     <string name="ram_widget_clean_action">Dọn RAM</string>
+    <string name="shield_score_widget_label">Sức khoẻ máy</string>
+    <string name="shield_score_widget_description">Xem điểm sức khoẻ máy ngay trên màn hình chính</string>
+    <string name="shield_score_widget_score_format">%1$d</string>
     <string name="ram_widget_detail_format">%1$s trống / %2$s</string>
     <!--Storage-->
     <string name="internal">Trong máy</string>

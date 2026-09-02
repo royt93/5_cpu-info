@@ -25,6 +25,7 @@ import com.galaxyjoy.cpuinfo.feat.setting.ExportFormatBottomSheet
 import com.galaxyjoy.cpuinfo.feat.setting.LanguagePickerBottomSheet
 import com.galaxyjoy.cpuinfo.feat.shield.ShieldScoreBottomSheet
 import com.galaxyjoy.cpuinfo.feat.shield.ShieldScoreProvider
+import com.galaxyjoy.cpuinfo.feat.shieldwidget.ShieldScoreWidgetProvider.Companion.EXTRA_OPEN_SHIELD_SCORE
 import com.galaxyjoy.cpuinfo.feat.vip.ActVip
 import com.galaxyjoy.cpuinfo.feat.vip.streak.CheckInStreak
 import com.galaxyjoy.cpuinfo.feat.vip.streak.CheckInStreakPrefs
@@ -113,6 +114,17 @@ class ActHost : BaseActivity() {
         registerLanguagePickResult()
         maybeShowFirstLaunchLanguagePicker()
         evaluateDailyStreak()
+        maybeOpenShieldScoreFromWidget()
+    }
+
+    /**
+     * U13 — the Shield Score home-screen widget's tap-to-open PendingIntent carries this extra
+     * so it lands directly on the score sheet, not just the default tab like a plain app-icon
+     * tap would (see [com.galaxyjoy.cpuinfo.feat.shieldwidget.ShieldScoreWidgetProvider]).
+     */
+    private fun maybeOpenShieldScoreFromWidget() {
+        if (!intent.getBooleanExtra(EXTRA_OPEN_SHIELD_SCORE, false)) return
+        ShieldScoreBottomSheet().show(supportFragmentManager, ShieldScoreBottomSheet.TAG)
     }
 
     /**

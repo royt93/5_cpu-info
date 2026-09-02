@@ -97,6 +97,9 @@
     <string name="ram_widget_label">RAM Monitor</string>
     <string name="ram_widget_description">See available RAM and clean it right from your home screen</string>
     <string name="ram_widget_clean_action">Clean RAM</string>
+    <string name="shield_score_widget_label">Device Health</string>
+    <string name="shield_score_widget_description">See your device health score right from your home screen</string>
+    <string name="shield_score_widget_score_format">%1$d</string>
     <string name="ram_widget_detail_format">%1$s free of %2$s</string>
     <!--Storage-->
     <string name="internal">Internal</string>

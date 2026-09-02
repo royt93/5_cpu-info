@@ -85,6 +85,9 @@
     <string name="ram_widget_label">RAM-Monitor</string>
     <string name="ram_widget_description">Verfügbaren RAM anzeigen und direkt vom Startbildschirm bereinigen</string>
     <string name="ram_widget_clean_action">RAM leeren</string>
+    <string name="shield_score_widget_label">Gerätezustand</string>
+    <string name="shield_score_widget_description">Sieh den Gerätezustand direkt auf dem Startbildschirm</string>
+    <string name="shield_score_widget_score_format">%1$d</string>
     <string name="ram_widget_detail_format">%1$s frei von %2$s</string>
     <!--Storage-->
     <string name="internal">Intern</string>
