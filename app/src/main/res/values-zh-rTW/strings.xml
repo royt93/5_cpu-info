@@ -497,6 +497,22 @@
     <string name="ram_bench_share_button">分享</string>
     <string name="ram_bench_share_text">RAM 效能測試 — 寫入：%1$s MB/s · 讀取：%2$s MB/s</string>
 
+    <string name="gpu_bench">GPU 效能測試</string>
+    <string name="gpu_bench_disclaimer_title">開始之前</string>
+    <string name="gpu_bench_disclaimer_body">此測試會繪製幾秒鐘高負載的著色器動畫，藉此測量 GPU 影格率。除了應用程式本身的暫存記憶體外，不會儲存任何內容。</string>
+    <string name="gpu_bench_start_button">開始測試</string>
+    <string name="gpu_bench_running_warmup">暖機中…</string>
+    <string name="gpu_bench_running_measuring">測量中…</string>
+    <string name="gpu_bench_stop_button">停止</string>
+    <string name="gpu_bench_aborted_overheat">已略過測試 — 裝置目前過熱，降溫後再試一次。</string>
+    <string name="gpu_bench_aborted_interrupted">測試在完成前已停止。</string>
+    <string name="gpu_bench_previous_summary">上次測試：%1$s · %2$s</string>
+    <string name="gpu_bench_no_previous">尚無先前結果</string>
+    <string name="gpu_bench_done_button">完成</string>
+    <string name="gpu_bench_share_button">分享</string>
+    <string name="gpu_bench_share_text">GPU 效能測試 — 平均：%1$s FPS</string>
+    <string name="gpu_bench_fps_label">平均 FPS</string>
+
     <string name="vip_diagnostic_pref_title">VIP 診斷歷史</string>
     <string name="vip_diagnostic_pref_summary">追蹤數月內電池/RAM/儲存空間的耗損 (VIP)</string>
     <string name="vip_diagnostic_title">診斷歷史</string>

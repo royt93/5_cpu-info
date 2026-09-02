@@ -498,6 +498,22 @@
     <string name="ram_bench_share_button">Teilen</string>
     <string name="ram_bench_share_text">RAM-Test — Schreiben: %1$s MB/s · Lesen: %2$s MB/s</string>
 
+    <string name="gpu_bench">GPU-Test</string>
+    <string name="gpu_bench_disclaimer_title">Bevor du startest</string>
+    <string name="gpu_bench_disclaimer_body">Dieser Test zeichnet einige Sekunden lang eine shader-intensive Animation, um die GPU-Bildrate zu messen. Es wird nichts außerhalb des App-Speichers gespeichert.</string>
+    <string name="gpu_bench_start_button">Test starten</string>
+    <string name="gpu_bench_running_warmup">Wird aufgewärmt…</string>
+    <string name="gpu_bench_running_measuring">Wird gemessen…</string>
+    <string name="gpu_bench_stop_button">Stopp</string>
+    <string name="gpu_bench_aborted_overheat">Test übersprungen — Gerät ist gerade zu warm. Versuche es erneut, wenn es abgekühlt ist.</string>
+    <string name="gpu_bench_aborted_interrupted">Test wurde vor dem Abschluss gestoppt.</string>
+    <string name="gpu_bench_previous_summary">Letzter Test: %1$s · %2$s</string>
+    <string name="gpu_bench_no_previous">Noch kein vorheriges Ergebnis</string>
+    <string name="gpu_bench_done_button">Fertig</string>
+    <string name="gpu_bench_share_button">Teilen</string>
+    <string name="gpu_bench_share_text">GPU-Test — Durchschnitt: %1$s FPS</string>
+    <string name="gpu_bench_fps_label">Durchschnittliche FPS</string>
+
     <string name="vip_diagnostic_pref_title">VIP-Diagnoseverlauf</string>
     <string name="vip_diagnostic_pref_summary">Akku-/RAM-/Speicherverschleiß über Monate verfolgen (VIP)</string>
     <string name="vip_diagnostic_title">Diagnoseverlauf</string>

@@ -525,6 +525,22 @@
     <string name="ram_bench_share_button">Share</string>
     <string name="ram_bench_share_text">RAM benchmark — Write: %1$s MB/s · Read: %2$s MB/s</string>
 
+    <string name="gpu_bench">GPU Benchmark</string>
+    <string name="gpu_bench_disclaimer_title">Before you start</string>
+    <string name="gpu_bench_disclaimer_body">This test draws a shader-heavy animation for a few seconds to measure GPU frame rate. Nothing is saved beyond the app’s own memory.</string>
+    <string name="gpu_bench_start_button">Start test</string>
+    <string name="gpu_bench_running_warmup">Warming up…</string>
+    <string name="gpu_bench_running_measuring">Measuring…</string>
+    <string name="gpu_bench_stop_button">Stop</string>
+    <string name="gpu_bench_aborted_overheat">Test skipped — device is too warm right now. Try again once it cools down.</string>
+    <string name="gpu_bench_aborted_interrupted">Test stopped before it finished.</string>
+    <string name="gpu_bench_previous_summary">Last test: %1$s · %2$s</string>
+    <string name="gpu_bench_no_previous">No previous result yet</string>
+    <string name="gpu_bench_done_button">Done</string>
+    <string name="gpu_bench_share_button">Share</string>
+    <string name="gpu_bench_share_text">GPU benchmark — Average: %1$s FPS</string>
+    <string name="gpu_bench_fps_label">Average FPS</string>
+
     <string name="vip_diagnostic_pref_title">VIP Diagnostic History</string>
     <string name="vip_diagnostic_pref_summary">Track battery/RAM/storage drift over months (VIP)</string>
     <string name="vip_diagnostic_title">Diagnostic History</string>

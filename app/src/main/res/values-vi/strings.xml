@@ -501,6 +501,22 @@
     <string name="ram_bench_share_button">Chia sẻ</string>
     <string name="ram_bench_share_text">Đo hiệu năng RAM — Ghi: %1$s MB/s · Đọc: %2$s MB/s</string>
 
+    <string name="gpu_bench">Đo hiệu năng GPU</string>
+    <string name="gpu_bench_disclaimer_title">Trước khi bắt đầu</string>
+    <string name="gpu_bench_disclaimer_body">Bài test vẽ hoạt ảnh nặng shader trong vài giây để đo tốc độ khung hình GPU. Không lưu gì ngoài bộ nhớ tạm của ứng dụng.</string>
+    <string name="gpu_bench_start_button">Bắt đầu test</string>
+    <string name="gpu_bench_running_warmup">Đang khởi động…</string>
+    <string name="gpu_bench_running_measuring">Đang đo…</string>
+    <string name="gpu_bench_stop_button">Dừng</string>
+    <string name="gpu_bench_aborted_overheat">Đã bỏ qua test — máy đang nóng. Thử lại khi máy nguội hơn.</string>
+    <string name="gpu_bench_aborted_interrupted">Test đã dừng trước khi xong.</string>
+    <string name="gpu_bench_previous_summary">Lần trước: %1$s · %2$s</string>
+    <string name="gpu_bench_no_previous">Chưa có kết quả trước đó</string>
+    <string name="gpu_bench_done_button">Xong</string>
+    <string name="gpu_bench_share_button">Chia sẻ</string>
+    <string name="gpu_bench_share_text">Đo hiệu năng GPU — Trung bình: %1$s FPS</string>
+    <string name="gpu_bench_fps_label">FPS trung bình</string>
+
     <string name="vip_diagnostic_pref_title">Lịch sử chẩn đoán VIP</string>
     <string name="vip_diagnostic_pref_summary">Theo dõi hao mòn pin/RAM/bộ nhớ qua nhiều tháng (VIP)</string>
     <string name="vip_diagnostic_title">Lịch sử chẩn đoán</string>

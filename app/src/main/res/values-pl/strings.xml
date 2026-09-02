@@ -495,6 +495,22 @@
     <string name="ram_bench_share_button">Udostępnij</string>
     <string name="ram_bench_share_text">Test pamięci RAM — Zapis: %1$s MB/s · Odczyt: %2$s MB/s</string>
 
+    <string name="gpu_bench">Test GPU</string>
+    <string name="gpu_bench_disclaimer_title">Zanim zaczniesz</string>
+    <string name="gpu_bench_disclaimer_body">Ten test przez kilka sekund renderuje animację obciążającą shadery, aby zmierzyć liczbę klatek GPU. Nic nie jest zapisywane poza pamięcią aplikacji.</string>
+    <string name="gpu_bench_start_button">Rozpocznij test</string>
+    <string name="gpu_bench_running_warmup">Rozgrzewanie…</string>
+    <string name="gpu_bench_running_measuring">Pomiar…</string>
+    <string name="gpu_bench_stop_button">Zatrzymaj</string>
+    <string name="gpu_bench_aborted_overheat">Test pominięty — urządzenie jest teraz zbyt ciepłe. Spróbuj ponownie po ostygnięciu.</string>
+    <string name="gpu_bench_aborted_interrupted">Test zatrzymany przed zakończeniem.</string>
+    <string name="gpu_bench_previous_summary">Ostatni test: %1$s · %2$s</string>
+    <string name="gpu_bench_no_previous">Brak wcześniejszego wyniku</string>
+    <string name="gpu_bench_done_button">Gotowe</string>
+    <string name="gpu_bench_share_button">Udostępnij</string>
+    <string name="gpu_bench_share_text">Test GPU — Średnia: %1$s FPS</string>
+    <string name="gpu_bench_fps_label">Średnia liczba FPS</string>
+
     <string name="vip_diagnostic_pref_title">Historia diagnostyczna VIP</string>
     <string name="vip_diagnostic_pref_summary">Śledź zużycie baterii/RAM/pamięci przez miesiące (VIP)</string>
     <string name="vip_diagnostic_title">Historia diagnostyczna</string>

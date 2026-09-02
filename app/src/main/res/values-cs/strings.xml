@@ -495,6 +495,22 @@
     <string name="ram_bench_share_button">Sdílet</string>
     <string name="ram_bench_share_text">Test RAM — Zápis: %1$s MB/s · Čtení: %2$s MB/s</string>
 
+    <string name="gpu_bench">Test GPU</string>
+    <string name="gpu_bench_disclaimer_title">Než začnete</string>
+    <string name="gpu_bench_disclaimer_body">Tento test několik sekund vykresluje animaci náročnou na shadery a měří tak snímkovou frekvenci GPU. Nic se neukládá mimo paměť aplikace.</string>
+    <string name="gpu_bench_start_button">Spustit test</string>
+    <string name="gpu_bench_running_warmup">Zahřívání…</string>
+    <string name="gpu_bench_running_measuring">Měření…</string>
+    <string name="gpu_bench_stop_button">Zastavit</string>
+    <string name="gpu_bench_aborted_overheat">Test přeskočen — zařízení je nyní příliš zahřáté. Zkuste to znovu, až vychladne.</string>
+    <string name="gpu_bench_aborted_interrupted">Test byl zastaven před dokončením.</string>
+    <string name="gpu_bench_previous_summary">Poslední test: %1$s · %2$s</string>
+    <string name="gpu_bench_no_previous">Zatím žádný předchozí výsledek</string>
+    <string name="gpu_bench_done_button">Hotovo</string>
+    <string name="gpu_bench_share_button">Sdílet</string>
+    <string name="gpu_bench_share_text">Test GPU — Průměr: %1$s FPS</string>
+    <string name="gpu_bench_fps_label">Průměrné FPS</string>
+
     <string name="vip_diagnostic_pref_title">Historie diagnostiky VIP</string>
     <string name="vip_diagnostic_pref_summary">Sledujte opotřebení baterie/RAM/úložiště v průběhu měsíců (VIP)</string>
     <string name="vip_diagnostic_title">Historie diagnostiky</string>
