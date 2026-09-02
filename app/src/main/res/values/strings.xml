@@ -343,6 +343,10 @@
     <string name="hardware_snapshot_identity_stable">No identity changes detected</string>
     <string name="hardware_snapshot_disclaimer">Best-effort comparison based on values readable from Android — not proof of tampering. Storage, RAM, and patch level normally change over time.</string>
     <string name="sensor_test_fab_label">Test Sensors</string>
+    <string name="sensor_waveform_accelerometer">Accelerometer</string>
+    <string name="sensor_waveform_gyroscope">Gyroscope</string>
+    <string name="sensor_waveform_barometer">Barometer</string>
+    <string name="sensor_waveform_collecting">Waiting for data…</string>
     <string name="sensor_test_title">Sensor Test</string>
     <string name="sensor_test_intro">Follow the instructions to check that each available sensor responds to real input. Best-effort check, not a certified diagnostic.</string>
     <string name="sensor_test_start_button">Start Test</string>

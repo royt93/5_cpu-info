@@ -297,6 +297,10 @@
     <string name="hardware_snapshot_identity_stable">Nie wykryto zmian tożsamości</string>
     <string name="hardware_snapshot_disclaimer">Porównanie oparte na wartościach odczytywalnych z systemu Android — nie jest dowodem manipulacji. Pamięć, RAM i poziom poprawek zwykle zmieniają się w czasie.</string>
     <string name="sensor_test_fab_label">Testuj czujniki</string>
+    <string name="sensor_waveform_accelerometer">Akcelerometr</string>
+    <string name="sensor_waveform_gyroscope">Żyroskop</string>
+    <string name="sensor_waveform_barometer">Barometr</string>
+    <string name="sensor_waveform_collecting">Oczekiwanie na dane…</string>
     <string name="sensor_test_title">Test czujników</string>
     <string name="sensor_test_intro">Postępuj zgodnie z instrukcjami, aby sprawdzić, czy każdy dostępny czujnik reaguje na rzeczywisty bodziec. Sprawdzenie orientacyjne, nie certyfikowana diagnostyka.</string>
     <string name="sensor_test_start_button">Rozpocznij test</string>

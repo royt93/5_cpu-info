@@ -13,8 +13,24 @@ import com.galaxyjoy.cpuinfo.util.round1
 import com.galaxyjoy.cpuinfo.util.runOnApiAbove
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
+/**
+ * F12 — live waveform data for the 3 sensor types worth charting (X/Y/Z motion sensors +
+ * single-axis barometer). [hasAccelerometer]/[hasGyroscope]/[hasBarometer] let the view hide
+ * whichever chart the device doesn't have, rather than showing an empty chart forever.
+ */
+data class SensorWaveformUiState(
+    val accelerometer: List<List<Float>> = emptyList(),
+    val gyroscope: List<List<Float>> = emptyList(),
+    val barometer: List<List<Float>> = emptyList(),
+    val hasAccelerometer: Boolean = false,
+    val hasGyroscope: Boolean = false,
+    val hasBarometer: Boolean = false,
+)
 
 /**
  * ViewModel for sensors data
@@ -29,6 +45,19 @@ class VMSensorsInfo @Inject constructor(
     val listLiveData = ListLiveData<Pair<String, String>>()
 
     private val sensorList = dataProviderSensor.getSensorList()
+
+    private val accelerometerBuffer = SensorWaveformBuffer(axisCount = 3)
+    private val gyroscopeBuffer = SensorWaveformBuffer(axisCount = 3)
+    private val barometerBuffer = SensorWaveformBuffer(axisCount = 1)
+
+    private val _waveformState = MutableStateFlow(
+        SensorWaveformUiState(
+            hasAccelerometer = sensorList.any { it.type == Sensor.TYPE_ACCELEROMETER },
+            hasGyroscope = sensorList.any { it.type == Sensor.TYPE_GYROSCOPE },
+            hasBarometer = sensorList.any { it.type == Sensor.TYPE_PRESSURE },
+        ),
+    )
+    val waveformState = _waveformState.asStateFlow()
 
     private var collectJob: Job? = null
 
@@ -70,6 +99,29 @@ class VMSensorsInfo @Inject constructor(
     private fun updateSensorInfo(reading: SensorReading) {
         val updatedRowId = indexOfSensor(reading.sensor) ?: return
         listLiveData[updatedRowId] = Pair(reading.sensor.name, getSensorData(reading))
+        recordWaveformSample(reading)
+    }
+
+    /** F12 — mirrors the reading into the matching rolling buffer, independent of the string
+     * formatting above (a different sensor could arrive between two accelerometer events, so
+     * this can't just piggyback on the `when` in [getSensorData]). */
+    private fun recordWaveformSample(reading: SensorReading) {
+        when (reading.sensor.type) {
+            Sensor.TYPE_ACCELEROMETER -> {
+                accelerometerBuffer.record(reading.values)
+                _waveformState.value = _waveformState.value.copy(accelerometer = accelerometerBuffer.snapshot())
+            }
+
+            Sensor.TYPE_GYROSCOPE -> {
+                gyroscopeBuffer.record(reading.values)
+                _waveformState.value = _waveformState.value.copy(gyroscope = gyroscopeBuffer.snapshot())
+            }
+
+            Sensor.TYPE_PRESSURE -> {
+                barometerBuffer.record(reading.values)
+                _waveformState.value = _waveformState.value.copy(barometer = barometerBuffer.snapshot())
+            }
+        }
     }
 
     /**

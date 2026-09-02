@@ -293,6 +293,10 @@
     <string name="hardware_snapshot_identity_stable">Žádné identifikační změny nebyly zjištěny</string>
     <string name="hardware_snapshot_disclaimer">Srovnání založené na hodnotách čitelných z Androidu — není důkazem manipulace. Úložiště, RAM a úroveň záplat se běžně mění v čase.</string>
     <string name="sensor_test_fab_label">Test senzorů</string>
+    <string name="sensor_waveform_accelerometer">Akcelerometr</string>
+    <string name="sensor_waveform_gyroscope">Gyroskop</string>
+    <string name="sensor_waveform_barometer">Barometr</string>
+    <string name="sensor_waveform_collecting">Čekání na data…</string>
     <string name="sensor_test_title">Test senzorů</string>
     <string name="sensor_test_intro">Postupujte podle pokynů a ověřte, že každý dostupný senzor reaguje na skutečný podnět. Orientační kontrola, ne certifikovaná diagnostika.</string>
     <string name="sensor_test_start_button">Spustit test</string>

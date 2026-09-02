@@ -313,6 +313,10 @@
     <string name="hardware_snapshot_identity_stable">Không phát hiện thay đổi định danh</string>
     <string name="hardware_snapshot_disclaimer">So sánh dựa trên giá trị đọc được từ Android — không phải bằng chứng can thiệp. Bộ nhớ, RAM và mức vá bảo mật thường thay đổi theo thời gian.</string>
     <string name="sensor_test_fab_label">Kiểm tra cảm biến</string>
+    <string name="sensor_waveform_accelerometer">Gia tốc kế</string>
+    <string name="sensor_waveform_gyroscope">Con quay hồi chuyển</string>
+    <string name="sensor_waveform_barometer">Áp kế</string>
+    <string name="sensor_waveform_collecting">Đang chờ dữ liệu…</string>
     <string name="sensor_test_title">Kiểm tra cảm biến</string>
     <string name="sensor_test_intro">Làm theo hướng dẫn để kiểm tra từng cảm biến có phản hồi với tác động thực tế không. Đây là kiểm tra tương đối, không phải chẩn đoán được chứng nhận.</string>
     <string name="sensor_test_start_button">Bắt đầu kiểm tra</string>

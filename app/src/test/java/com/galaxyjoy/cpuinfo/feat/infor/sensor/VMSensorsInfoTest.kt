@@ -165,4 +165,51 @@ class VMSensorsInfoTest {
 
         assertTrue(firstClosed)
     }
+
+    // --- F12 sensor waveform ---
+
+    private val accelerometerSensor: Sensor = mockk {
+        every { name } returns "Accelerometer"
+        every { type } returns Sensor.TYPE_ACCELEROMETER
+    }
+
+    @Test
+    fun `waveformState has-flags reflect which sensors the device actually reports`() {
+        every { dataProviderSensor.getSensorList() } returns listOf(accelerometerSensor, sensorA)
+        every { observableSensorData.observe() } returns emptyFlow()
+
+        val vm = newViewModel()
+
+        assertTrue(vm.waveformState.value.hasAccelerometer)
+        assertTrue(!vm.waveformState.value.hasGyroscope)
+        assertTrue(!vm.waveformState.value.hasBarometer)
+    }
+
+    @Test
+    fun `an accelerometer reading is recorded into waveformState without disturbing other axes`() {
+        every { dataProviderSensor.getSensorList() } returns listOf(accelerometerSensor)
+        every { observableSensorData.observe() } returns flowOf(
+            SensorReading(accelerometerSensor, floatArrayOf(1f, 2f, 3f)),
+        )
+
+        val vm = newViewModel()
+        vm.startProvidingData()
+
+        assertEquals(listOf(1f), vm.waveformState.value.accelerometer[0])
+        assertEquals(listOf(2f), vm.waveformState.value.accelerometer[1])
+        assertEquals(listOf(3f), vm.waveformState.value.accelerometer[2])
+        assertTrue(vm.waveformState.value.gyroscope.isEmpty())
+        assertTrue(vm.waveformState.value.barometer.isEmpty())
+    }
+
+    @Test
+    fun `a reading from an unrelated sensor type does not touch waveformState`() {
+        every { dataProviderSensor.getSensorList() } returns listOf(sensorA)
+        every { observableSensorData.observe() } returns flowOf(SensorReading(sensorA, floatArrayOf(123.4f)))
+
+        val vm = newViewModel()
+        vm.startProvidingData()
+
+        assertEquals(SensorWaveformUiState(), vm.waveformState.value)
+    }
 }

@@ -405,6 +405,23 @@ class ActHostSmokeTest {
     }
 
     @Test
+    fun sensorWaveformChartsRenderOnSensorsTab() {
+        // Integration guard for F12: real device data — MockK can't stand in for onSensorChanged
+        // event delivery (needs a real SensorManager/Looper), so this is the only place the
+        // waveform actually gets exercised end to end. Accelerometer is present on virtually
+        // every Android phone (unlike barometer, which many budget devices lack), so only that
+        // one chart is asserted displayed — the visibility-toggle logic itself is already unit
+        // tested in VMSensorsInfoTest with a fabricated sensor list.
+        onView(withId(R.id.menuHardware)).perform(click())
+        composeRule.waitForIdle()
+
+        clickTabByText(composeRule.activity.getString(R.string.sensors))
+        composeRule.waitForIdle()
+
+        onView(withId(R.id.chartAccelerometer)).check(matches(isDisplayed()))
+    }
+
+    @Test
     fun sensorTestFabRunsThroughAllStepsToADoneScreen() {
         // Regression guard for F07: proves the guided test flow actually registers real
         // SensorEventListeners per step (not just renders static UI) and reaches a Done screen

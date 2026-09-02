@@ -260,6 +260,10 @@
     <string name="hardware_snapshot_identity_stable">未偵測到識別變更</string>
     <string name="hardware_snapshot_disclaimer">根據 Android 可讀取的數值進行盡力比較——並非竄改的證據。儲存空間、RAM 與修補程式等級通常會隨時間變化。</string>
     <string name="sensor_test_fab_label">測試感測器</string>
+    <string name="sensor_waveform_accelerometer">加速度計</string>
+    <string name="sensor_waveform_gyroscope">陀螺儀</string>
+    <string name="sensor_waveform_barometer">氣壓計</string>
+    <string name="sensor_waveform_collecting">等待資料中…</string>
     <string name="sensor_test_title">感測器測試</string>
     <string name="sensor_test_intro">依照指示操作，檢查每個可用的感測器是否對實際輸入有反應。僅為盡力而為的檢測，非官方認證診斷。</string>
     <string name="sensor_test_start_button">開始測試</string>
