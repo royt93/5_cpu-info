@@ -90,7 +90,7 @@ Epoxy đã bị Airbnb ngừng phát triển, chỉ còn 3 màn hình dùng (`Fr
 
 - ✅T2.25 — Thêm step `Lint` (`./gradlew lintDevDebug`) vào CI, giữ `abortOnError=false` như quyết định trước đó (không đổi mức nghiêm trọng) — S
 - ✅T2.26 — Thêm step `Assemble debug APK` (`./gradlew assembleDevDebug`) vào CI — S
-- ✅T2.27 — Xoá 2 permission thừa khỏi `AndroidManifest.xml`: `POST_NOTIFICATIONS` (chỉ xuất hiện dạng string literal trong `AppPermissionCatalog.kt` — catalog tra cứu cho feature F05, không phải permission app tự xin; không có `NotificationManager`/runtime request nào) và `REQUEST_DELETE_PACKAGES` (code chỉ dùng `Intent.ACTION_UNINSTALL_PACKAGE` — dialog xác nhận hệ thống, không cần permission silent-uninstall). An toàn kể cả nếu 1 lib nào đó cần lại — manifest merger sẽ tự thêm từ lib manifest, không mất gì — S
+- ✅T2.27 — Xoá 2 permission thừa khỏi `AndroidManifest.xml`: `POST_NOTIFICATIONS` (chỉ xuất hiện dạng string literal trong `AppPermissionCatalog.kt` — catalog tra cứu cho feature F05, không phải permission app tự xin; không có `NotificationManager`/runtime request nào) và `REQUEST_DELETE_PACKAGES` (code chỉ dùng `Intent.ACTION_UNINSTALL_PACKAGE` — dialog xác nhận hệ thống, không cần permission silent-uninstall). An toàn kể cả nếu 1 lib nào đó cần lại — manifest merger sẽ tự thêm từ lib manifest, không mất gì — S. **Cập nhật (2026-09-02)**: `POST_NOTIFICATIONS` đã được thêm lại vào Manifest cho U19 (Cảnh báo sức khoẻ máy chủ động, `doc/task/epic-04-unique-ideas.md`) — lần này dùng thật (`HealthAlertNotifier` xin quyền runtime + bắn `Notification` thật khi user tự bật toggle trong Settings), không phải khai báo thừa như trước — không phải regression của mục này.
 
 ---
 
