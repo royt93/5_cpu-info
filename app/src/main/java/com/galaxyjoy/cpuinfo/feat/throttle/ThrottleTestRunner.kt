@@ -52,7 +52,8 @@ class ThrottleTestRunner @Inject constructor(
         var abortReason: ThrottleFingerprint.AbortReason? = null
         val startElapsed = SystemClock.elapsedRealtime()
 
-        val workers = List(coreCount) { launch(Dispatchers.Default) { burnCpu() } }
+        val opsCounters = LongArray(coreCount)
+        val workers = List(coreCount) { index -> launch(Dispatchers.Default) { burnCpu(index, opsCounters) } }
         try {
             while (true) {
                 delay(ThrottleFingerprint.SAMPLE_INTERVAL_MS)
@@ -76,9 +77,15 @@ class ThrottleTestRunner @Inject constructor(
             }
         } finally {
             workers.forEach { it.cancel() }
+            // join (not just cancel) so each worker's final opsCounters write below is visible
+            // to this thread before summing it — cancel() alone only requests, doesn't wait.
+            workers.forEach { it.join() }
         }
 
-        ThrottleFingerprint.evaluate(samples, aborted = abortReason != null, abortReason = abortReason)
+        val elapsedSeconds = samples.lastOrNull()?.elapsedMs?.div(1000.0) ?: 0.0
+        val opsPerSecond = if (elapsedSeconds > 0) (opsCounters.sum() / elapsedSeconds).roundToLong() else 0L
+
+        ThrottleFingerprint.evaluate(samples, opsPerSecond, aborted = abortReason != null, abortReason = abortReason)
             ?.let { onState(State.Finished(it)) }
     }
 
@@ -89,12 +96,15 @@ class ThrottleTestRunner @Inject constructor(
         return if (freqs.isEmpty()) 0L else freqs.average().roundToLong()
     }
 
-    /** Tight FP busy-loop — no allocation, checks cancellation every iteration. */
-    private suspend fun burnCpu() {
+    /** Tight FP busy-loop — no allocation, checks cancellation every iteration. Each worker only
+     * ever writes its own [index] of [opsCounters], so no synchronization is needed here — the
+     * caller's `join()` after `cancel()` is what makes the final count visible cross-thread. */
+    private suspend fun burnCpu(index: Int, opsCounters: LongArray) {
         var seed = 1.0
         while (coroutineContext.isActive) {
             seed = sqrt(seed + 1.0) * sin(seed)
             if (!seed.isFinite()) seed = 1.0
+            opsCounters[index]++
         }
     }
 }

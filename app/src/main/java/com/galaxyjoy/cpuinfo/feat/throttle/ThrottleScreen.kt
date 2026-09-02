@@ -34,7 +34,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.galaxyjoy.cpuinfo.R
 import java.text.DateFormat
+import java.text.NumberFormat
 import java.util.Date
+import java.util.Locale
 
 @Composable
 internal fun ThrottleScreen(
@@ -275,6 +277,10 @@ private fun DoneContent(
     ResultRow(stringResource(R.string.throttle_sustained_freq_label), "${result.sustainedFreqMhz} MHz")
     ResultRow(stringResource(R.string.throttle_throttle_percent_label), "${result.throttlePercent}%")
     ResultRow(stringResource(R.string.throttle_max_temp_label), "${result.maxTempC}°C")
+    ResultRow(
+        stringResource(R.string.throttle_benchmark_score_label),
+        stringResource(R.string.throttle_benchmark_score_value, formatOps(result.opsPerSecond)),
+    )
 
     Spacer(Modifier.height(16.dp))
     if (state.previous != null) {
@@ -284,6 +290,16 @@ private fun DoneContent(
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
+        // Saved results from before this score existed default to 0 (SharedPreferences getLong
+        // default) — guard against a nonsensical "+∞%" delta from that legacy zero baseline.
+        if (state.previous.opsPerSecond > 0) {
+            val scoreDeltaPercent = (((result.opsPerSecond - state.previous.opsPerSecond) * 100) / state.previous.opsPerSecond).toInt()
+            Text(
+                text = stringResource(R.string.throttle_score_compare_previous, scoreDeltaPercent),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
     } else {
         Text(
             text = stringResource(R.string.throttle_no_previous),
@@ -320,6 +336,9 @@ private fun AbortBanner(text: String) {
         )
     }
 }
+
+private fun formatOps(opsPerSecond: Long): String =
+    NumberFormat.getIntegerInstance(Locale.getDefault()).format(opsPerSecond)
 
 @Composable
 private fun ResultRow(label: String, value: String) {

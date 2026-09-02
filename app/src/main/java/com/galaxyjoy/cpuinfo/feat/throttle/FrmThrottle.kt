@@ -49,6 +49,7 @@ class FrmThrottle : Fragment() {
             result.sustainedFreqMhz,
             result.throttlePercent,
             result.maxTempC,
+            result.opsPerSecond,
         )
         val intent = Intent(Intent.ACTION_SEND).apply {
             type = "text/plain"

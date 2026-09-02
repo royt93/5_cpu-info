@@ -23,7 +23,7 @@
 
 > **2026-08-29 status sweep**: this doc predates the F/U-coded feature sprints (Sprint 3–14: VIP streak, Device Truth Score, Cluster Topology, Throttle Fingerprint, thermal status, AI Readiness, Hardware Snapshot, Sensor Test Suite, App Permission Inventory, Vulkan/GLES Detail, USB/BT Inspector, Fleet Compare — see git log). Verified against current codebase rather than assumed; #5 and #1 were the only items from this doc's original bundle still genuinely open at that point.
 
-**Skipped**: #3 CPU stress test / benchmark. **#2 Widget v2 đã làm xong (2026-09-01)** — xem chi tiết bên dưới.
+**#2 Widget v2 đã làm xong (2026-09-01)**, **#3 CPU stress test đã làm xong (2026-09-02, mở rộng Throttle Test)** — xem chi tiết bên dưới.
 
 **❌ #1 Floating overlay — skipped, 2026-08-30**: no code was written for this item (research/exploration only, via read-only `grep`/`find` — nothing to revert). Reason: this app is a live, published Play Store app (per root `CLAUDE.md`). The feature needs two "special" surfaces Play Store reviews strictly —
 > - `SYSTEM_ALERT_WINDOW` ("draw over other apps"), and
@@ -34,6 +34,7 @@
 **Đợt 3a hoàn tất** (#10 + #8 + #7 + #6 + #9) — đã ship, không rõ commit nào cụ thể (không track riêng lúc đó), xác nhận qua code hiện tại.
 **#5 hoàn tất** (Sprint 15, 2026-08-30) — Network Info tab, permission consent flow đầu tiên của app.
 **#4 hoàn tất** (Sprint 17, 2026-08-30) — tab Battery riêng, thay hẳn phần battery basic cũ trong Hardware tab.
+**#3 hoàn tất** (2026-09-02) — mở rộng Throttle Test có sẵn thêm điểm benchmark ops/sec, không xây feature riêng.
 **Còn lại thật sự mở**: #1 (đã skip, xem lý do trên).
 
 ---
@@ -68,19 +69,17 @@
 
 ---
 
-## 🟠 #3 — CPU stress test / mini benchmark (1.5 ngày)
+## ✅ #3 — CPU stress test / mini benchmark (1.5 ngày) — Đã xong (2026-09-02, mở rộng Throttle Test thay vì feature riêng)
 
-**Mô tả**: Burn CPU N giây, score float ops/sec hoặc Coremark-style, compare với baseline.
+**Quyết định kiến trúc**: `ThrottleTestRunner` (U02, `feat/throttle/`) đã có sẵn ~90% h1 tầng dự kiến — burn CPU N giây trên mọi core (busy-loop float sqrt/sin), live freq/temp sampling, safety abort khi quá nóng. Thay vì xây feature riêng (native C++ workload + foreground service như plan gốc, trùng lặp lớn), mở rộng ngay workload có sẵn để đếm thêm số phép tính hoàn thành.
 
-**Tech**:
-- Native C++ workload (đã có CMake setup, có thể nhúng vào `cpuinfo-libs`)
-- Foreground service để không bị system kill mid-test
-- Live freq graph trong khi chạy (qua `DataProviderCpu.getCurrentFreq`)
-- Hardcoded baseline scores per chipset family
+**Đã làm**: `burnCpu()` trong `ThrottleTestRunner.kt` nhận thêm `LongArray` đếm số vòng lặp mỗi worker (mỗi core tự ghi vào ô riêng, không cần đồng bộ hoá vì không core nào ghi chung ô — `join()` sau `cancel()` đảm bảo visibility cross-thread). `ThrottleFingerprint.Result`/`evaluate()` thêm field `opsPerSecond` (tổng ops / giây thực chạy). `ThrottleResultPrefs` lưu thêm để so sánh — **baseline là lần chạy trước CỦA CHÍNH máy đó**, không phải số cứng theo chipset như plan gốc (không có dữ liệu hiệu chuẩn cross-device thật, đưa ra số bịa sẽ gây hiểu lầm). `ThrottleScreen` thêm dòng "Điểm benchmark: X ops/s" + delta % so với lần trước; `throttle_share_text` thêm dòng benchmark khi share.
 
-**Risk**: Battery drain warning từ Play Store; cần disclaimer; thermal throttling skew kết quả.
+**Đã bỏ khỏi scope gốc**: native C++ workload (busy-loop Kotlin hiện có đã đủ, không cần native phức tạp thêm); foreground service riêng (test đã chạy foreground trong Activity/ViewModel hiện có, không cần service sống ngoài); baseline hardcoded theo chipset (không có dữ liệu thật, xem trên).
 
-**Value**: 🌟🌟 differentiator vs read-only info app, gamify thiết bị.
+**Verify**: `ThrottleFingerprintTest` (+1 test opsPerSecond truyền qua đúng), `ThrottleScreenTest` (widget mới, 3 test: hiện score lần đầu, delta % so với lần trước, không lỗi chia-cho-0 khi dữ liệu cũ chưa có field này), `ActHostSmokeTest#throttleTestTabRunsFullCycleAndShowsResult` mở rộng assert thêm dòng benchmark score — full 30s cycle thật + suite 27/27 pass trên TECNO KJ7 và Galaxy S24 Ultra thật.
+
+**Risk gốc vẫn giữ nguyên** (không đổi vì không đổi workload cốt lõi): battery drain warning từ Play Store đã có disclaimer sẵn từ U02; thermal throttling skew kết quả — đây chính là điều `ThrottleFingerprint` đã đo (throttlePercent), score chỉ là số liệu bổ sung cùng 1 lần chạy.
 
 ---
 

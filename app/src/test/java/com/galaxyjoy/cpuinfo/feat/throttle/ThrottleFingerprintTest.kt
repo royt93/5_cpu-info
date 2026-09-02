@@ -12,7 +12,16 @@ class ThrottleFingerprintTest {
 
     @Test
     fun `evaluate returns null for empty samples`() {
-        assertNull(ThrottleFingerprint.evaluate(emptyList(), aborted = false, abortReason = null))
+        assertNull(ThrottleFingerprint.evaluate(emptyList(), opsPerSecond = 0L, aborted = false, abortReason = null))
+    }
+
+    @Test
+    fun `evaluate carries opsPerSecond through into the result unchanged`() {
+        val samples = listOf(Sample(elapsedMs = 0, avgFreqMhz = 2000, tempC = 30))
+
+        val result = ThrottleFingerprint.evaluate(samples, opsPerSecond = 12_345_678L, aborted = false, abortReason = null)!!
+
+        assertEquals(12_345_678L, result.opsPerSecond)
     }
 
     @Test
@@ -27,7 +36,7 @@ class ThrottleFingerprintTest {
             Sample(elapsedMs = 30_000, avgFreqMhz = 1800, tempC = 42),
         )
 
-        val result = ThrottleFingerprint.evaluate(samples, aborted = false, abortReason = null)!!
+        val result = ThrottleFingerprint.evaluate(samples, opsPerSecond = 0L, aborted = false, abortReason = null)!!
 
         assertEquals(2800L, result.peakFreqMhz)
         // sustained window = last 5s → samples at 25s and 30s → avg(1900,1800)=1850
@@ -48,7 +57,7 @@ class ThrottleFingerprintTest {
             Sample(elapsedMs = 30_000, avgFreqMhz = 2300, tempC = 35),
         )
 
-        val result = ThrottleFingerprint.evaluate(samples, aborted = false, abortReason = null)!!
+        val result = ThrottleFingerprint.evaluate(samples, opsPerSecond = 0L, aborted = false, abortReason = null)!!
 
         assertFalse(result.throttled)
         assertTrue(result.throttlePercent < ThrottleFingerprint.THROTTLE_THRESHOLD_PERCENT)
@@ -61,7 +70,7 @@ class ThrottleFingerprintTest {
             Sample(elapsedMs = 1_000, avgFreqMhz = 0, tempC = 30),
         )
 
-        val result = ThrottleFingerprint.evaluate(samples, aborted = false, abortReason = null)!!
+        val result = ThrottleFingerprint.evaluate(samples, opsPerSecond = 0L, aborted = false, abortReason = null)!!
 
         assertEquals(0, result.throttlePercent)
         assertFalse(result.throttled)
@@ -73,6 +82,7 @@ class ThrottleFingerprintTest {
 
         val result = ThrottleFingerprint.evaluate(
             samples,
+            opsPerSecond = 0L,
             aborted = true,
             abortReason = AbortReason.OVERHEAT,
         )!!
@@ -99,7 +109,7 @@ class ThrottleFingerprintTest {
     fun `evaluate with single sample uses it as both peak and sustained`() {
         val samples = listOf(Sample(elapsedMs = 0, avgFreqMhz = 2000, tempC = 31))
 
-        val result = ThrottleFingerprint.evaluate(samples, aborted = false, abortReason = null)!!
+        val result = ThrottleFingerprint.evaluate(samples, opsPerSecond = 0L, aborted = false, abortReason = null)!!
 
         assertEquals(2000L, result.peakFreqMhz)
         assertEquals(2000L, result.sustainedFreqMhz)

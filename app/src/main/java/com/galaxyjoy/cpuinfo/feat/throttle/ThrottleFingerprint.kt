@@ -36,6 +36,12 @@ object ThrottleFingerprint {
         val durationMs: Long,
         val aborted: Boolean,
         val abortReason: AbortReason?,
+        /** quick_win.md #3 "CPU stress test / mini benchmark" score — total busy-loop float ops
+         * across all core workers, per second of actual test duration. Compared only against
+         * this same device's own previous run ([ThrottleResultPrefs]), never a hardcoded
+         * per-chipset baseline — there's no real cross-device calibration data behind such a
+         * number, and publishing a made-up one would be misleading. */
+        val opsPerSecond: Long,
     )
 
     fun shouldAbortForSafety(tempC: Int): Boolean = tempC >= SAFETY_ABORT_TEMP_C
@@ -45,7 +51,7 @@ object ThrottleFingerprint {
     /**
      * @return null only when [samples] is empty (test cancelled before the first sample tick).
      */
-    fun evaluate(samples: List<Sample>, aborted: Boolean, abortReason: AbortReason?): Result? {
+    fun evaluate(samples: List<Sample>, opsPerSecond: Long, aborted: Boolean, abortReason: AbortReason?): Result? {
         if (samples.isEmpty()) return null
 
         val peakFreqMhz = samples.maxOf { it.avgFreqMhz }
@@ -69,6 +75,7 @@ object ThrottleFingerprint {
             durationMs = samples.last().elapsedMs,
             aborted = aborted,
             abortReason = abortReason,
+            opsPerSecond = opsPerSecond,
         )
     }
 }

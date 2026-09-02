@@ -266,9 +266,12 @@
     <string name="throttle_aborted_user">Đã dừng theo yêu cầu của bạn</string>
     <string name="throttle_compare_previous">%1$+d%% so với lần trước</string>
     <string name="throttle_no_previous">Đây là lần test đầu tiên</string>
+    <string name="throttle_benchmark_score_label">Điểm benchmark</string>
+    <string name="throttle_benchmark_score_value">%1$s ops/s</string>
+    <string name="throttle_score_compare_previous">%1$+d%% so với điểm lần trước</string>
     <string name="throttle_share_button">Chia sẻ kết quả</string>
     <string name="throttle_done_button">Xong</string>
-    <string name="throttle_share_text">Throttling Fingerprint — CPU Info\nXung đỉnh: %1$d MHz\nXung ổn định: %2$d MHz\nĐộ tụt: %3$d%%\nNhiệt độ tối đa: %4$d°C</string>
+    <string name="throttle_share_text">Throttling Fingerprint — CPU Info\nXung đỉnh: %1$d MHz\nXung ổn định: %2$d MHz\nĐộ tụt: %3$d%%\nNhiệt độ tối đa: %4$d°C\nĐiểm benchmark: %5$d ops/s</string>
     <!--Device Truth Score (U01)-->
     <string name="device_truth_fab_label">Kiểm tra thiết bị</string>
     <string name="device_truth_title">Kiểm tra tính xác thực thiết bị</string>

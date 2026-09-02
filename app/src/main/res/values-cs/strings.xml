@@ -211,9 +211,12 @@
     <string name="throttle_aborted_user">Zastaveno na váš pokyn</string>
     <string name="throttle_compare_previous">%1$+d %% oproti poslednímu testu</string>
     <string name="throttle_no_previous">Toto je váš první test</string>
+    <string name="throttle_benchmark_score_label">Skóre testu</string>
+    <string name="throttle_benchmark_score_value">%1$s op/s</string>
+    <string name="throttle_score_compare_previous">%1$+d%% oproti poslednímu skóre</string>
     <string name="throttle_share_button">Sdílet výsledek</string>
     <string name="throttle_done_button">Hotovo</string>
-    <string name="throttle_share_text">Throttling Fingerprint — CPU Info\nŠpička: %1$d MHz\nUstálená: %2$d MHz\nPokles: %3$d %%\nMax. teplota: %4$d°C</string>
+    <string name="throttle_share_text">Throttling Fingerprint — CPU Info\nŠpička: %1$d MHz\nUstálená: %2$d MHz\nPokles: %3$d %%\nMax. teplota: %4$d°C\nSkóre testu: %5$d op/s</string>
     <!--Security checklist (F04)-->
     <string name="security_patch_level">Bezpečnostní záplata</string>
     <string name="selinux_status">SELinux</string>

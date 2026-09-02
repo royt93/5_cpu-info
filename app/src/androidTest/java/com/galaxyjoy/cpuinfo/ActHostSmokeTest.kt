@@ -238,6 +238,13 @@ class ActHostSmokeTest {
 
         composeRule.onNodeWithText(composeRule.activity.getString(R.string.throttle_done_button)).assertExists()
         composeRule.onNodeWithText(composeRule.activity.getString(R.string.throttle_share_button)).assertExists()
+
+        // quick_win.md #3 "CPU stress test / mini benchmark" — extended into the Throttle Test
+        // (Sprint 18) rather than a separate feature; this is the real-device proof the ops/sec
+        // counter actually produced a nonzero score from the 30s run above, not just that the
+        // label renders.
+        composeRule.onNodeWithText(composeRule.activity.getString(R.string.throttle_benchmark_score_label))
+            .assertExists()
     }
 
     @Test

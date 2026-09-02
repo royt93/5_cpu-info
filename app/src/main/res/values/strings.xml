@@ -268,9 +268,12 @@
     <string name="throttle_aborted_user">Stopped by you</string>
     <string name="throttle_compare_previous">%1$+d%% vs your last test</string>
     <string name="throttle_no_previous">This is your first test</string>
+    <string name="throttle_benchmark_score_label">Benchmark score</string>
+    <string name="throttle_benchmark_score_value">%1$s ops/s</string>
+    <string name="throttle_score_compare_previous">%1$+d%% vs your last score</string>
     <string name="throttle_share_button">Share result</string>
     <string name="throttle_done_button">Done</string>
-    <string name="throttle_share_text">Throttling Fingerprint — CPU Info\nPeak: %1$d MHz\nSustained: %2$d MHz\nDrop: %3$d%%\nMax temp: %4$d°C</string>
+    <string name="throttle_share_text">Throttling Fingerprint — CPU Info\nPeak: %1$d MHz\nSustained: %2$d MHz\nDrop: %3$d%%\nMax temp: %4$d°C\nBenchmark: %5$d ops/s</string>
     <!--Security checklist (F04)-->
     <string name="security_patch_level">Security patch</string>
     <string name="selinux_status">SELinux</string>

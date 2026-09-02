@@ -198,9 +198,12 @@
     <string name="throttle_aborted_user">已依您的要求停止</string>
     <string name="throttle_compare_previous">與上次測試相比 %1$+d%%</string>
     <string name="throttle_no_previous">這是您的第一次測試</string>
+    <string name="throttle_benchmark_score_label">跑分成績</string>
+    <string name="throttle_benchmark_score_value">%1$s 次運算/秒</string>
+    <string name="throttle_score_compare_previous">%1$+d%%（與上次成績相比）</string>
     <string name="throttle_share_button">分享結果</string>
     <string name="throttle_done_button">完成</string>
-    <string name="throttle_share_text">Throttling Fingerprint — CPU Info\n峰值：%1$d MHz\n穩定：%2$d MHz\n下降：%3$d%%\n最高溫度：%4$d°C</string>
+    <string name="throttle_share_text">Throttling Fingerprint — CPU Info\n峰值：%1$d MHz\n穩定：%2$d MHz\n下降：%3$d%%\n最高溫度：%4$d°C\n跑分成績：%5$d 次運算/秒</string>
     <!--Security checklist (F04)-->
     <string name="security_patch_level">安全性修補程式</string>
     <string name="selinux_status">SELinux</string>

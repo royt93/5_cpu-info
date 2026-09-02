@@ -22,6 +22,7 @@ class ThrottleResultPrefs @Inject constructor(@ApplicationContext context: Conte
         val sustainedFreqMhz: Long,
         val throttlePercent: Int,
         val maxTempC: Int,
+        val opsPerSecond: Long,
     )
 
     fun getLastResult(): SavedResult? {
@@ -33,6 +34,7 @@ class ThrottleResultPrefs @Inject constructor(@ApplicationContext context: Conte
             sustainedFreqMhz = sp.getLong(KEY_SUSTAINED_FREQ, 0L),
             throttlePercent = sp.getInt(KEY_THROTTLE_PERCENT, 0),
             maxTempC = sp.getInt(KEY_MAX_TEMP, 0),
+            opsPerSecond = sp.getLong(KEY_OPS_PER_SECOND, 0L),
         )
     }
 
@@ -43,6 +45,7 @@ class ThrottleResultPrefs @Inject constructor(@ApplicationContext context: Conte
             .putLong(KEY_SUSTAINED_FREQ, result.sustainedFreqMhz)
             .putInt(KEY_THROTTLE_PERCENT, result.throttlePercent)
             .putInt(KEY_MAX_TEMP, result.maxTempC)
+            .putLong(KEY_OPS_PER_SECOND, result.opsPerSecond)
             .apply()
     }
 
@@ -53,5 +56,6 @@ class ThrottleResultPrefs @Inject constructor(@ApplicationContext context: Conte
         const val KEY_SUSTAINED_FREQ = "sustained_freq_mhz"
         const val KEY_THROTTLE_PERCENT = "throttle_percent"
         const val KEY_MAX_TEMP = "max_temp_c"
+        const val KEY_OPS_PER_SECOND = "ops_per_second"
     }
 }
