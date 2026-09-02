@@ -39,6 +39,7 @@ class SystemInfoExporter @Inject constructor(
     enum class Format(val mime: String, val ext: String) {
         TEXT("text/plain", "txt"),
         JSON("application/json", "json"),
+        IMAGE("image/png", "png"),
     }
 
     fun exportSystemInfo(context: Context, scope: CoroutineScope, format: Format = Format.TEXT) {
@@ -47,6 +48,7 @@ class SystemInfoExporter @Inject constructor(
                 when (format) {
                     Format.TEXT -> buildSystemInfoText()
                     Format.JSON -> buildSystemInfoJson().toString(2)
+                    Format.IMAGE -> error("Format.IMAGE handled by DeviceCardExporter, not SystemInfoExporter")
                 }
             }
 

@@ -20,6 +20,14 @@
     <string name="settings">Einstellungen</string>
     <string name="export_format_title">Exportformat</string>
     <string name="export_as_text">Klartext</string>
+    <string name="export_as_image">Bild (teilen)</string>
+    <string name="device_card_row_cores">Kerne</string>
+    <string name="device_card_row_ram">RAM</string>
+    <string name="device_card_row_storage">Speicher</string>
+    <string name="device_card_row_display">Bildschirm</string>
+    <string name="device_card_row_android">Android</string>
+    <string name="device_card_footer">Erstellt mit CPU Info</string>
+    <string name="device_card_share_button">Geräte-Karte teilen</string>
     <string name="language">Sprache</string>
     <string name="language_picker_title">Sprache wählen</string>
     <string name="language_system_default">Systemstandard</string>

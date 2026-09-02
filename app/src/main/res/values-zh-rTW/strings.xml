@@ -22,6 +22,14 @@
     <string name="settings">設定</string>
     <string name="export_format_title">匯出格式</string>
     <string name="export_as_text">純文字</string>
+    <string name="export_as_image">圖片（分享）</string>
+    <string name="device_card_row_cores">核心數</string>
+    <string name="device_card_row_ram">RAM</string>
+    <string name="device_card_row_storage">儲存空間</string>
+    <string name="device_card_row_display">螢幕</string>
+    <string name="device_card_row_android">Android</string>
+    <string name="device_card_footer">由 CPU Info 產生</string>
+    <string name="device_card_share_button">分享裝置卡片</string>
     <string name="language">語言</string>
     <string name="language_picker_title">選擇語言</string>
     <string name="language_system_default">系統預設</string>

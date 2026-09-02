@@ -21,6 +21,7 @@ import com.galaxyjoy.cpuinfo.BuildConfig
 import com.galaxyjoy.cpuinfo.R
 import com.galaxyjoy.cpuinfo.data.local.UserPreferencesRepository
 import com.galaxyjoy.cpuinfo.databinding.ActHostLayoutBinding
+import com.galaxyjoy.cpuinfo.feat.devicecard.DeviceCardExporter
 import com.galaxyjoy.cpuinfo.feat.setting.ExportFormatBottomSheet
 import com.galaxyjoy.cpuinfo.feat.setting.LanguagePickerBottomSheet
 import com.galaxyjoy.cpuinfo.feat.shield.ShieldScoreBottomSheet
@@ -61,6 +62,9 @@ class ActHost : BaseActivity() {
 
     @Inject
     lateinit var shieldScoreProvider: ShieldScoreProvider
+
+    @Inject
+    lateinit var deviceCardExporter: DeviceCardExporter
 
     private var menuMain: Menu? = null
     private var vipActionView: View? = null
@@ -183,7 +187,11 @@ class ActHost : BaseActivity() {
             val format = runCatching { SystemInfoExporter.Format.valueOf(name) }.getOrNull()
                 ?: SystemInfoExporter.Format.TEXT
             lifecycleScope.launch { userPreferencesRepository.setExportFormat(format.name) }
-            systemInfoExporter.exportSystemInfo(this, lifecycleScope, format)
+            if (format == SystemInfoExporter.Format.IMAGE) {
+                deviceCardExporter.exportDeviceCard(lifecycleScope)
+            } else {
+                systemInfoExporter.exportSystemInfo(this, lifecycleScope, format)
+            }
         }
     }
 

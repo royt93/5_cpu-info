@@ -20,6 +20,14 @@
     <string name="settings">Nastavení</string>
     <string name="export_format_title">Formát exportu</string>
     <string name="export_as_text">Prostý text</string>
+    <string name="export_as_image">Obrázek (sdílet)</string>
+    <string name="device_card_row_cores">Jádra</string>
+    <string name="device_card_row_ram">RAM</string>
+    <string name="device_card_row_storage">Úložiště</string>
+    <string name="device_card_row_display">Displej</string>
+    <string name="device_card_row_android">Android</string>
+    <string name="device_card_footer">Vytvořeno pomocí CPU Info</string>
+    <string name="device_card_share_button">Sdílet kartu zařízení</string>
     <string name="language">Jazyk</string>
     <string name="language_picker_title">Vyberte jazyk</string>
     <string name="language_system_default">Výchozí systému</string>

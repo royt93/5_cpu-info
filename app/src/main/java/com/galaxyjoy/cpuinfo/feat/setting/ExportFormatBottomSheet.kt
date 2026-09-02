@@ -112,6 +112,14 @@ private fun ExportFormatContent(initial: Format, onPicked: (Format) -> Unit) {
                     onPicked(Format.JSON)
                 },
             )
+            FormatRow(
+                label = stringResource(R.string.export_as_image),
+                selected = selected == Format.IMAGE,
+                onClick = {
+                    selected = Format.IMAGE
+                    onPicked(Format.IMAGE)
+                },
+            )
         }
     }
 }

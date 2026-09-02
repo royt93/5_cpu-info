@@ -21,6 +21,14 @@
     <string name="audio">Âm thanh</string>
     <string name="export_format_title">Định dạng xuất</string>
     <string name="export_as_text">Văn bản thuần</string>
+    <string name="export_as_image">Hình ảnh (chia sẻ)</string>
+    <string name="device_card_row_cores">Số nhân</string>
+    <string name="device_card_row_ram">RAM</string>
+    <string name="device_card_row_storage">Bộ nhớ</string>
+    <string name="device_card_row_display">Màn hình</string>
+    <string name="device_card_row_android">Android</string>
+    <string name="device_card_footer">Tạo bởi CPU Info</string>
+    <string name="device_card_share_button">Chia sẻ thẻ thiết bị</string>
     <string name="language">Ngôn ngữ</string>
     <string name="language_picker_title">Chọn ngôn ngữ</string>
     <string name="language_system_default">Mặc định hệ thống</string>
