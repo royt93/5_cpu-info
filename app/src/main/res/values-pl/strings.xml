@@ -365,6 +365,11 @@
     <string name="usb_bt_interface_count">Interfejsy</string>
     <string name="fleet_compare_pref_title">Porównanie z flotą</string>
     <string name="fleet_compare_pref_summary">Sprawdź RAM/pamięć względem znanych specyfikacji tego modelu</string>
+    <string name="health_alert_pref_title">Alerty stanu urządzenia</string>
+    <string name="health_alert_pref_summary">Powiadom, gdy wynik stanu urządzenia gwałtownie spadnie</string>
+    <string name="health_alert_channel_name">Alerty stanu urządzenia</string>
+    <string name="health_alert_notification_title">Wynik stanu urządzenia spadł</string>
+    <string name="health_alert_notification_body">Aktualny wynik: %1$d. Dotknij, aby zobaczyć szczegóły.</string>
     <string name="fleet_compare_title">Porównanie z flotą</string>
     <string name="fleet_compare_verdict_ok">Zgodne ze znanymi specyfikacjami</string>
     <string name="fleet_compare_verdict_mismatch">Poniżej oczekiwanych specyfikacji</string>

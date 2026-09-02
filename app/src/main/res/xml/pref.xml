@@ -46,6 +46,12 @@
             app:summary="@string/fleet_compare_pref_summary"
             app:title="@string/fleet_compare_pref_title" />
 
+        <SwitchPreferenceCompat
+            app:defaultValue="false"
+            app:key="key_health_alert"
+            app:summary="@string/health_alert_pref_summary"
+            app:title="@string/health_alert_pref_title" />
+
     </PreferenceCategory>
 
     <PreferenceCategory

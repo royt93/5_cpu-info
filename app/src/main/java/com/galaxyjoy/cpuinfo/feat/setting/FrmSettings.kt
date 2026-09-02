@@ -1,14 +1,21 @@
 package com.galaxyjoy.cpuinfo.feat.setting
 
+import android.Manifest
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentManager
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.SwitchPreferenceCompat
 import com.galaxyjoy.cpuinfo.BuildConfig
 import com.galaxyjoy.cpuinfo.R
 import com.galaxyjoy.cpuinfo.ext.openBrowserPolicy
 import com.galaxyjoy.cpuinfo.feat.fleet.FleetCompareBottomSheet
+import com.galaxyjoy.cpuinfo.feat.healthalert.HealthAlertScheduler
 import com.galaxyjoy.cpuinfo.feat.snapshot.HardwareSnapshotBottomSheet
 import com.galaxyjoy.cpuinfo.feat.usbbt.UsbBluetoothBottomSheet
 import com.galaxyjoy.cpuinfo.feat.vip.ActVip
@@ -25,6 +32,21 @@ class FrmSettings : PreferenceFragmentCompat(),
     companion object {
         const val KEY_TEMPERATURE_UNIT = "temperature_unit"
         const val KEY_THEME_CONFIG = "key_theme"
+        const val KEY_HEALTH_ALERT = "key_health_alert"
+    }
+
+    /** Must be registered before the fragment reaches CREATED — a class-level property, not
+     * something created lazily inside [onCreatePreferences]. */
+    private val requestNotificationPermission = registerForActivityResult(
+        ActivityResultContracts.RequestPermission(),
+    ) { granted ->
+        val pref = findPreference<SwitchPreferenceCompat>(KEY_HEALTH_ALERT)
+        if (granted) {
+            HealthAlertScheduler.schedule(requireContext())
+            pref?.isChecked = true
+        } else {
+            pref?.isChecked = false
+        }
     }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -71,6 +93,7 @@ class FrmSettings : PreferenceFragmentCompat(),
         wireUsbBluetoothPref()
         wireFleetComparePref()
         wireVipDiagnosticHistoryPref()
+        wireHealthAlertPref()
 
         listenForBottomSheetResults()
     }
@@ -157,6 +180,33 @@ class FrmSettings : PreferenceFragmentCompat(),
                 VipDiagnosticReportBottomSheet().show(fm, VipDiagnosticReportBottomSheet.TAG)
             }
             true
+        }
+    }
+
+    /**
+     * U19 — turning this on requests `POST_NOTIFICATIONS` (API 33+ only; older devices need no
+     * runtime grant) rather than asking at first launch. Declining leaves the switch off — no
+     * repeated nagging, matches CLAUDE.md's "im lặng bỏ qua" guidance for this exact feature.
+     */
+    private fun wireHealthAlertPref() {
+        val pref = findPreference<SwitchPreferenceCompat>(KEY_HEALTH_ALERT) ?: return
+        pref.setOnPreferenceChangeListener { _, newValue ->
+            val enabling = newValue as Boolean
+            if (!enabling) {
+                HealthAlertScheduler.cancel(requireContext())
+                return@setOnPreferenceChangeListener true
+            }
+
+            val needsPermission = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+                ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.POST_NOTIFICATIONS) !=
+                PackageManager.PERMISSION_GRANTED
+            if (needsPermission) {
+                requestNotificationPermission.launch(Manifest.permission.POST_NOTIFICATIONS)
+                false // async callback flips the switch itself once the user answers
+            } else {
+                HealthAlertScheduler.schedule(requireContext())
+                true
+            }
         }
     }
 

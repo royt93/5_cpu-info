@@ -381,6 +381,11 @@
     <string name="usb_bt_interface_count">Số interface</string>
     <string name="fleet_compare_pref_title">So sánh cùng dòng máy</string>
     <string name="fleet_compare_pref_summary">Kiểm tra RAM/bộ nhớ so với thông số gốc của dòng máy này</string>
+    <string name="health_alert_pref_title">Cảnh báo sức khoẻ máy</string>
+    <string name="health_alert_pref_summary">Báo khi điểm sức khoẻ máy giảm mạnh</string>
+    <string name="health_alert_channel_name">Cảnh báo sức khoẻ máy</string>
+    <string name="health_alert_notification_title">Điểm sức khoẻ máy giảm</string>
+    <string name="health_alert_notification_body">Điểm hiện tại: %1$d. Chạm để xem chi tiết.</string>
     <string name="fleet_compare_title">So sánh cùng dòng máy</string>
     <string name="fleet_compare_verdict_ok">Khớp thông số gốc</string>
     <string name="fleet_compare_verdict_mismatch">Thấp hơn thông số kỳ vọng</string>

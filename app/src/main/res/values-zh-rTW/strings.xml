@@ -328,6 +328,11 @@
     <string name="usb_bt_interface_count">介面數</string>
     <string name="fleet_compare_pref_title">機型比對</string>
     <string name="fleet_compare_pref_summary">根據此機型的已知規格檢查 RAM／儲存空間</string>
+    <string name="health_alert_pref_title">裝置健康警示</string>
+    <string name="health_alert_pref_summary">裝置健康分數大幅下降時通知我</string>
+    <string name="health_alert_channel_name">裝置健康警示</string>
+    <string name="health_alert_notification_title">裝置健康分數下降</string>
+    <string name="health_alert_notification_body">目前分數：%1$d。點一下查看詳情。</string>
     <string name="fleet_compare_title">機型比對</string>
     <string name="fleet_compare_verdict_ok">符合已知規格</string>
     <string name="fleet_compare_verdict_mismatch">低於預期規格</string>
