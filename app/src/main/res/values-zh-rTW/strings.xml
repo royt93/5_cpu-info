@@ -231,6 +231,8 @@
     <string name="cluster_tier_unlabeled">叢集</string>
     <string name="cluster_core_range">%1$d 核心（Core %2$d–%3$d）</string>
     <string name="cluster_max_freq">最高 %1$d MHz</string>
+    <string name="cluster_cache_private">%1$s：%2$s（獨立）</string>
+    <string name="cluster_cache_shared">%1$s：%2$s（共享 ×%3$d）</string>
     <!--AI Readiness Score (F10/U12)-->
     <string name="ai_readiness_bar_label">AI 就緒度</string>
     <string name="ai_readiness_title">AI 就緒度分數</string>

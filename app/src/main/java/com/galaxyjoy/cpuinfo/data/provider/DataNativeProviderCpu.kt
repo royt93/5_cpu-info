@@ -22,6 +22,27 @@ class DataNativeProviderCpu @Inject constructor() {
 
     external fun getL4Caches(): IntArray?
 
+    // --- U06 "CPU Cluster Topology" cache-per-cluster additions below ---
+    // Parallel arrays to getL1dCaches()/etc above — index i here describes the same cache
+    // instance as index i there. processorStart/processorCount are the logical-core range that
+    // shares that cache instance, used to attribute each cache to its cluster.
+
+    external fun getL1dCacheProcessorStarts(): IntArray?
+
+    external fun getL1dCacheProcessorCounts(): IntArray?
+
+    external fun getL1iCacheProcessorStarts(): IntArray?
+
+    external fun getL1iCacheProcessorCounts(): IntArray?
+
+    external fun getL2CacheProcessorStarts(): IntArray?
+
+    external fun getL2CacheProcessorCounts(): IntArray?
+
+    external fun getL3CacheProcessorStarts(): IntArray?
+
+    external fun getL3CacheProcessorCounts(): IntArray?
+
     // --- U01 "Device Truth Score" additions below ---
 
     external fun getCoreCount(): Int

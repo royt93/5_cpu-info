@@ -19,6 +19,32 @@ class ClusterTopologyProvider @Inject constructor(
         val clusterCount = dataNativeProviderCpu.getClusterCount()
         if (clusterCount == 0) return emptyList()
 
+        val rawCaches = rawCachesFor(ClusterTopologyBuilder.CacheLevel.L1I) {
+            Triple(
+                dataNativeProviderCpu.getL1iCaches(),
+                dataNativeProviderCpu.getL1iCacheProcessorStarts(),
+                dataNativeProviderCpu.getL1iCacheProcessorCounts(),
+            )
+        } + rawCachesFor(ClusterTopologyBuilder.CacheLevel.L1D) {
+            Triple(
+                dataNativeProviderCpu.getL1dCaches(),
+                dataNativeProviderCpu.getL1dCacheProcessorStarts(),
+                dataNativeProviderCpu.getL1dCacheProcessorCounts(),
+            )
+        } + rawCachesFor(ClusterTopologyBuilder.CacheLevel.L2) {
+            Triple(
+                dataNativeProviderCpu.getL2Caches(),
+                dataNativeProviderCpu.getL2CacheProcessorStarts(),
+                dataNativeProviderCpu.getL2CacheProcessorCounts(),
+            )
+        } + rawCachesFor(ClusterTopologyBuilder.CacheLevel.L3) {
+            Triple(
+                dataNativeProviderCpu.getL3Caches(),
+                dataNativeProviderCpu.getL3CacheProcessorStarts(),
+                dataNativeProviderCpu.getL3CacheProcessorCounts(),
+            )
+        }
+
         val rawClusters = (0 until clusterCount).mapNotNull { clusterIndex ->
             val coreStart = dataNativeProviderCpu.getClusterCoreStart(clusterIndex)
             val coreCount = dataNativeProviderCpu.getClusterCoreCount(clusterIndex)
@@ -38,6 +64,16 @@ class ClusterTopologyProvider @Inject constructor(
             )
         }
 
-        return ClusterTopologyBuilder.build(rawClusters)
+        return ClusterTopologyBuilder.build(rawClusters, rawCaches)
+    }
+
+    private inline fun rawCachesFor(
+        level: ClusterTopologyBuilder.CacheLevel,
+        fetch: () -> Triple<IntArray?, IntArray?, IntArray?>,
+    ): List<ClusterTopologyBuilder.RawCache> {
+        val (sizes, starts, counts) = fetch()
+        if (sizes == null || starts == null || counts == null) return emptyList()
+        if (sizes.size != starts.size || sizes.size != counts.size) return emptyList()
+        return sizes.indices.map { i -> ClusterTopologyBuilder.RawCache(level, sizes[i], starts[i], counts[i]) }
     }
 }

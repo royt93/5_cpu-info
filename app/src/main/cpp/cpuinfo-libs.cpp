@@ -187,6 +187,156 @@ Java_com_galaxyjoy_cpuinfo_data_provider_DataNativeProviderCpu_getL4Caches(JNIEn
     return result;
 }
 
+// --- U06 "CPU Cluster Topology" cache-per-cluster additions below ---
+// Same cache structs read above for .size, now also reading .processor_start/.processor_count —
+// the logical-core index (and count of cores sharing that cache instance) needed to attribute
+// each cache to the cluster it belongs to. Both fields are unconditional members of
+// cpuinfo_cache (cpuinfo.h), populated from /sys/.../cache/index*/shared_cpu_list on ARM.
+
+extern "C"
+JNIEXPORT jintArray JNICALL
+Java_com_galaxyjoy_cpuinfo_data_provider_DataNativeProviderCpu_getL1dCacheProcessorStarts(
+        JNIEnv *env, jobject thiz) {
+    if (!cpuinfo_initialize() || cpuinfo_get_l1d_caches_count() == 0) {
+        return nullptr;
+    }
+    uint32_t cacheCount = cpuinfo_get_l1d_caches_count();
+    jintArray result = env->NewIntArray(cacheCount);
+    jint internalArray[cacheCount];
+    auto l1dCaches = cpuinfo_get_l1d_caches();
+    for (uint32_t i = 0; i < cacheCount; i++) {
+        internalArray[i] = (jint) l1dCaches[i].processor_start;
+    }
+    env->SetIntArrayRegion(result, 0, cacheCount, internalArray);
+    return result;
+}
+
+extern "C"
+JNIEXPORT jintArray JNICALL
+Java_com_galaxyjoy_cpuinfo_data_provider_DataNativeProviderCpu_getL1dCacheProcessorCounts(
+        JNIEnv *env, jobject thiz) {
+    if (!cpuinfo_initialize() || cpuinfo_get_l1d_caches_count() == 0) {
+        return nullptr;
+    }
+    uint32_t cacheCount = cpuinfo_get_l1d_caches_count();
+    jintArray result = env->NewIntArray(cacheCount);
+    jint internalArray[cacheCount];
+    auto l1dCaches = cpuinfo_get_l1d_caches();
+    for (uint32_t i = 0; i < cacheCount; i++) {
+        internalArray[i] = (jint) l1dCaches[i].processor_count;
+    }
+    env->SetIntArrayRegion(result, 0, cacheCount, internalArray);
+    return result;
+}
+
+extern "C"
+JNIEXPORT jintArray JNICALL
+Java_com_galaxyjoy_cpuinfo_data_provider_DataNativeProviderCpu_getL1iCacheProcessorStarts(
+        JNIEnv *env, jobject thiz) {
+    if (!cpuinfo_initialize() || cpuinfo_get_l1i_caches_count() == 0) {
+        return nullptr;
+    }
+    uint32_t cacheCount = cpuinfo_get_l1i_caches_count();
+    jintArray result = env->NewIntArray(cacheCount);
+    jint internalArray[cacheCount];
+    auto l1iCaches = cpuinfo_get_l1i_caches();
+    for (uint32_t i = 0; i < cacheCount; i++) {
+        internalArray[i] = (jint) l1iCaches[i].processor_start;
+    }
+    env->SetIntArrayRegion(result, 0, cacheCount, internalArray);
+    return result;
+}
+
+extern "C"
+JNIEXPORT jintArray JNICALL
+Java_com_galaxyjoy_cpuinfo_data_provider_DataNativeProviderCpu_getL1iCacheProcessorCounts(
+        JNIEnv *env, jobject thiz) {
+    if (!cpuinfo_initialize() || cpuinfo_get_l1i_caches_count() == 0) {
+        return nullptr;
+    }
+    uint32_t cacheCount = cpuinfo_get_l1i_caches_count();
+    jintArray result = env->NewIntArray(cacheCount);
+    jint internalArray[cacheCount];
+    auto l1iCaches = cpuinfo_get_l1i_caches();
+    for (uint32_t i = 0; i < cacheCount; i++) {
+        internalArray[i] = (jint) l1iCaches[i].processor_count;
+    }
+    env->SetIntArrayRegion(result, 0, cacheCount, internalArray);
+    return result;
+}
+
+extern "C"
+JNIEXPORT jintArray JNICALL
+Java_com_galaxyjoy_cpuinfo_data_provider_DataNativeProviderCpu_getL2CacheProcessorStarts(
+        JNIEnv *env, jobject thiz) {
+    if (!cpuinfo_initialize() || cpuinfo_get_l2_caches_count() == 0) {
+        return nullptr;
+    }
+    uint32_t cacheCount = cpuinfo_get_l2_caches_count();
+    jintArray result = env->NewIntArray(cacheCount);
+    jint internalArray[cacheCount];
+    auto l2Caches = cpuinfo_get_l2_caches();
+    for (uint32_t i = 0; i < cacheCount; i++) {
+        internalArray[i] = (jint) l2Caches[i].processor_start;
+    }
+    env->SetIntArrayRegion(result, 0, cacheCount, internalArray);
+    return result;
+}
+
+extern "C"
+JNIEXPORT jintArray JNICALL
+Java_com_galaxyjoy_cpuinfo_data_provider_DataNativeProviderCpu_getL2CacheProcessorCounts(
+        JNIEnv *env, jobject thiz) {
+    if (!cpuinfo_initialize() || cpuinfo_get_l2_caches_count() == 0) {
+        return nullptr;
+    }
+    uint32_t cacheCount = cpuinfo_get_l2_caches_count();
+    jintArray result = env->NewIntArray(cacheCount);
+    jint internalArray[cacheCount];
+    auto l2Caches = cpuinfo_get_l2_caches();
+    for (uint32_t i = 0; i < cacheCount; i++) {
+        internalArray[i] = (jint) l2Caches[i].processor_count;
+    }
+    env->SetIntArrayRegion(result, 0, cacheCount, internalArray);
+    return result;
+}
+
+extern "C"
+JNIEXPORT jintArray JNICALL
+Java_com_galaxyjoy_cpuinfo_data_provider_DataNativeProviderCpu_getL3CacheProcessorStarts(
+        JNIEnv *env, jobject thiz) {
+    if (!cpuinfo_initialize() || cpuinfo_get_l3_caches_count() == 0) {
+        return nullptr;
+    }
+    uint32_t cacheCount = cpuinfo_get_l3_caches_count();
+    jintArray result = env->NewIntArray(cacheCount);
+    jint internalArray[cacheCount];
+    auto l3Caches = cpuinfo_get_l3_caches();
+    for (uint32_t i = 0; i < cacheCount; i++) {
+        internalArray[i] = (jint) l3Caches[i].processor_start;
+    }
+    env->SetIntArrayRegion(result, 0, cacheCount, internalArray);
+    return result;
+}
+
+extern "C"
+JNIEXPORT jintArray JNICALL
+Java_com_galaxyjoy_cpuinfo_data_provider_DataNativeProviderCpu_getL3CacheProcessorCounts(
+        JNIEnv *env, jobject thiz) {
+    if (!cpuinfo_initialize() || cpuinfo_get_l3_caches_count() == 0) {
+        return nullptr;
+    }
+    uint32_t cacheCount = cpuinfo_get_l3_caches_count();
+    jintArray result = env->NewIntArray(cacheCount);
+    jint internalArray[cacheCount];
+    auto l3Caches = cpuinfo_get_l3_caches();
+    for (uint32_t i = 0; i < cacheCount; i++) {
+        internalArray[i] = (jint) l3Caches[i].processor_count;
+    }
+    env->SetIntArrayRegion(result, 0, cacheCount, internalArray);
+    return result;
+}
+
 // --- U01 "Device Truth Score" additions below ---
 
 extern "C"

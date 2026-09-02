@@ -18,6 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.galaxyjoy.cpuinfo.R
+import com.galaxyjoy.cpuinfo.util.Utils
 
 @Composable
 internal fun ClusterTopologyScreen(clusters: List<ClusterTopologyBuilder.Cluster>) {
@@ -72,7 +73,24 @@ private fun ClusterCard(cluster: ClusterTopologyBuilder.Cluster) {
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
+            cluster.caches.forEach { cache ->
+                Text(
+                    text = cacheRowText(cache),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
         }
+    }
+}
+
+@Composable
+private fun cacheRowText(cache: ClusterTopologyBuilder.CacheEntry): String {
+    val sizeReadable = Utils.humanReadableByteCount(cache.sizeBytes.toLong())
+    return if (cache.sharedCoreCount <= 1) {
+        stringResource(R.string.cluster_cache_private, cache.level.label, sizeReadable)
+    } else {
+        stringResource(R.string.cluster_cache_shared, cache.level.label, sizeReadable, cache.sharedCoreCount)
     }
 }
 

@@ -1,5 +1,7 @@
 package com.galaxyjoy.cpuinfo.feat.infor.cpu
 
+import com.galaxyjoy.cpuinfo.feat.infor.cpu.ClusterTopologyBuilder.CacheLevel
+import com.galaxyjoy.cpuinfo.feat.infor.cpu.ClusterTopologyBuilder.RawCache
 import com.galaxyjoy.cpuinfo.feat.infor.cpu.ClusterTopologyBuilder.RawCluster
 import com.galaxyjoy.cpuinfo.feat.infor.cpu.ClusterTopologyBuilder.Tier
 import org.junit.Assert.assertEquals
@@ -59,6 +61,56 @@ class ClusterTopologyBuilderTest {
             List(4) { i -> RawCluster(coreStart = i * 2, coreCount = 2, vendorId = 3, uarchId = 0, maxFreqMhz = (i * 100).toLong()) },
         )
         assertTrue(result.all { it.tier == Tier.UNLABELED })
+    }
+
+    @Test
+    fun `no rawCaches given defaults to empty caches per cluster`() {
+        val result = ClusterTopologyBuilder.build(
+            listOf(RawCluster(coreStart = 0, coreCount = 4, vendorId = 3, uarchId = 0, maxFreqMhz = 2000)),
+        )
+        assertTrue(result[0].caches.isEmpty())
+    }
+
+    @Test
+    fun `cache instance is attributed to the cluster whose core range contains its processorStart`() {
+        // TECNO KJ7-like: little cluster core 0-1 (private L1d 64KB), big cluster core 2-7
+        // (private L1d 32KB + L2 shared across all 6 cores) — same fixture shape confirmed on a
+        // real device this session.
+        val rawCaches = listOf(
+            RawCache(CacheLevel.L1D, sizeBytes = 65536, processorStart = 0, processorCount = 1),
+            RawCache(CacheLevel.L1D, sizeBytes = 65536, processorStart = 1, processorCount = 1),
+            RawCache(CacheLevel.L1D, sizeBytes = 32768, processorStart = 2, processorCount = 1),
+            RawCache(CacheLevel.L2, sizeBytes = 524288, processorStart = 2, processorCount = 6),
+        )
+        val result = ClusterTopologyBuilder.build(
+            listOf(
+                RawCluster(coreStart = 0, coreCount = 2, vendorId = 3, uarchId = 0, maxFreqMhz = 1800),
+                RawCluster(coreStart = 2, coreCount = 6, vendorId = 3, uarchId = 0, maxFreqMhz = 2200),
+            ),
+            rawCaches,
+        )
+
+        val littleCluster = result.first { it.coreIndexRange == 0 until 2 }
+        val bigCluster = result.first { it.coreIndexRange == 2 until 8 }
+
+        assertEquals(1, littleCluster.caches.size)
+        assertEquals(65536, littleCluster.caches[0].sizeBytes)
+        assertEquals(1, littleCluster.caches[0].sharedCoreCount)
+
+        assertEquals(2, bigCluster.caches.size)
+        val bigL2 = bigCluster.caches.first { it.level == CacheLevel.L2 }
+        assertEquals(524288, bigL2.sizeBytes)
+        assertEquals(6, bigL2.sharedCoreCount)
+    }
+
+    @Test
+    fun `a cache level absent from rawCaches is simply omitted, not a crash`() {
+        val rawCaches = listOf(RawCache(CacheLevel.L1D, sizeBytes = 65536, processorStart = 0, processorCount = 1))
+        val result = ClusterTopologyBuilder.build(
+            listOf(RawCluster(coreStart = 0, coreCount = 4, vendorId = 3, uarchId = 0, maxFreqMhz = 2000)),
+            rawCaches,
+        )
+        assertTrue(result[0].caches.none { it.level == CacheLevel.L3 })
     }
 
     @Test

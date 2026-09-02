@@ -264,6 +264,8 @@
     <string name="cluster_tier_unlabeled">Klastr</string>
     <string name="cluster_core_range">%1$d jader (Core %2$d–%3$d)</string>
     <string name="cluster_max_freq">Max %1$d MHz</string>
+    <string name="cluster_cache_private">%1$s: %2$s (soukromá)</string>
+    <string name="cluster_cache_shared">%1$s: %2$s (sdílená ×%3$d)</string>
     <!--AI Readiness Score (F10/U12)-->
     <string name="ai_readiness_bar_label">Připravenost na AI</string>
     <string name="ai_readiness_title">Skóre připravenosti na AI</string>

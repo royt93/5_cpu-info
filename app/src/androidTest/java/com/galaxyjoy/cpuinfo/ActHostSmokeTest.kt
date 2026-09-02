@@ -27,7 +27,9 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.galaxyjoy.cpuinfo.feat.ActHost
 import com.galaxyjoy.cpuinfo.feat.app.APPLICATIONS_LIST_TAG
+import com.galaxyjoy.cpuinfo.feat.infor.cpu.ClusterTopologyBuilder
 import com.galaxyjoy.cpuinfo.widget.progress.IconRoundCornerProgressBar
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -91,6 +93,25 @@ class ActHostSmokeTest {
         // Reaching here without an exception already proves onCreate()/Hilt DI/native cpuinfo
         // lib init (B01/B02) succeeded on a real device — the failure mode for those bugs was a
         // crash before any UI could render.
+    }
+
+    @Test
+    fun clusterTopologyCardsShowAtLeastOneCacheLevelOnDefaultCpuTab() {
+        // Integration guard for U06's cache-per-cluster addition: real device data (this is the
+        // one thing ClusterTopologyProviderTest-style unit tests can't cover — MockK can't mock
+        // `external fun` native methods, see doc/task/epic-01-bugfix.md — so real
+        // processor_start/processor_count values from libcpuinfo only get exercised here). CPU is
+        // the default tab, no navigation needed. Substring-matches "L1i"/"L1d"/"L2"/"L3" rather
+        // than a full formatted string since exact size/shared-count varies by real device.
+        composeRule.waitForIdle()
+
+        val hasAnyCacheLevelLabel = ClusterTopologyBuilder.CacheLevel.entries.any { level ->
+            composeRule.onAllNodesWithText(level.label, substring = true).fetchSemanticsNodes().isNotEmpty()
+        }
+        assertTrue(
+            "Expected at least one cache-level label (L1i/L1d/L2/L3) on the default CPU tab",
+            hasAnyCacheLevelLabel,
+        )
     }
 
     @Test
