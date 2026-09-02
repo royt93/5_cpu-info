@@ -473,6 +473,22 @@
     <string name="storage_bench_share_button">分享</string>
     <string name="storage_bench_share_text">儲存效能測試 — 循序寫入：%1$s MB/s · 循序讀取：%2$s MB/s · 隨機寫入：%3$s ops/s · 隨機讀取：%4$s ops/s · 雜湊：%5$s MB/s</string>
 
+    <string name="ram_bench">RAM 效能測試</string>
+    <string name="ram_bench_disclaimer_title">開始之前</string>
+    <string name="ram_bench_disclaimer_body">此測試會寫入並讀取一段暫存記憶體緩衝區以測量 RAM 傳輸速度。不會動到任何檔案，除了應用程式自己的記憶體外不會儲存任何內容。</string>
+    <string name="ram_bench_start_button">開始測試</string>
+    <string name="ram_bench_running_label">執行中：%1$s</string>
+    <string name="ram_bench_phase_write">寫入</string>
+    <string name="ram_bench_phase_read">讀取</string>
+    <string name="ram_bench_stop_button">停止</string>
+    <string name="ram_bench_aborted_overheat">已略過測試 — 裝置目前過熱，請待裝置降溫後再試一次。</string>
+    <string name="ram_bench_aborted_low_memory">已略過測試 — 目前可用記憶體不足，請關閉部分應用程式後再試一次。</string>
+    <string name="ram_bench_previous_summary">上次測試：%1$s · 寫入 %2$s MB/s · 讀取 %3$s MB/s</string>
+    <string name="ram_bench_no_previous">尚無先前結果</string>
+    <string name="ram_bench_done_button">完成</string>
+    <string name="ram_bench_share_button">分享</string>
+    <string name="ram_bench_share_text">RAM 效能測試 — 寫入：%1$s MB/s · 讀取：%2$s MB/s</string>
+
     <string name="vip_diagnostic_pref_title">VIP 診斷歷史</string>
     <string name="vip_diagnostic_pref_summary">追蹤數月內電池/RAM/儲存空間的耗損 (VIP)</string>
     <string name="vip_diagnostic_title">診斷歷史</string>

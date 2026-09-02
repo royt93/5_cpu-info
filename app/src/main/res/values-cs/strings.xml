@@ -471,6 +471,22 @@
     <string name="storage_bench_share_button">Sdílet</string>
     <string name="storage_bench_share_text">Test úložiště — Sekv. zápis: %1$s MB/s · Sekv. čtení: %2$s MB/s · Náhodný zápis: %3$s ops/s · Náhodné čtení: %4$s ops/s · Hash: %5$s MB/s</string>
 
+    <string name="ram_bench">Test RAM</string>
+    <string name="ram_bench_disclaimer_title">Než začnete</string>
+    <string name="ram_bench_disclaimer_body">Tento test zapisuje do dočasného paměťového bufferu a čte z něj pro měření propustnosti RAM. Nedotýká se žádných souborů, nic se neukládá mimo vlastní paměť aplikace.</string>
+    <string name="ram_bench_start_button">Spustit test</string>
+    <string name="ram_bench_running_label">Probíhá: %1$s</string>
+    <string name="ram_bench_phase_write">Zápis</string>
+    <string name="ram_bench_phase_read">Čtení</string>
+    <string name="ram_bench_stop_button">Zastavit</string>
+    <string name="ram_bench_aborted_overheat">Test přeskočen — zařízení je teď příliš teplé. Zkuste to znovu po vychladnutí.</string>
+    <string name="ram_bench_aborted_low_memory">Test přeskočen — teď je málo volné paměti. Zavřete pár aplikací a zkuste to znovu.</string>
+    <string name="ram_bench_previous_summary">Poslední test: %1$s · zápis %2$s MB/s · čtení %3$s MB/s</string>
+    <string name="ram_bench_no_previous">Zatím žádný předchozí výsledek</string>
+    <string name="ram_bench_done_button">Hotovo</string>
+    <string name="ram_bench_share_button">Sdílet</string>
+    <string name="ram_bench_share_text">Test RAM — Zápis: %1$s MB/s · Čtení: %2$s MB/s</string>
+
     <string name="vip_diagnostic_pref_title">Historie diagnostiky VIP</string>
     <string name="vip_diagnostic_pref_summary">Sledujte opotřebení baterie/RAM/úložiště v průběhu měsíců (VIP)</string>
     <string name="vip_diagnostic_title">Historie diagnostiky</string>

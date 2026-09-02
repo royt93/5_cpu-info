@@ -477,6 +477,22 @@
     <string name="storage_bench_share_button">Chia sẻ</string>
     <string name="storage_bench_share_text">Đo hiệu năng lưu trữ — Ghi tuần tự: %1$s MB/s · Đọc tuần tự: %2$s MB/s · Ghi ngẫu nhiên: %3$s ops/s · Đọc ngẫu nhiên: %4$s ops/s · Băm: %5$s MB/s</string>
 
+    <string name="ram_bench">Đo hiệu năng RAM</string>
+    <string name="ram_bench_disclaimer_title">Trước khi bắt đầu</string>
+    <string name="ram_bench_disclaimer_body">Bài test ghi và đọc 1 vùng nhớ tạm để đo tốc độ RAM. Không đụng vào file nào, không lưu gì ngoài bộ nhớ riêng của app.</string>
+    <string name="ram_bench_start_button">Bắt đầu</string>
+    <string name="ram_bench_running_label">Đang chạy: %1$s</string>
+    <string name="ram_bench_phase_write">Ghi</string>
+    <string name="ram_bench_phase_read">Đọc</string>
+    <string name="ram_bench_stop_button">Dừng</string>
+    <string name="ram_bench_aborted_overheat">Đã bỏ qua test — máy đang hơi nóng. Thử lại sau khi máy nguội.</string>
+    <string name="ram_bench_aborted_low_memory">Đã bỏ qua test — không đủ bộ nhớ trống. Đóng bớt app rồi thử lại.</string>
+    <string name="ram_bench_previous_summary">Lần trước: %1$s · ghi %2$s MB/s · đọc %3$s MB/s</string>
+    <string name="ram_bench_no_previous">Chưa có kết quả trước đó</string>
+    <string name="ram_bench_done_button">Xong</string>
+    <string name="ram_bench_share_button">Chia sẻ</string>
+    <string name="ram_bench_share_text">Đo hiệu năng RAM — Ghi: %1$s MB/s · Đọc: %2$s MB/s</string>
+
     <string name="vip_diagnostic_pref_title">Lịch sử chẩn đoán VIP</string>
     <string name="vip_diagnostic_pref_summary">Theo dõi hao mòn pin/RAM/bộ nhớ qua nhiều tháng (VIP)</string>
     <string name="vip_diagnostic_title">Lịch sử chẩn đoán</string>

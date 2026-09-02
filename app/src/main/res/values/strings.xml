@@ -499,6 +499,22 @@
     <string name="storage_bench_share_button">Share</string>
     <string name="storage_bench_share_text">Storage benchmark — Seq write: %1$s MB/s · Seq read: %2$s MB/s · Random write: %3$s ops/s · Random read: %4$s ops/s · Hash: %5$s MB/s</string>
 
+    <string name="ram_bench">RAM Benchmark</string>
+    <string name="ram_bench_disclaimer_title">Before you start</string>
+    <string name="ram_bench_disclaimer_body">This test writes to and reads from a temporary memory buffer to measure RAM throughput. No files are touched and nothing is saved beyond the app’s own memory.</string>
+    <string name="ram_bench_start_button">Start test</string>
+    <string name="ram_bench_running_label">Running: %1$s</string>
+    <string name="ram_bench_phase_write">Write</string>
+    <string name="ram_bench_phase_read">Read</string>
+    <string name="ram_bench_stop_button">Stop</string>
+    <string name="ram_bench_aborted_overheat">Test skipped — device is too warm right now. Try again once it cools down.</string>
+    <string name="ram_bench_aborted_low_memory">Test skipped — not enough free memory right now. Close some apps and try again.</string>
+    <string name="ram_bench_previous_summary">Last test: %1$s · write %2$s MB/s · read %3$s MB/s</string>
+    <string name="ram_bench_no_previous">No previous result yet</string>
+    <string name="ram_bench_done_button">Done</string>
+    <string name="ram_bench_share_button">Share</string>
+    <string name="ram_bench_share_text">RAM benchmark — Write: %1$s MB/s · Read: %2$s MB/s</string>
+
     <string name="vip_diagnostic_pref_title">VIP Diagnostic History</string>
     <string name="vip_diagnostic_pref_summary">Track battery/RAM/storage drift over months (VIP)</string>
     <string name="vip_diagnostic_title">Diagnostic History</string>

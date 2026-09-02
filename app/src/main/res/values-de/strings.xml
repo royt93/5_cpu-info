@@ -474,6 +474,22 @@
     <string name="storage_bench_share_button">Teilen</string>
     <string name="storage_bench_share_text">Speichertest — Seq. Schreiben: %1$s MB/s · Seq. Lesen: %2$s MB/s · Zufälliges Schreiben: %3$s Ops/s · Zufälliges Lesen: %4$s Ops/s · Hash: %5$s MB/s</string>
 
+    <string name="ram_bench">RAM-Test</string>
+    <string name="ram_bench_disclaimer_title">Bevor du startest</string>
+    <string name="ram_bench_disclaimer_body">Dieser Test schreibt in einen temporären Speicherpuffer und liest daraus, um den RAM-Durchsatz zu messen. Es werden keine Dateien berührt und nichts über den appeigenen Speicher hinaus gespeichert.</string>
+    <string name="ram_bench_start_button">Test starten</string>
+    <string name="ram_bench_running_label">Läuft: %1$s</string>
+    <string name="ram_bench_phase_write">Schreiben</string>
+    <string name="ram_bench_phase_read">Lesen</string>
+    <string name="ram_bench_stop_button">Stopp</string>
+    <string name="ram_bench_aborted_overheat">Test übersprungen — Gerät ist gerade zu warm. Versuche es nach dem Abkühlen erneut.</string>
+    <string name="ram_bench_aborted_low_memory">Test übersprungen — gerade zu wenig freier Speicher. Schließe ein paar Apps und versuche es erneut.</string>
+    <string name="ram_bench_previous_summary">Letzter Test: %1$s · Schreiben %2$s MB/s · Lesen %3$s MB/s</string>
+    <string name="ram_bench_no_previous">Noch kein vorheriges Ergebnis</string>
+    <string name="ram_bench_done_button">Fertig</string>
+    <string name="ram_bench_share_button">Teilen</string>
+    <string name="ram_bench_share_text">RAM-Test — Schreiben: %1$s MB/s · Lesen: %2$s MB/s</string>
+
     <string name="vip_diagnostic_pref_title">VIP-Diagnoseverlauf</string>
     <string name="vip_diagnostic_pref_summary">Akku-/RAM-/Speicherverschleiß über Monate verfolgen (VIP)</string>
     <string name="vip_diagnostic_title">Diagnoseverlauf</string>

@@ -471,6 +471,22 @@
     <string name="storage_bench_share_button">Udostępnij</string>
     <string name="storage_bench_share_text">Test pamięci masowej — Zapis seq.: %1$s MB/s · Odczyt seq.: %2$s MB/s · Zapis losowy: %3$s ops/s · Odczyt losowy: %4$s ops/s · Hash: %5$s MB/s</string>
 
+    <string name="ram_bench">Test pamięci RAM</string>
+    <string name="ram_bench_disclaimer_title">Zanim zaczniesz</string>
+    <string name="ram_bench_disclaimer_body">Ten test zapisuje i odczytuje tymczasowy bufor pamięci, aby zmierzyć przepustowość RAM. Żadne pliki nie są dotykane, nic nie jest zapisywane poza pamięcią samej aplikacji.</string>
+    <string name="ram_bench_start_button">Rozpocznij test</string>
+    <string name="ram_bench_running_label">Trwa: %1$s</string>
+    <string name="ram_bench_phase_write">Zapis</string>
+    <string name="ram_bench_phase_read">Odczyt</string>
+    <string name="ram_bench_stop_button">Zatrzymaj</string>
+    <string name="ram_bench_aborted_overheat">Test pominięty — urządzenie jest teraz zbyt ciepłe. Spróbuj ponownie po ostygnięciu.</string>
+    <string name="ram_bench_aborted_low_memory">Test pominięty — za mało wolnej pamięci. Zamknij kilka aplikacji i spróbuj ponownie.</string>
+    <string name="ram_bench_previous_summary">Ostatni test: %1$s · zapis %2$s MB/s · odczyt %3$s MB/s</string>
+    <string name="ram_bench_no_previous">Brak wcześniejszego wyniku</string>
+    <string name="ram_bench_done_button">Gotowe</string>
+    <string name="ram_bench_share_button">Udostępnij</string>
+    <string name="ram_bench_share_text">Test pamięci RAM — Zapis: %1$s MB/s · Odczyt: %2$s MB/s</string>
+
     <string name="vip_diagnostic_pref_title">Historia diagnostyczna VIP</string>
     <string name="vip_diagnostic_pref_summary">Śledź zużycie baterii/RAM/pamięci przez miesiące (VIP)</string>
     <string name="vip_diagnostic_title">Historia diagnostyczna</string>
