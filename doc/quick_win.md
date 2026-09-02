@@ -103,7 +103,7 @@
 
 ---
 
-## 🟠 #5 — Network info screen (1 ngày)
+## ✅ #5 — Network info screen (1 ngày) — Đã xong (Sprint 15, 2026-08-30)
 
 **Mô tả**: Tab mới `feat/infor/network`. Hoàn toàn không có hiện tại (chỉ có permission internet/wifi/network state).
 
@@ -119,7 +119,7 @@
 
 ---
 
-## 🟡 #6 — Camera hardware capabilities (0.5 ngày)
+## ✅ #6 — Camera hardware capabilities (0.5 ngày) — Đã xong
 
 **Mô tả**: Tab mới `feat/infor/camera`. Read-only metadata, không cần CAMERA permission.
 
@@ -133,7 +133,7 @@
 
 ---
 
-## 🟡 #7 — Display detail & refresh rate (0.5 ngày)
+## ✅ #7 — Display detail & refresh rate (0.5 ngày) — Đã xong
 
 **Mô tả**: Mở rộng `feat/infor/screen` thành tab riêng hoặc nested section. Bổ sung thông tin thiếu mà user 2026 quan tâm nhất.
 
@@ -151,7 +151,7 @@
 
 ---
 
-## 🟡 #8 — Media codec capabilities (0.5 ngày)
+## ✅ #8 — Media codec capabilities (0.5 ngày) — Đã xong
 
 **Mô tả**: Tab mới `feat/infor/media`. Zero info codec hiện tại.
 
@@ -168,9 +168,11 @@
 
 ---
 
-## 🟡 #9 — Export hardware report (0.5 ngày)
+## 🟡 #9 — Export hardware report (0.5 ngày) — Đã xong một phần
 
-**Mô tả**: Generate JSON/HTML/Text từ tất cả `DataProvider*`, share intent.
+**Đã làm**: `SystemInfoExporter.kt` implement 2/3 format dự kiến — `Format.TEXT` và `Format.JSON`, chia sẻ qua `ACTION_SEND` (đúng plan), picker format qua `ExportFormatBottomSheet.kt`. **Còn thiếu so với mô tả gốc**: format HTML (printable) chưa có — enum `Format` chỉ có `TEXT`/`JSON`, chưa `HTML`.
+
+**Mô tả gốc**: Generate JSON/HTML/Text từ tất cả `DataProvider*`, share intent.
 
 **Tech**:
 - `SystemInfoExporter.kt` đã có khung (utility class) — chỉ cần extend
@@ -184,7 +186,7 @@
 
 ---
 
-## 🟢 #10 — Widevine DRM level (~2 giờ)
+## ✅ #10 — Widevine DRM level (~2 giờ) — Đã xong (vượt scope gốc: security level + HDCP level + max HDCP)
 
 **Mô tả**: Single-screen feature. Bottom-line item dễ làm nhất.
 
