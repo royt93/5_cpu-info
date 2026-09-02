@@ -22,6 +22,9 @@ class VMGpuBench @Inject constructor(
         data class Done(
             val result: GpuBenchmark.Result,
             val previous: GpuBenchResultPrefs.SavedResult?,
+            /** U18 — up to [GpuBenchResultPrefs] `MAX_HISTORY_ENTRIES` past runs, oldest first,
+             * including the just-saved [result] as the last entry. Used to draw a trend chart. */
+            val history: List<GpuBenchResultPrefs.SavedResult>,
         ) : UiState
         data class Aborted(val reason: GpuBenchmark.AbortReason) : UiState
     }
@@ -43,7 +46,7 @@ class VMGpuBench @Inject constructor(
                         val previous = resultPrefs.getLastResult()
                         resultPrefs.saveResult(state.result)
                         _thermalSnapshot.value = thermalStatusProvider.snapshot()
-                        UiState.Done(state.result, previous)
+                        UiState.Done(state.result, previous, resultPrefs.getHistory())
                     }
 
                     is GpuBenchmarkRunner.State.Aborted -> UiState.Aborted(state.reason)

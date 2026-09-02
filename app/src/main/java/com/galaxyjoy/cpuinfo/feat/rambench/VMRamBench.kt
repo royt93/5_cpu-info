@@ -23,6 +23,7 @@ class VMRamBench @Inject constructor(
         data class Done(
             val result: RamBenchmark.Result,
             val previous: RamBenchResultPrefs.SavedResult?,
+            val history: List<RamBenchResultPrefs.SavedResult>,
         ) : UiState
         data class Aborted(val reason: RamBenchmark.AbortReason) : UiState
     }
@@ -46,7 +47,7 @@ class VMRamBench @Inject constructor(
                         val previous = resultPrefs.getLastResult()
                         resultPrefs.saveResult(state.result)
                         _thermalSnapshot.value = thermalStatusProvider.snapshot()
-                        UiState.Done(state.result, previous)
+                        UiState.Done(state.result, previous, resultPrefs.getHistory())
                     }
 
                     is RamBenchmarkRunner.State.Aborted -> UiState.Aborted(state.reason)

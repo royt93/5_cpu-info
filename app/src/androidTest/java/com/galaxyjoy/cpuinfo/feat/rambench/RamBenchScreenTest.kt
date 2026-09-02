@@ -60,6 +60,7 @@ class RamBenchScreenTest {
         val state = VMRamBench.UiState.Done(
             result = RamBenchmark.Result(writeMbPerSec = 1234.5, readMbPerSec = 2345.6),
             previous = null,
+            history = emptyList(),
         )
 
         composeRule.setContent {

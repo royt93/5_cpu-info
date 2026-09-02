@@ -2,16 +2,21 @@ package com.galaxyjoy.cpuinfo.feat.storagebench
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
-/** Persists the last completed benchmark so a new run can show a before/after comparison. */
+/** Persists the last completed benchmark (before/after comparison) and a bounded history (U18
+ * trend chart) — same JSON-array-in-a-single-key pattern as
+ * [com.galaxyjoy.cpuinfo.feat.gpubench.GpuBenchResultPrefs]. */
 @Singleton
 class StorageBenchResultPrefs @Inject constructor(@ApplicationContext context: Context) {
 
     private val sp: SharedPreferences =
         context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+    private val gson = Gson()
 
     data class SavedResult(
         val timestampMs: Long,
@@ -22,37 +27,34 @@ class StorageBenchResultPrefs @Inject constructor(@ApplicationContext context: C
         val hashMbPerSec: Double,
     )
 
-    fun getLastResult(): SavedResult? {
-        val timestamp = sp.getLong(KEY_TIMESTAMP, 0L)
-        if (timestamp == 0L) return null
-        return SavedResult(
-            timestampMs = timestamp,
-            seqWriteMbPerSec = sp.getFloat(KEY_SEQ_WRITE, 0f).toDouble(),
-            seqReadMbPerSec = sp.getFloat(KEY_SEQ_READ, 0f).toDouble(),
-            randomWriteOpsPerSec = sp.getFloat(KEY_RANDOM_WRITE, 0f).toDouble(),
-            randomReadOpsPerSec = sp.getFloat(KEY_RANDOM_READ, 0f).toDouble(),
-            hashMbPerSec = sp.getFloat(KEY_HASH, 0f).toDouble(),
-        )
+    fun getLastResult(): SavedResult? = getHistory().lastOrNull()
+
+    fun getHistory(): List<SavedResult> {
+        val json = sp.getString(KEY_HISTORY_JSON, null) ?: return emptyList()
+        return try {
+            val type = object : TypeToken<List<SavedResult>>() {}.type
+            gson.fromJson<List<SavedResult>>(json, type) ?: emptyList()
+        } catch (e: Exception) {
+            emptyList()
+        }
     }
 
     fun saveResult(result: StorageBenchmark.Result) {
-        sp.edit()
-            .putLong(KEY_TIMESTAMP, System.currentTimeMillis())
-            .putFloat(KEY_SEQ_WRITE, result.seqWriteMbPerSec.toFloat())
-            .putFloat(KEY_SEQ_READ, result.seqReadMbPerSec.toFloat())
-            .putFloat(KEY_RANDOM_WRITE, result.randomWriteOpsPerSec.toFloat())
-            .putFloat(KEY_RANDOM_READ, result.randomReadOpsPerSec.toFloat())
-            .putFloat(KEY_HASH, result.hashMbPerSec.toFloat())
-            .apply()
+        val entry = SavedResult(
+            timestampMs = System.currentTimeMillis(),
+            seqWriteMbPerSec = result.seqWriteMbPerSec,
+            seqReadMbPerSec = result.seqReadMbPerSec,
+            randomWriteOpsPerSec = result.randomWriteOpsPerSec,
+            randomReadOpsPerSec = result.randomReadOpsPerSec,
+            hashMbPerSec = result.hashMbPerSec,
+        )
+        val updated = (getHistory() + entry).takeLast(MAX_HISTORY_ENTRIES)
+        sp.edit().putString(KEY_HISTORY_JSON, gson.toJson(updated)).apply()
     }
 
     private companion object {
         const val PREFS_NAME = "storage_bench_result_prefs"
-        const val KEY_TIMESTAMP = "timestamp_ms"
-        const val KEY_SEQ_WRITE = "seq_write_mb_s"
-        const val KEY_SEQ_READ = "seq_read_mb_s"
-        const val KEY_RANDOM_WRITE = "random_write_ops_s"
-        const val KEY_RANDOM_READ = "random_read_ops_s"
-        const val KEY_HASH = "hash_mb_s"
+        const val KEY_HISTORY_JSON = "history_json"
+        const val MAX_HISTORY_ENTRIES = 24
     }
 }

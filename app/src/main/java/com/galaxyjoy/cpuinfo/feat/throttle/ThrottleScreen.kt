@@ -33,6 +33,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.galaxyjoy.cpuinfo.R
+import com.galaxyjoy.cpuinfo.ui.component.BenchTrendChart
 import java.text.DateFormat
 import java.text.NumberFormat
 import java.util.Date
@@ -307,6 +308,9 @@ private fun DoneContent(
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
     }
+
+    Spacer(Modifier.height(16.dp))
+    BenchTrendChart(values = state.history.map { it.sustainedFreqMhz.toDouble() })
 
     Spacer(Modifier.height(24.dp))
     Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {

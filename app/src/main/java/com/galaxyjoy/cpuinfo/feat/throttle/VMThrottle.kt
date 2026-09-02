@@ -29,6 +29,7 @@ class VMThrottle @Inject constructor(
         data class Done(
             val result: ThrottleFingerprint.Result,
             val previous: ThrottleResultPrefs.SavedResult?,
+            val history: List<ThrottleResultPrefs.SavedResult>,
         ) : UiState
     }
 
@@ -56,7 +57,7 @@ class VMThrottle @Inject constructor(
                         val previous = resultPrefs.getLastResult()
                         resultPrefs.saveResult(state.result)
                         _thermalSnapshot.value = thermalStatusProvider.snapshot()
-                        UiState.Done(state.result, previous)
+                        UiState.Done(state.result, previous, resultPrefs.getHistory())
                     }
                 }
             }

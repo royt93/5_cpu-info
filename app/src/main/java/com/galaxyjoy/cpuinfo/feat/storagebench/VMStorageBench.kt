@@ -23,6 +23,7 @@ class VMStorageBench @Inject constructor(
         data class Done(
             val result: StorageBenchmark.Result,
             val previous: StorageBenchResultPrefs.SavedResult?,
+            val history: List<StorageBenchResultPrefs.SavedResult>,
         ) : UiState
         data object Aborted : UiState
     }
@@ -46,7 +47,7 @@ class VMStorageBench @Inject constructor(
                         val previous = resultPrefs.getLastResult()
                         resultPrefs.saveResult(state.result)
                         _thermalSnapshot.value = thermalStatusProvider.snapshot()
-                        UiState.Done(state.result, previous)
+                        UiState.Done(state.result, previous, resultPrefs.getHistory())
                     }
 
                     StorageBenchmarkRunner.State.Aborted -> UiState.Aborted

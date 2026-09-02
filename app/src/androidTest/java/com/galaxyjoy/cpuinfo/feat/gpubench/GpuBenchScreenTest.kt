@@ -75,6 +75,7 @@ class GpuBenchScreenTest {
         val state = VMGpuBench.UiState.Done(
             result = GpuBenchmark.Result(avgFps = 42.5, frameCount = 250, durationMs = 5000),
             previous = null,
+            history = emptyList(),
         )
 
         composeRule.setContent {
@@ -83,6 +84,27 @@ class GpuBenchScreenTest {
 
         composeRule.onNodeWithText("42.5 FPS").assertExists()
         composeRule.onNodeWithText(appContext.getString(R.string.gpu_bench_no_previous)).assertExists()
+    }
+
+    /** U18 — [com.galaxyjoy.cpuinfo.ui.component.BenchTrendChart] mounts a real MPAndroidChart
+     * `LineChart` (an Android View, not Compose) once there are 2+ history points; this just
+     * needs to not crash the render, the chart's own drawing isn't asserted on here. */
+    @Test
+    fun doneState_withMultipleHistoryEntries_rendersTrendChartWithoutCrashing() {
+        val state = VMGpuBench.UiState.Done(
+            result = GpuBenchmark.Result(avgFps = 42.5, frameCount = 250, durationMs = 5000),
+            previous = GpuBenchResultPrefs.SavedResult(timestampMs = 1L, avgFps = 30.0),
+            history = listOf(
+                GpuBenchResultPrefs.SavedResult(timestampMs = 1L, avgFps = 30.0),
+                GpuBenchResultPrefs.SavedResult(timestampMs = 2L, avgFps = 42.5),
+            ),
+        )
+
+        composeRule.setContent {
+            CpuInfoTheme { GpuBenchScreen(state, noThermalSnapshot, { noOpRenderer }, {}, {}, {}, {}) }
+        }
+
+        composeRule.onNodeWithText("42.5 FPS").assertExists()
     }
 
     @Test

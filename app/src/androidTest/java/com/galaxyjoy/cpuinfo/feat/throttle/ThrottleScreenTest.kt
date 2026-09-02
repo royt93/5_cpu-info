@@ -43,7 +43,7 @@ class ThrottleScreenTest {
 
     @Test
     fun firstRun_showsScoreRowAndNoPreviousMessage() {
-        val state = VMThrottle.UiState.Done(result(opsPerSecond = 5_000_000L), previous = null)
+        val state = VMThrottle.UiState.Done(result(opsPerSecond = 5_000_000L), previous = null, history = emptyList())
 
         composeRule.setContent {
             CpuInfoTheme { ThrottleScreen(state, noThermalSnapshot, {}, {}, {}, {}) }
@@ -65,7 +65,7 @@ class ThrottleScreenTest {
             maxTempC = 36,
             opsPerSecond = 4_000_000L,
         )
-        val state = VMThrottle.UiState.Done(result(opsPerSecond = 5_000_000L), previous = previous)
+        val state = VMThrottle.UiState.Done(result(opsPerSecond = 5_000_000L), previous = previous, history = emptyList())
 
         composeRule.setContent {
             CpuInfoTheme { ThrottleScreen(state, noThermalSnapshot, {}, {}, {}, {}) }
@@ -87,7 +87,7 @@ class ThrottleScreenTest {
             maxTempC = 36,
             opsPerSecond = 0L,
         )
-        val state = VMThrottle.UiState.Done(result(opsPerSecond = 5_000_000L), previous = legacyPrevious)
+        val state = VMThrottle.UiState.Done(result(opsPerSecond = 5_000_000L), previous = legacyPrevious, history = emptyList())
 
         composeRule.setContent {
             CpuInfoTheme { ThrottleScreen(state, noThermalSnapshot, {}, {}, {}, {}) }

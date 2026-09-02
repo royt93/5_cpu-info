@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import com.galaxyjoy.cpuinfo.R
 import com.galaxyjoy.cpuinfo.feat.throttle.ThermalStatusMapper
 import com.galaxyjoy.cpuinfo.feat.throttle.ThermalStatusProvider
+import com.galaxyjoy.cpuinfo.ui.component.BenchTrendChart
 import java.text.DateFormat
 import java.util.Date
 import java.util.Locale
@@ -228,6 +229,9 @@ private fun DoneContent(
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
     }
+
+    Spacer(Modifier.height(16.dp))
+    BenchTrendChart(values = state.history.map { it.writeMbPerSec })
 
     Spacer(Modifier.height(24.dp))
     Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {

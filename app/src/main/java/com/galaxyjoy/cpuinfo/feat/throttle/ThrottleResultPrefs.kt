@@ -2,19 +2,23 @@ package com.galaxyjoy.cpuinfo.feat.throttle
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * Persists the last completed throttle-test result so a new run can show a before/after delta
- * (e.g. after a battery swap, ROM update, or reapplying thermal paste).
+ * Persists the last completed throttle-test result (before/after delta — e.g. after a battery
+ * swap, ROM update, or reapplying thermal paste) and a bounded history (U18 trend chart) — same
+ * JSON-array-in-a-single-key pattern as [com.galaxyjoy.cpuinfo.feat.gpubench.GpuBenchResultPrefs].
  */
 @Singleton
 class ThrottleResultPrefs @Inject constructor(@ApplicationContext context: Context) {
 
     private val sp: SharedPreferences =
         context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+    private val gson = Gson()
 
     data class SavedResult(
         val timestampMs: Long,
@@ -25,37 +29,34 @@ class ThrottleResultPrefs @Inject constructor(@ApplicationContext context: Conte
         val opsPerSecond: Long,
     )
 
-    fun getLastResult(): SavedResult? {
-        val timestamp = sp.getLong(KEY_TIMESTAMP, 0L)
-        if (timestamp == 0L) return null
-        return SavedResult(
-            timestampMs = timestamp,
-            peakFreqMhz = sp.getLong(KEY_PEAK_FREQ, 0L),
-            sustainedFreqMhz = sp.getLong(KEY_SUSTAINED_FREQ, 0L),
-            throttlePercent = sp.getInt(KEY_THROTTLE_PERCENT, 0),
-            maxTempC = sp.getInt(KEY_MAX_TEMP, 0),
-            opsPerSecond = sp.getLong(KEY_OPS_PER_SECOND, 0L),
-        )
+    fun getLastResult(): SavedResult? = getHistory().lastOrNull()
+
+    fun getHistory(): List<SavedResult> {
+        val json = sp.getString(KEY_HISTORY_JSON, null) ?: return emptyList()
+        return try {
+            val type = object : TypeToken<List<SavedResult>>() {}.type
+            gson.fromJson<List<SavedResult>>(json, type) ?: emptyList()
+        } catch (e: Exception) {
+            emptyList()
+        }
     }
 
     fun saveResult(result: ThrottleFingerprint.Result) {
-        sp.edit()
-            .putLong(KEY_TIMESTAMP, System.currentTimeMillis())
-            .putLong(KEY_PEAK_FREQ, result.peakFreqMhz)
-            .putLong(KEY_SUSTAINED_FREQ, result.sustainedFreqMhz)
-            .putInt(KEY_THROTTLE_PERCENT, result.throttlePercent)
-            .putInt(KEY_MAX_TEMP, result.maxTempC)
-            .putLong(KEY_OPS_PER_SECOND, result.opsPerSecond)
-            .apply()
+        val entry = SavedResult(
+            timestampMs = System.currentTimeMillis(),
+            peakFreqMhz = result.peakFreqMhz,
+            sustainedFreqMhz = result.sustainedFreqMhz,
+            throttlePercent = result.throttlePercent,
+            maxTempC = result.maxTempC,
+            opsPerSecond = result.opsPerSecond,
+        )
+        val updated = (getHistory() + entry).takeLast(MAX_HISTORY_ENTRIES)
+        sp.edit().putString(KEY_HISTORY_JSON, gson.toJson(updated)).apply()
     }
 
     private companion object {
         const val PREFS_NAME = "throttle_result_prefs"
-        const val KEY_TIMESTAMP = "timestamp_ms"
-        const val KEY_PEAK_FREQ = "peak_freq_mhz"
-        const val KEY_SUSTAINED_FREQ = "sustained_freq_mhz"
-        const val KEY_THROTTLE_PERCENT = "throttle_percent"
-        const val KEY_MAX_TEMP = "max_temp_c"
-        const val KEY_OPS_PER_SECOND = "ops_per_second"
+        const val KEY_HISTORY_JSON = "history_json"
+        const val MAX_HISTORY_ENTRIES = 24
     }
 }

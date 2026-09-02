@@ -38,6 +38,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.galaxyjoy.cpuinfo.R
 import com.galaxyjoy.cpuinfo.feat.throttle.ThermalStatusMapper
+import com.galaxyjoy.cpuinfo.ui.component.BenchTrendChart
 import com.galaxyjoy.cpuinfo.feat.throttle.ThermalStatusProvider
 import java.text.DateFormat
 import java.util.Date
@@ -283,6 +284,9 @@ private fun DoneContent(
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
     }
+
+    Spacer(Modifier.height(16.dp))
+    BenchTrendChart(values = state.history.map { it.avgFps })
 
     Spacer(Modifier.height(24.dp))
     Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
