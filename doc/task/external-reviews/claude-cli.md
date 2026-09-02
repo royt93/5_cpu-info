@@ -1,6 +1,6 @@
 # Code Review — CPU Info (com.galaxyjoy.cpuinfo)
 
-> Review độc lập, chỉ đọc code. Đối chiếu doc/feature.md + doc/quick_win.md để không lặp ý cũ.
+> Review độc lập, chỉ đọc code. Đối chiếu doc/task/feature.md + doc/task/quick_win.md để không lặp ý cũ.
 
 ## 1. Bug / vấn đề cần fix
 

@@ -57,7 +57,7 @@ Chi tiết đầy đủ ở `doc/AD.MD`. Tóm tắt:
 - 3 touchpoint: App Open (`SplashActivity`), Banner (`ActHost` bottom — có lifecycle hooks `bannerResume/Pause/Destroy`), Interstitial (`FrmApplications` — nút Sort A/Z). Preload interstitial gọi trong `ActHost.onCreate`.
 - Init flow trong `GalaxyApp.setupAd()`: `AdManager.setConfig(adConfig) → AdManager.initialize(this) { ... }`. Thứ tự này **bắt buộc** — SDK sẽ no-op hoặc crash nếu đảo.
 - SDK tự throttle (min 60s giữa fullscreen, max 6/session, 5/ngày) → không cần thêm logic gating ở app layer.
-- VIP whitelist GAID cứng (`getMyVipGAIDSet()`) đã được xoá khỏi `GalaxyApp.kt` — SDK dùng danh sách nội bộ + `vipKeySecret` (xem `doc/feature.md` đợt 2 #7).
+- VIP whitelist GAID cứng (`getMyVipGAIDSet()`) đã được xoá khỏi `GalaxyApp.kt` — SDK dùng danh sách nội bộ + `vipKeySecret` (xem `doc/task/feature.md` đợt 2 #7).
 
 ### Memory leak history
 `doc/MEMORY_LEAK.MD` ghi lại 7 leak đã fix (sensor listener, broadcast receiver lifecycle, postDelayed, NavController listener, ReviewManager callback). Khi đụng vào các file đó hoặc thêm pattern tương tự (raw `Thread`, anonymous listener, `postDelayed`, receiver register), check lại doc này trước.
@@ -75,6 +75,6 @@ Chi tiết đầy đủ ở `doc/AD.MD`. Tóm tắt:
 ## Notes
 
 - `local.properties` chứa SDK path → không commit.
-- `doc/feature.md` track roadmap enhancement (đợt 1 đã ship, đợt 2 đang plan ở mục Deferred).
-- `doc/quick_win.md` — danh sách cải tiến nhỏ, dễ làm, chưa gắn vào roadmap chính.
+- `doc/task/feature.md` track roadmap enhancement (đợt 1 đã ship, đợt 2 đang plan ở mục Deferred).
+- `doc/task/quick_win.md` — danh sách cải tiến nhỏ, dễ làm, chưa gắn vào roadmap chính.
 - `doc/AD_PROMPT_AOS.MD` — prompt/spec gốc dùng khi triển khai lại hệ thống quảng cáo, tham khảo khi cần đối chiếu hành vi AppLovin/AdMob mong muốn.

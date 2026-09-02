@@ -4,7 +4,7 @@ package com.galaxyjoy.cpuinfo.feat.storagebench
  * Pure storage/CPU micro-benchmark math (F06) — no Android deps. [StorageBenchmarkRunner] drives
  * the actual I/O + hash workload and feeds raw byte/op counts + elapsed time here.
  *
- * Deliberately narrower than the "CPU stress test" idea previously skipped in doc/quick_win.md
+ * Deliberately narrower than the "CPU stress test" idea previously skipped in doc/task/quick_win.md
  * over battery/thermal risk (see also U02's [com.galaxyjoy.cpuinfo.feat.throttle.ThrottleFingerprint]
  * for that reasoning): this is short (a few seconds of file I/O in the app's own cache, no
  * sustained multi-core burn), so it reuses the same conservative battery-temperature gate but

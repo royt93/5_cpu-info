@@ -32,7 +32,7 @@ the full list. Summary: VIP daily check-in streak (U09/U10), Device Truth Score 
 Topology (F09/U06), Throttling Fingerprint stress test (U02), thermal status + security checklist
 (F02/F04), AI Readiness Score (F10/U12), Hardware Diff/Snapshot (U03), Interactive Sensor Test
 Suite (F07), App Permission & SDK Inventory (F05), Vulkan/GLES Detail (F08), USB/BT Inspector
-(F03), Privacy-preserving Fleet Compare (U04). Also see `doc/quick_win.md` — most of its "đợt 3a"
+(F03), Privacy-preserving Fleet Compare (U04). Also see `doc/task/quick_win.md` — most of its "đợt 3a"
 bundle (#10/#8/#7/#6/#9) turned out to already be implemented as part of this loop.
 
 ## ✅ Implemented — signing security (2026-08-31)

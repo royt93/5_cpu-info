@@ -8,7 +8,7 @@ import kotlin.math.roundToLong
  *
  * Test is hard-capped at [TEST_DURATION_MS] and self-aborts if battery temperature reaches
  * [SAFETY_ABORT_TEMP_C] — this is a deliberately conservative safety-limited redesign of the
- * "CPU stress test" idea previously skipped in doc/quick_win.md over battery/thermal risk.
+ * "CPU stress test" idea previously skipped in doc/task/quick_win.md over battery/thermal risk.
  */
 object ThrottleFingerprint {
 

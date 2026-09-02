@@ -1,6 +1,6 @@
 # Báo cáo Đánh giá Độc lập Codebase CPU Info (`com.galaxyjoy.cpuinfo`)
 
-> Đánh giá thực hiện trên nhánh `dev`. Phân tích chuyên sâu kiến trúc, logic hệ thống, native C++ lib, memory leak và tiềm năng sản phẩm. Không lặp lại các hạng mục đã ghi nhận trong `doc/feature.md` và `doc/quick_win.md`.
+> Đánh giá thực hiện trên nhánh `dev`. Phân tích chuyên sâu kiến trúc, logic hệ thống, native C++ lib, memory leak và tiềm năng sản phẩm. Không lặp lại các hạng mục đã ghi nhận trong `doc/task/feature.md` và `doc/task/quick_win.md`.
 
 ---
 
