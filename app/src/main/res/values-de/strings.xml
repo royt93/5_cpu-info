@@ -537,6 +537,14 @@
     <string name="bench_result_card_share_image_button">Als Bild teilen</string>
     <string name="bench_result_card_share_button">Ergebniskarte teilen</string>
 
+    <!-- U21 - Widget für das letzte Benchmark-Ergebnis -->
+    <string name="last_bench_widget_label">Neuester Benchmark</string>
+    <string name="last_bench_widget_description">Zeigt das zuletzt ausgeführte Benchmark-Ergebnis (CPU/Speicher/RAM/GPU)</string>
+    <string name="last_bench_widget_empty">Noch kein Benchmark ausgeführt</string>
+    <string name="last_bench_widget_value_mhz">%1$d MHz</string>
+    <string name="last_bench_widget_value_read_write_mb">%1$s/%2$s MB/s</string>
+    <string name="last_bench_widget_value_fps">%1$s FPS</string>
+
     <string name="vip_diagnostic_pref_title">VIP-Diagnoseverlauf</string>
     <string name="vip_diagnostic_pref_summary">Akku-/RAM-/Speicherverschleiß über Monate verfolgen (VIP)</string>
     <string name="vip_diagnostic_title">Diagnoseverlauf</string>

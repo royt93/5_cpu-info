@@ -540,6 +540,14 @@
     <string name="bench_result_card_share_image_button">Chia sẻ ảnh</string>
     <string name="bench_result_card_share_button">Chia sẻ thẻ kết quả</string>
 
+    <!-- U21 - Widget kết quả benchmark gần nhất -->
+    <string name="last_bench_widget_label">Benchmark gần nhất</string>
+    <string name="last_bench_widget_description">Hiện kết quả benchmark chạy gần nhất (CPU/Bộ nhớ/RAM/GPU)</string>
+    <string name="last_bench_widget_empty">Chưa chạy benchmark nào</string>
+    <string name="last_bench_widget_value_mhz">%1$d MHz</string>
+    <string name="last_bench_widget_value_read_write_mb">%1$s/%2$s MB/s</string>
+    <string name="last_bench_widget_value_fps">%1$s FPS</string>
+
     <string name="vip_diagnostic_pref_title">Lịch sử chẩn đoán VIP</string>
     <string name="vip_diagnostic_pref_summary">Theo dõi hao mòn pin/RAM/bộ nhớ qua nhiều tháng (VIP)</string>
     <string name="vip_diagnostic_title">Lịch sử chẩn đoán</string>

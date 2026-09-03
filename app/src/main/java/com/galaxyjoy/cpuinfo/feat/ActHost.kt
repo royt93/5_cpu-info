@@ -22,6 +22,8 @@ import com.galaxyjoy.cpuinfo.R
 import com.galaxyjoy.cpuinfo.data.local.UserPreferencesRepository
 import com.galaxyjoy.cpuinfo.databinding.ActHostLayoutBinding
 import com.galaxyjoy.cpuinfo.feat.devicecard.DeviceCardExporter
+import com.galaxyjoy.cpuinfo.feat.infor.FrmInfoContainer
+import com.galaxyjoy.cpuinfo.feat.lastbenchwidget.LastBenchWidgetProvider.Companion.EXTRA_OPEN_BENCH_TAB
 import com.galaxyjoy.cpuinfo.feat.setting.ExportFormatBottomSheet
 import com.galaxyjoy.cpuinfo.feat.setting.LanguagePickerBottomSheet
 import com.galaxyjoy.cpuinfo.feat.shield.ShieldScoreBottomSheet
@@ -95,6 +97,10 @@ class ActHost : BaseActivity() {
         setTheme(R.style.AppThemeBase)
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate")
+        // Must run before setContentView: the layout's `app:navGraph` makes NavHostFragment
+        // create + attach the start-destination fragment (FrmInfoContainer) synchronously during
+        // inflation, before any code after setContentView() below can run.
+        consumeOpenBenchTabFromWidget()
         binding = DataBindingUtil.setContentView(this, R.layout.act_host_layout)
         setupEdgeToEdge()
         setupNavigation()
@@ -129,6 +135,16 @@ class ActHost : BaseActivity() {
     private fun maybeOpenShieldScoreFromWidget() {
         if (!intent.getBooleanExtra(EXTRA_OPEN_SHIELD_SCORE, false)) return
         ShieldScoreBottomSheet().show(supportFragmentManager, ShieldScoreBottomSheet.TAG)
+    }
+
+    /**
+     * U21 — the "latest benchmark result" widget's tap-to-open PendingIntent carries the target
+     * benchmark's ViewPager2 tab position, consumed here (one-shot, via a static field) before
+     * [FrmInfoContainer] is created by `setContentView`'s nav-graph inflation below.
+     */
+    private fun consumeOpenBenchTabFromWidget() {
+        val pos = intent.getIntExtra(EXTRA_OPEN_BENCH_TAB, -1)
+        FrmInfoContainer.pendingTabPosition = pos.takeIf { it >= 0 }
     }
 
     /**

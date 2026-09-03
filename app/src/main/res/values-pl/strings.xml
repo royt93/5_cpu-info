@@ -534,6 +534,14 @@
     <string name="bench_result_card_share_image_button">Udostępnij jako obraz</string>
     <string name="bench_result_card_share_button">Udostępnij kartę wyników</string>
 
+    <!-- U21 - Widżet ostatniego wyniku benchmarku -->
+    <string name="last_bench_widget_label">Ostatni benchmark</string>
+    <string name="last_bench_widget_description">Pokazuje ostatnio uruchomiony wynik benchmarku (CPU/Pamięć/RAM/GPU)</string>
+    <string name="last_bench_widget_empty">Nie uruchomiono jeszcze benchmarku</string>
+    <string name="last_bench_widget_value_mhz">%1$d MHz</string>
+    <string name="last_bench_widget_value_read_write_mb">%1$s/%2$s MB/s</string>
+    <string name="last_bench_widget_value_fps">%1$s FPS</string>
+
     <string name="vip_diagnostic_pref_title">Historia diagnostyczna VIP</string>
     <string name="vip_diagnostic_pref_summary">Śledź zużycie baterii/RAM/pamięci przez miesiące (VIP)</string>
     <string name="vip_diagnostic_title">Historia diagnostyczna</string>

@@ -534,6 +534,14 @@
     <string name="bench_result_card_share_image_button">Sdílet jako obrázek</string>
     <string name="bench_result_card_share_button">Sdílet kartu výsledků</string>
 
+    <!-- U21 - Widget posledního výsledku benchmarku -->
+    <string name="last_bench_widget_label">Poslední benchmark</string>
+    <string name="last_bench_widget_description">Zobrazuje naposledy spuštěný výsledek benchmarku (CPU/Úložiště/RAM/GPU)</string>
+    <string name="last_bench_widget_empty">Zatím nebyl spuštěn žádný benchmark</string>
+    <string name="last_bench_widget_value_mhz">%1$d MHz</string>
+    <string name="last_bench_widget_value_read_write_mb">%1$s/%2$s MB/s</string>
+    <string name="last_bench_widget_value_fps">%1$s FPS</string>
+
     <string name="vip_diagnostic_pref_title">Historie diagnostiky VIP</string>
     <string name="vip_diagnostic_pref_summary">Sledujte opotřebení baterie/RAM/úložiště v průběhu měsíců (VIP)</string>
     <string name="vip_diagnostic_title">Historie diagnostiky</string>

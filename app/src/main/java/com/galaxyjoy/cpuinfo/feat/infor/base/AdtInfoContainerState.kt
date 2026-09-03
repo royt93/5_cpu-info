@@ -92,15 +92,15 @@ class AdtInfoContainerState(fragment: Fragment) : FragmentStateAdapter(fragment)
         private const val DRM_POS = 8
         private const val MEDIA_POS = 9
         private const val CAMERA_POS = 10
-        private const val THROTTLE_POS = 11
+        internal const val THROTTLE_POS = 11
         private const val NETWORK_POS = 12
         private const val AUDIO_POS = 13
         private const val BATTERY_POS = 14
         private const val DASHBOARD_POS = 15
-        private const val STORAGE_BENCH_POS = 16
-        private const val RAM_BENCH_POS = 17
-        private const val GPU_BENCH_POS = 18
-        private const val ALL_BENCH_POS = 19
+        internal const val STORAGE_BENCH_POS = 16
+        internal const val RAM_BENCH_POS = 17
+        internal const val GPU_BENCH_POS = 18
+        internal const val ALL_BENCH_POS = 19
 
         private const val INFO_PAGE_AMOUNT = 20
     }

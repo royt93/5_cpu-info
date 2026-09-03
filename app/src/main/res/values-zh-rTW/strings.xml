@@ -536,6 +536,14 @@
     <string name="bench_result_card_share_image_button">分享圖片</string>
     <string name="bench_result_card_share_button">分享結果卡片</string>
 
+    <!-- U21 - 最新跑分結果小工具 -->
+    <string name="last_bench_widget_label">最新跑分</string>
+    <string name="last_bench_widget_description">顯示最近一次執行的跑分結果 (CPU/儲存空間/RAM/GPU)</string>
+    <string name="last_bench_widget_empty">尚未執行任何跑分</string>
+    <string name="last_bench_widget_value_mhz">%1$d MHz</string>
+    <string name="last_bench_widget_value_read_write_mb">%1$s/%2$s MB/s</string>
+    <string name="last_bench_widget_value_fps">%1$s FPS</string>
+
     <string name="vip_diagnostic_pref_title">VIP 診斷歷史</string>
     <string name="vip_diagnostic_pref_summary">追蹤數月內電池/RAM/儲存空間的耗損 (VIP)</string>
     <string name="vip_diagnostic_title">診斷歷史</string>

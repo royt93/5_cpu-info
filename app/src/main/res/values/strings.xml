@@ -564,6 +564,14 @@
     <string name="bench_result_card_share_image_button">Share as image</string>
     <string name="bench_result_card_share_button">Share benchmark card</string>
 
+    <!-- U21 - Last benchmark result widget -->
+    <string name="last_bench_widget_label">Latest benchmark</string>
+    <string name="last_bench_widget_description">Shows the most recently run benchmark result (CPU/Storage/RAM/GPU)</string>
+    <string name="last_bench_widget_empty">No benchmark run yet</string>
+    <string name="last_bench_widget_value_mhz">%1$d MHz</string>
+    <string name="last_bench_widget_value_read_write_mb">%1$s/%2$s MB/s</string>
+    <string name="last_bench_widget_value_fps">%1$s FPS</string>
+
     <string name="vip_diagnostic_pref_title">VIP Diagnostic History</string>
     <string name="vip_diagnostic_pref_summary">Track battery/RAM/storage drift over months (VIP)</string>
     <string name="vip_diagnostic_title">Diagnostic History</string>
