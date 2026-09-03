@@ -393,6 +393,16 @@
     <string name="fleet_compare_storage_label">Bộ nhớ</string>
     <string name="fleet_compare_gb_value">%1$d GB</string>
     <string name="fleet_compare_min_gb_value">tối thiểu %1$d GB</string>
+
+    <!-- U22 - So sánh 2 máy trực tiếp -->
+    <string name="p2p_compare_title">So sánh trực tiếp với máy khác</string>
+    <string name="p2p_compare_share_button">Chia sẻ mã máy này</string>
+    <string name="p2p_compare_share_subject">CPU Info - Mã so sánh máy</string>
+    <string name="p2p_compare_share_chooser_title">Chia sẻ mã máy</string>
+    <string name="p2p_compare_paste_label">Dán mã máy khác vào đây</string>
+    <string name="p2p_compare_compare_button">So sánh</string>
+    <string name="p2p_compare_parse_error">Mã không hợp lệ, kiểm tra lại</string>
+    <string name="p2p_compare_back_button">Quay lại</string>
     <string name="fleet_compare_no_match">Chưa có dữ liệu tham chiếu cho \"%1$s\".</string>
     <string name="fleet_compare_supported_models">Hỗ trợ: Galaxy S22/S23/S24 Ultra, Pixel 6/7/8/9 Pro.</string>
     <string name="fleet_compare_disclaimer">So sánh máy của bạn với bảng tham chiếu offline nhỏ cho các dòng máy đã biết — không có dữ liệu nào của máy bạn được gửi đi. RAM/bộ nhớ thực tế thường thấp hơn thông số quảng cáo một chút.</string>

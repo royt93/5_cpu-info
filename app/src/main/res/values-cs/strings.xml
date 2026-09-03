@@ -373,6 +373,16 @@
     <string name="fleet_compare_storage_label">Úložiště</string>
     <string name="fleet_compare_gb_value">%1$d GB</string>
     <string name="fleet_compare_min_gb_value">min. %1$d GB</string>
+
+    <!-- U22 - Přímé porovnání zařízení (P2P) -->
+    <string name="p2p_compare_title">Porovnat přímo s jiným zařízením</string>
+    <string name="p2p_compare_share_button">Sdílet kód tohoto zařízení</string>
+    <string name="p2p_compare_share_subject">CPU Info - Kód pro porovnání zařízení</string>
+    <string name="p2p_compare_share_chooser_title">Sdílet kód zařízení</string>
+    <string name="p2p_compare_paste_label">Sem vložte kód druhého zařízení</string>
+    <string name="p2p_compare_compare_button">Porovnat</string>
+    <string name="p2p_compare_parse_error">Neplatný kód, zkontrolujte a zkuste to znovu</string>
+    <string name="p2p_compare_back_button">Zpět</string>
     <string name="fleet_compare_no_match">Zatím nejsou k dispozici referenční data pro „%1$s“.</string>
     <string name="fleet_compare_supported_models">Podporováno: Galaxy S22/S23/S24 Ultra, Pixel 6/7/8/9 Pro.</string>
     <string name="fleet_compare_disclaimer">Porovnává vaše zařízení s malou offline referenční tabulkou známých modelů — žádná data o vašem zařízení se nikam neodesílají. Hlášená RAM/úložiště je obvykle o něco nižší než uváděná hodnota.</string>

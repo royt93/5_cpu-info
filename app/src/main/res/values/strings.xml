@@ -425,6 +425,16 @@
     <string name="fleet_compare_storage_label">Storage</string>
     <string name="fleet_compare_gb_value">%1$d GB</string>
     <string name="fleet_compare_min_gb_value">min %1$d GB</string>
+
+    <!-- U22 - P2P Device Compare -->
+    <string name="p2p_compare_title">Compare directly with another device</string>
+    <string name="p2p_compare_share_button">Share this device\'s code</string>
+    <string name="p2p_compare_share_subject">CPU Info - Device compare code</string>
+    <string name="p2p_compare_share_chooser_title">Share device code</string>
+    <string name="p2p_compare_paste_label">Paste the other device\'s code here</string>
+    <string name="p2p_compare_compare_button">Compare</string>
+    <string name="p2p_compare_parse_error">Invalid code, please check and try again</string>
+    <string name="p2p_compare_back_button">Back</string>
     <string name="fleet_compare_no_match">No reference data for \"%1$s\" yet.</string>
     <string name="fleet_compare_supported_models">Supported: Galaxy S22/S23/S24 Ultra, Pixel 6/7/8/9 Pro.</string>
     <string name="fleet_compare_disclaimer">Compares your device against a small offline reference table of known models — nothing about your device is ever sent anywhere. Reported RAM/storage is normally somewhat below the marketed figure.</string>

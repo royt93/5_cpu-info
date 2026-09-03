@@ -376,6 +376,16 @@
     <string name="fleet_compare_storage_label">Speicher</string>
     <string name="fleet_compare_gb_value">%1$d GB</string>
     <string name="fleet_compare_min_gb_value">min. %1$d GB</string>
+
+    <!-- U22 - Direkter Gerätevergleich (P2P) -->
+    <string name="p2p_compare_title">Direkt mit einem anderen Gerät vergleichen</string>
+    <string name="p2p_compare_share_button">Code dieses Geräts teilen</string>
+    <string name="p2p_compare_share_subject">CPU Info - Gerätevergleichscode</string>
+    <string name="p2p_compare_share_chooser_title">Gerätecode teilen</string>
+    <string name="p2p_compare_paste_label">Code des anderen Geräts hier einfügen</string>
+    <string name="p2p_compare_compare_button">Vergleichen</string>
+    <string name="p2p_compare_parse_error">Ungültiger Code, bitte überprüfen</string>
+    <string name="p2p_compare_back_button">Zurück</string>
     <string name="fleet_compare_no_match">Noch keine Referenzdaten für „%1$s“.</string>
     <string name="fleet_compare_supported_models">Unterstützt: Galaxy S22/S23/S24 Ultra, Pixel 6/7/8/9 Pro.</string>
     <string name="fleet_compare_disclaimer">Vergleicht dein Gerät mit einer kleinen, offline gespeicherten Referenztabelle bekannter Modelle — es werden keine Daten über dein Gerät irgendwohin gesendet. Gemeldeter RAM/Speicher liegt normalerweise etwas unter dem beworbenen Wert.</string>

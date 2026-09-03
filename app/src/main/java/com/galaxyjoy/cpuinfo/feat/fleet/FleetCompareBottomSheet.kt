@@ -30,6 +30,7 @@ import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,7 +42,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import com.galaxyjoy.cpuinfo.R
+import com.galaxyjoy.cpuinfo.feat.p2pcompare.P2PCompareExporter
+import com.galaxyjoy.cpuinfo.feat.p2pcompare.P2PCompareScreen
+import com.galaxyjoy.cpuinfo.feat.p2pcompare.VMP2PCompare
 import com.galaxyjoy.cpuinfo.feat.setting.BaseRoundedBottomSheet
 import com.galaxyjoy.cpuinfo.ui.theme.CpuInfoTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -57,6 +64,11 @@ class FleetCompareBottomSheet : BaseRoundedBottomSheet() {
     @Inject
     lateinit var fleetCompareProvider: FleetCompareProvider
 
+    @Inject
+    lateinit var p2pCompareExporter: P2PCompareExporter
+
+    private val vmP2PCompare: VMP2PCompare by viewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -68,7 +80,18 @@ class FleetCompareBottomSheet : BaseRoundedBottomSheet() {
 
         setContent {
             CpuInfoTheme {
-                FleetCompareContent(result = result)
+                FleetCompareContent(result = result) {
+                    val p2pState by vmP2PCompare.uiState.collectAsStateWithLifecycle()
+                    P2PCompareScreen(
+                        uiState = p2pState,
+                        onPastedCodeChanged = vmP2PCompare::onPastedCodeChanged,
+                        onCompareClicked = vmP2PCompare::onCompareClicked,
+                        onShareClicked = {
+                            p2pCompareExporter.exportDeviceCode(requireContext(), lifecycleScope, vmP2PCompare.localPayload)
+                        },
+                        onBackClicked = vmP2PCompare::onBackClicked,
+                    )
+                }
             }
         }
     }
@@ -79,7 +102,7 @@ class FleetCompareBottomSheet : BaseRoundedBottomSheet() {
 }
 
 @Composable
-private fun FleetCompareContent(result: FleetCompareEvaluator.Result) {
+private fun FleetCompareContent(result: FleetCompareEvaluator.Result, p2pSection: @Composable () -> Unit) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
@@ -136,6 +159,8 @@ private fun FleetCompareContent(result: FleetCompareEvaluator.Result) {
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center,
             )
+
+            p2pSection()
         }
     }
 }

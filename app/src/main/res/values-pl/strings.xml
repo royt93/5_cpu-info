@@ -377,6 +377,16 @@
     <string name="fleet_compare_storage_label">Pamięć</string>
     <string name="fleet_compare_gb_value">%1$d GB</string>
     <string name="fleet_compare_min_gb_value">min. %1$d GB</string>
+
+    <!-- U22 - Bezpośrednie porównanie urządzeń (P2P) -->
+    <string name="p2p_compare_title">Porównaj bezpośrednio z innym urządzeniem</string>
+    <string name="p2p_compare_share_button">Udostępnij kod tego urządzenia</string>
+    <string name="p2p_compare_share_subject">CPU Info - Kod porównania urządzeń</string>
+    <string name="p2p_compare_share_chooser_title">Udostępnij kod urządzenia</string>
+    <string name="p2p_compare_paste_label">Wklej tutaj kod innego urządzenia</string>
+    <string name="p2p_compare_compare_button">Porównaj</string>
+    <string name="p2p_compare_parse_error">Nieprawidłowy kod, sprawdź i spróbuj ponownie</string>
+    <string name="p2p_compare_back_button">Wstecz</string>
     <string name="fleet_compare_no_match">Brak jeszcze danych referencyjnych dla „%1$s”.</string>
     <string name="fleet_compare_supported_models">Obsługiwane: Galaxy S22/S23/S24 Ultra, Pixel 6/7/8/9 Pro.</string>
     <string name="fleet_compare_disclaimer">Porównuje Twoje urządzenie z małą, offline\'ową tabelą referencyjną znanych modeli — żadne dane o Twoim urządzeniu nigdzie nie są wysyłane. Zgłaszana pamięć RAM/pamięć masowa jest zwykle nieco niższa niż podana wartość reklamowa.</string>
