@@ -367,6 +367,12 @@
     <string name="fleet_compare_pref_summary">Sprawdź RAM/pamięć względem znanych specyfikacji tego modelu</string>
     <string name="health_alert_pref_title">Alerty stanu urządzenia</string>
     <string name="health_alert_pref_summary">Powiadom, gdy wynik stanu urządzenia gwałtownie spadnie</string>
+
+    <!-- U25 - Eksport historii benchmarków do CSV -->
+    <string name="export_bench_history_pref_title">Eksportuj historię benchmarków</string>
+    <string name="export_bench_history_pref_summary">Udostępnij wszystkie zapisane wyniki CPU/pamięci/RAM/GPU jako CSV</string>
+    <string name="export_bench_history_share_subject">CPU Info - Historia benchmarków</string>
+    <string name="export_bench_history_share_chooser_title">Udostępnij historię benchmarków</string>
     <string name="health_alert_channel_name">Alerty stanu urządzenia</string>
     <string name="health_alert_notification_title">Wynik stanu urządzenia spadł</string>
     <string name="health_alert_notification_body">Aktualny wynik: %1$d. Dotknij, aby zobaczyć szczegóły.</string>

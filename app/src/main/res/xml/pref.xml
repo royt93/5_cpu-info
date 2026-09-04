@@ -52,6 +52,11 @@
             app:summary="@string/health_alert_pref_summary"
             app:title="@string/health_alert_pref_title" />
 
+        <Preference
+            app:key="key_export_bench_history"
+            app:summary="@string/export_bench_history_pref_summary"
+            app:title="@string/export_bench_history_pref_title" />
+
     </PreferenceCategory>
 
     <PreferenceCategory

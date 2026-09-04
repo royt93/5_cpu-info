@@ -415,6 +415,12 @@
     <string name="fleet_compare_pref_summary">Check RAM/storage against known specs for this model</string>
     <string name="health_alert_pref_title">Health alerts</string>
     <string name="health_alert_pref_summary">Notify me if the device health score drops sharply</string>
+
+    <!-- U25 - Export benchmark history as CSV -->
+    <string name="export_bench_history_pref_title">Export benchmark history</string>
+    <string name="export_bench_history_pref_summary">Share all your saved CPU/storage/RAM/GPU benchmark runs as CSV</string>
+    <string name="export_bench_history_share_subject">CPU Info - Benchmark history</string>
+    <string name="export_bench_history_share_chooser_title">Share benchmark history</string>
     <string name="health_alert_channel_name">Device health alerts</string>
     <string name="health_alert_notification_title">Device health score dropped</string>
     <string name="health_alert_notification_body">Current score: %1$d. Tap to see details.</string>

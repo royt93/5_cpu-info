@@ -366,6 +366,12 @@
     <string name="fleet_compare_pref_summary">RAM/Speicher mit bekannten Spezifikationen dieses Modells vergleichen</string>
     <string name="health_alert_pref_title">Zustandswarnungen</string>
     <string name="health_alert_pref_summary">Benachrichtigen, wenn der Gerätezustand stark sinkt</string>
+
+    <!-- U25 - Benchmark-Verlauf als CSV exportieren -->
+    <string name="export_bench_history_pref_title">Benchmark-Verlauf exportieren</string>
+    <string name="export_bench_history_pref_summary">Alle gespeicherten CPU-/Speicher-/RAM-/GPU-Benchmarks als CSV teilen</string>
+    <string name="export_bench_history_share_subject">CPU Info - Benchmark-Verlauf</string>
+    <string name="export_bench_history_share_chooser_title">Benchmark-Verlauf teilen</string>
     <string name="health_alert_channel_name">Gerätezustandswarnungen</string>
     <string name="health_alert_notification_title">Gerätezustand gesunken</string>
     <string name="health_alert_notification_body">Aktueller Wert: %1$d. Zum Anzeigen tippen.</string>

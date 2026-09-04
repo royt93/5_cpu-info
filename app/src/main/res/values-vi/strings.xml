@@ -383,6 +383,12 @@
     <string name="fleet_compare_pref_summary">Kiểm tra RAM/bộ nhớ so với thông số gốc của dòng máy này</string>
     <string name="health_alert_pref_title">Cảnh báo sức khoẻ máy</string>
     <string name="health_alert_pref_summary">Báo khi điểm sức khoẻ máy giảm mạnh</string>
+
+    <!-- U25 - Xuất lịch sử benchmark ra CSV -->
+    <string name="export_bench_history_pref_title">Xuất lịch sử benchmark</string>
+    <string name="export_bench_history_pref_summary">Chia sẻ toàn bộ kết quả benchmark CPU/lưu trữ/RAM/GPU đã lưu dạng CSV</string>
+    <string name="export_bench_history_share_subject">CPU Info - Lịch sử benchmark</string>
+    <string name="export_bench_history_share_chooser_title">Chia sẻ lịch sử benchmark</string>
     <string name="health_alert_channel_name">Cảnh báo sức khoẻ máy</string>
     <string name="health_alert_notification_title">Điểm sức khoẻ máy giảm</string>
     <string name="health_alert_notification_body">Điểm hiện tại: %1$d. Chạm để xem chi tiết.</string>

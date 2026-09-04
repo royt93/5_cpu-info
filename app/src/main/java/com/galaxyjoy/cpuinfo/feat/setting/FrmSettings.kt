@@ -11,12 +11,18 @@ import androidx.fragment.app.FragmentManager
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
+import androidx.lifecycle.lifecycleScope
 import com.galaxyjoy.cpuinfo.BuildConfig
 import com.galaxyjoy.cpuinfo.R
 import com.galaxyjoy.cpuinfo.ext.openBrowserPolicy
+import com.galaxyjoy.cpuinfo.feat.benchhistory.BenchHistoryExporter
 import com.galaxyjoy.cpuinfo.feat.fleet.FleetCompareBottomSheet
+import com.galaxyjoy.cpuinfo.feat.gpubench.GpuBenchResultPrefs
 import com.galaxyjoy.cpuinfo.feat.healthalert.HealthAlertScheduler
+import com.galaxyjoy.cpuinfo.feat.rambench.RamBenchResultPrefs
 import com.galaxyjoy.cpuinfo.feat.snapshot.HardwareSnapshotBottomSheet
+import com.galaxyjoy.cpuinfo.feat.storagebench.StorageBenchResultPrefs
+import com.galaxyjoy.cpuinfo.feat.throttle.ThrottleResultPrefs
 import com.galaxyjoy.cpuinfo.feat.usbbt.UsbBluetoothBottomSheet
 import com.galaxyjoy.cpuinfo.feat.vip.ActVip
 import com.galaxyjoy.cpuinfo.feat.vipreport.VipDiagnosticReportBottomSheet
@@ -94,6 +100,7 @@ class FrmSettings : PreferenceFragmentCompat(),
         wireFleetComparePref()
         wireVipDiagnosticHistoryPref()
         wireHealthAlertPref()
+        wireExportBenchHistoryPref()
 
         listenForBottomSheetResults()
     }
@@ -207,6 +214,25 @@ class FrmSettings : PreferenceFragmentCompat(),
                 HealthAlertScheduler.schedule(requireContext())
                 true
             }
+        }
+    }
+
+    /** U25 — direct share-sheet action, no confirmation dialog, matching the app's other
+     * one-tap exporters (`DeviceCardExporter`/`SystemInfoExporter`). `*ResultPrefs` constructors
+     * are plain `(Context)` despite being `@Inject`-annotated for Hilt elsewhere (same fact U21's
+     * `LastBenchWidgetProvider` already relies on) — `FrmSettings` isn't a Hilt entry point, so
+     * they're built directly here instead of injected. */
+    private fun wireExportBenchHistoryPref() {
+        findPreference<Preference>("key_export_bench_history")?.setOnPreferenceClickListener {
+            val context = requireContext().applicationContext
+            val exporter = BenchHistoryExporter(
+                throttlePrefs = ThrottleResultPrefs(context),
+                storagePrefs = StorageBenchResultPrefs(context),
+                ramPrefs = RamBenchResultPrefs(context),
+                gpuPrefs = GpuBenchResultPrefs(context),
+            )
+            exporter.exportHistory(requireContext(), lifecycleScope)
+            true
         }
     }
 

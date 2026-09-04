@@ -363,6 +363,12 @@
     <string name="fleet_compare_pref_summary">Zkontrolujte RAM/úložiště podle známých specifikací tohoto modelu</string>
     <string name="health_alert_pref_title">Upozornění na stav zařízení</string>
     <string name="health_alert_pref_summary">Upozornit, když skóre stavu zařízení prudce klesne</string>
+
+    <!-- U25 - Export historie benchmarků do CSV -->
+    <string name="export_bench_history_pref_title">Exportovat historii benchmarků</string>
+    <string name="export_bench_history_pref_summary">Sdílet všechny uložené výsledky CPU/úložiště/RAM/GPU jako CSV</string>
+    <string name="export_bench_history_share_subject">CPU Info - Historie benchmarků</string>
+    <string name="export_bench_history_share_chooser_title">Sdílet historii benchmarků</string>
     <string name="health_alert_channel_name">Upozornění na stav zařízení</string>
     <string name="health_alert_notification_title">Skóre stavu zařízení kleslo</string>
     <string name="health_alert_notification_body">Aktuální skóre: %1$d. Klepnutím zobrazíte podrobnosti.</string>
