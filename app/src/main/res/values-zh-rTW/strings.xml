@@ -572,6 +572,21 @@
     <string name="all_bench_done_button">完成</string>
     <string name="all_bench_share_button">分享</string>
     <string name="all_bench_share_text">完整測試 — CPU：%1$d MHz · 儲存：%2$s/%3$s MB/s · RAM：%4$s/%5$s MB/s · GPU：%6$s FPS</string>
+
+    <string name="cluster_bench">核心叢集效能測試</string>
+    <string name="cluster_bench_disclaimer_title">開始前</string>
+    <string name="cluster_bench_disclaimer_body">此測試會分別對每個核心叢集（例如超大核、效能核、省電核）執行短暫的 CPU 負載，以比較其真實效能。每個叢集約需數秒。</string>
+    <string name="cluster_bench_start_button">開始測試</string>
+    <string name="cluster_bench_running_label">正在測試叢集 %1$d/%2$d：%3$s</string>
+    <string name="cluster_bench_stop_button">停止</string>
+    <string name="cluster_bench_aborted_overheat">已略過測試 — 裝置目前過熱，請待裝置降溫後再試一次。</string>
+    <string name="cluster_bench_aborted_interrupted">測試在完成前已停止。</string>
+    <string name="cluster_bench_row_label">%1$s（%2$d 核）</string>
+    <string name="cluster_bench_ops_value">%1$s 次運算/秒</string>
+    <string name="cluster_bench_done_button">完成</string>
+    <string name="cluster_bench_share_button">分享</string>
+    <string name="cluster_bench_share_segment">%1$s（%2$d 核）：%3$s 次運算/秒</string>
+    <string name="cluster_bench_share_text">核心叢集效能測試 — %1$s</string>
     <string name="bench_result_card_title">效能測試結果</string>
     <string name="bench_result_card_share_image_button">分享圖片</string>
     <string name="bench_result_card_share_button">分享結果卡片</string>

@@ -7,6 +7,7 @@
 #include <csetjmp>
 #include <csignal>
 #include <mutex>
+#include <sched.h>
 
 #define LOGI(...) \
   ((void)__android_log_print(ANDROID_LOG_INFO, "cpuinfo-libs::", __VA_ARGS__))
@@ -591,4 +592,30 @@ Java_com_galaxyjoy_cpuinfo_data_provider_DataNativeProviderCpu_hasArmFp16Arith(J
 #else
     return false;
 #endif
+}
+
+// --- U31 "Cluster Benchmark" additions below ---
+// Pins the CALLING thread to a contiguous core range via sched_setaffinity — raw kernel
+// scheduling call, no libcpuinfo involvement. Must be invoked from the worker thread itself:
+// affinity is a per-thread OS attribute, not settable on another thread's behalf here. A
+// foreground app normally runs in the "top-app" cpuset cgroup (all cores allowed), so
+// restricting further to one cluster's cores from within that set is expected to succeed; if the
+// kernel/cgroup policy denies it (EPERM/EINVAL), this returns false so the Kotlin side can treat
+// the run as "affinity unavailable" instead of crashing.
+
+extern "C"
+JNIEXPORT jboolean JNICALL
+Java_com_galaxyjoy_cpuinfo_data_provider_DataNativeProviderCpu_setThreadAffinity(JNIEnv *env,
+                                                                                    jobject thiz,
+                                                                                    jint coreIndexStart,
+                                                                                    jint coreIndexCount) {
+    if (coreIndexStart < 0 || coreIndexCount <= 0) {
+        return false;
+    }
+    cpu_set_t cpuSet;
+    CPU_ZERO(&cpuSet);
+    for (jint i = 0; i < coreIndexCount; i++) {
+        CPU_SET(coreIndexStart + i, &cpuSet);
+    }
+    return sched_setaffinity(0, sizeof(cpu_set_t), &cpuSet) == 0;
 }

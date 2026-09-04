@@ -573,6 +573,21 @@
     <string name="all_bench_done_button">Fertig</string>
     <string name="all_bench_share_button">Teilen</string>
     <string name="all_bench_share_text">Vollständiger Test — CPU: %1$d MHz · Speicher: %2$s/%3$s MB/s · RAM: %4$s/%5$s MB/s · GPU: %6$s FPS</string>
+
+    <string name="cluster_bench">Cluster-Benchmark</string>
+    <string name="cluster_bench_disclaimer_title">Bevor du beginnst</string>
+    <string name="cluster_bench_disclaimer_body">Dieser Test führt eine kurze CPU-Last auf jedem Kerncluster einzeln aus (z. B. Prime vs. Leistung vs. Effizienz), um deren tatsächlichen Durchsatz zu vergleichen. Dauert einige Sekunden pro Cluster.</string>
+    <string name="cluster_bench_start_button">Test starten</string>
+    <string name="cluster_bench_running_label">Teste Cluster %1$d/%2$d: %3$s</string>
+    <string name="cluster_bench_stop_button">Stopp</string>
+    <string name="cluster_bench_aborted_overheat">Test übersprungen — Gerät ist gerade zu warm. Versuche es nach dem Abkühlen erneut.</string>
+    <string name="cluster_bench_aborted_interrupted">Test wurde vor dem Abschluss gestoppt.</string>
+    <string name="cluster_bench_row_label">%1$s (%2$d Kerne)</string>
+    <string name="cluster_bench_ops_value">%1$s Ops/s</string>
+    <string name="cluster_bench_done_button">Fertig</string>
+    <string name="cluster_bench_share_button">Teilen</string>
+    <string name="cluster_bench_share_segment">%1$s (%2$d Kerne): %3$s Ops/s</string>
+    <string name="cluster_bench_share_text">Cluster-Benchmark — %1$s</string>
     <string name="bench_result_card_title">Benchmark-Ergebnisse</string>
     <string name="bench_result_card_share_image_button">Als Bild teilen</string>
     <string name="bench_result_card_share_button">Ergebniskarte teilen</string>

@@ -570,6 +570,21 @@
     <string name="all_bench_done_button">Gotowe</string>
     <string name="all_bench_share_button">Udostępnij</string>
     <string name="all_bench_share_text">Pełny test — CPU: %1$d MHz · Pamięć: %2$s/%3$s MB/s · RAM: %4$s/%5$s MB/s · GPU: %6$s FPS</string>
+
+    <string name="cluster_bench">Test klastrów</string>
+    <string name="cluster_bench_disclaimer_title">Zanim zaczniesz</string>
+    <string name="cluster_bench_disclaimer_body">Ten test uruchamia krótkie obciążenie CPU osobno na każdym klastrze rdzeni (np. Prime, Wydajność, Oszczędność), aby porównać ich rzeczywistą wydajność. Zajmuje kilka sekund na klaster.</string>
+    <string name="cluster_bench_start_button">Rozpocznij test</string>
+    <string name="cluster_bench_running_label">Testowanie klastra %1$d/%2$d: %3$s</string>
+    <string name="cluster_bench_stop_button">Zatrzymaj</string>
+    <string name="cluster_bench_aborted_overheat">Test pominięty — urządzenie jest teraz zbyt ciepłe. Spróbuj ponownie po ostygnięciu.</string>
+    <string name="cluster_bench_aborted_interrupted">Test zatrzymany przed zakończeniem.</string>
+    <string name="cluster_bench_row_label">%1$s (%2$d rdzeni)</string>
+    <string name="cluster_bench_ops_value">%1$s op/s</string>
+    <string name="cluster_bench_done_button">Gotowe</string>
+    <string name="cluster_bench_share_button">Udostępnij</string>
+    <string name="cluster_bench_share_segment">%1$s (%2$d rdzeni): %3$s op/s</string>
+    <string name="cluster_bench_share_text">Test klastrów — %1$s</string>
     <string name="bench_result_card_title">Wyniki testu wydajności</string>
     <string name="bench_result_card_share_image_button">Udostępnij jako obraz</string>
     <string name="bench_result_card_share_button">Udostępnij kartę wyników</string>

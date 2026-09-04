@@ -93,4 +93,11 @@ class DataNativeProviderCpu @Inject constructor() {
     external fun hasArmSve2(): Boolean
 
     external fun hasArmFp16Arith(): Boolean
+
+    // --- U31 "Cluster Benchmark" additions below ---
+
+    /** Pins the calling thread to logical cores `[coreIndexStart, coreIndexStart+coreIndexCount)`
+     * via `sched_setaffinity`. Must be called from the worker thread itself. Returns `false`
+     * (rather than throwing) if the kernel/cgroup policy denies it. */
+    external fun setThreadAffinity(coreIndexStart: Int, coreIndexCount: Int): Boolean
 }
