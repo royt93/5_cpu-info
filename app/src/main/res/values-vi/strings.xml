@@ -558,6 +558,9 @@
     <string name="last_bench_widget_value_read_write_mb">%1$s/%2$s MB/s</string>
     <string name="last_bench_widget_value_fps">%1$s FPS</string>
 
+    <!-- U24 - Percentile benchmark so với lịch sử chính máy -->
+    <string name="bench_percentile_message">Tốt hơn %1$d%% số lần chạy trên máy này</string>
+
     <string name="vip_diagnostic_pref_title">Lịch sử chẩn đoán VIP</string>
     <string name="vip_diagnostic_pref_summary">Theo dõi hao mòn pin/RAM/bộ nhớ qua nhiều tháng (VIP)</string>
     <string name="vip_diagnostic_title">Lịch sử chẩn đoán</string>

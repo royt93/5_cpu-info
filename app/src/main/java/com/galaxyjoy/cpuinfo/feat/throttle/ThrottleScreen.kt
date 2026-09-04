@@ -34,6 +34,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.galaxyjoy.cpuinfo.R
 import com.galaxyjoy.cpuinfo.ui.component.BenchTrendChart
+import com.galaxyjoy.cpuinfo.util.BenchPercentileCalculator
 import java.text.DateFormat
 import java.text.NumberFormat
 import java.util.Date
@@ -311,6 +312,15 @@ private fun DoneContent(
 
     Spacer(Modifier.height(16.dp))
     BenchTrendChart(values = state.history.map { it.sustainedFreqMhz.toDouble() })
+
+    BenchPercentileCalculator.percentileOfLast(state.history.map { it.sustainedFreqMhz.toDouble() })?.let { percentile ->
+        Spacer(Modifier.height(8.dp))
+        Text(
+            text = stringResource(R.string.bench_percentile_message, percentile),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+    }
 
     Spacer(Modifier.height(24.dp))
     Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {

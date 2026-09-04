@@ -552,6 +552,9 @@
     <string name="last_bench_widget_value_read_write_mb">%1$s/%2$s MB/s</string>
     <string name="last_bench_widget_value_fps">%1$s FPS</string>
 
+    <!-- U24 - Percentyl wyniku benchmarku względem historii tego urządzenia -->
+    <string name="bench_percentile_message">Lepszy niż %1$d%% Twoich testów na tym urządzeniu</string>
+
     <string name="vip_diagnostic_pref_title">Historia diagnostyczna VIP</string>
     <string name="vip_diagnostic_pref_summary">Śledź zużycie baterii/RAM/pamięci przez miesiące (VIP)</string>
     <string name="vip_diagnostic_title">Historia diagnostyczna</string>

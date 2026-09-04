@@ -552,6 +552,9 @@
     <string name="last_bench_widget_value_read_write_mb">%1$s/%2$s MB/s</string>
     <string name="last_bench_widget_value_fps">%1$s FPS</string>
 
+    <!-- U24 - Percentil výsledku benchmarku vůči historii tohoto zařízení -->
+    <string name="bench_percentile_message">Lepší než %1$d %% vašich testů na tomto zařízení</string>
+
     <string name="vip_diagnostic_pref_title">Historie diagnostiky VIP</string>
     <string name="vip_diagnostic_pref_summary">Sledujte opotřebení baterie/RAM/úložiště v průběhu měsíců (VIP)</string>
     <string name="vip_diagnostic_title">Historie diagnostiky</string>

@@ -554,6 +554,9 @@
     <string name="last_bench_widget_value_read_write_mb">%1$s/%2$s MB/s</string>
     <string name="last_bench_widget_value_fps">%1$s FPS</string>
 
+    <!-- U24 - 跑分成績與本機歷史紀錄的百分位比較 -->
+    <string name="bench_percentile_message">優於本機 %1$d%% 的測試次數</string>
+
     <string name="vip_diagnostic_pref_title">VIP 診斷歷史</string>
     <string name="vip_diagnostic_pref_summary">追蹤數月內電池/RAM/儲存空間的耗損 (VIP)</string>
     <string name="vip_diagnostic_title">診斷歷史</string>

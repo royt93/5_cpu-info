@@ -72,6 +72,41 @@ class RamBenchScreenTest {
         composeRule.onNodeWithText(appContext.getString(R.string.ram_bench_no_previous)).assertExists()
     }
 
+    /** U24 — percentile vs this device's own history, shown right below the trend chart. */
+    @Test
+    fun doneState_withAtLeastTwoHistoryEntries_showsPercentileBetterThanAllPreviousRuns() {
+        val history = listOf(
+            RamBenchResultPrefs.SavedResult(1L, writeMbPerSec = 1000.0, readMbPerSec = 2000.0),
+            RamBenchResultPrefs.SavedResult(2L, writeMbPerSec = 1234.5, readMbPerSec = 2345.6),
+        )
+        val state = VMRamBench.UiState.Done(
+            result = RamBenchmark.Result(writeMbPerSec = 1234.5, readMbPerSec = 2345.6),
+            previous = null,
+            history = history,
+        )
+
+        composeRule.setContent {
+            CpuInfoTheme { RamBenchScreen(state, noThermalSnapshot, {}, {}, {}, {}) }
+        }
+
+        composeRule.onNodeWithText(appContext.getString(R.string.bench_percentile_message, 100)).assertExists()
+    }
+
+    @Test
+    fun doneState_withFewerThanTwoHistoryEntries_hidesPercentileMessage() {
+        val state = VMRamBench.UiState.Done(
+            result = RamBenchmark.Result(writeMbPerSec = 1234.5, readMbPerSec = 2345.6),
+            previous = null,
+            history = emptyList(),
+        )
+
+        composeRule.setContent {
+            CpuInfoTheme { RamBenchScreen(state, noThermalSnapshot, {}, {}, {}, {}) }
+        }
+
+        composeRule.onNodeWithText("of your runs on this device", substring = true).assertDoesNotExist()
+    }
+
     @Test
     fun abortedState_overheat_showsOverheatMessageNotLowMemoryMessage() {
         val state = VMRamBench.UiState.Aborted(RamBenchmark.AbortReason.OVERHEAT)

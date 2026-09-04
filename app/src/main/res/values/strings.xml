@@ -582,6 +582,9 @@
     <string name="last_bench_widget_value_read_write_mb">%1$s/%2$s MB/s</string>
     <string name="last_bench_widget_value_fps">%1$s FPS</string>
 
+    <!-- U24 - Benchmark percentile vs this device's own history -->
+    <string name="bench_percentile_message">Better than %1$d%% of your runs on this device</string>
+
     <string name="vip_diagnostic_pref_title">VIP Diagnostic History</string>
     <string name="vip_diagnostic_pref_summary">Track battery/RAM/storage drift over months (VIP)</string>
     <string name="vip_diagnostic_title">Diagnostic History</string>

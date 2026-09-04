@@ -99,4 +99,31 @@ class ThrottleScreenTest {
         val formattedOps = NumberFormat.getIntegerInstance(Locale.getDefault()).format(5_000_000L)
         composeRule.onNodeWithText(appContext.getString(R.string.throttle_benchmark_score_value, formattedOps)).assertExists()
     }
+
+    /** U24 — percentile vs this device's own history, shown right below the trend chart. */
+    @Test
+    fun withAtLeastTwoHistoryEntries_showsPercentileBetterThanAllPreviousRuns() {
+        val history = listOf(
+            ThrottleResultPrefs.SavedResult(1L, 2400, 2200, 12, 34, 4_000_000L),
+            ThrottleResultPrefs.SavedResult(2L, 2800, 2600, 7, 35, 5_000_000L),
+        )
+        val state = VMThrottle.UiState.Done(result(opsPerSecond = 5_000_000L), previous = null, history = history)
+
+        composeRule.setContent {
+            CpuInfoTheme { ThrottleScreen(state, noThermalSnapshot, {}, {}, {}, {}) }
+        }
+
+        composeRule.onNodeWithText(appContext.getString(R.string.bench_percentile_message, 100)).assertExists()
+    }
+
+    @Test
+    fun withFewerThanTwoHistoryEntries_hidesPercentileMessage() {
+        val state = VMThrottle.UiState.Done(result(opsPerSecond = 5_000_000L), previous = null, history = emptyList())
+
+        composeRule.setContent {
+            CpuInfoTheme { ThrottleScreen(state, noThermalSnapshot, {}, {}, {}, {}) }
+        }
+
+        composeRule.onNodeWithText("of your runs on this device", substring = true).assertDoesNotExist()
+    }
 }

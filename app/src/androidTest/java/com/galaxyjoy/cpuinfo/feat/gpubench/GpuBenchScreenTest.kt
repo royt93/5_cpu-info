@@ -105,6 +105,23 @@ class GpuBenchScreenTest {
         }
 
         composeRule.onNodeWithText("42.5 FPS").assertExists()
+        // U24 — percentile vs this device's own history: current run (42.5) beats both entries.
+        composeRule.onNodeWithText(appContext.getString(R.string.bench_percentile_message, 100)).assertExists()
+    }
+
+    @Test
+    fun doneState_withFewerThanTwoHistoryEntries_hidesPercentileMessage() {
+        val state = VMGpuBench.UiState.Done(
+            result = GpuBenchmark.Result(avgFps = 42.5, frameCount = 250, durationMs = 5000),
+            previous = null,
+            history = emptyList(),
+        )
+
+        composeRule.setContent {
+            CpuInfoTheme { GpuBenchScreen(state, noThermalSnapshot, { noOpRenderer }, {}, {}, {}, {}) }
+        }
+
+        composeRule.onNodeWithText("of your runs on this device", substring = true).assertDoesNotExist()
     }
 
     @Test
