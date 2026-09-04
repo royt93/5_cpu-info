@@ -107,6 +107,46 @@ class RamBenchScreenTest {
         composeRule.onNodeWithText("of your runs on this device", substring = true).assertDoesNotExist()
     }
 
+    /** U29 — OS update impact vs the previous Android build. */
+    @Test
+    fun doneState_withADetectedOsUpdate_showsImpactMessage() {
+        val history = listOf(
+            RamBenchResultPrefs.SavedResult(1L, writeMbPerSec = 1000.0, readMbPerSec = 2000.0, osBuildFingerprint = "build_a"),
+            RamBenchResultPrefs.SavedResult(2L, writeMbPerSec = 1500.0, readMbPerSec = 2345.6, osBuildFingerprint = "build_b"),
+        )
+        val state = VMRamBench.UiState.Done(
+            result = RamBenchmark.Result(writeMbPerSec = 1500.0, readMbPerSec = 2345.6),
+            previous = null,
+            history = history,
+        )
+
+        composeRule.setContent {
+            CpuInfoTheme { RamBenchScreen(state, noThermalSnapshot, {}, {}, {}, {}) }
+        }
+
+        // (1500 - 1000) * 100 / 1000 = +50%
+        composeRule.onNodeWithText(appContext.getString(R.string.bench_os_update_impact_message, "+50")).assertExists()
+    }
+
+    @Test
+    fun doneState_withoutADetectedOsUpdate_hidesImpactMessage() {
+        val history = listOf(
+            RamBenchResultPrefs.SavedResult(1L, writeMbPerSec = 1000.0, readMbPerSec = 2000.0, osBuildFingerprint = "build_a"),
+            RamBenchResultPrefs.SavedResult(2L, writeMbPerSec = 1234.5, readMbPerSec = 2345.6, osBuildFingerprint = "build_a"),
+        )
+        val state = VMRamBench.UiState.Done(
+            result = RamBenchmark.Result(writeMbPerSec = 1234.5, readMbPerSec = 2345.6),
+            previous = null,
+            history = history,
+        )
+
+        composeRule.setContent {
+            CpuInfoTheme { RamBenchScreen(state, noThermalSnapshot, {}, {}, {}, {}) }
+        }
+
+        composeRule.onNodeWithText("vs before the update", substring = true).assertDoesNotExist()
+    }
+
     @Test
     fun abortedState_overheat_showsOverheatMessageNotLowMemoryMessage() {
         val state = VMRamBench.UiState.Aborted(RamBenchmark.AbortReason.OVERHEAT)

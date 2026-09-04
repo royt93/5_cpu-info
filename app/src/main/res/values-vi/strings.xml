@@ -584,6 +584,9 @@
     <!-- U24 - Percentile benchmark so với lịch sử chính máy -->
     <string name="bench_percentile_message">Tốt hơn %1$d%% số lần chạy trên máy này</string>
 
+    <!-- U29 - Tác động sau khi cập nhật Android -->
+    <string name="bench_os_update_impact_message">Vừa cập nhật Android: %1$s%% so với trước khi cập nhật</string>
+
     <string name="vip_diagnostic_pref_title">Lịch sử chẩn đoán VIP</string>
     <string name="vip_diagnostic_pref_summary">Theo dõi hao mòn pin/RAM/bộ nhớ qua nhiều tháng (VIP)</string>
     <string name="vip_diagnostic_title">Lịch sử chẩn đoán</string>

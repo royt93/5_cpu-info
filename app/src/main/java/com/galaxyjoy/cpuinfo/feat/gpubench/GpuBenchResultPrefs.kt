@@ -2,6 +2,7 @@ package com.galaxyjoy.cpuinfo.feat.gpubench
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.os.Build
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -25,6 +26,9 @@ class GpuBenchResultPrefs @Inject constructor(@ApplicationContext context: Conte
     data class SavedResult(
         val timestampMs: Long,
         val avgFps: Double,
+        /** U29 — see [com.galaxyjoy.cpuinfo.feat.throttle.ThrottleResultPrefs.SavedResult]'s
+         * matching field for why this is nullable. */
+        val osBuildFingerprint: String? = null,
     )
 
     fun getLastResult(): SavedResult? = getHistory().lastOrNull()
@@ -40,7 +44,11 @@ class GpuBenchResultPrefs @Inject constructor(@ApplicationContext context: Conte
     }
 
     fun saveResult(result: GpuBenchmark.Result) {
-        val entry = SavedResult(timestampMs = System.currentTimeMillis(), avgFps = result.avgFps)
+        val entry = SavedResult(
+            timestampMs = System.currentTimeMillis(),
+            avgFps = result.avgFps,
+            osBuildFingerprint = Build.FINGERPRINT,
+        )
         val updated = (getHistory() + entry).takeLast(MAX_HISTORY_ENTRIES)
         sp.edit().putString(KEY_HISTORY_JSON, gson.toJson(updated)).apply()
     }

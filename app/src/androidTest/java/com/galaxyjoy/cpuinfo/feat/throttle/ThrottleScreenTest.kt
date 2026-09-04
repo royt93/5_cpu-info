@@ -126,4 +126,36 @@ class ThrottleScreenTest {
 
         composeRule.onNodeWithText("of your runs on this device", substring = true).assertDoesNotExist()
     }
+
+    /** U29 — OS update impact vs the previous Android build, shown below the percentile line. */
+    @Test
+    fun withADetectedOsUpdate_showsImpactMessage() {
+        val history = listOf(
+            ThrottleResultPrefs.SavedResult(1L, 2400, 2200, 12, 34, 4_000_000L, osBuildFingerprint = "build_a"),
+            ThrottleResultPrefs.SavedResult(2L, 2800, 2600, 7, 35, 5_000_000L, osBuildFingerprint = "build_b"),
+        )
+        val state = VMThrottle.UiState.Done(result(opsPerSecond = 5_000_000L), previous = null, history = history)
+
+        composeRule.setContent {
+            CpuInfoTheme { ThrottleScreen(state, noThermalSnapshot, {}, {}, {}, {}) }
+        }
+
+        // (2600 - 2200) * 100 / 2200 = +18%
+        composeRule.onNodeWithText(appContext.getString(R.string.bench_os_update_impact_message, "+18")).assertExists()
+    }
+
+    @Test
+    fun withoutADetectedOsUpdate_hidesImpactMessage() {
+        val history = listOf(
+            ThrottleResultPrefs.SavedResult(1L, 2400, 2200, 12, 34, 4_000_000L, osBuildFingerprint = "build_a"),
+            ThrottleResultPrefs.SavedResult(2L, 2800, 2600, 7, 35, 5_000_000L, osBuildFingerprint = "build_a"),
+        )
+        val state = VMThrottle.UiState.Done(result(opsPerSecond = 5_000_000L), previous = null, history = history)
+
+        composeRule.setContent {
+            CpuInfoTheme { ThrottleScreen(state, noThermalSnapshot, {}, {}, {}, {}) }
+        }
+
+        composeRule.onNodeWithText("vs before the update", substring = true).assertDoesNotExist()
+    }
 }

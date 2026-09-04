@@ -609,6 +609,9 @@
     <!-- U24 - Benchmark percentile vs this device's own history -->
     <string name="bench_percentile_message">Better than %1$d%% of your runs on this device</string>
 
+    <!-- U29 - OS update impact vs the previous Android build -->
+    <string name="bench_os_update_impact_message">Android updated: %1$s%% vs before the update</string>
+
     <string name="vip_diagnostic_pref_title">VIP Diagnostic History</string>
     <string name="vip_diagnostic_pref_summary">Track battery/RAM/storage drift over months (VIP)</string>
     <string name="vip_diagnostic_title">Diagnostic History</string>

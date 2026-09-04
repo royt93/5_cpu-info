@@ -2,6 +2,7 @@ package com.galaxyjoy.cpuinfo.feat.storagebench
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.os.Build
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -25,6 +26,9 @@ class StorageBenchResultPrefs @Inject constructor(@ApplicationContext context: C
         val randomWriteOpsPerSec: Double,
         val randomReadOpsPerSec: Double,
         val hashMbPerSec: Double,
+        /** U29 — see [com.galaxyjoy.cpuinfo.feat.throttle.ThrottleResultPrefs.SavedResult]'s
+         * matching field for why this is nullable. */
+        val osBuildFingerprint: String? = null,
     )
 
     fun getLastResult(): SavedResult? = getHistory().lastOrNull()
@@ -47,6 +51,7 @@ class StorageBenchResultPrefs @Inject constructor(@ApplicationContext context: C
             randomWriteOpsPerSec = result.randomWriteOpsPerSec,
             randomReadOpsPerSec = result.randomReadOpsPerSec,
             hashMbPerSec = result.hashMbPerSec,
+            osBuildFingerprint = Build.FINGERPRINT,
         )
         val updated = (getHistory() + entry).takeLast(MAX_HISTORY_ENTRIES)
         sp.edit().putString(KEY_HISTORY_JSON, gson.toJson(updated)).apply()

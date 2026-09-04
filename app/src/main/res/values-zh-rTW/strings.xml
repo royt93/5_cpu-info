@@ -580,6 +580,9 @@
     <!-- U24 - 跑分成績與本機歷史紀錄的百分位比較 -->
     <string name="bench_percentile_message">優於本機 %1$d%% 的測試次數</string>
 
+    <!-- U29 - Android 更新後的效能影響 -->
+    <string name="bench_os_update_impact_message">Android 已更新：較更新前 %1$s%%</string>
+
     <string name="vip_diagnostic_pref_title">VIP 診斷歷史</string>
     <string name="vip_diagnostic_pref_summary">追蹤數月內電池/RAM/儲存空間的耗損 (VIP)</string>
     <string name="vip_diagnostic_title">診斷歷史</string>

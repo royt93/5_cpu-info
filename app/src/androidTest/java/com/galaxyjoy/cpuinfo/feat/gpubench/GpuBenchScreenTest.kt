@@ -124,6 +124,46 @@ class GpuBenchScreenTest {
         composeRule.onNodeWithText("of your runs on this device", substring = true).assertDoesNotExist()
     }
 
+    /** U29 — OS update impact vs the previous Android build. */
+    @Test
+    fun doneState_withADetectedOsUpdate_showsImpactMessage() {
+        val history = listOf(
+            GpuBenchResultPrefs.SavedResult(timestampMs = 1L, avgFps = 30.0, osBuildFingerprint = "build_a"),
+            GpuBenchResultPrefs.SavedResult(timestampMs = 2L, avgFps = 42.5, osBuildFingerprint = "build_b"),
+        )
+        val state = VMGpuBench.UiState.Done(
+            result = GpuBenchmark.Result(avgFps = 42.5, frameCount = 250, durationMs = 5000),
+            previous = null,
+            history = history,
+        )
+
+        composeRule.setContent {
+            CpuInfoTheme { GpuBenchScreen(state, noThermalSnapshot, { noOpRenderer }, {}, {}, {}, {}) }
+        }
+
+        // (42.5 - 30) * 100 / 30 = +42%
+        composeRule.onNodeWithText(appContext.getString(R.string.bench_os_update_impact_message, "+42")).assertExists()
+    }
+
+    @Test
+    fun doneState_withoutADetectedOsUpdate_hidesImpactMessage() {
+        val history = listOf(
+            GpuBenchResultPrefs.SavedResult(timestampMs = 1L, avgFps = 30.0, osBuildFingerprint = "build_a"),
+            GpuBenchResultPrefs.SavedResult(timestampMs = 2L, avgFps = 42.5, osBuildFingerprint = "build_a"),
+        )
+        val state = VMGpuBench.UiState.Done(
+            result = GpuBenchmark.Result(avgFps = 42.5, frameCount = 250, durationMs = 5000),
+            previous = null,
+            history = history,
+        )
+
+        composeRule.setContent {
+            CpuInfoTheme { GpuBenchScreen(state, noThermalSnapshot, { noOpRenderer }, {}, {}, {}, {}) }
+        }
+
+        composeRule.onNodeWithText("vs before the update", substring = true).assertDoesNotExist()
+    }
+
     @Test
     fun abortedState_overheat_showsOverheatMessageNotInterruptedMessage() {
         val state = VMGpuBench.UiState.Aborted(GpuBenchmark.AbortReason.OVERHEAT)

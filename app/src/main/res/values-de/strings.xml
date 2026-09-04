@@ -581,6 +581,9 @@
     <!-- U24 - Benchmark-Perzentil im Vergleich zur eigenen Verlaufshistorie -->
     <string name="bench_percentile_message">Besser als %1$d %% deiner Testläufe auf diesem Gerät</string>
 
+    <!-- U29 - Auswirkung des letzten Android-Updates -->
+    <string name="bench_os_update_impact_message">Android aktualisiert: %1$s %% gegenüber vor dem Update</string>
+
     <string name="vip_diagnostic_pref_title">VIP-Diagnoseverlauf</string>
     <string name="vip_diagnostic_pref_summary">Akku-/RAM-/Speicherverschleiß über Monate verfolgen (VIP)</string>
     <string name="vip_diagnostic_title">Diagnoseverlauf</string>

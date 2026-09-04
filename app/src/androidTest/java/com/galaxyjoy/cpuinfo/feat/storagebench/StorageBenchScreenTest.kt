@@ -58,4 +58,36 @@ class StorageBenchScreenTest {
 
         composeRule.onNodeWithText("of your runs on this device", substring = true).assertDoesNotExist()
     }
+
+    /** U29 — OS update impact vs the previous Android build. */
+    @Test
+    fun doneState_withADetectedOsUpdate_showsImpactMessage() {
+        val history = listOf(
+            StorageBenchResultPrefs.SavedResult(1L, 80.0, 200.0, 300.0, 400.0, 50.0, osBuildFingerprint = "build_a"),
+            StorageBenchResultPrefs.SavedResult(2L, 100.0, 200.0, 300.0, 400.0, 50.0, osBuildFingerprint = "build_b"),
+        )
+        val state = VMStorageBench.UiState.Done(result(100.0), previous = null, history = history)
+
+        composeRule.setContent {
+            CpuInfoTheme { StorageBenchScreen(state, noThermalSnapshot, {}, {}, {}, {}) }
+        }
+
+        // (100 - 80) * 100 / 80 = +25%
+        composeRule.onNodeWithText(appContext.getString(R.string.bench_os_update_impact_message, "+25")).assertExists()
+    }
+
+    @Test
+    fun doneState_withoutADetectedOsUpdate_hidesImpactMessage() {
+        val history = listOf(
+            StorageBenchResultPrefs.SavedResult(1L, 80.0, 200.0, 300.0, 400.0, 50.0, osBuildFingerprint = "build_a"),
+            StorageBenchResultPrefs.SavedResult(2L, 100.0, 200.0, 300.0, 400.0, 50.0, osBuildFingerprint = "build_a"),
+        )
+        val state = VMStorageBench.UiState.Done(result(100.0), previous = null, history = history)
+
+        composeRule.setContent {
+            CpuInfoTheme { StorageBenchScreen(state, noThermalSnapshot, {}, {}, {}, {}) }
+        }
+
+        composeRule.onNodeWithText("vs before the update", substring = true).assertDoesNotExist()
+    }
 }

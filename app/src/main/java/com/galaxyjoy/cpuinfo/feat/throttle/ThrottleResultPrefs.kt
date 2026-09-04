@@ -2,6 +2,7 @@ package com.galaxyjoy.cpuinfo.feat.throttle
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.os.Build
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -27,6 +28,11 @@ class ThrottleResultPrefs @Inject constructor(@ApplicationContext context: Conte
         val throttlePercent: Int,
         val maxTempC: Int,
         val opsPerSecond: Long,
+        /** U29 — `Build.FINGERPRINT` at the time this run was saved, `null` for entries saved
+         * before this field existed (Gson leaves it `null` on old persisted JSON missing the
+         * key). Lets [com.galaxyjoy.cpuinfo.util.OsUpdateImpactCalculator] detect an OTA update
+         * between 2 runs and compare before/after. */
+        val osBuildFingerprint: String? = null,
     )
 
     fun getLastResult(): SavedResult? = getHistory().lastOrNull()
@@ -49,6 +55,7 @@ class ThrottleResultPrefs @Inject constructor(@ApplicationContext context: Conte
             throttlePercent = result.throttlePercent,
             maxTempC = result.maxTempC,
             opsPerSecond = result.opsPerSecond,
+            osBuildFingerprint = Build.FINGERPRINT,
         )
         val updated = (getHistory() + entry).takeLast(MAX_HISTORY_ENTRIES)
         sp.edit().putString(KEY_HISTORY_JSON, gson.toJson(updated)).apply()

@@ -2,6 +2,7 @@ package com.galaxyjoy.cpuinfo.feat.rambench
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.os.Build
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -22,6 +23,9 @@ class RamBenchResultPrefs @Inject constructor(@ApplicationContext context: Conte
         val timestampMs: Long,
         val writeMbPerSec: Double,
         val readMbPerSec: Double,
+        /** U29 — see [com.galaxyjoy.cpuinfo.feat.throttle.ThrottleResultPrefs.SavedResult]'s
+         * matching field for why this is nullable. */
+        val osBuildFingerprint: String? = null,
     )
 
     fun getLastResult(): SavedResult? = getHistory().lastOrNull()
@@ -41,6 +45,7 @@ class RamBenchResultPrefs @Inject constructor(@ApplicationContext context: Conte
             timestampMs = System.currentTimeMillis(),
             writeMbPerSec = result.writeMbPerSec,
             readMbPerSec = result.readMbPerSec,
+            osBuildFingerprint = Build.FINGERPRINT,
         )
         val updated = (getHistory() + entry).takeLast(MAX_HISTORY_ENTRIES)
         sp.edit().putString(KEY_HISTORY_JSON, gson.toJson(updated)).apply()

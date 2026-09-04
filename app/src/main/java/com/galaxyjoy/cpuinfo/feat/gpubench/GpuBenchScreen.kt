@@ -41,6 +41,7 @@ import com.galaxyjoy.cpuinfo.feat.throttle.ThermalStatusMapper
 import com.galaxyjoy.cpuinfo.feat.throttle.ThermalStatusProvider
 import com.galaxyjoy.cpuinfo.ui.component.BenchTrendChart
 import com.galaxyjoy.cpuinfo.util.BenchPercentileCalculator
+import com.galaxyjoy.cpuinfo.util.OsUpdateImpactCalculator
 import java.text.DateFormat
 import java.util.Date
 import java.util.Locale
@@ -293,6 +294,15 @@ private fun DoneContent(
         Spacer(Modifier.height(8.dp))
         Text(
             text = stringResource(R.string.bench_percentile_message, percentile),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+    }
+
+    OsUpdateImpactCalculator.detectImpact(state.history.map { it.osBuildFingerprint to it.avgFps })?.let { impact ->
+        Spacer(Modifier.height(8.dp))
+        Text(
+            text = stringResource(R.string.bench_os_update_impact_message, "%+d".format(Locale.US, impact.percentChange)),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
