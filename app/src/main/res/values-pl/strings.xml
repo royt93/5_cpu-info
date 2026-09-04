@@ -376,6 +376,10 @@
     <string name="health_alert_channel_name">Alerty stanu urządzenia</string>
     <string name="health_alert_notification_title">Wynik stanu urządzenia spadł</string>
     <string name="health_alert_notification_body">Aktualny wynik: %1$d. Dotknij, aby zobaczyć szczegóły.</string>
+
+    <!-- U26 - Cotygodniowe podsumowanie stanu urządzenia -->
+    <string name="health_alert_weekly_digest_title">Cotygodniowe podsumowanie stanu urządzenia</string>
+    <string name="health_alert_weekly_digest_body">Wynik stanu: %1$d (%2$s w porównaniu do zeszłego tygodnia)</string>
     <string name="fleet_compare_title">Porównanie z flotą</string>
     <string name="fleet_compare_verdict_ok">Zgodne ze znanymi specyfikacjami</string>
     <string name="fleet_compare_verdict_mismatch">Poniżej oczekiwanych specyfikacji</string>

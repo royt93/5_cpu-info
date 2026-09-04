@@ -24,6 +24,15 @@ class HealthAlertPrefs(context: Context) {
         sp.edit().putLong(KEY_LAST_ALERT_MS, timestampMs).apply()
     }
 
+    /** U26 — separate from [getLastScore]/[saveScore], which the 6-hourly [HealthAlertWorker]
+     * overwrites every run and so can never hold a real "score from ~7 days ago". */
+    fun getWeeklyBaselineScore(): Int? =
+        if (sp.contains(KEY_WEEKLY_BASELINE_SCORE)) sp.getInt(KEY_WEEKLY_BASELINE_SCORE, 0) else null
+
+    fun saveWeeklyBaselineScore(score: Int) {
+        sp.edit().putInt(KEY_WEEKLY_BASELINE_SCORE, score).apply()
+    }
+
     /** Test-only reset — [HealthAlertNotifierTest] runs against the real on-device prefs file
      * (same one the real worker would use), so it needs to start from a known-empty state rather
      * than whatever a previous test run or real background check left behind. */
@@ -35,5 +44,6 @@ class HealthAlertPrefs(context: Context) {
         const val PREFS_NAME = "health_alert_prefs"
         const val KEY_LAST_SCORE = "last_score"
         const val KEY_LAST_ALERT_MS = "last_alert_ms"
+        const val KEY_WEEKLY_BASELINE_SCORE = "weekly_baseline_score"
     }
 }

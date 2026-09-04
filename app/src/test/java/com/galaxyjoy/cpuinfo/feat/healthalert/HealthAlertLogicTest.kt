@@ -1,6 +1,7 @@
 package com.galaxyjoy.cpuinfo.feat.healthalert
 
 import org.junit.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
@@ -78,5 +79,26 @@ class HealthAlertLogicTest {
                 nowMs = HealthAlertLogic.COOLDOWN_MS,
             ),
         )
+    }
+
+    /** U26 */
+    @Test
+    fun `weeklyDigestDelta is null when there is no baseline yet`() {
+        assertEquals(null, HealthAlertLogic.weeklyDigestDelta(previousWeekScore = null, currentScore = 80))
+    }
+
+    @Test
+    fun `weeklyDigestDelta is positive when the score improved since the baseline`() {
+        assertEquals(5, HealthAlertLogic.weeklyDigestDelta(previousWeekScore = 70, currentScore = 75))
+    }
+
+    @Test
+    fun `weeklyDigestDelta is negative when the score dropped since the baseline`() {
+        assertEquals(-10, HealthAlertLogic.weeklyDigestDelta(previousWeekScore = 80, currentScore = 70))
+    }
+
+    @Test
+    fun `weeklyDigestDelta is zero when the score did not change`() {
+        assertEquals(0, HealthAlertLogic.weeklyDigestDelta(previousWeekScore = 80, currentScore = 80))
     }
 }

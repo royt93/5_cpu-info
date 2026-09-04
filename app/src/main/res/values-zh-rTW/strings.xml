@@ -339,6 +339,10 @@
     <string name="health_alert_channel_name">裝置健康警示</string>
     <string name="health_alert_notification_title">裝置健康分數下降</string>
     <string name="health_alert_notification_body">目前分數：%1$d。點一下查看詳情。</string>
+
+    <!-- U26 - 每週裝置健康摘要通知 -->
+    <string name="health_alert_weekly_digest_title">每週裝置健康摘要</string>
+    <string name="health_alert_weekly_digest_body">健康分數：%1$d（較上週 %2$s）</string>
     <string name="fleet_compare_title">機型比對</string>
     <string name="fleet_compare_verdict_ok">符合已知規格</string>
     <string name="fleet_compare_verdict_mismatch">低於預期規格</string>

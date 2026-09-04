@@ -392,6 +392,10 @@
     <string name="health_alert_channel_name">Cảnh báo sức khoẻ máy</string>
     <string name="health_alert_notification_title">Điểm sức khoẻ máy giảm</string>
     <string name="health_alert_notification_body">Điểm hiện tại: %1$d. Chạm để xem chi tiết.</string>
+
+    <!-- U26 - Thông báo tổng kết sức khoẻ máy hàng tuần -->
+    <string name="health_alert_weekly_digest_title">Tổng kết sức khoẻ máy tuần này</string>
+    <string name="health_alert_weekly_digest_body">Điểm sức khoẻ: %1$d (%2$s so với tuần trước)</string>
     <string name="fleet_compare_title">So sánh cùng dòng máy</string>
     <string name="fleet_compare_verdict_ok">Khớp thông số gốc</string>
     <string name="fleet_compare_verdict_mismatch">Thấp hơn thông số kỳ vọng</string>

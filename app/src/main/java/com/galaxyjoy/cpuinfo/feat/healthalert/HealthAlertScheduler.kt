@@ -15,13 +15,22 @@ object HealthAlertScheduler {
 
     const val WORK_NAME = "health_alert_check"
 
+    /** U26 — same toggle as [WORK_NAME] (see `FrmSettings.wireHealthAlertPref()`), just a second
+     * `enqueueUniquePeriodicWork` call under its own unique name, no new Settings switch needed. */
+    const val WEEKLY_DIGEST_WORK_NAME = "health_alert_weekly_digest"
+
     fun schedule(context: Context) {
         val request = PeriodicWorkRequestBuilder<HealthAlertWorker>(6, TimeUnit.HOURS).build()
         WorkManager.getInstance(context)
             .enqueueUniquePeriodicWork(WORK_NAME, ExistingPeriodicWorkPolicy.UPDATE, request)
+
+        val digestRequest = PeriodicWorkRequestBuilder<HealthAlertWeeklyDigestWorker>(7, TimeUnit.DAYS).build()
+        WorkManager.getInstance(context)
+            .enqueueUniquePeriodicWork(WEEKLY_DIGEST_WORK_NAME, ExistingPeriodicWorkPolicy.UPDATE, digestRequest)
     }
 
     fun cancel(context: Context) {
         WorkManager.getInstance(context).cancelUniqueWork(WORK_NAME)
+        WorkManager.getInstance(context).cancelUniqueWork(WEEKLY_DIGEST_WORK_NAME)
     }
 }

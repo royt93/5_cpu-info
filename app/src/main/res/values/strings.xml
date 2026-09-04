@@ -424,6 +424,10 @@
     <string name="health_alert_channel_name">Device health alerts</string>
     <string name="health_alert_notification_title">Device health score dropped</string>
     <string name="health_alert_notification_body">Current score: %1$d. Tap to see details.</string>
+
+    <!-- U26 - Weekly health digest notification -->
+    <string name="health_alert_weekly_digest_title">Weekly health digest</string>
+    <string name="health_alert_weekly_digest_body">Health score: %1$d (%2$s vs last week)</string>
     <string name="fleet_compare_title">Fleet Compare</string>
     <string name="fleet_compare_verdict_ok">Matches known specs</string>
     <string name="fleet_compare_verdict_mismatch">Below expected specs</string>

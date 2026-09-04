@@ -50,4 +50,33 @@ class HealthAlertSchedulerTest {
 
         verify(exactly = 1) { workManager.cancelUniqueWork(HealthAlertScheduler.WORK_NAME) }
     }
+
+    /** U26 — same toggle also schedules/cancels the weekly digest job. */
+    @Test
+    fun `schedule also enqueues the weekly digest under its own unique work name`() {
+        val workManager: WorkManager = mockk(relaxed = true)
+        mockkStatic(WorkManager::class)
+        every { WorkManager.getInstance(context) } returns workManager
+
+        HealthAlertScheduler.schedule(context)
+
+        verify(exactly = 1) {
+            workManager.enqueueUniquePeriodicWork(
+                HealthAlertScheduler.WEEKLY_DIGEST_WORK_NAME,
+                ExistingPeriodicWorkPolicy.UPDATE,
+                any<PeriodicWorkRequest>(),
+            )
+        }
+    }
+
+    @Test
+    fun `cancel also cancels the weekly digest unique work name`() {
+        val workManager: WorkManager = mockk(relaxed = true)
+        mockkStatic(WorkManager::class)
+        every { WorkManager.getInstance(context) } returns workManager
+
+        HealthAlertScheduler.cancel(context)
+
+        verify(exactly = 1) { workManager.cancelUniqueWork(HealthAlertScheduler.WEEKLY_DIGEST_WORK_NAME) }
+    }
 }

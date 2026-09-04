@@ -372,6 +372,10 @@
     <string name="health_alert_channel_name">Upozornění na stav zařízení</string>
     <string name="health_alert_notification_title">Skóre stavu zařízení kleslo</string>
     <string name="health_alert_notification_body">Aktuální skóre: %1$d. Klepnutím zobrazíte podrobnosti.</string>
+
+    <!-- U26 - Týdenní souhrn stavu zařízení -->
+    <string name="health_alert_weekly_digest_title">Týdenní souhrn stavu zařízení</string>
+    <string name="health_alert_weekly_digest_body">Skóre stavu: %1$d (%2$s oproti minulému týdnu)</string>
     <string name="fleet_compare_title">Porovnání s flotilou</string>
     <string name="fleet_compare_verdict_ok">Odpovídá známým specifikacím</string>
     <string name="fleet_compare_verdict_mismatch">Pod očekávanými specifikacemi</string>

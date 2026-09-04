@@ -375,6 +375,10 @@
     <string name="health_alert_channel_name">Gerätezustandswarnungen</string>
     <string name="health_alert_notification_title">Gerätezustand gesunken</string>
     <string name="health_alert_notification_body">Aktueller Wert: %1$d. Zum Anzeigen tippen.</string>
+
+    <!-- U26 - Wöchentliche Gesundheits-Zusammenfassung -->
+    <string name="health_alert_weekly_digest_title">Wöchentliche Gesundheits-Zusammenfassung</string>
+    <string name="health_alert_weekly_digest_body">Gesundheitswert: %1$d (%2$s gegenüber letzter Woche)</string>
     <string name="fleet_compare_title">Fleet-Vergleich</string>
     <string name="fleet_compare_verdict_ok">Entspricht bekannten Spezifikationen</string>
     <string name="fleet_compare_verdict_mismatch">Unter den erwarteten Spezifikationen</string>

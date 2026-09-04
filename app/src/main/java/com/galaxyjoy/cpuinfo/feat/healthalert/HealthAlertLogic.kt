@@ -24,4 +24,11 @@ object HealthAlertLogic {
         if (previousScore != null && previousScore - currentScore >= SCORE_DROP_THRESHOLD) return true
         return false
     }
+
+    /** U26 — how much the score moved since the last weekly digest baseline. `null` when there's
+     * no baseline yet (first-ever run of the weekly digest worker on this device) — the caller
+     * skips sending a notification in that case, same "nothing to compare against yet" shape as
+     * [shouldAlert]'s own `previousScore == null` handling. */
+    fun weeklyDigestDelta(previousWeekScore: Int?, currentScore: Int): Int? =
+        previousWeekScore?.let { currentScore - it }
 }
