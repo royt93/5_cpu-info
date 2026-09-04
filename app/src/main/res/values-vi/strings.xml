@@ -397,6 +397,11 @@
     <string name="export_bench_history_pref_summary">Chia sẻ toàn bộ kết quả benchmark CPU/lưu trữ/RAM/GPU đã lưu dạng CSV</string>
     <string name="export_bench_history_share_subject">CPU Info - Lịch sử benchmark</string>
     <string name="export_bench_history_share_chooser_title">Chia sẻ lịch sử benchmark</string>
+
+    <!-- U28 - Xuất báo cáo thiết bị đầy đủ -->
+    <string name="export_full_report_pref_title">Xuất báo cáo thiết bị đầy đủ</string>
+    <string name="export_full_report_pref_summary">Gộp thẻ thông tin máy, thẻ kết quả benchmark và toàn bộ lịch sử benchmark thành 1 file chia sẻ</string>
+    <string name="device_report_share_chooser_title">Chia sẻ báo cáo thiết bị</string>
     <string name="health_alert_channel_name">Cảnh báo sức khoẻ máy</string>
     <string name="health_alert_notification_title">Điểm sức khoẻ máy giảm</string>
     <string name="health_alert_notification_body">Điểm hiện tại: %1$d. Chạm để xem chi tiết.</string>

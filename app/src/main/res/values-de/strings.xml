@@ -380,6 +380,11 @@
     <string name="export_bench_history_pref_summary">Alle gespeicherten CPU-/Speicher-/RAM-/GPU-Benchmarks als CSV teilen</string>
     <string name="export_bench_history_share_subject">CPU Info - Benchmark-Verlauf</string>
     <string name="export_bench_history_share_chooser_title">Benchmark-Verlauf teilen</string>
+
+    <!-- U28 - Vollständigen Gerätebericht exportieren -->
+    <string name="export_full_report_pref_title">Vollständigen Gerätebericht exportieren</string>
+    <string name="export_full_report_pref_summary">Gerätekarte, Benchmark-Ergebniskarte und den kompletten Benchmark-Verlauf in einer teilbaren Datei bündeln</string>
+    <string name="device_report_share_chooser_title">Gerätebericht teilen</string>
     <string name="health_alert_channel_name">Gerätezustandswarnungen</string>
     <string name="health_alert_notification_title">Gerätezustand gesunken</string>
     <string name="health_alert_notification_body">Aktueller Wert: %1$d. Zum Anzeigen tippen.</string>

@@ -377,6 +377,11 @@
     <string name="export_bench_history_pref_summary">Sdílet všechny uložené výsledky CPU/úložiště/RAM/GPU jako CSV</string>
     <string name="export_bench_history_share_subject">CPU Info - Historie benchmarků</string>
     <string name="export_bench_history_share_chooser_title">Sdílet historii benchmarků</string>
+
+    <!-- U28 - Export úplné zprávy o zařízení -->
+    <string name="export_full_report_pref_title">Exportovat úplnou zprávu o zařízení</string>
+    <string name="export_full_report_pref_summary">Sloučit kartu zařízení, kartu výsledků benchmarku a celou historii benchmarků do jednoho souboru ke sdílení</string>
+    <string name="device_report_share_chooser_title">Sdílet zprávu o zařízení</string>
     <string name="health_alert_channel_name">Upozornění na stav zařízení</string>
     <string name="health_alert_notification_title">Skóre stavu zařízení kleslo</string>
     <string name="health_alert_notification_body">Aktuální skóre: %1$d. Klepnutím zobrazíte podrobnosti.</string>

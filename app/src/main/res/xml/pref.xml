@@ -57,6 +57,11 @@
             app:summary="@string/export_bench_history_pref_summary"
             app:title="@string/export_bench_history_pref_title" />
 
+        <Preference
+            app:key="key_export_full_report"
+            app:summary="@string/export_full_report_pref_summary"
+            app:title="@string/export_full_report_pref_title" />
+
     </PreferenceCategory>
 
     <PreferenceCategory

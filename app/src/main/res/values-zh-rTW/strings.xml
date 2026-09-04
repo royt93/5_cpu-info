@@ -337,6 +337,11 @@
     <string name="export_bench_history_pref_summary">將已儲存的 CPU/儲存空間/RAM/GPU 跑分紀錄以 CSV 格式分享</string>
     <string name="export_bench_history_share_subject">CPU Info - 跑分歷史紀錄</string>
     <string name="export_bench_history_share_chooser_title">分享跑分歷史紀錄</string>
+
+    <!-- U28 - 匯出完整裝置報告 -->
+    <string name="export_full_report_pref_title">匯出完整裝置報告</string>
+    <string name="export_full_report_pref_summary">將裝置卡片、跑分結果卡片與完整跑分歷史紀錄合併成 1 個檔案分享</string>
+    <string name="device_report_share_chooser_title">分享裝置報告</string>
     <string name="health_alert_channel_name">裝置健康警示</string>
     <string name="health_alert_notification_title">裝置健康分數下降</string>
     <string name="health_alert_notification_body">目前分數：%1$d。點一下查看詳情。</string>

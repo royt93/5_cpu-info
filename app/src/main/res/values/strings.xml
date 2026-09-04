@@ -430,6 +430,11 @@
     <string name="export_bench_history_pref_summary">Share all your saved CPU/storage/RAM/GPU benchmark runs as CSV</string>
     <string name="export_bench_history_share_subject">CPU Info - Benchmark history</string>
     <string name="export_bench_history_share_chooser_title">Share benchmark history</string>
+
+    <!-- U28 - Export full device report (zip: device card + bench result card + CSV history) -->
+    <string name="export_full_report_pref_title">Export full device report</string>
+    <string name="export_full_report_pref_summary">Bundle the device card, benchmark result card, and full benchmark history into one shareable file</string>
+    <string name="device_report_share_chooser_title">Share device report</string>
     <string name="health_alert_channel_name">Device health alerts</string>
     <string name="health_alert_notification_title">Device health score dropped</string>
     <string name="health_alert_notification_body">Current score: %1$d. Tap to see details.</string>

@@ -16,6 +16,7 @@ import com.galaxyjoy.cpuinfo.BuildConfig
 import com.galaxyjoy.cpuinfo.R
 import com.galaxyjoy.cpuinfo.ext.openBrowserPolicy
 import com.galaxyjoy.cpuinfo.feat.benchhistory.BenchHistoryExporter
+import com.galaxyjoy.cpuinfo.feat.devicereport.DeviceReportExporter
 import com.galaxyjoy.cpuinfo.feat.fleet.FleetCompareBottomSheet
 import com.galaxyjoy.cpuinfo.feat.gpubench.GpuBenchResultPrefs
 import com.galaxyjoy.cpuinfo.feat.healthalert.HealthAlertScheduler
@@ -28,12 +29,24 @@ import com.galaxyjoy.cpuinfo.feat.vip.ActVip
 import com.galaxyjoy.cpuinfo.feat.vipreport.VipDiagnosticReportBottomSheet
 import com.galaxyjoy.cpuinfo.util.ThemeHelper
 import com.roy.sdkadbmob.AdManager
+import dagger.hilt.android.AndroidEntryPoint
 import moreApp
 import rateApp
 import shareApp
+import javax.inject.Inject
 
+/** U28 — [DeviceReportExporter] is Hilt-injected (its own dependency graph — `DeviceCardProvider`
+ * pulls in 6 further providers — is too deep to keep hand-constructing plain-`Context` instances
+ * for, unlike the shallow single-`Context`-constructor classes U21/U25 hand-construct elsewhere in
+ * this file). `FrmSettings` wasn't a Hilt entry point before; making it one is inert for every
+ * existing preference here (none of them use `@Inject`) and is the standard way every other
+ * screen in this app already gets its dependencies. */
+@AndroidEntryPoint
 class FrmSettings : PreferenceFragmentCompat(),
     SharedPreferences.OnSharedPreferenceChangeListener {
+
+    @Inject
+    lateinit var deviceReportExporter: DeviceReportExporter
 
     companion object {
         const val KEY_TEMPERATURE_UNIT = "temperature_unit"
@@ -101,6 +114,7 @@ class FrmSettings : PreferenceFragmentCompat(),
         wireVipDiagnosticHistoryPref()
         wireHealthAlertPref()
         wireExportBenchHistoryPref()
+        wireExportFullReportPref()
 
         listenForBottomSheetResults()
     }
@@ -232,6 +246,15 @@ class FrmSettings : PreferenceFragmentCompat(),
                 gpuPrefs = GpuBenchResultPrefs(context),
             )
             exporter.exportHistory(requireContext(), lifecycleScope)
+            true
+        }
+    }
+
+    /** U28 — Hilt-injected [deviceReportExporter], unlike [wireExportBenchHistoryPref]'s
+     * hand-constructed `*ResultPrefs` (see this file's top-level doc comment for why). */
+    private fun wireExportFullReportPref() {
+        findPreference<Preference>("key_export_full_report")?.setOnPreferenceClickListener {
+            deviceReportExporter.exportFullReport(lifecycleScope)
             true
         }
     }

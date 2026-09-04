@@ -381,6 +381,11 @@
     <string name="export_bench_history_pref_summary">Udostępnij wszystkie zapisane wyniki CPU/pamięci/RAM/GPU jako CSV</string>
     <string name="export_bench_history_share_subject">CPU Info - Historia benchmarków</string>
     <string name="export_bench_history_share_chooser_title">Udostępnij historię benchmarków</string>
+
+    <!-- U28 - Eksportuj pełny raport urządzenia -->
+    <string name="export_full_report_pref_title">Eksportuj pełny raport urządzenia</string>
+    <string name="export_full_report_pref_summary">Połącz kartę urządzenia, kartę wyników benchmarku i pełną historię benchmarków w jeden plik do udostępnienia</string>
+    <string name="device_report_share_chooser_title">Udostępnij raport urządzenia</string>
     <string name="health_alert_channel_name">Alerty stanu urządzenia</string>
     <string name="health_alert_notification_title">Wynik stanu urządzenia spadł</string>
     <string name="health_alert_notification_body">Aktualny wynik: %1$d. Dotknij, aby zobaczyć szczegóły.</string>
