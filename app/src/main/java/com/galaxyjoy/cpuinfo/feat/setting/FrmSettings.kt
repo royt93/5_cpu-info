@@ -16,6 +16,7 @@ import com.galaxyjoy.cpuinfo.BuildConfig
 import com.galaxyjoy.cpuinfo.R
 import com.galaxyjoy.cpuinfo.ext.openBrowserPolicy
 import com.galaxyjoy.cpuinfo.feat.benchhistory.BenchHistoryExporter
+import com.galaxyjoy.cpuinfo.feat.benchreminder.BenchReminderScheduler
 import com.galaxyjoy.cpuinfo.feat.devicereport.DeviceReportExporter
 import com.galaxyjoy.cpuinfo.feat.fleet.FleetCompareBottomSheet
 import com.galaxyjoy.cpuinfo.feat.gpubench.GpuBenchResultPrefs
@@ -52,6 +53,7 @@ class FrmSettings : PreferenceFragmentCompat(),
         const val KEY_TEMPERATURE_UNIT = "temperature_unit"
         const val KEY_THEME_CONFIG = "key_theme"
         const val KEY_HEALTH_ALERT = "key_health_alert"
+        const val KEY_BENCH_REMINDER = "key_bench_reminder"
     }
 
     /** Must be registered before the fragment reaches CREATED — a class-level property, not
@@ -62,6 +64,22 @@ class FrmSettings : PreferenceFragmentCompat(),
         val pref = findPreference<SwitchPreferenceCompat>(KEY_HEALTH_ALERT)
         if (granted) {
             HealthAlertScheduler.schedule(requireContext())
+            pref?.isChecked = true
+        } else {
+            pref?.isChecked = false
+        }
+    }
+
+    /** U30 — separate launcher from [requestNotificationPermission] rather than a shared one
+     * branching on "which pref triggered this": keeps each toggle's wiring independently readable
+     * and independently testable, at the cost of a few duplicated lines (same tradeoff already
+     * made by the 4 near-identical `*ResultPrefs` classes elsewhere in this codebase). */
+    private val requestBenchReminderNotificationPermission = registerForActivityResult(
+        ActivityResultContracts.RequestPermission(),
+    ) { granted ->
+        val pref = findPreference<SwitchPreferenceCompat>(KEY_BENCH_REMINDER)
+        if (granted) {
+            BenchReminderScheduler.schedule(requireContext())
             pref?.isChecked = true
         } else {
             pref?.isChecked = false
@@ -113,6 +131,7 @@ class FrmSettings : PreferenceFragmentCompat(),
         wireFleetComparePref()
         wireVipDiagnosticHistoryPref()
         wireHealthAlertPref()
+        wireBenchReminderPref()
         wireExportBenchHistoryPref()
         wireExportFullReportPref()
 
@@ -226,6 +245,32 @@ class FrmSettings : PreferenceFragmentCompat(),
                 false // async callback flips the switch itself once the user answers
             } else {
                 HealthAlertScheduler.schedule(requireContext())
+                true
+            }
+        }
+    }
+
+    /**
+     * U30 — same permission-request shape as [wireHealthAlertPref], own scheduler/launcher (see
+     * [requestBenchReminderNotificationPermission] for why not shared).
+     */
+    private fun wireBenchReminderPref() {
+        val pref = findPreference<SwitchPreferenceCompat>(KEY_BENCH_REMINDER) ?: return
+        pref.setOnPreferenceChangeListener { _, newValue ->
+            val enabling = newValue as Boolean
+            if (!enabling) {
+                BenchReminderScheduler.cancel(requireContext())
+                return@setOnPreferenceChangeListener true
+            }
+
+            val needsPermission = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+                ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.POST_NOTIFICATIONS) !=
+                PackageManager.PERMISSION_GRANTED
+            if (needsPermission) {
+                requestBenchReminderNotificationPermission.launch(Manifest.permission.POST_NOTIFICATIONS)
+                false
+            } else {
+                BenchReminderScheduler.schedule(requireContext())
                 true
             }
         }

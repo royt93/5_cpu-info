@@ -392,6 +392,13 @@
     <!-- U26 - Wöchentliche Gesundheits-Zusammenfassung -->
     <string name="health_alert_weekly_digest_title">Wöchentliche Gesundheits-Zusammenfassung</string>
     <string name="health_alert_weekly_digest_body">Gesundheitswert: %1$d (%2$s gegenüber letzter Woche)</string>
+
+    <!-- U30 - Benchmark reminder notification -->
+    <string name="bench_reminder_pref_title">Benchmark-Erinnerungen</string>
+    <string name="bench_reminder_pref_summary">Erinnern, Benchmarks nach längerer Inaktivität erneut auszuführen</string>
+    <string name="bench_reminder_channel_name">Benchmark-Erinnerungen</string>
+    <string name="bench_reminder_notification_title">Zeit für einen neuen Benchmark</string>
+    <string name="bench_reminder_notification_body">Es ist eine Weile her seit dem letzten Lauf. Zum erneuten Ausführen tippen.</string>
     <string name="fleet_compare_title">Fleet-Vergleich</string>
     <string name="fleet_compare_verdict_ok">Entspricht bekannten Spezifikationen</string>
     <string name="fleet_compare_verdict_mismatch">Unter den erwarteten Spezifikationen</string>

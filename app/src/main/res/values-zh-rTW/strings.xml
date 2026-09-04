@@ -349,6 +349,13 @@
     <!-- U26 - 每週裝置健康摘要通知 -->
     <string name="health_alert_weekly_digest_title">每週裝置健康摘要</string>
     <string name="health_alert_weekly_digest_body">健康分數：%1$d（較上週 %2$s）</string>
+
+    <!-- U30 - Benchmark reminder notification -->
+    <string name="bench_reminder_pref_title">效能測試提醒</string>
+    <string name="bench_reminder_pref_summary">閒置一段時間後提醒我重新執行效能測試</string>
+    <string name="bench_reminder_channel_name">效能測試提醒</string>
+    <string name="bench_reminder_notification_title">該重新測試效能了</string>
+    <string name="bench_reminder_notification_body">距離上次測試已經有一段時間了，點一下重新執行。</string>
     <string name="fleet_compare_title">機型比對</string>
     <string name="fleet_compare_verdict_ok">符合已知規格</string>
     <string name="fleet_compare_verdict_mismatch">低於預期規格</string>

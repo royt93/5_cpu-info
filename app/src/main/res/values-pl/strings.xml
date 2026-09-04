@@ -393,6 +393,13 @@
     <!-- U26 - Cotygodniowe podsumowanie stanu urządzenia -->
     <string name="health_alert_weekly_digest_title">Cotygodniowe podsumowanie stanu urządzenia</string>
     <string name="health_alert_weekly_digest_body">Wynik stanu: %1$d (%2$s w porównaniu do zeszłego tygodnia)</string>
+
+    <!-- U30 - Benchmark reminder notification -->
+    <string name="bench_reminder_pref_title">Przypomnienia o benchmarkach</string>
+    <string name="bench_reminder_pref_summary">Przypomnij o ponownym uruchomieniu testów po dłuższej przerwie</string>
+    <string name="bench_reminder_channel_name">Przypomnienia o benchmarkach</string>
+    <string name="bench_reminder_notification_title">Czas na nowy benchmark</string>
+    <string name="bench_reminder_notification_body">Minęło trochę czasu od ostatniego testu — dotknij, aby uruchomić ponownie.</string>
     <string name="fleet_compare_title">Porównanie z flotą</string>
     <string name="fleet_compare_verdict_ok">Zgodne ze znanymi specyfikacjami</string>
     <string name="fleet_compare_verdict_mismatch">Poniżej oczekiwanych specyfikacji</string>

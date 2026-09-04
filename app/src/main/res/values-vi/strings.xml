@@ -409,6 +409,13 @@
     <!-- U26 - Thông báo tổng kết sức khoẻ máy hàng tuần -->
     <string name="health_alert_weekly_digest_title">Tổng kết sức khoẻ máy tuần này</string>
     <string name="health_alert_weekly_digest_body">Điểm sức khoẻ: %1$d (%2$s so với tuần trước)</string>
+
+    <!-- U30 - Benchmark reminder notification -->
+    <string name="bench_reminder_pref_title">Nhắc chạy lại benchmark</string>
+    <string name="bench_reminder_pref_summary">Nhắc tôi chạy lại benchmark sau một thời gian không dùng</string>
+    <string name="bench_reminder_channel_name">Nhắc chạy lại benchmark</string>
+    <string name="bench_reminder_notification_title">Đã lâu chưa benchmark</string>
+    <string name="bench_reminder_notification_body">Đã lâu kể từ lần benchmark gần nhất — chạm để chạy lại.</string>
     <string name="fleet_compare_title">So sánh cùng dòng máy</string>
     <string name="fleet_compare_verdict_ok">Khớp thông số gốc</string>
     <string name="fleet_compare_verdict_mismatch">Thấp hơn thông số kỳ vọng</string>

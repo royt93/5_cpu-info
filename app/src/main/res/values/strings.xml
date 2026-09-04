@@ -442,6 +442,13 @@
     <!-- U26 - Weekly health digest notification -->
     <string name="health_alert_weekly_digest_title">Weekly health digest</string>
     <string name="health_alert_weekly_digest_body">Health score: %1$d (%2$s vs last week)</string>
+
+    <!-- U30 - Benchmark reminder notification -->
+    <string name="bench_reminder_pref_title">Benchmark reminders</string>
+    <string name="bench_reminder_pref_summary">Remind me to re-run benchmarks once it\'s been a while</string>
+    <string name="bench_reminder_channel_name">Benchmark reminders</string>
+    <string name="bench_reminder_notification_title">Time for a fresh benchmark</string>
+    <string name="bench_reminder_notification_body">It\'s been a while since your last run — tap to check for changes.</string>
     <string name="fleet_compare_title">Fleet Compare</string>
     <string name="fleet_compare_verdict_ok">Matches known specs</string>
     <string name="fleet_compare_verdict_mismatch">Below expected specs</string>

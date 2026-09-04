@@ -389,6 +389,13 @@
     <!-- U26 - Týdenní souhrn stavu zařízení -->
     <string name="health_alert_weekly_digest_title">Týdenní souhrn stavu zařízení</string>
     <string name="health_alert_weekly_digest_body">Skóre stavu: %1$d (%2$s oproti minulému týdnu)</string>
+
+    <!-- U30 - Benchmark reminder notification -->
+    <string name="bench_reminder_pref_title">Připomenutí benchmarků</string>
+    <string name="bench_reminder_pref_summary">Připomenout opětovné spuštění benchmarků po delší neaktivitě</string>
+    <string name="bench_reminder_channel_name">Připomenutí benchmarků</string>
+    <string name="bench_reminder_notification_title">Čas na nový benchmark</string>
+    <string name="bench_reminder_notification_body">Od posledního spuštění uplynula doba — klepnutím spustíte znovu.</string>
     <string name="fleet_compare_title">Porovnání s flotilou</string>
     <string name="fleet_compare_verdict_ok">Odpovídá známým specifikacím</string>
     <string name="fleet_compare_verdict_mismatch">Pod očekávanými specifikacemi</string>
