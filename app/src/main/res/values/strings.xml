@@ -110,6 +110,8 @@
     <string name="shield_score_widget_label">Device Health</string>
     <string name="shield_score_widget_description">See your device health score right from your home screen</string>
     <string name="shield_score_widget_score_format">%1$d</string>
+    <!-- U27 - Resizable widget large layout breakdown row, e.g. "RAM: 74" -->
+    <string name="shield_score_widget_breakdown_row">%1$s: %2$d</string>
     <string name="ram_widget_detail_format">%1$s free of %2$s</string>
     <!--Storage-->
     <string name="internal">Internal</string>

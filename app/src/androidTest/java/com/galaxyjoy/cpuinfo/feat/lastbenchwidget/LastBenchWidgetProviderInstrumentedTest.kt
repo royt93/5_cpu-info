@@ -1,6 +1,7 @@
 package com.galaxyjoy.cpuinfo.feat.lastbenchwidget
 
 import android.view.ContextThemeWrapper
+import android.view.View
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -91,5 +92,34 @@ class LastBenchWidgetProviderInstrumentedTest {
         // does not crash, mirroring RamWidgetProviderInstrumentedTest's real-DataProviderRam test.
         val root = inflate(latest)
         assertTrue(root.findViewById<TextView>(R.id.widgetLastBenchLabel).text.isNotEmpty())
+    }
+
+    /** U27 — large layout shows all 4 benchmark types at once, each row hidden if that type has
+     * never been run, instead of just the single newest one the compact layout shows. */
+    @Test
+    fun largeLayout_showsAllFourTypes_hidingOnesNeverRun() {
+        val throttle = ThrottleResultPrefs.SavedResult(
+            timestampMs = 1_000L, peakFreqMhz = 2800, sustainedFreqMhz = 2600,
+            throttlePercent = 7, maxTempC = 40, opsPerSecond = 5_000_000L,
+        )
+        val gpu = GpuBenchResultPrefs.SavedResult(timestampMs = 4_000L, avgFps = 55.5)
+        val latest = LastBenchPicker.pick(throttle, null, null, gpu)
+
+        val views = LastBenchWidgetProvider.buildRemoteViews(
+            appContext, appWidgetId = 1, latest, isLarge = true,
+            throttle = throttle, storage = null, ram = null, gpu = gpu,
+        )
+        val parent = FrameLayout(themedContext)
+        val root = views.apply(themedContext, parent).also { parent.addView(it) }
+
+        val throttleRow = root.findViewById<TextView>(R.id.widgetLastBenchThrottleRow)
+        val storageRow = root.findViewById<View>(R.id.widgetLastBenchStorageRow)
+        val ramRow = root.findViewById<View>(R.id.widgetLastBenchRamRow)
+        val gpuRow = root.findViewById<TextView>(R.id.widgetLastBenchGpuRow)
+
+        assertTrue("throttle row should mention 2600: ${throttleRow.text}", throttleRow.text.contains("2600"))
+        assertEquals(View.GONE, storageRow.visibility)
+        assertEquals(View.GONE, ramRow.visibility)
+        assertTrue("gpu row should mention 55.5: ${gpuRow.text}", gpuRow.text.contains("55.5"))
     }
 }

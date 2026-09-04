@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/widgetLastBenchRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/widget_ram_background"
+    android:orientation="vertical"
+    android:padding="12dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="@string/last_bench_widget_label"
+        android:textColor="@color/onSurface"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/widgetLastBenchThrottleRow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/onSurface"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        tools:text="CPU (sustained): 2600 MHz" />
+
+    <TextView
+        android:id="@+id/widgetLastBenchStorageRow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:textColor="@color/onSurface"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        tools:text="Storage (write/read): 100.0/200.0 MB/s" />
+
+    <TextView
+        android:id="@+id/widgetLastBenchRamRow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:textColor="@color/onSurface"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        tools:text="RAM (write/read): 4000.0/5000.0 MB/s" />
+
+    <TextView
+        android:id="@+id/widgetLastBenchGpuRow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:textColor="@color/onSurface"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        tools:text="GPU (avg FPS): 55.5 FPS" />
+
+</LinearLayout>

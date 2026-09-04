@@ -7,6 +7,7 @@ import android.appwidget.AppWidgetProvider
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import android.widget.RemoteViews
 import androidx.annotation.VisibleForTesting
 import androidx.work.ExistingPeriodicWorkPolicy
@@ -18,6 +19,7 @@ import com.galaxyjoy.cpuinfo.feat.ActHost
 import com.galaxyjoy.cpuinfo.feat.infor.hardware.BatteryStatusProvider
 import com.galaxyjoy.cpuinfo.feat.shield.ShieldScoreCalculator
 import com.galaxyjoy.cpuinfo.feat.shield.ShieldScoreProvider
+import com.galaxyjoy.cpuinfo.util.WidgetSizeClass
 import java.util.concurrent.TimeUnit
 
 /**
@@ -31,6 +33,18 @@ class ShieldScoreWidgetProvider : AppWidgetProvider() {
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
         appWidgetIds.forEach { updateWidget(context, appWidgetManager, it) }
+    }
+
+    /** U27 — fired on initial placement (with the launcher's default size) and every time the
+     * user drags-resizes the widget. Same `updateWidget` used by [onUpdate]/the periodic worker —
+     * it already reads the current size fresh via `appWidgetManager.getAppWidgetOptions`. */
+    override fun onAppWidgetOptionsChanged(
+        context: Context,
+        appWidgetManager: AppWidgetManager,
+        appWidgetId: Int,
+        newOptions: Bundle,
+    ) {
+        updateWidget(context, appWidgetManager, appWidgetId)
     }
 
     override fun onEnabled(context: Context) {
@@ -74,12 +88,20 @@ class ShieldScoreWidgetProvider : AppWidgetProvider() {
             )
             val result = provider.compute()
 
-            val views = buildRemoteViews(context, appWidgetId, result)
+            val minHeightDp = appWidgetManager.getAppWidgetOptions(appWidgetId)
+                .getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, 0)
+            val views = buildRemoteViews(context, appWidgetId, result, WidgetSizeClass.isLarge(minHeightDp))
             appWidgetManager.updateAppWidget(appWidgetId, views)
         }
 
-        internal fun buildRemoteViews(context: Context, appWidgetId: Int, result: ShieldScoreCalculator.Result): RemoteViews {
-            val views = RemoteViews(context.packageName, R.layout.widget_shield_score)
+        internal fun buildRemoteViews(
+            context: Context,
+            appWidgetId: Int,
+            result: ShieldScoreCalculator.Result,
+            isLarge: Boolean = false,
+        ): RemoteViews {
+            val layoutRes = if (isLarge) R.layout.widget_shield_score_large else R.layout.widget_shield_score
+            val views = RemoteViews(context.packageName, layoutRes)
             views.setTextViewText(
                 R.id.widgetShieldScorePercent,
                 context.getString(R.string.shield_score_widget_score_format, result.overall),
@@ -89,6 +111,21 @@ class ShieldScoreWidgetProvider : AppWidgetProvider() {
             // RemoteViews.setInt) rather than the progress bar fill.
             views.setTextColor(R.id.widgetShieldScorePercent, scoreColor(result.overall))
             views.setProgressBar(R.id.widgetShieldScoreProgress, 100, result.overall, false)
+
+            if (isLarge) {
+                views.setTextViewText(
+                    R.id.widgetShieldScoreRamRow,
+                    context.getString(R.string.shield_score_widget_breakdown_row, context.getString(R.string.ram), result.ramScore),
+                )
+                views.setTextViewText(
+                    R.id.widgetShieldScoreStorageRow,
+                    context.getString(R.string.shield_score_widget_breakdown_row, context.getString(R.string.storage), result.storageScore),
+                )
+                views.setTextViewText(
+                    R.id.widgetShieldScoreBatteryRow,
+                    context.getString(R.string.shield_score_widget_breakdown_row, context.getString(R.string.battery), result.batteryScore),
+                )
+            }
 
             val openAppIntent = Intent(context, ActHost::class.java).apply {
                 putExtra(EXTRA_OPEN_SHIELD_SCORE, true)

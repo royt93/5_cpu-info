@@ -6,6 +6,8 @@ import android.appwidget.AppWidgetProvider
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
+import android.view.View
 import android.widget.RemoteViews
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
@@ -17,6 +19,7 @@ import com.galaxyjoy.cpuinfo.feat.infor.base.AdtInfoContainerState
 import com.galaxyjoy.cpuinfo.feat.rambench.RamBenchResultPrefs
 import com.galaxyjoy.cpuinfo.feat.storagebench.StorageBenchResultPrefs
 import com.galaxyjoy.cpuinfo.feat.throttle.ThrottleResultPrefs
+import com.galaxyjoy.cpuinfo.util.WidgetSizeClass
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 
@@ -31,6 +34,17 @@ class LastBenchWidgetProvider : AppWidgetProvider() {
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
         appWidgetIds.forEach { updateWidget(context, appWidgetManager, it) }
+    }
+
+    /** U27 — same reasoning as [com.galaxyjoy.cpuinfo.feat.shieldwidget.ShieldScoreWidgetProvider]'s
+     * override: react to the user drag-resizing the widget, not just initial placement. */
+    override fun onAppWidgetOptionsChanged(
+        context: Context,
+        appWidgetManager: AppWidgetManager,
+        appWidgetId: Int,
+        newOptions: Bundle,
+    ) {
+        updateWidget(context, appWidgetManager, appWidgetId)
     }
 
     override fun onEnabled(context: Context) {
@@ -68,14 +82,17 @@ class LastBenchWidgetProvider : AppWidgetProvider() {
 
         fun updateWidget(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int) {
             val appContext = context.applicationContext
-            val latest = LastBenchPicker.pick(
-                throttle = ThrottleResultPrefs(appContext).getLastResult(),
-                storage = StorageBenchResultPrefs(appContext).getLastResult(),
-                ram = RamBenchResultPrefs(appContext).getLastResult(),
-                gpu = GpuBenchResultPrefs(appContext).getLastResult(),
-            )
+            val throttle = ThrottleResultPrefs(appContext).getLastResult()
+            val storage = StorageBenchResultPrefs(appContext).getLastResult()
+            val ram = RamBenchResultPrefs(appContext).getLastResult()
+            val gpu = GpuBenchResultPrefs(appContext).getLastResult()
+            val latest = LastBenchPicker.pick(throttle, storage, ram, gpu)
 
-            val views = buildRemoteViews(context, appWidgetId, latest)
+            val minHeightDp = appWidgetManager.getAppWidgetOptions(appWidgetId)
+                .getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, 0)
+            val views = buildRemoteViews(
+                context, appWidgetId, latest, WidgetSizeClass.isLarge(minHeightDp), throttle, storage, ram, gpu,
+            )
             appWidgetManager.updateAppWidget(appWidgetId, views)
         }
 
@@ -83,10 +100,21 @@ class LastBenchWidgetProvider : AppWidgetProvider() {
             context: Context,
             appWidgetId: Int,
             latest: LastBenchPicker.Latest?,
+            isLarge: Boolean = false,
+            throttle: ThrottleResultPrefs.SavedResult? = null,
+            storage: StorageBenchResultPrefs.SavedResult? = null,
+            ram: RamBenchResultPrefs.SavedResult? = null,
+            gpu: GpuBenchResultPrefs.SavedResult? = null,
         ): RemoteViews {
-            val views = RemoteViews(context.packageName, R.layout.widget_last_bench)
+            val layoutRes = if (isLarge) R.layout.widget_last_bench_large else R.layout.widget_last_bench
+            val views = RemoteViews(context.packageName, layoutRes)
 
-            if (latest == null) {
+            if (isLarge) {
+                bindRow(views, context, R.id.widgetLastBenchThrottleRow, LastBenchPicker.Kind.THROTTLE, throttle, storage, ram, gpu)
+                bindRow(views, context, R.id.widgetLastBenchStorageRow, LastBenchPicker.Kind.STORAGE, throttle, storage, ram, gpu)
+                bindRow(views, context, R.id.widgetLastBenchRamRow, LastBenchPicker.Kind.RAM, throttle, storage, ram, gpu)
+                bindRow(views, context, R.id.widgetLastBenchGpuRow, LastBenchPicker.Kind.GPU, throttle, storage, ram, gpu)
+            } else if (latest == null) {
                 views.setTextViewText(R.id.widgetLastBenchLabel, context.getString(R.string.last_bench_widget_empty))
                 views.setTextViewText(R.id.widgetLastBenchValue, "")
             } else {
@@ -104,6 +132,44 @@ class LastBenchWidgetProvider : AppWidgetProvider() {
             views.setOnClickPendingIntent(R.id.widgetLastBenchRoot, openAppPendingIntent)
 
             return views
+        }
+
+        /** U27 — large layout shows all 4 benchmark types at once (not just the newest one, see
+         * the compact layout's [labelRes]/[valueText] usage above), each on its own row, hidden if
+         * that type has never been run. Reuses [labelRes]/[valueText] instead of duplicating the
+         * per-kind formatting by building the same [LastBenchPicker.Latest] shape each of those
+         * already expects. */
+        private fun bindRow(
+            views: RemoteViews,
+            context: Context,
+            rowId: Int,
+            kind: LastBenchPicker.Kind,
+            throttle: ThrottleResultPrefs.SavedResult?,
+            storage: StorageBenchResultPrefs.SavedResult?,
+            ram: RamBenchResultPrefs.SavedResult?,
+            gpu: GpuBenchResultPrefs.SavedResult?,
+        ) {
+            val latestForKind = latestForKind(kind, throttle, storage, ram, gpu)
+            if (latestForKind == null) {
+                views.setViewVisibility(rowId, View.GONE)
+                return
+            }
+            views.setViewVisibility(rowId, View.VISIBLE)
+            val text = "${context.getString(labelRes(kind))}: ${valueText(context, latestForKind)}"
+            views.setTextViewText(rowId, text)
+        }
+
+        private fun latestForKind(
+            kind: LastBenchPicker.Kind,
+            throttle: ThrottleResultPrefs.SavedResult?,
+            storage: StorageBenchResultPrefs.SavedResult?,
+            ram: RamBenchResultPrefs.SavedResult?,
+            gpu: GpuBenchResultPrefs.SavedResult?,
+        ): LastBenchPicker.Latest? = when (kind) {
+            LastBenchPicker.Kind.THROTTLE -> throttle?.let { LastBenchPicker.Latest(kind, it.timestampMs, throttle = it) }
+            LastBenchPicker.Kind.STORAGE -> storage?.let { LastBenchPicker.Latest(kind, it.timestampMs, storage = it) }
+            LastBenchPicker.Kind.RAM -> ram?.let { LastBenchPicker.Latest(kind, it.timestampMs, ram = it) }
+            LastBenchPicker.Kind.GPU -> gpu?.let { LastBenchPicker.Latest(kind, it.timestampMs, gpu = it) }
         }
 
         internal fun tabPositionFor(kind: LastBenchPicker.Kind): Int = when (kind) {
