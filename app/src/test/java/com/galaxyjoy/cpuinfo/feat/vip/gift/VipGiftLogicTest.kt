@@ -90,4 +90,17 @@ class VipGiftLogicTest {
 
         assertTrue(days >= 1)
     }
+
+    /** Documents the known rounding-up behavior (see the function's own `ponytail:` comment) —
+     * 12h remaining rounds up to a full 2 days rather than a fractional 1.5, an intentional
+     * bounded over-grant (never under-grants) rather than an oversight. Pinning the exact value
+     * here (not just `>= 1`) so a future change to this rounding is a deliberate decision, not a
+     * silent behavior drift. */
+    @Test
+    fun `partial-day remainder rounds up to the next whole day, a bounded over-grant by design`() {
+        val now = 0L
+        val currentExpiryMs = dayMs / 2 // 12h remaining
+
+        assertEquals(2, VipGiftLogic.daysToGrantForAccumulate(currentExpiryMs, now))
+    }
 }
