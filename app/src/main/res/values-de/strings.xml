@@ -183,6 +183,13 @@
     <string name="vip_redeem_invalid">Ungültiger Schlüssel. Bitte erneut versuchen.</string>
     <string name="vip_redeem_success">%1$d-Tage-VIP aktiviert. Viel Spaß!</string>
     <string name="vip_watch_ad_3d">Werbung ansehen → 3 Tage VIP</string>
+
+    <!-- U11 - Einem Freund 1 Tag VIP schenken -->
+    <string name="vip_gift_button">Einem Freund 1 Tag VIP schenken</string>
+    <string name="vip_gift_share_message">Ich nutze CPU Info — hier ist ein kostenloser 1-Tages-VIP-Geschenkcode! Füge ihn im VIP-Bildschirm im Einlösefeld ein: %1$s</string>
+    <string name="vip_gift_share_chooser_title">VIP-Geschenkcode teilen</string>
+    <string name="vip_gift_already_generated_today">Du hast heute schon einen Geschenkcode erstellt — versuch es morgen erneut</string>
+    <string name="vip_gift_already_redeemed_today">Du hast heute schon einen Geschenkcode eingelöst — versuch es morgen erneut</string>
     <string name="vip_watch_ad_failed">Werbung nicht verfügbar, bitte später erneut versuchen.</string>
     <string name="vip_buy_30d_locked">30-Tage-VIP kaufen — bald verfügbar</string>
     <string name="vip_buy_90d_locked">90-Tage-VIP kaufen — bald verfügbar</string>

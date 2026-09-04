@@ -220,6 +220,13 @@
     <string name="vip_redeem_invalid">Mã không hợp lệ. Vui lòng thử lại.</string>
     <string name="vip_redeem_success">Đã kích hoạt VIP %1$d ngày. Chúc bạn vui vẻ!</string>
     <string name="vip_watch_ad_3d">Xem quảng cáo → 3 ngày VIP</string>
+
+    <!-- U11 - Tặng bạn 1 ngày VIP -->
+    <string name="vip_gift_button">Tặng bạn 1 ngày VIP</string>
+    <string name="vip_gift_share_message">Mình đang dùng CPU Info — tặng bạn mã VIP miễn phí 1 ngày! Dán mã này vào ô nhập mã ở màn VIP: %1$s</string>
+    <string name="vip_gift_share_chooser_title">Chia sẻ mã tặng VIP</string>
+    <string name="vip_gift_already_generated_today">Bạn đã tạo mã tặng hôm nay rồi, thử lại vào ngày mai nhé</string>
+    <string name="vip_gift_already_redeemed_today">Bạn đã dùng mã tặng hôm nay rồi, thử lại vào ngày mai nhé</string>
     <string name="vip_watch_ad_failed">Quảng cáo chưa sẵn sàng, vui lòng thử lại sau.</string>
     <string name="vip_buy_30d_locked">Mua VIP 30 ngày — sắp ra mắt</string>
     <string name="vip_buy_90d_locked">Mua VIP 90 ngày — sắp ra mắt</string>

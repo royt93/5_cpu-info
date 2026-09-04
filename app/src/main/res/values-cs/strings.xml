@@ -180,6 +180,13 @@
     <string name="vip_redeem_invalid">Neplatný klíč. Zkuste to znovu.</string>
     <string name="vip_redeem_success">Aktivováno VIP na %1$d dnů. Užijte si to!</string>
     <string name="vip_watch_ad_3d">Sledovat reklamu → 3 dny VIP</string>
+
+    <!-- U11 - Darovat příteli 1 den VIP -->
+    <string name="vip_gift_button">Darovat příteli 1 den VIP</string>
+    <string name="vip_gift_share_message">Používám CPU Info — tady je bezplatný dárkový kód na 1 den VIP! Vlož ho do pole pro uplatnění kódu na obrazovce VIP: %1$s</string>
+    <string name="vip_gift_share_chooser_title">Sdílet dárkový kód VIP</string>
+    <string name="vip_gift_already_generated_today">Dnes už jsi vygeneroval dárkový kód — zkus to znovu zítra</string>
+    <string name="vip_gift_already_redeemed_today">Dnes už jsi uplatnil dárkový kód — zkus to znovu zítra</string>
     <string name="vip_watch_ad_failed">Reklama není dostupná, zkuste to později.</string>
     <string name="vip_buy_30d_locked">Koupit VIP na 30 dnů — brzy</string>
     <string name="vip_buy_90d_locked">Koupit VIP na 90 dnů — brzy</string>

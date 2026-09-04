@@ -29,10 +29,17 @@ object AdKeys {
     val VIP_3D_KEY: String
         get() = decodeBase64(VIP_3D_B64)
 
+    /** U11 — HMAC signing key riêng cho mã tặng VIP giữa 2 user (`VipGiftCode`). Cố ý **khác**
+     * [VIP_SECRET] — lộ khoá này chỉ cho phép tự tạo mã tặng 1 ngày (đã giới hạn 1 mã/ngày +
+     * hết hạn sau vài ngày ở `VipGiftLogic`), không cho phép đúc lại key redeem 30 ngày thật. */
+    val VIP_GIFT_SIGNING_KEY: String
+        get() = decodeBase64(VIP_GIFT_SIGNING_KEY_B64)
+
     // Base64 của plain key trong doc/AD_PROMPT_AOS.MD §0.
     private const val VIP_SECRET_B64 = "OWZBMHE3ZU4hMjdjTHgwNEAyMTk5M1kydTBJNyNRMA=="
     private const val VIP_30D_B64 = "OWZBMHE3ZU4hMjdjTHgwNEAyMTk5M1kydTBJNyNRMA=="
     private const val VIP_3D_B64 = "ZVE3QDkzTDBmITJZMjcwN3hOMDQwMjE5OTN1MEkjMmFL"
+    private const val VIP_GIFT_SIGNING_KEY_B64 = "ZzFmVDlBYzNaMjdSb3kwNFFwMjE5OTNZMnUwSTcjUTA="
 
     private fun decodeBase64(b64: String): String =
         String(Base64.decode(b64, Base64.NO_WRAP))

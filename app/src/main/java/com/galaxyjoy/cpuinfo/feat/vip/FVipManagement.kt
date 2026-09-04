@@ -18,6 +18,9 @@ import androidx.fragment.app.Fragment
 import com.galaxyjoy.cpuinfo.R
 import com.galaxyjoy.cpuinfo.common.const.AdKeys
 import com.galaxyjoy.cpuinfo.databinding.FVipManagementBinding
+import com.galaxyjoy.cpuinfo.feat.vip.gift.VipGiftCode
+import com.galaxyjoy.cpuinfo.feat.vip.gift.VipGiftLogic
+import com.galaxyjoy.cpuinfo.feat.vip.gift.VipGiftPrefs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.roy.sdkadbmob.AdManager
 import java.text.SimpleDateFormat
@@ -33,6 +36,7 @@ class FVipManagement : Fragment() {
     private val binding get() = _binding!!
 
     private val vipPrefs by lazy { VipPrefs(requireContext()) }
+    private val vipGiftPrefs by lazy { VipGiftPrefs(requireContext()) }
 
     private var countDownTimer: CountDownTimer? = null
     private var pulseAnimator: ObjectAnimator? = null
@@ -80,6 +84,7 @@ class FVipManagement : Fragment() {
     private fun setupListeners() {
         binding.btnRedeemKey.setOnClickListener { onRedeemClick() }
         binding.btnWatchAd.setOnClickListener { onWatchAdClick() }
+        binding.btnGiftVip.setOnClickListener { onGiftVipClick() }
         binding.btnRevoke.setOnClickListener { onRevokeClick() }
         binding.tvPrivacyPolicy.setOnClickListener {
             openPrivacyPolicy()
@@ -126,7 +131,8 @@ class FVipManagement : Fragment() {
         }
         val days = VipKeys.lookupDays(raw)
         if (days == null) {
-            Log.d(TAG, "onRedeemClick: invalid key (not in whitelist)")
+            if (tryRedeemGiftCode(raw)) return
+            Log.d(TAG, "onRedeemClick: invalid key (not in whitelist, not a valid gift code)")
             binding.tilRedeemKey.error = getString(R.string.vip_redeem_invalid)
             return
         }
@@ -150,6 +156,68 @@ class FVipManagement : Fragment() {
         } else {
             binding.tilRedeemKey.error = getString(R.string.vip_redeem_invalid)
         }
+    }
+
+    /**
+     * U11 — the `etRedeemKey` field's OTHER accepted input shape: a [VipGiftCode] instead of a
+     * [VipKeys] whitelist entry. Returns `true` if [raw] was recognized and handled (whether the
+     * redemption itself succeeded or failed) so the caller stops before showing the generic
+     * "invalid key" error meant for neither-of-the-two-formats input.
+     */
+    private fun tryRedeemGiftCode(raw: String): Boolean {
+        val issuedEpochDay = VipGiftCode.decode(raw) ?: return false
+        val today = VipGiftPrefs.todayEpochDay()
+        if (!VipGiftLogic.isCodeFresh(issuedEpochDay, today)) {
+            Log.d(TAG, "tryRedeemGiftCode: code expired (issued=$issuedEpochDay, today=$today)")
+            return false
+        }
+        if (!VipGiftLogic.canRedeemToday(vipGiftPrefs.getLastRedeemedEpochDay(), today)) {
+            Log.d(TAG, "tryRedeemGiftCode: already redeemed a gift today")
+            binding.tilRedeemKey.error = getString(R.string.vip_gift_already_redeemed_today)
+            return true
+        }
+        val days = VipGiftLogic.daysToGrantForAccumulate(AdManager.getVipByKeyExpiry(), System.currentTimeMillis())
+        val ok = AdManager.activateVipByKey(requireContext(), AdKeys.VIP_SECRET, days)
+        Log.d(TAG, "tryRedeemGiftCode: activate result=$ok, accumulateDays=$days")
+        if (!ok) return false
+
+        vipGiftPrefs.saveLastRedeemedEpochDay(today)
+        vipPrefs.saveGrantedAtMs(System.currentTimeMillis())
+        vipPrefs.markUserRedeemed()
+        // Total-activated stat should reflect the real gift amount, not the internal
+        // accumulate-adjusted `days` sent to the SDK to avoid overwriting existing VIP time.
+        vipPrefs.addTotalDaysActivated(VipGiftLogic.GIFT_DAYS)
+        binding.etRedeemKey.setText("")
+        triggerConfettiAndHaptic()
+        Toast.makeText(
+            requireContext(),
+            getString(R.string.vip_redeem_success, VipGiftLogic.GIFT_DAYS),
+            Toast.LENGTH_SHORT,
+        ).show()
+        bindUi()
+        notifyVipChanged()
+        return true
+    }
+
+    /** U11 — VIP user shares a 1-day gift code for a friend, limited to once/day (generation
+     * side; redemption side has its own once/day limit in [tryRedeemGiftCode]). */
+    private fun onGiftVipClick() {
+        if (!AdManager.isVipByKeyActive()) return // defensive — bindUi already hides/disables the button
+        val today = VipGiftPrefs.todayEpochDay()
+        if (!VipGiftLogic.canGenerateToday(vipGiftPrefs.getLastGeneratedEpochDay(), today)) {
+            Toast.makeText(requireContext(), getString(R.string.vip_gift_already_generated_today), Toast.LENGTH_SHORT).show()
+            return
+        }
+        val code = VipGiftCode.encode(today)
+        vipGiftPrefs.saveLastGeneratedEpochDay(today)
+        Log.d(TAG, "onGiftVipClick: generated gift code for epochDay=$today")
+
+        val shareIntent = Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_TEXT, getString(R.string.vip_gift_share_message, code))
+        }
+        startActivity(Intent.createChooser(shareIntent, getString(R.string.vip_gift_share_chooser_title)))
+        bindUi()
     }
 
     private fun onWatchAdClick() {
@@ -301,6 +369,12 @@ class FVipManagement : Fragment() {
 
         // Watch ad btn: hide khi đã VIP (lib sẽ skip rewarded anyway → tránh confuse user).
         binding.btnWatchAd.visibility = if (active) View.GONE else View.VISIBLE
+
+        // U11 — gift btn: chỉ VIP mới có gì để tặng; disable (không ẩn) khi đã tạo mã hôm nay,
+        // để user còn thấy nút thay vì tưởng tính năng biến mất.
+        binding.btnGiftVip.visibility = if (active) View.VISIBLE else View.GONE
+        binding.btnGiftVip.isEnabled = active &&
+            VipGiftLogic.canGenerateToday(vipGiftPrefs.getLastGeneratedEpochDay(), VipGiftPrefs.todayEpochDay())
 
         // Revoke btn: hide khi free user (không có VIP để revoke). UI sạch hơn disabled.
         // Layout XML default enabled=true (mặc định MaterialButton), nhưng explicit set để

@@ -184,6 +184,13 @@
     <string name="vip_redeem_invalid">Nieprawidłowy klucz. Spróbuj ponownie.</string>
     <string name="vip_redeem_success">Aktywowano VIP na %1$d dni. Miłego korzystania!</string>
     <string name="vip_watch_ad_3d">Obejrzyj reklamę → 3 dni VIP</string>
+
+    <!-- U11 - Podaruj znajomemu 1 dzień VIP -->
+    <string name="vip_gift_button">Podaruj znajomemu 1 dzień VIP</string>
+    <string name="vip_gift_share_message">Używam CPU Info — oto darmowy kod prezentowy na 1 dzień VIP! Wklej go w polu odbioru kodu na ekranie VIP: %1$s</string>
+    <string name="vip_gift_share_chooser_title">Udostępnij kod prezentowy VIP</string>
+    <string name="vip_gift_already_generated_today">Dzisiaj już wygenerowałeś kod prezentowy — spróbuj ponownie jutro</string>
+    <string name="vip_gift_already_redeemed_today">Dzisiaj już wykorzystałeś kod prezentowy — spróbuj ponownie jutro</string>
     <string name="vip_watch_ad_failed">Reklama niedostępna, spróbuj ponownie później.</string>
     <string name="vip_buy_30d_locked">Kup VIP na 30 dni — wkrótce</string>
     <string name="vip_buy_90d_locked">Kup VIP na 90 dni — wkrótce</string>

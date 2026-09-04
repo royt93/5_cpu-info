@@ -454,6 +454,13 @@
     <string name="vip_redeem_success">已成功啟用 %1$d 天 VIP，祝您使用愉快！</string>
     <string name="vip_redeem_invalid">序號無效，請重試。</string>
     <string name="vip_watch_ad_3d">觀看廣告 → 獲得 3 天 VIP</string>
+
+    <!-- U11 - 贈送好友 1 天 VIP -->
+    <string name="vip_gift_button">贈送好友 1 天 VIP</string>
+    <string name="vip_gift_share_message">我正在使用 CPU Info — 送你一組免費的 1 天 VIP 贈禮代碼！將它貼到 VIP 畫面的兌換欄位：%1$s</string>
+    <string name="vip_gift_share_chooser_title">分享 VIP 贈禮代碼</string>
+    <string name="vip_gift_already_generated_today">你今天已經產生過贈禮代碼了，明天再試一次吧</string>
+    <string name="vip_gift_already_redeemed_today">你今天已經兌換過贈禮代碼了，明天再試一次吧</string>
     <string name="vip_watch_ad_failed">廣告尚未就緒，請稍後再試。</string>
     <string name="vip_revoke_all_button">撤銷 VIP</string>
     <string name="vip_revoke_all_confirm_title">確認撤銷</string>
