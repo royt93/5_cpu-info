@@ -4,7 +4,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class DataNativeProviderCpu @Inject constructor() {
+open class DataNativeProviderCpu @Inject constructor() {
 
     external fun initLibrary()
 
@@ -99,5 +99,10 @@ class DataNativeProviderCpu @Inject constructor() {
     /** Pins the calling thread to logical cores `[coreIndexStart, coreIndexStart+coreIndexCount)`
      * via `sched_setaffinity`. Must be called from the worker thread itself. Returns `false`
      * (rather than throwing) if the kernel/cgroup policy denies it. */
-    external fun setThreadAffinity(coreIndexStart: Int, coreIndexCount: Int): Boolean
+    /** `open` (unlike every other member here) so a JVM unit test can override it with a plain
+     * fake — MockK can't stub `external fun`s (they have no bytecode body to proxy; stubbing one
+     * throws `UnsatisfiedLinkError` immediately, a known limitation throughout this codebase since
+     * U06). [ClusterBenchmarkRunner] is the one caller that branches on this method's return
+     * value, so it's the one native call worth unlocking for real unit testing. */
+    open external fun setThreadAffinity(coreIndexStart: Int, coreIndexCount: Int): Boolean
 }
