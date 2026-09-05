@@ -1,6 +1,7 @@
 package com.galaxyjoy.cpuinfo.feat.clusterbench
 
 import com.galaxyjoy.cpuinfo.feat.infor.cpu.ClusterTopologyBuilder
+import com.galaxyjoy.cpuinfo.util.BenchmarkSafety
 
 /**
  * Pure U31 model — no Android deps. [ClusterBenchmarkRunner] drives the actual per-cluster
@@ -17,7 +18,7 @@ object ClusterBenchmark {
     const val DURATION_PER_CLUSTER_MS = 3_000L
 
     /** Same threshold as U02's [com.galaxyjoy.cpuinfo.feat.throttle.ThrottleFingerprint]. */
-    const val SAFETY_ABORT_TEMP_C = 43
+    const val SAFETY_ABORT_TEMP_C = BenchmarkSafety.SAFETY_ABORT_TEMP_C
 
     enum class AbortReason { OVERHEAT, INTERRUPTED }
 
@@ -25,9 +26,13 @@ object ClusterBenchmark {
         val tier: ClusterTopologyBuilder.Tier,
         val coreCount: Int,
         val opsPerSecond: Long,
+        /** False if [com.galaxyjoy.cpuinfo.data.provider.DataNativeProviderCpu.setThreadAffinity]
+         * failed for at least one worker — the measurement may have run on the wrong cores
+         * (kernel/cgroup denied the pin) so the OS scheduler could have spread load elsewhere. */
+        val affinityConfirmed: Boolean = true,
     )
 
     data class Result(val clusters: List<ClusterResult>)
 
-    fun shouldAbortForSafety(tempC: Int): Boolean = tempC >= SAFETY_ABORT_TEMP_C
+    fun shouldAbortForSafety(tempC: Int): Boolean = BenchmarkSafety.shouldAbortForSafety(tempC)
 }

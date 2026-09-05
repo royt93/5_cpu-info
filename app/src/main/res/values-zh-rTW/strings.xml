@@ -598,6 +598,7 @@
     <string name="cluster_bench_share_button">分享</string>
     <string name="cluster_bench_share_segment">%1$s（%2$d 核）：%3$s 次運算/秒</string>
     <string name="cluster_bench_share_text">核心叢集效能測試 — %1$s</string>
+    <string name="cluster_bench_affinity_warning">⚠ 無法固定到此叢集的核心 — 結果可能不準確</string>
     <string name="bench_result_card_title">效能測試結果</string>
     <string name="bench_result_card_share_image_button">分享圖片</string>
     <string name="bench_result_card_share_button">分享結果卡片</string>

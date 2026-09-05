@@ -8,6 +8,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.galaxyjoy.cpuinfo.feat.gpubench.GpuBenchResultPrefs
 import com.galaxyjoy.cpuinfo.feat.gpubench.GpuBenchmark
 import com.galaxyjoy.cpuinfo.feat.rambench.RamBenchResultPrefs
+import com.galaxyjoy.cpuinfo.feat.storagebench.StorageBenchmark
 import com.galaxyjoy.cpuinfo.feat.storagebench.StorageBenchResultPrefs
 import com.galaxyjoy.cpuinfo.feat.throttle.ThrottleFingerprint
 import com.galaxyjoy.cpuinfo.feat.throttle.ThrottleResultPrefs
@@ -105,6 +106,30 @@ class BackupInstrumentedTest {
 
         assertEquals(5_000_000L, throttlePrefs.getLastResult()?.opsPerSecond)
         assertEquals(55.5, gpuPrefs.getLastResult()?.avgFps)
+    }
+
+    @Test
+    fun apply_anOlderBackupMissingAHistoryField_leavesThatBenchmarksRealHistoryUntouched() = runBlocking {
+        // Simulates restoring a backup written by an older app version that didn't know about
+        // storageHistory yet (field absent from the JSON entirely, decodes to null via Gson) —
+        // the real-world case that used to wipe existing data (see BackupImporterTest's JVM
+        // coverage of the same bug against a mocked StorageBenchResultPrefs; this proves it
+        // against the real SharedPreferences-backed implementation).
+        storagePrefs.saveResult(
+            StorageBenchmark.Result(
+                seqWriteMbPerSec = 111.0, seqReadMbPerSec = 222.0,
+                randomWriteOpsPerSec = 10.0, randomReadOpsPerSec = 20.0, hashMbPerSec = 30.0,
+            ),
+        )
+        appContext.contentResolver.openOutputStream(backupFileUri)?.use {
+            it.write("""{"version":1,"throttleHistory":[]}""".toByteArray())
+        }
+
+        val decoded = importer.readFrom(backupFileUri)
+        assertTrue(decoded != null)
+        importer.apply(decoded!!)
+
+        assertEquals(111.0, storagePrefs.getLastResult()?.seqWriteMbPerSec)
     }
 
     @Test

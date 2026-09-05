@@ -162,6 +162,14 @@ private fun DoneContent(
             value = stringResource(R.string.cluster_bench_ops_value, ops.format(cluster.opsPerSecond)),
             color = tierColor(cluster.tier),
         )
+        if (!cluster.affinityConfirmed) {
+            Text(
+                text = stringResource(R.string.cluster_bench_affinity_warning),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.error,
+                modifier = Modifier.padding(bottom = 4.dp),
+            )
+        }
     }
 
     Spacer(Modifier.height(24.dp))

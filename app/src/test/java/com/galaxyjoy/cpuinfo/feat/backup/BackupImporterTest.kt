@@ -33,21 +33,30 @@ class BackupImporterTest {
     }
 
     @Test
-    fun `apply replaces all 4 histories from the bundle`() {
+    fun `apply replaces only the histories present in the bundle`() {
         val throttleEntry = ThrottleResultPrefs.SavedResult(1L, 2400, 2200, 12, 34, 4_000_000L)
         val bundle = BackupBundle(version = 1, throttleHistory = listOf(throttleEntry))
 
         importer.apply(bundle)
 
         verify(exactly = 1) { throttlePrefs.replaceHistory(listOf(throttleEntry)) }
-        verify(exactly = 1) { storagePrefs.replaceHistory(emptyList()) }
-        verify(exactly = 1) { ramPrefs.replaceHistory(emptyList()) }
-        verify(exactly = 1) { gpuPrefs.replaceHistory(emptyList()) }
+        verify(exactly = 0) { storagePrefs.replaceHistory(any()) }
+        verify(exactly = 0) { ramPrefs.replaceHistory(any()) }
+        verify(exactly = 0) { gpuPrefs.replaceHistory(any()) }
     }
 
     @Test
-    fun `apply treats a null history field as empty rather than skipping the replace`() {
+    fun `apply skips the replace entirely when a history field is null, leaving existing data untouched`() {
         val bundle = BackupBundle(version = 1)
+
+        importer.apply(bundle)
+
+        verify(exactly = 0) { throttlePrefs.replaceHistory(any()) }
+    }
+
+    @Test
+    fun `apply still replaces with an explicit empty list when the bundle says so`() {
+        val bundle = BackupBundle(version = 1, throttleHistory = emptyList())
 
         importer.apply(bundle)
 

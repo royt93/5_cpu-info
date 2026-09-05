@@ -49,6 +49,21 @@ class DataProviderBatteryTest {
         assertNull(provider.getBatteryData().chargingCurrentMa)
     }
 
+    @Test fun `temperature reads zero and sub-zero readings, not just positive ones`() {
+        every { statusProvider.getBatteryStatusIntent() } returns intent
+        every { intent.hasExtra(BatteryManager.EXTRA_TEMPERATURE) } returns true
+        every { intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, 0) } returns 0
+        assertEquals(0f, provider.getBatteryData().temperature)
+        every { intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, 0) } returns -50
+        assertEquals(-5f, provider.getBatteryData().temperature)
+    }
+
+    @Test fun `temperature is null when the extra is absent, not defaulted to zero`() {
+        every { statusProvider.getBatteryStatusIntent() } returns intent
+        every { intent.hasExtra(BatteryManager.EXTRA_TEMPERATURE) } returns false
+        assertNull(provider.getBatteryData().temperature)
+    }
+
     @Test fun `missing broadcast and unsupported current are unavailable`() {
         every { statusProvider.getBatteryStatusIntent() } returns null
         every { manager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CURRENT_NOW) } returns Int.MIN_VALUE

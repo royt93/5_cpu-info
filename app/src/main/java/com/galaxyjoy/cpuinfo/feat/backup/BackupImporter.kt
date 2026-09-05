@@ -41,12 +41,13 @@ class BackupImporter @Inject constructor(
 
     /** Replaces (not merges) each benchmark's history, and overwrites the temperature-unit/theme
      * prefs + app locale only for the fields actually present in [bundle] — an older/partial
-     * backup with `null` settings fields leaves those untouched rather than resetting them. */
+     * backup with `null` fields (histories included) leaves those untouched rather than resetting
+     * them. */
     fun apply(bundle: BackupBundle) {
-        throttlePrefs.replaceHistory(bundle.throttleHistory ?: emptyList())
-        storagePrefs.replaceHistory(bundle.storageHistory ?: emptyList())
-        ramPrefs.replaceHistory(bundle.ramHistory ?: emptyList())
-        gpuPrefs.replaceHistory(bundle.gpuHistory ?: emptyList())
+        bundle.throttleHistory?.let { throttlePrefs.replaceHistory(it) }
+        bundle.storageHistory?.let { storagePrefs.replaceHistory(it) }
+        bundle.ramHistory?.let { ramPrefs.replaceHistory(it) }
+        bundle.gpuHistory?.let { gpuPrefs.replaceHistory(it) }
         bundle.temperatureUnit?.let { prefs.insert(FrmSettings.KEY_TEMPERATURE_UNIT, it) }
         bundle.theme?.let {
             prefs.insert(FrmSettings.KEY_THEME_CONFIG, it)

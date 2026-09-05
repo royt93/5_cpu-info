@@ -63,5 +63,18 @@ class ClusterBenchmarkRunnerInstrumentedTest {
         val finished = states.filterIsInstance<ClusterBenchmarkRunner.State.Finished>().single()
         assertTrue(finished.result.clusters.size == realClusters.size)
         assertTrue(finished.result.clusters.all { it.opsPerSecond > 0 })
+        // affinityConfirmed's actual value is device/OS-state-dependent (cgroup policy can deny
+        // sched_setaffinity even for a plain background app thread) — not asserted true/false,
+        // same reasoning as setThreadAffinity_pinningToCore0_doesNotCrashAndReportsAResult above.
+        // Confirmed on a real Pixel 7 Pro during this exact test's development: this device's
+        // kernel DOES deny the pin for all 8 workers of its single ALL_CORES cluster (logged via
+        // -w instrumentation output as `affinityConfirmed=false` per cluster), which is exactly
+        // the real-world case the U28-U35 tech-debt sweep added this field to surface in the UI
+        // instead of silently mis-measuring. This assertion only proves the field threads through
+        // end-to-end without crashing, matching what the sibling test above already proves for
+        // the raw JNI call.
+        finished.result.clusters.forEach {
+            android.util.Log.i("ClusterBenchTest", "cluster=${it.tier} affinityConfirmed=${it.affinityConfirmed}")
+        }
     }
 }

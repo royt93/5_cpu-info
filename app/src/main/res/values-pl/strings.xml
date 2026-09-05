@@ -596,6 +596,7 @@
     <string name="cluster_bench_share_button">Udostępnij</string>
     <string name="cluster_bench_share_segment">%1$s (%2$d rdzeni): %3$s op/s</string>
     <string name="cluster_bench_share_text">Test klastrów — %1$s</string>
+    <string name="cluster_bench_affinity_warning">⚠ nie udało się przypiąć do rdzeni tego klastra — wynik może być niedokładny</string>
     <string name="bench_result_card_title">Wyniki testu wydajności</string>
     <string name="bench_result_card_share_image_button">Udostępnij jako obraz</string>
     <string name="bench_result_card_share_button">Udostępnij kartę wyników</string>

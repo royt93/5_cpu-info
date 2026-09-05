@@ -599,6 +599,7 @@
     <string name="cluster_bench_share_button">Teilen</string>
     <string name="cluster_bench_share_segment">%1$s (%2$d Kerne): %3$s Ops/s</string>
     <string name="cluster_bench_share_text">Cluster-Benchmark — %1$s</string>
+    <string name="cluster_bench_affinity_warning">⚠ Anheften an die Kerne dieses Clusters fehlgeschlagen — Ergebnis könnte ungenau sein</string>
     <string name="bench_result_card_title">Benchmark-Ergebnisse</string>
     <string name="bench_result_card_share_image_button">Als Bild teilen</string>
     <string name="bench_result_card_share_button">Ergebniskarte teilen</string>

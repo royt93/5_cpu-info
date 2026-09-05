@@ -64,12 +64,12 @@ class ClusterBenchmarkRunner @Inject constructor(
                 return
             }
             onState(State.Running(index, clusters.size, cluster.tier))
-            val opsPerSecond = benchmarkCluster(cluster, durationPerClusterMs)
+            val (opsPerSecond, affinityConfirmed) = benchmarkCluster(cluster, durationPerClusterMs)
             if (stopRequested) {
                 onState(State.Aborted(ClusterBenchmark.AbortReason.INTERRUPTED))
                 return
             }
-            results += ClusterBenchmark.ClusterResult(cluster.tier, cluster.coreCount, opsPerSecond)
+            results += ClusterBenchmark.ClusterResult(cluster.tier, cluster.coreCount, opsPerSecond, affinityConfirmed)
         }
 
         onState(State.Finished(ClusterBenchmark.Result(results)))
@@ -78,14 +78,17 @@ class ClusterBenchmarkRunner @Inject constructor(
     private suspend fun benchmarkCluster(
         cluster: ClusterTopologyBuilder.Cluster,
         durationMs: Long,
-    ): Long = withContext(Dispatchers.Default) {
+    ): Pair<Long, Boolean> = withContext(Dispatchers.Default) {
         val opsCounters = LongArray(cluster.coreCount)
+        // Same no-synchronization reasoning as opsCounters: each worker only ever writes its own
+        // index, visibility guaranteed by the join() below, not by these writes racing.
+        val affinityPinned = BooleanArray(cluster.coreCount)
         val executor = Executors.newFixedThreadPool(cluster.coreCount)
         val dispatcher = executor.asCoroutineDispatcher()
         try {
             val workers = (0 until cluster.coreCount).map { i ->
                 launch(dispatcher) {
-                    dataNativeProviderCpu.setThreadAffinity(cluster.coreIndexRange.first + i, 1)
+                    affinityPinned[i] = dataNativeProviderCpu.setThreadAffinity(cluster.coreIndexRange.first + i, 1)
                     burnCpu(i, opsCounters)
                 }
             }
@@ -106,7 +109,8 @@ class ClusterBenchmarkRunner @Inject constructor(
         }
 
         val elapsedSeconds = durationMs / 1000.0
-        if (elapsedSeconds > 0) (opsCounters.sum() / elapsedSeconds).roundToLong() else 0L
+        val opsPerSecond = if (elapsedSeconds > 0) (opsCounters.sum() / elapsedSeconds).roundToLong() else 0L
+        opsPerSecond to affinityPinned.all { it }
     }
 
     /** Tight FP busy-loop — no allocation, checks cancellation every iteration. Each worker only

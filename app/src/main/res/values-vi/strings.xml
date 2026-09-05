@@ -603,6 +603,7 @@
     <string name="cluster_bench_share_button">Chia sẻ</string>
     <string name="cluster_bench_share_segment">%1$s (%2$d nhân): %3$s ops/s</string>
     <string name="cluster_bench_share_text">Benchmark cụm nhân — %1$s</string>
+    <string name="cluster_bench_affinity_warning">⚠ không pin được vào đúng nhân của cụm này — kết quả có thể không chính xác</string>
     <string name="bench_result_card_title">Kết quả kiểm tra hiệu năng</string>
     <string name="bench_result_card_share_image_button">Chia sẻ ảnh</string>
     <string name="bench_result_card_share_button">Chia sẻ thẻ kết quả</string>

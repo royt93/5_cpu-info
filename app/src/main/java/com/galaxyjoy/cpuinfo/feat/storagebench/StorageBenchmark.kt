@@ -1,5 +1,7 @@
 package com.galaxyjoy.cpuinfo.feat.storagebench
 
+import com.galaxyjoy.cpuinfo.util.BenchmarkSafety
+
 /**
  * Pure storage/CPU micro-benchmark math (F06) — no Android deps. [StorageBenchmarkRunner] drives
  * the actual I/O + hash workload and feeds raw byte/op counts + elapsed time here.
@@ -21,7 +23,7 @@ object StorageBenchmark {
     const val HASH_BUFFER_BYTES = 256 * 1024
 
     /** Same threshold as U02's [com.galaxyjoy.cpuinfo.feat.throttle.ThrottleFingerprint]. */
-    const val SAFETY_ABORT_TEMP_C = 43
+    const val SAFETY_ABORT_TEMP_C = BenchmarkSafety.SAFETY_ABORT_TEMP_C
 
     data class Result(
         val seqWriteMbPerSec: Double,
@@ -31,7 +33,7 @@ object StorageBenchmark {
         val hashMbPerSec: Double,
     )
 
-    fun shouldAbortForSafety(tempC: Int): Boolean = tempC >= SAFETY_ABORT_TEMP_C
+    fun shouldAbortForSafety(tempC: Int): Boolean = BenchmarkSafety.shouldAbortForSafety(tempC)
 
     fun mbPerSec(bytes: Long, elapsedNanos: Long): Double {
         if (elapsedNanos <= 0L) return 0.0

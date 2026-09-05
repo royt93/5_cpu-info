@@ -1,5 +1,7 @@
 package com.galaxyjoy.cpuinfo.feat.rambench
 
+import com.galaxyjoy.cpuinfo.util.BenchmarkSafety
+
 /**
  * Pure RAM micro-benchmark math (U16) — no Android deps. [RamBenchmarkRunner] drives the actual
  * memory read/write workload and feeds raw byte counts + elapsed time here. Same shape as F06's
@@ -18,7 +20,7 @@ object RamBenchmark {
     const val READ_DURATION_MS = 500L
 
     /** Same threshold as U02's [com.galaxyjoy.cpuinfo.feat.throttle.ThrottleFingerprint]. */
-    const val SAFETY_ABORT_TEMP_C = 43
+    const val SAFETY_ABORT_TEMP_C = BenchmarkSafety.SAFETY_ABORT_TEMP_C
 
     enum class AbortReason { OVERHEAT, INSUFFICIENT_MEMORY }
 
@@ -27,7 +29,7 @@ object RamBenchmark {
         val readMbPerSec: Double,
     )
 
-    fun shouldAbortForSafety(tempC: Int): Boolean = tempC >= SAFETY_ABORT_TEMP_C
+    fun shouldAbortForSafety(tempC: Int): Boolean = BenchmarkSafety.shouldAbortForSafety(tempC)
 
     /** Requires at least 4x the scratch buffer free in the JVM heap before allocating — leaves
      * headroom for the rest of the app + GC, rather than allocating right up to the limit. */

@@ -27,8 +27,9 @@ class DataProviderBattery @Inject constructor(
             chargingCurrentMa = current?.let { BatteryReading.chargingCurrentMa(it, activelyCharging) },
             currentMa = current?.let(BatteryReading::currentMa),
             temperature = readOrNull {
-                status?.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, 0)
-                    ?.takeIf { it > 0 }?.div(10f)
+                status?.takeIf { it.hasExtra(BatteryManager.EXTRA_TEMPERATURE) }
+                    ?.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, 0)
+                    ?.div(10f)
             },
             designedCapacity = readOrNull { batteryStatusProvider.getBatteryCapacity() } ?: -1.0,
             chargeCounter = longPropertyOrNull(BatteryManager.BATTERY_PROPERTY_CHARGE_COUNTER),

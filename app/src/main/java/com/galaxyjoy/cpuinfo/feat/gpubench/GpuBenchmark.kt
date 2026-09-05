@@ -1,5 +1,7 @@
 package com.galaxyjoy.cpuinfo.feat.gpubench
 
+import com.galaxyjoy.cpuinfo.util.BenchmarkSafety
+
 /**
  * Pure GPU micro-benchmark math (U15) — no GL/Android deps, unlike [GpuBenchmarkRunner] which
  * drives the actual `GLSurfaceView.Renderer` workload. No hardcoded score table (unlike a
@@ -18,7 +20,7 @@ object GpuBenchmark {
 
     /** Same threshold as U02's [com.galaxyjoy.cpuinfo.feat.throttle.ThrottleFingerprint] and
      * U16's [com.galaxyjoy.cpuinfo.feat.rambench.RamBenchmark]. */
-    const val SAFETY_ABORT_TEMP_C = 43
+    const val SAFETY_ABORT_TEMP_C = BenchmarkSafety.SAFETY_ABORT_TEMP_C
 
     enum class AbortReason { OVERHEAT, INTERRUPTED }
 
@@ -28,7 +30,7 @@ object GpuBenchmark {
         val durationMs: Long,
     )
 
-    fun shouldAbortForSafety(tempC: Int): Boolean = tempC >= SAFETY_ABORT_TEMP_C
+    fun shouldAbortForSafety(tempC: Int): Boolean = BenchmarkSafety.shouldAbortForSafety(tempC)
 
     fun fps(frameCount: Long, elapsedNanos: Long): Double {
         if (elapsedNanos <= 0L) return 0.0

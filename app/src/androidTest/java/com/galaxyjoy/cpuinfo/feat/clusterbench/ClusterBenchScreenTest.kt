@@ -87,6 +87,48 @@ class ClusterBenchScreenTest {
     }
 
     @Test
+    fun doneState_affinityNotConfirmed_showsWarningRow() {
+        val result = ClusterBenchmark.Result(
+            clusters = listOf(
+                ClusterBenchmark.ClusterResult(
+                    ClusterTopologyBuilder.Tier.EFFICIENCY,
+                    coreCount = 4,
+                    opsPerSecond = 3_000_000L,
+                    affinityConfirmed = false,
+                ),
+            ),
+        )
+        val state = VMClusterBench.UiState.Done(result)
+
+        composeRule.setContent {
+            CpuInfoTheme { ClusterBenchScreen(state, {}, {}, {}, {}) }
+        }
+
+        composeRule.onNodeWithText(appContext.getString(R.string.cluster_bench_affinity_warning)).assertExists()
+    }
+
+    @Test
+    fun doneState_affinityConfirmed_hidesWarningRow() {
+        val result = ClusterBenchmark.Result(
+            clusters = listOf(
+                ClusterBenchmark.ClusterResult(
+                    ClusterTopologyBuilder.Tier.EFFICIENCY,
+                    coreCount = 4,
+                    opsPerSecond = 3_000_000L,
+                    affinityConfirmed = true,
+                ),
+            ),
+        )
+        val state = VMClusterBench.UiState.Done(result)
+
+        composeRule.setContent {
+            CpuInfoTheme { ClusterBenchScreen(state, {}, {}, {}, {}) }
+        }
+
+        composeRule.onNodeWithText(appContext.getString(R.string.cluster_bench_affinity_warning)).assertDoesNotExist()
+    }
+
+    @Test
     fun abortedState_overheat_showsOverheatMessageNotInterruptedMessage() {
         val state = VMClusterBench.UiState.Aborted(ClusterBenchmark.AbortReason.OVERHEAT)
 

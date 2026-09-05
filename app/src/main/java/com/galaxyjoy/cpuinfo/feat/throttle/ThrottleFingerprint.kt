@@ -1,5 +1,6 @@
 package com.galaxyjoy.cpuinfo.feat.throttle
 
+import com.galaxyjoy.cpuinfo.util.BenchmarkSafety
 import kotlin.math.roundToLong
 
 /**
@@ -14,7 +15,7 @@ object ThrottleFingerprint {
 
     const val TEST_DURATION_MS = 30_000L
     const val SAMPLE_INTERVAL_MS = 1_000L
-    const val SAFETY_ABORT_TEMP_C = 43
+    const val SAFETY_ABORT_TEMP_C = BenchmarkSafety.SAFETY_ABORT_TEMP_C
     const val THROTTLE_THRESHOLD_PERCENT = 15
     private const val SUSTAINED_WINDOW_MS = 5_000L
 
@@ -44,7 +45,7 @@ object ThrottleFingerprint {
         val opsPerSecond: Long,
     )
 
-    fun shouldAbortForSafety(tempC: Int): Boolean = tempC >= SAFETY_ABORT_TEMP_C
+    fun shouldAbortForSafety(tempC: Int): Boolean = BenchmarkSafety.shouldAbortForSafety(tempC)
 
     fun shouldStop(elapsedMs: Long): Boolean = elapsedMs >= TEST_DURATION_MS
 

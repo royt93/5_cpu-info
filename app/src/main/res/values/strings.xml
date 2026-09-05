@@ -630,6 +630,7 @@
     <string name="cluster_bench_share_button">Share</string>
     <string name="cluster_bench_share_segment">%1$s (%2$d cores): %3$s ops/s</string>
     <string name="cluster_bench_share_text">Cluster benchmark — %1$s</string>
+    <string name="cluster_bench_affinity_warning">⚠ could not pin to this cluster\'s cores — result may be inaccurate</string>
     <string name="bench_result_card_title">Benchmark results</string>
     <string name="bench_result_card_share_image_button">Share as image</string>
     <string name="bench_result_card_share_button">Share benchmark card</string>
