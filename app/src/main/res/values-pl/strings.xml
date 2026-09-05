@@ -386,6 +386,16 @@
     <string name="export_full_report_pref_title">Eksportuj pełny raport urządzenia</string>
     <string name="export_full_report_pref_summary">Połącz kartę urządzenia, kartę wyników benchmarku i pełną historię benchmarków w jeden plik do udostępnienia</string>
     <string name="device_report_share_chooser_title">Udostępnij raport urządzenia</string>
+
+    <!-- U32 - Backup/restore -->
+    <string name="backup_export_pref_title">Kopia zapasowa historii benchmarków</string>
+    <string name="backup_export_pref_summary">Zapisz wszystkie 4 historie benchmarków i kilka ustawień do pliku, aby przywrócić je później lub na nowym urządzeniu</string>
+    <string name="backup_import_pref_title">Przywróć z kopii zapasowej</string>
+    <string name="backup_import_pref_summary">Zastąp bieżącą historię benchmarków i ustawienia wcześniej zapisanym plikiem kopii zapasowej</string>
+    <string name="backup_export_success">Zapisano kopię zapasową</string>
+    <string name="backup_export_failed">Nie udało się zapisać kopii zapasowej</string>
+    <string name="backup_import_success">Przywrócono kopię zapasową</string>
+    <string name="backup_import_failed">Nieprawidłowy plik kopii zapasowej</string>
     <string name="health_alert_channel_name">Alerty stanu urządzenia</string>
     <string name="health_alert_notification_title">Wynik stanu urządzenia spadł</string>
     <string name="health_alert_notification_body">Aktualny wynik: %1$d. Dotknij, aby zobaczyć szczegóły.</string>

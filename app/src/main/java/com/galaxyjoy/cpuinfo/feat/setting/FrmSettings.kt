@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentManager
@@ -15,6 +16,8 @@ import androidx.lifecycle.lifecycleScope
 import com.galaxyjoy.cpuinfo.BuildConfig
 import com.galaxyjoy.cpuinfo.R
 import com.galaxyjoy.cpuinfo.ext.openBrowserPolicy
+import com.galaxyjoy.cpuinfo.feat.backup.BackupExporter
+import com.galaxyjoy.cpuinfo.feat.backup.BackupImporter
 import com.galaxyjoy.cpuinfo.feat.benchhistory.BenchHistoryExporter
 import com.galaxyjoy.cpuinfo.feat.benchreminder.BenchReminderScheduler
 import com.galaxyjoy.cpuinfo.feat.devicereport.DeviceReportExporter
@@ -31,6 +34,7 @@ import com.galaxyjoy.cpuinfo.feat.vipreport.VipDiagnosticReportBottomSheet
 import com.galaxyjoy.cpuinfo.util.ThemeHelper
 import com.roy.sdkadbmob.AdManager
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import moreApp
 import rateApp
 import shareApp
@@ -48,6 +52,12 @@ class FrmSettings : PreferenceFragmentCompat(),
 
     @Inject
     lateinit var deviceReportExporter: DeviceReportExporter
+
+    @Inject
+    lateinit var backupExporter: BackupExporter
+
+    @Inject
+    lateinit var backupImporter: BackupImporter
 
     companion object {
         const val KEY_TEMPERATURE_UNIT = "temperature_unit"
@@ -83,6 +93,43 @@ class FrmSettings : PreferenceFragmentCompat(),
             pref?.isChecked = true
         } else {
             pref?.isChecked = false
+        }
+    }
+
+    /** U32 — `"application/json"` is just the SAF picker's suggested filename/MIME, the user can
+     * rename it on save. */
+    private val createBackupDocument = registerForActivityResult(
+        ActivityResultContracts.CreateDocument("application/json"),
+    ) { uri ->
+        if (uri == null) return@registerForActivityResult
+        lifecycleScope.launch {
+            val success = backupExporter.writeTo(uri)
+            Toast.makeText(
+                requireContext(),
+                if (success) R.string.backup_export_success else R.string.backup_export_failed,
+                Toast.LENGTH_SHORT,
+            ).show()
+        }
+    }
+
+    /** U32 — [BackupImporter.readFrom] only parses; this callback decides whether to actually
+     * [BackupImporter.apply] it, so a malformed/foreign file is rejected with zero side effects
+     * on existing data. */
+    private val openBackupDocument = registerForActivityResult(
+        ActivityResultContracts.OpenDocument(),
+    ) { uri ->
+        if (uri == null) return@registerForActivityResult
+        lifecycleScope.launch {
+            val bundle = backupImporter.readFrom(uri)
+            if (bundle == null) {
+                Toast.makeText(requireContext(), R.string.backup_import_failed, Toast.LENGTH_SHORT).show()
+                return@launch
+            }
+            backupImporter.apply(bundle)
+            findPreference<Preference>(KEY_TEMPERATURE_UNIT)?.summary =
+                readTemperatureUnitLabel(currentTemperatureUnitValue())
+            findPreference<Preference>(KEY_THEME_CONFIG)?.summary = readThemeLabel(currentThemeValue())
+            Toast.makeText(requireContext(), R.string.backup_import_success, Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -134,6 +181,7 @@ class FrmSettings : PreferenceFragmentCompat(),
         wireBenchReminderPref()
         wireExportBenchHistoryPref()
         wireExportFullReportPref()
+        wireBackupPrefs()
 
         listenForBottomSheetResults()
     }
@@ -300,6 +348,19 @@ class FrmSettings : PreferenceFragmentCompat(),
     private fun wireExportFullReportPref() {
         findPreference<Preference>("key_export_full_report")?.setOnPreferenceClickListener {
             deviceReportExporter.exportFullReport(lifecycleScope)
+            true
+        }
+    }
+
+    /** U32 — export writes a re-importable JSON file via SAF; import reads one back and
+     * overwrites the 4 benchmark histories + carried-over settings. */
+    private fun wireBackupPrefs() {
+        findPreference<Preference>("key_export_backup")?.setOnPreferenceClickListener {
+            createBackupDocument.launch("cpuinfo_backup.json")
+            true
+        }
+        findPreference<Preference>("key_import_backup")?.setOnPreferenceClickListener {
+            openBackupDocument.launch(arrayOf("application/json"))
             true
         }
     }

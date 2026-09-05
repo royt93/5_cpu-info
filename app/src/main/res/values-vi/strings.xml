@@ -402,6 +402,16 @@
     <string name="export_full_report_pref_title">Xuất báo cáo thiết bị đầy đủ</string>
     <string name="export_full_report_pref_summary">Gộp thẻ thông tin máy, thẻ kết quả benchmark và toàn bộ lịch sử benchmark thành 1 file chia sẻ</string>
     <string name="device_report_share_chooser_title">Chia sẻ báo cáo thiết bị</string>
+
+    <!-- U32 - Backup/restore -->
+    <string name="backup_export_pref_title">Sao lưu lịch sử benchmark</string>
+    <string name="backup_export_pref_summary">Lưu cả 4 lịch sử benchmark và vài cài đặt ra file để khôi phục sau hoặc trên máy mới</string>
+    <string name="backup_import_pref_title">Khôi phục từ bản sao lưu</string>
+    <string name="backup_import_pref_summary">Thay thế lịch sử benchmark và cài đặt hiện tại bằng file sao lưu đã lưu trước đó</string>
+    <string name="backup_export_success">Đã lưu bản sao lưu</string>
+    <string name="backup_export_failed">Không lưu được bản sao lưu</string>
+    <string name="backup_import_success">Đã khôi phục bản sao lưu</string>
+    <string name="backup_import_failed">File sao lưu không hợp lệ</string>
     <string name="health_alert_channel_name">Cảnh báo sức khoẻ máy</string>
     <string name="health_alert_notification_title">Điểm sức khoẻ máy giảm</string>
     <string name="health_alert_notification_body">Điểm hiện tại: %1$d. Chạm để xem chi tiết.</string>

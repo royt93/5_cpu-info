@@ -61,6 +61,11 @@ class ThrottleResultPrefs @Inject constructor(@ApplicationContext context: Conte
         sp.edit().putString(KEY_HISTORY_JSON, gson.toJson(updated)).apply()
     }
 
+    /** U32 — wholesale overwrite for backup restore, unlike [saveResult]'s append-one-entry. */
+    fun replaceHistory(entries: List<SavedResult>) {
+        sp.edit().putString(KEY_HISTORY_JSON, gson.toJson(entries.takeLast(MAX_HISTORY_ENTRIES))).apply()
+    }
+
     private companion object {
         const val PREFS_NAME = "throttle_result_prefs"
         const val KEY_HISTORY_JSON = "history_json"

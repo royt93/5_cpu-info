@@ -342,6 +342,16 @@
     <string name="export_full_report_pref_title">匯出完整裝置報告</string>
     <string name="export_full_report_pref_summary">將裝置卡片、跑分結果卡片與完整跑分歷史紀錄合併成 1 個檔案分享</string>
     <string name="device_report_share_chooser_title">分享裝置報告</string>
+
+    <!-- U32 - Backup/restore -->
+    <string name="backup_export_pref_title">備份效能測試紀錄</string>
+    <string name="backup_export_pref_summary">將全部 4 種效能測試紀錄及部分設定儲存成檔案，方便日後或在新裝置上還原</string>
+    <string name="backup_import_pref_title">從備份還原</string>
+    <string name="backup_import_pref_summary">用先前儲存的備份檔案取代目前的效能測試紀錄與設定</string>
+    <string name="backup_export_success">備份已儲存</string>
+    <string name="backup_export_failed">無法儲存備份</string>
+    <string name="backup_import_success">備份已還原</string>
+    <string name="backup_import_failed">無效的備份檔案</string>
     <string name="health_alert_channel_name">裝置健康警示</string>
     <string name="health_alert_notification_title">裝置健康分數下降</string>
     <string name="health_alert_notification_body">目前分數：%1$d。點一下查看詳情。</string>

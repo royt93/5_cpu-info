@@ -382,6 +382,16 @@
     <string name="export_full_report_pref_title">Exportovat úplnou zprávu o zařízení</string>
     <string name="export_full_report_pref_summary">Sloučit kartu zařízení, kartu výsledků benchmarku a celou historii benchmarků do jednoho souboru ke sdílení</string>
     <string name="device_report_share_chooser_title">Sdílet zprávu o zařízení</string>
+
+    <!-- U32 - Backup/restore -->
+    <string name="backup_export_pref_title">Zálohovat historii benchmarků</string>
+    <string name="backup_export_pref_summary">Uloží všechny 4 historie benchmarků a několik nastavení do souboru pro pozdější obnovení nebo obnovení na novém zařízení</string>
+    <string name="backup_import_pref_title">Obnovit ze zálohy</string>
+    <string name="backup_import_pref_summary">Nahradí aktuální historii benchmarků a nastavení dříve uloženým záložním souborem</string>
+    <string name="backup_export_success">Záloha uložena</string>
+    <string name="backup_export_failed">Zálohu se nepodařilo uložit</string>
+    <string name="backup_import_success">Záloha obnovena</string>
+    <string name="backup_import_failed">Neplatný záložní soubor</string>
     <string name="health_alert_channel_name">Upozornění na stav zařízení</string>
     <string name="health_alert_notification_title">Skóre stavu zařízení kleslo</string>
     <string name="health_alert_notification_body">Aktuální skóre: %1$d. Klepnutím zobrazíte podrobnosti.</string>

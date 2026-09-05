@@ -435,6 +435,16 @@
     <string name="export_full_report_pref_title">Export full device report</string>
     <string name="export_full_report_pref_summary">Bundle the device card, benchmark result card, and full benchmark history into one shareable file</string>
     <string name="device_report_share_chooser_title">Share device report</string>
+
+    <!-- U32 - Backup/restore benchmark history + settings (re-importable, unlike the share-only exporters above) -->
+    <string name="backup_export_pref_title">Back up benchmark history</string>
+    <string name="backup_export_pref_summary">Save all 4 benchmark histories and a few settings to a file you can restore later or on a new device</string>
+    <string name="backup_import_pref_title">Restore from backup</string>
+    <string name="backup_import_pref_summary">Replace current benchmark history and settings with a previously saved backup file</string>
+    <string name="backup_export_success">Backup saved</string>
+    <string name="backup_export_failed">Couldn\'t save backup</string>
+    <string name="backup_import_success">Backup restored</string>
+    <string name="backup_import_failed">Not a valid backup file</string>
     <string name="health_alert_channel_name">Device health alerts</string>
     <string name="health_alert_notification_title">Device health score dropped</string>
     <string name="health_alert_notification_body">Current score: %1$d. Tap to see details.</string>

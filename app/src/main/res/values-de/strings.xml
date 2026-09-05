@@ -385,6 +385,16 @@
     <string name="export_full_report_pref_title">Vollständigen Gerätebericht exportieren</string>
     <string name="export_full_report_pref_summary">Gerätekarte, Benchmark-Ergebniskarte und den kompletten Benchmark-Verlauf in einer teilbaren Datei bündeln</string>
     <string name="device_report_share_chooser_title">Gerätebericht teilen</string>
+
+    <!-- U32 - Backup/restore -->
+    <string name="backup_export_pref_title">Benchmark-Verlauf sichern</string>
+    <string name="backup_export_pref_summary">Speichert alle 4 Benchmark-Verläufe und einige Einstellungen in einer Datei zum späteren oder geräteübergreifenden Wiederherstellen</string>
+    <string name="backup_import_pref_title">Aus Sicherung wiederherstellen</string>
+    <string name="backup_import_pref_summary">Ersetzt aktuellen Benchmark-Verlauf und Einstellungen durch eine zuvor gespeicherte Sicherungsdatei</string>
+    <string name="backup_export_success">Sicherung gespeichert</string>
+    <string name="backup_export_failed">Sicherung konnte nicht gespeichert werden</string>
+    <string name="backup_import_success">Sicherung wiederhergestellt</string>
+    <string name="backup_import_failed">Keine gültige Sicherungsdatei</string>
     <string name="health_alert_channel_name">Gerätezustandswarnungen</string>
     <string name="health_alert_notification_title">Gerätezustand gesunken</string>
     <string name="health_alert_notification_body">Aktueller Wert: %1$d. Zum Anzeigen tippen.</string>

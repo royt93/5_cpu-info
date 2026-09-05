@@ -57,6 +57,11 @@ class StorageBenchResultPrefs @Inject constructor(@ApplicationContext context: C
         sp.edit().putString(KEY_HISTORY_JSON, gson.toJson(updated)).apply()
     }
 
+    /** U32 — wholesale overwrite for backup restore, unlike [saveResult]'s append-one-entry. */
+    fun replaceHistory(entries: List<SavedResult>) {
+        sp.edit().putString(KEY_HISTORY_JSON, gson.toJson(entries.takeLast(MAX_HISTORY_ENTRIES))).apply()
+    }
+
     private companion object {
         const val PREFS_NAME = "storage_bench_result_prefs"
         const val KEY_HISTORY_JSON = "history_json"

@@ -68,6 +68,16 @@
             app:summary="@string/export_full_report_pref_summary"
             app:title="@string/export_full_report_pref_title" />
 
+        <Preference
+            app:key="key_export_backup"
+            app:summary="@string/backup_export_pref_summary"
+            app:title="@string/backup_export_pref_title" />
+
+        <Preference
+            app:key="key_import_backup"
+            app:summary="@string/backup_import_pref_summary"
+            app:title="@string/backup_import_pref_title" />
+
     </PreferenceCategory>
 
     <PreferenceCategory
