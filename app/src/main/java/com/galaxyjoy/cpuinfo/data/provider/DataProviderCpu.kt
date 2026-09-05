@@ -78,6 +78,29 @@ class DataProviderCpu @Inject constructor() {
     }
 
     /**
+     * U34 — cpufreq governor (e.g. "schedutil"/"performance"/"ondemand") for [coreNumber]'s
+     * scaling policy, or `null` if the core is offline/unreadable — same try/catch-around-
+     * `RandomAccessFile` shape as [getCurrentFreq]/[getMinMaxFreq], but `null` instead of a `-1`
+     * sentinel since there's no sensible numeric placeholder for a governor name.
+     *
+     * Confirmed on a real device (TECNO KJ7) that `scaling_governor` isn't always readable: some
+     * OEM kernels lock it to `system:system` mode 0660, unlike the world-readable
+     * `scaling_cur_freq`/`cpuinfo_min_freq`/`cpuinfo_max_freq` [getCurrentFreq]/[getMinMaxFreq]
+     * already rely on — a regular app gets `Permission denied` there, caught below and degraded
+     * to `null` like any other unreadable-file case. The caller hides the row entirely when
+     * `null` rather than showing a placeholder.
+     */
+    fun getGovernor(coreNumber: Int): String? {
+        val path = "${CPU_INFO_DIR}cpu$coreNumber/cpufreq/scaling_governor"
+        return try {
+            RandomAccessFile(path, "r").use { it.readLine() }?.trim()?.takeIf { it.isNotEmpty() }
+        } catch (e: Exception) {
+            Timber.e("getGovernor() - cannot read file")
+            null
+        }
+    }
+
+    /**
      * Gets the number of cores available in this device, across all processors.
      * Requires: Ability to peruse the filesystem at "/sys/devices/system/cpu"
      *

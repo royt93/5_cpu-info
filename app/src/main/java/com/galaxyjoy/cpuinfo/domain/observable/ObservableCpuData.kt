@@ -59,7 +59,12 @@ class ObservableCpuData @Inject constructor(
                     l1iCaches = l1iCaches,
                     l2Caches = l2Caches,
                     l3Caches = l3Caches,
-                    l4Caches = l4Caches
+                    l4Caches = l4Caches,
+                    // U34 — read fresh each tick (not hoisted with the other fixed fields above):
+                    // unlike cache sizes/core count, the active governor can genuinely change at
+                    // runtime (e.g. a power-saving mode switch, or a rooted user manually
+                    // changing it).
+                    governor = dataProviderCpu.getGovernor(0)
                 )
             )
             delay(REFRESH_DELAY)

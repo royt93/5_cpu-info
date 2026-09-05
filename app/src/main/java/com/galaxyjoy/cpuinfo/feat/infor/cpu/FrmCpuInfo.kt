@@ -123,6 +123,7 @@ class FrmCpuInfo : BaseFrm<FrmCpuInfoBinding>(R.layout.frm_cpu_info), AdtInfoIte
         rows.add(CpuRow.ValueRow(getString(R.string.cpu_soc_name), data.processorName))
         rows.add(CpuRow.ValueRow(getString(R.string.cpu_abi), data.abi))
         rows.add(CpuRow.ValueRow(getString(R.string.cpu_cores), data.coreNumber.toString()))
+        data.governor?.let { rows.add(CpuRow.ValueRow(getString(R.string.cpu_governor), it)) }
         rows.add(
             CpuRow.ValueRow(
                 getString(R.string.cpu_has_neon),

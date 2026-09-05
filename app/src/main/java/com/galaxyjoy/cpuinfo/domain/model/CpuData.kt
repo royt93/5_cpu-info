@@ -13,7 +13,9 @@ data class CpuData(
     val l1iCaches: String,
     val l2Caches: String,
     val l3Caches: String,
-    val l4Caches: String
+    val l4Caches: String,
+    /** U34 — cpufreq governor for core 0 (e.g. "schedutil"), `null` if unreadable. */
+    val governor: String? = null
 ) {
 
     data class Frequency(

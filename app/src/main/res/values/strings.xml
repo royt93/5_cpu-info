@@ -49,6 +49,8 @@
     <string name="cpu_frequency_stopped">Core %1$d: Stopped</string>
     <string name="cpu_soc_name">SoC name</string>
     <string name="cpu_cores">Cores</string>
+    <!-- U34 - cpufreq governor, e.g. "schedutil" -->
+    <string name="cpu_governor" translatable="false">CPU Governor</string>
     <string name="cpu_has_neon" translatable="false">ARM Neon</string>
     <string name="cpu_l1d" translatable="false">L1d cache</string>
     <string name="cpu_l1i" translatable="false">L1i cache</string>
