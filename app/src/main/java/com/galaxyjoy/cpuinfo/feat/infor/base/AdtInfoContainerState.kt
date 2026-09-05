@@ -24,6 +24,7 @@ import com.galaxyjoy.cpuinfo.feat.gpubench.FrmGpuBench
 import com.galaxyjoy.cpuinfo.feat.rambench.FrmRamBench
 import com.galaxyjoy.cpuinfo.feat.siliconlottery.FrmSiliconLottery
 import com.galaxyjoy.cpuinfo.feat.storagebench.FrmStorageBench
+import com.galaxyjoy.cpuinfo.feat.storagetruth.FrmStorageTruth
 import com.galaxyjoy.cpuinfo.feat.throttle.FrmThrottle
 
 /**
@@ -55,6 +56,7 @@ class AdtInfoContainerState(fragment: Fragment) : FragmentStateAdapter(fragment)
             ALL_BENCH_POS -> FrmAllBench()
             CLUSTER_BENCH_POS -> FrmClusterBench()
             SILICON_LOTTERY_POS -> FrmSiliconLottery()
+            STORAGE_TRUTH_POS -> FrmStorageTruth()
             else -> throw IllegalArgumentException("Unknown position for ViewPager2")
         }
 
@@ -83,6 +85,7 @@ class AdtInfoContainerState(fragment: Fragment) : FragmentStateAdapter(fragment)
         ALL_BENCH_POS -> R.string.all_bench
         CLUSTER_BENCH_POS -> R.string.cluster_bench
         SILICON_LOTTERY_POS -> R.string.silicon_lottery
+        STORAGE_TRUTH_POS -> R.string.storage_truth
         else -> throw IllegalArgumentException("Unknown position for ViewPager2")
     }
 
@@ -109,7 +112,8 @@ class AdtInfoContainerState(fragment: Fragment) : FragmentStateAdapter(fragment)
         internal const val ALL_BENCH_POS = 19
         internal const val CLUSTER_BENCH_POS = 20
         internal const val SILICON_LOTTERY_POS = 21
+        internal const val STORAGE_TRUTH_POS = 22
 
-        private const val INFO_PAGE_AMOUNT = 22
+        private const val INFO_PAGE_AMOUNT = 23
     }
 }

@@ -616,6 +616,28 @@
     <string name="silicon_lottery_strongest_label">★ nejsilnější</string>
     <string name="silicon_lottery_weakest_label">▼ nejslabší</string>
     <string name="silicon_lottery_spread_label">Rozptyl nejsilnějšího a nejslabšího jádra: %1$.1f%%</string>
+
+    <string name="storage_truth">Storage Truth</string>
+    <string name="storage_truth_disclaimer_title">Než začnete</string>
+    <string name="storage_truth_disclaimer_body">Tento test zapíše jedinečný vzor na 512MB úložiště a poté jej přečte zpět, aby zkontroloval, že nic nebylo tiše přepsáno — klasický příznak podvržené paměti flash, která hlásí větší kapacitu, než jakou skutečně má. Jde o odhad, ne o certifikovaný laboratorní test: nejspolehlivější u extrémních podvrhů (skutečná kapacita hluboko pod 512MB). Trvá necelou minutu.</string>
+    <string name="storage_truth_start_button">Spustit test</string>
+    <string name="storage_truth_writing_label">Zapisuji blok %1$d/%2$d</string>
+    <string name="storage_truth_verifying_label">Kontroluji…</string>
+    <string name="storage_truth_stop_button">Zastavit</string>
+    <string name="storage_truth_aborted_overheat">Test přeskočen — zařízení je teď příliš teplé. Zkuste to znovu po vychladnutí.</string>
+    <string name="storage_truth_aborted_interrupted">Test zastaven před dokončením.</string>
+    <string name="storage_truth_aborted_insufficient_space">Nedostatek volného místa pro spuštění tohoto testu.</string>
+    <string name="storage_truth_verdict_genuine">✓ Pravé — nebyla zjištěna falešná kapacita</string>
+    <string name="storage_truth_verdict_suspect_fake">⚠ Podezření na falešnou kapacitu</string>
+    <string name="storage_truth_verdict_inconclusive">Nelze určit</string>
+    <string name="storage_truth_tested_label">Otestováno</string>
+    <string name="storage_truth_tested_value">%1$s MB</string>
+    <string name="storage_truth_mismatch_detail">První poškození nalezeno kolem %1$s MB — skutečné použitelné úložiště může být menší, než je uvedeno.</string>
+    <string name="storage_truth_done_button">Hotovo</string>
+    <string name="storage_truth_share_button">Sdílet</string>
+    <string name="storage_truth_share_text_genuine">Storage Truth — otestováno %1$s MB, falešná kapacita nezjištěna ✓</string>
+    <string name="storage_truth_share_text_suspect">Storage Truth — ⚠ podezření na falešnou kapacitu, poškození nalezeno kolem %1$s MB</string>
+
     <string name="bench_result_card_title">Výsledky testu výkonu</string>
     <string name="bench_result_card_share_image_button">Sdílet jako obrázek</string>
     <string name="bench_result_card_share_button">Sdílet kartu výsledků</string>

@@ -616,6 +616,27 @@
     <string name="silicon_lottery_strongest_label">★ najsilniejszy</string>
     <string name="silicon_lottery_weakest_label">▼ najsłabszy</string>
     <string name="silicon_lottery_spread_label">Rozrzut najsilniejszy/najsłabszy rdzeń: %1$.1f%%</string>
+    <string name="storage_truth">Storage Truth</string>
+    <string name="storage_truth_disclaimer_title">Zanim zaczniesz</string>
+    <string name="storage_truth_disclaimer_body">Ten test zapisuje unikalny wzór na 512MB pamięci, a następnie odczytuje go z powrotem, aby sprawdzić, czy nic nie zostało po cichu nadpisane — klasyczny objaw podrobionej pamięci flash, która zgłasza większą pojemność niż ma naprawdę. To heurystyka, nie certyfikowany test laboratoryjny: najskuteczniejsza przy skrajnych podróbkach (rzeczywista pojemność znacznie poniżej 512MB). Zajmuje mniej niż minutę.</string>
+    <string name="storage_truth_start_button">Rozpocznij test</string>
+    <string name="storage_truth_writing_label">Zapisywanie bloku %1$d/%2$d</string>
+    <string name="storage_truth_verifying_label">Sprawdzanie…</string>
+    <string name="storage_truth_stop_button">Zatrzymaj</string>
+    <string name="storage_truth_aborted_overheat">Test pominięty — urządzenie jest teraz zbyt ciepłe. Spróbuj ponownie po ostygnięciu.</string>
+    <string name="storage_truth_aborted_interrupted">Test zatrzymany przed zakończeniem.</string>
+    <string name="storage_truth_aborted_insufficient_space">Za mało wolnego miejsca, aby uruchomić ten test.</string>
+    <string name="storage_truth_verdict_genuine">✓ Oryginalna — nie wykryto fałszywej pojemności</string>
+    <string name="storage_truth_verdict_suspect_fake">⚠ Podejrzenie fałszywej pojemności</string>
+    <string name="storage_truth_verdict_inconclusive">Brak jednoznacznego wyniku</string>
+    <string name="storage_truth_tested_label">Przetestowano</string>
+    <string name="storage_truth_tested_value">%1$s MB</string>
+    <string name="storage_truth_mismatch_detail">Pierwsze uszkodzenie znalezione około %1$s MB — rzeczywista dostępna pamięć może być mniejsza niż podano.</string>
+    <string name="storage_truth_done_button">Gotowe</string>
+    <string name="storage_truth_share_button">Udostępnij</string>
+    <string name="storage_truth_share_text_genuine">Storage Truth — przetestowano %1$s MB, nie wykryto fałszywej pojemności ✓</string>
+    <string name="storage_truth_share_text_suspect">Storage Truth — ⚠ podejrzenie fałszywej pojemności, uszkodzenie znalezione około %1$s MB</string>
+
     <string name="bench_result_card_title">Wyniki testu wydajności</string>
     <string name="bench_result_card_share_image_button">Udostępnij jako obraz</string>
     <string name="bench_result_card_share_button">Udostępnij kartę wyników</string>

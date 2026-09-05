@@ -619,6 +619,27 @@
     <string name="silicon_lottery_strongest_label">★ stärkster</string>
     <string name="silicon_lottery_weakest_label">▼ schwächster</string>
     <string name="silicon_lottery_spread_label">Streuung stärkster/schwächster Kern: %1$.1f%%</string>
+    <string name="storage_truth">Storage Truth</string>
+    <string name="storage_truth_disclaimer_title">Bevor du beginnst</string>
+    <string name="storage_truth_disclaimer_body">Dieser Test schreibt ein einzigartiges Muster auf 512MB Speicher und liest es danach zurück, um zu prüfen, ob etwas heimlich überschrieben wurde — ein klassisches Zeichen für gefälschten Flash-Speicher, der mehr Kapazität meldet als er wirklich hat. Eine Heuristik, kein zertifizierter Labortest: am zuverlässigsten bei extremen Fälschungen (echte Kapazität weit unter 512MB). Dauert unter einer Minute.</string>
+    <string name="storage_truth_start_button">Test starten</string>
+    <string name="storage_truth_writing_label">Schreibe Block %1$d/%2$d</string>
+    <string name="storage_truth_verifying_label">Überprüfe…</string>
+    <string name="storage_truth_stop_button">Stopp</string>
+    <string name="storage_truth_aborted_overheat">Test übersprungen — Gerät ist gerade zu warm. Versuche es nach dem Abkühlen erneut.</string>
+    <string name="storage_truth_aborted_interrupted">Test vor Abschluss gestoppt.</string>
+    <string name="storage_truth_aborted_insufficient_space">Nicht genug freier Speicherplatz für diesen Test.</string>
+    <string name="storage_truth_verdict_genuine">✓ Echt — keine gefälschte Kapazität erkannt</string>
+    <string name="storage_truth_verdict_suspect_fake">⚠ Verdacht auf gefälschte Kapazität</string>
+    <string name="storage_truth_verdict_inconclusive">Nicht eindeutig</string>
+    <string name="storage_truth_tested_label">Getestet</string>
+    <string name="storage_truth_tested_value">%1$s MB</string>
+    <string name="storage_truth_mismatch_detail">Erste Beschädigung bei ca. %1$s MB gefunden — dein echter nutzbarer Speicher könnte kleiner sein als angegeben.</string>
+    <string name="storage_truth_done_button">Fertig</string>
+    <string name="storage_truth_share_button">Teilen</string>
+    <string name="storage_truth_share_text_genuine">Storage Truth — %1$s MB getestet, keine gefälschte Kapazität erkannt ✓</string>
+    <string name="storage_truth_share_text_suspect">Storage Truth — ⚠ Verdacht auf gefälschte Kapazität, Beschädigung bei ca. %1$s MB gefunden</string>
+
     <string name="bench_result_card_title">Benchmark-Ergebnisse</string>
     <string name="bench_result_card_share_image_button">Als Bild teilen</string>
     <string name="bench_result_card_share_button">Ergebniskarte teilen</string>

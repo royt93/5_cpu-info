@@ -623,6 +623,28 @@
     <string name="silicon_lottery_strongest_label">★ mạnh nhất</string>
     <string name="silicon_lottery_weakest_label">▼ yếu nhất</string>
     <string name="silicon_lottery_spread_label">Chênh lệch nhân mạnh nhất/yếu nhất: %1$.1f%%</string>
+
+    <string name="storage_truth">Storage Truth</string>
+    <string name="storage_truth_disclaimer_title">Trước khi bắt đầu</string>
+    <string name="storage_truth_disclaimer_body">Bài test ghi 1 mẫu dữ liệu riêng biệt lên 512MB bộ nhớ, sau đó đọc lại để kiểm tra có bị ghi đè âm thầm không — dấu hiệu kinh điển của bộ nhớ giả báo sai dung lượng. Đây là kiểm tra ước lượng, không phải xét nghiệm phòng lab chính thức: đáng tin cậy nhất với hàng giả nặng (dung lượng thật thấp hơn hẳn 512MB). Mất chưa tới 1 phút.</string>
+    <string name="storage_truth_start_button">Bắt đầu test</string>
+    <string name="storage_truth_writing_label">Đang ghi khối %1$d/%2$d</string>
+    <string name="storage_truth_verifying_label">Đang kiểm tra…</string>
+    <string name="storage_truth_stop_button">Dừng</string>
+    <string name="storage_truth_aborted_overheat">Đã bỏ qua test — máy đang hơi nóng. Thử lại sau khi máy nguội.</string>
+    <string name="storage_truth_aborted_interrupted">Test đã dừng trước khi xong.</string>
+    <string name="storage_truth_aborted_insufficient_space">Không đủ dung lượng trống để chạy test này.</string>
+    <string name="storage_truth_verdict_genuine">✓ Chính hãng — không phát hiện dung lượng giả</string>
+    <string name="storage_truth_verdict_suspect_fake">⚠ Nghi ngờ dung lượng giả</string>
+    <string name="storage_truth_verdict_inconclusive">Chưa đủ dữ liệu kết luận</string>
+    <string name="storage_truth_tested_label">Đã kiểm tra</string>
+    <string name="storage_truth_tested_value">%1$s MB</string>
+    <string name="storage_truth_mismatch_detail">Phát hiện lỗi đầu tiên khoảng %1$s MB — dung lượng thật dùng được có thể nhỏ hơn công bố.</string>
+    <string name="storage_truth_done_button">Xong</string>
+    <string name="storage_truth_share_button">Chia sẻ</string>
+    <string name="storage_truth_share_text_genuine">Storage Truth — đã test %1$s MB, không phát hiện dung lượng giả ✓</string>
+    <string name="storage_truth_share_text_suspect">Storage Truth — ⚠ nghi ngờ dung lượng giả, phát hiện lỗi khoảng %1$s MB</string>
+
     <string name="bench_result_card_title">Kết quả kiểm tra hiệu năng</string>
     <string name="bench_result_card_share_image_button">Chia sẻ ảnh</string>
     <string name="bench_result_card_share_button">Chia sẻ thẻ kết quả</string>

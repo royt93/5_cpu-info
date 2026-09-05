@@ -650,6 +650,28 @@
     <string name="silicon_lottery_strongest_label">★ strongest</string>
     <string name="silicon_lottery_weakest_label">▼ weakest</string>
     <string name="silicon_lottery_spread_label">Strongest vs weakest core spread: %1$.1f%%</string>
+
+    <string name="storage_truth">Storage Truth</string>
+    <string name="storage_truth_disclaimer_title">Before you start</string>
+    <string name="storage_truth_disclaimer_body">This test writes a unique pattern across 512MB of storage, then reads it back to check nothing got silently overwritten — a classic sign of counterfeit flash that reports more capacity than it really has. A heuristic check, not a certified lab test: most reliable at catching extreme fakes (real capacity well under 512MB). Takes under a minute.</string>
+    <string name="storage_truth_start_button">Start test</string>
+    <string name="storage_truth_writing_label">Writing block %1$d/%2$d</string>
+    <string name="storage_truth_verifying_label">Verifying…</string>
+    <string name="storage_truth_stop_button">Stop</string>
+    <string name="storage_truth_aborted_overheat">Test skipped — device is too warm right now. Try again once it cools down.</string>
+    <string name="storage_truth_aborted_interrupted">Test stopped before it finished.</string>
+    <string name="storage_truth_aborted_insufficient_space">Not enough free storage space to run this test.</string>
+    <string name="storage_truth_verdict_genuine">✓ Genuine — no fake capacity detected</string>
+    <string name="storage_truth_verdict_suspect_fake">⚠ Suspect fake capacity</string>
+    <string name="storage_truth_verdict_inconclusive">Inconclusive</string>
+    <string name="storage_truth_tested_label">Tested</string>
+    <string name="storage_truth_tested_value">%1$s MB</string>
+    <string name="storage_truth_mismatch_detail">First corruption found around %1$s MB — your real usable storage may be smaller than reported.</string>
+    <string name="storage_truth_done_button">Done</string>
+    <string name="storage_truth_share_button">Share</string>
+    <string name="storage_truth_share_text_genuine">Storage Truth — tested %1$s MB, no fake capacity detected ✓</string>
+    <string name="storage_truth_share_text_suspect">Storage Truth — ⚠ suspect fake capacity, corruption found around %1$s MB</string>
+
     <string name="bench_result_card_title">Benchmark results</string>
     <string name="bench_result_card_share_image_button">Share as image</string>
     <string name="bench_result_card_share_button">Share benchmark card</string>

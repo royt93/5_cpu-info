@@ -618,6 +618,27 @@
     <string name="silicon_lottery_strongest_label">★ 最強</string>
     <string name="silicon_lottery_weakest_label">▼ 最弱</string>
     <string name="silicon_lottery_spread_label">最強與最弱核心差距：%1$.1f%%</string>
+    <string name="storage_truth">儲存空間真相</string>
+    <string name="storage_truth_disclaimer_title">開始前</string>
+    <string name="storage_truth_disclaimer_body">此測試會在 512MB 儲存空間寫入獨特的資料樣式，再讀回檢查是否遭到悄悄覆寫 — 這是儲存容量造假晶片的經典特徵（回報容量遠大於實際容量）。此為推估性檢測，非正式實驗室認證測試：對容量造假嚴重的情況（實際容量遠低於 512MB）最為可靠。約需不到一分鐘。</string>
+    <string name="storage_truth_start_button">開始測試</string>
+    <string name="storage_truth_writing_label">正在寫入區塊 %1$d/%2$d</string>
+    <string name="storage_truth_verifying_label">正在驗證…</string>
+    <string name="storage_truth_stop_button">停止</string>
+    <string name="storage_truth_aborted_overheat">已略過測試 — 裝置目前過熱，請待裝置降溫後再試一次。</string>
+    <string name="storage_truth_aborted_interrupted">測試已在完成前停止。</string>
+    <string name="storage_truth_aborted_insufficient_space">可用儲存空間不足，無法執行此測試。</string>
+    <string name="storage_truth_verdict_genuine">✓ 真實 — 未偵測到容量造假</string>
+    <string name="storage_truth_verdict_suspect_fake">⚠ 疑似容量造假</string>
+    <string name="storage_truth_verdict_inconclusive">無法判定</string>
+    <string name="storage_truth_tested_label">已測試</string>
+    <string name="storage_truth_tested_value">%1$s MB</string>
+    <string name="storage_truth_mismatch_detail">在約 %1$s MB 處發現第一個損壞 — 實際可用容量可能小於標示值。</string>
+    <string name="storage_truth_done_button">完成</string>
+    <string name="storage_truth_share_button">分享</string>
+    <string name="storage_truth_share_text_genuine">儲存空間真相 — 已測試 %1$s MB，未偵測到容量造假 ✓</string>
+    <string name="storage_truth_share_text_suspect">儲存空間真相 — ⚠ 疑似容量造假，在約 %1$s MB 處發現損壞</string>
+
     <string name="bench_result_card_title">效能測試結果</string>
     <string name="bench_result_card_share_image_button">分享圖片</string>
     <string name="bench_result_card_share_button">分享結果卡片</string>
