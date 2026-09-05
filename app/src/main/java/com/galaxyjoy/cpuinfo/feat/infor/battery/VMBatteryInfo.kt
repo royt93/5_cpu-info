@@ -3,69 +3,39 @@ package com.galaxyjoy.cpuinfo.feat.infor.battery
 import android.content.Intent
 import android.content.res.Resources
 import android.os.BatteryManager
-import android.os.Build
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.galaxyjoy.cpuinfo.R
-import com.galaxyjoy.cpuinfo.feat.infor.hardware.BatteryStatusProvider
 import com.galaxyjoy.cpuinfo.feat.temp.TemperatureFormatter
-import com.galaxyjoy.cpuinfo.feat.temp.TemperatureProvider
-import com.galaxyjoy.cpuinfo.util.DispatchersProvider
 import com.galaxyjoy.cpuinfo.util.Utils
-import com.galaxyjoy.cpuinfo.util.lifecycle.ListLiveData
 import com.galaxyjoy.cpuinfo.util.round2
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlin.math.abs
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
+import androidx.lifecycle.asLiveData
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.distinctUntilChanged
+import com.galaxyjoy.cpuinfo.domain.model.BatteryData
+import com.galaxyjoy.cpuinfo.domain.observable.ObservableBatteryData
+import com.galaxyjoy.cpuinfo.domain.observe
 import javax.inject.Inject
 
-/**
- * Surface battery status + capacity diagnostics via [BatteryManager] and the sticky
- * `ACTION_BATTERY_CHANGED` intent (through [BatteryStatusProvider], moved here from
- * [com.galaxyjoy.cpuinfo.feat.infor.hardware.VMHardwareInfo]).
- *
- * Polls every [REFRESH_DELAY_MS] while the tab is alive — cheap local `BatteryManager` reads, no
- * I/O — so charging state, instantaneous current, and this-session min/max current stay live
- * without a separate `ACTION_POWER_CONNECTED` broadcast receiver. Session min/max is
- * intentionally text-only, not a rendered graph: no charting component exists elsewhere in the
- * app yet (see doc/task/epic-03-new-features.md F01), and this app's list-of-rows tabs don't have
- * one to reuse — adding a one-off chart widget for a single row wasn't worth the extra surface.
- */
+/** Formats snapshots from the Battery interactor; Android reads live in DataProviderBattery. */
 @HiltViewModel
 class VMBatteryInfo @Inject constructor(
     private val resources: Resources,
-    private val batteryManager: BatteryManager,
-    private val batteryStatusProvider: BatteryStatusProvider,
-    private val temperatureProvider: TemperatureProvider,
+    observableBatteryData: ObservableBatteryData,
     private val temperatureFormatter: TemperatureFormatter,
-    private val dispatchersProvider: DispatchersProvider,
 ) : ViewModel() {
-
-    val listLiveData = ListLiveData<Pair<String, String>>()
 
     private var sessionMinCurrentMa: Double? = null
     private var sessionMaxCurrentMa: Double? = null
 
-    init {
-        viewModelScope.launch(dispatchersProvider.io) {
-            while (isActive) {
-                listLiveData.replace(buildRows())
-                delay(REFRESH_DELAY_MS)
-            }
-        }
-    }
+    val rows = observableBatteryData.observe()
+        .map { data -> statusSection(data) + capacitySection(data) }
+        .distinctUntilChanged()
+        .asLiveData(viewModelScope.coroutineContext)
 
-    private fun buildRows(): List<Pair<String, String>> {
-        val batteryStatus = batteryStatusProvider.getBatteryStatusIntent()
-        val rows = mutableListOf<Pair<String, String>>()
-        rows.addAll(statusSection(batteryStatus))
-        rows.addAll(capacitySection(batteryStatus))
-        return rows
-    }
-
-    private fun statusSection(batteryStatus: Intent?): List<Pair<String, String>> {
+    private fun statusSection(data: BatteryData): List<Pair<String, String>> {
+        val batteryStatus = data.status
         val rows = mutableListOf<Pair<String, String>>()
         rows.add(resources.getString(R.string.battery) to "")
 
@@ -83,14 +53,16 @@ class VMBatteryInfo @Inject constructor(
             rows.add(resources.getString(R.string.battery_health) to getBatteryHealthStatus(health))
         }
 
-        val voltage = batteryStatus.getIntExtra(BatteryManager.EXTRA_VOLTAGE, -1)
-        if (voltage > 0) {
+        data.voltageMv?.let { voltage ->
             rows.add(resources.getString(R.string.voltage) to "${voltage / 1000.0}V")
         }
+        data.chargingCurrentMa?.let { current ->
+            rows.add(resources.getString(R.string.battery_charging_current) to
+                resources.getString(R.string.battery_ma_value, current.round2().toString()))
+        }
 
-        val temperature = temperatureProvider.getBatteryTemperature()
-        if (temperature > 0) {
-            rows.add(resources.getString(R.string.temperature) to temperatureFormatter.format(temperature.toFloat()))
+        data.temperature?.let { temperature ->
+            rows.add(resources.getString(R.string.temperature) to temperatureFormatter.format(temperature))
         }
 
         val technology = batteryStatus.getStringExtra(BatteryManager.EXTRA_TECHNOLOGY)
@@ -128,34 +100,29 @@ class VMBatteryInfo @Inject constructor(
         else -> resources.getString(R.string.battery_unknown)
     }
 
-    private fun capacitySection(batteryStatus: Intent?): List<Pair<String, String>> {
+    private fun capacitySection(data: BatteryData): List<Pair<String, String>> {
         val rows = mutableListOf<Pair<String, String>>()
         rows.add(resources.getString(R.string.battery_section_capacity) to "")
 
-        val designedCapacity = batteryStatusProvider.getBatteryCapacity().round2()
+        val designedCapacity = data.designedCapacity.round2()
         if (designedCapacity != -1.0) {
             rows.add(resources.getString(R.string.battery_designed_capacity) to resources.getString(R.string.battery_mah_value, designedCapacity.toString()))
         }
 
-        batteryManager.longPropertyOrNull(BatteryManager.BATTERY_PROPERTY_CHARGE_COUNTER)?.let { microAh ->
+        data.chargeCounter?.let { microAh ->
             rows.add(resources.getString(R.string.battery_charge_counter) to resources.getString(R.string.battery_mah_value, (microAh / 1000.0).round2().toString()))
         }
 
-        batteryManager.longPropertyOrNull(BatteryManager.BATTERY_PROPERTY_ENERGY_COUNTER)?.let { nanoWh ->
+        data.energyCounter?.let { nanoWh ->
             rows.add(resources.getString(R.string.battery_energy_counter) to resources.getString(R.string.battery_mwh_value, (nanoWh / 1_000_000.0).round2().toString()))
         }
 
-        // Cycle count is an ACTION_BATTERY_CHANGED extra (not a BatteryManager property),
-        // added in Android 14.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE && batteryStatus != null) {
-            val cycleCount = batteryStatus.getIntExtra(BatteryManager.EXTRA_CYCLE_COUNT, -1)
-            if (cycleCount >= 0) {
-                rows.add(resources.getString(R.string.battery_cycle_count) to cycleCount.toString())
-            }
+        data.cycleCount?.let { cycleCount ->
+            rows.add(resources.getString(R.string.battery_cycle_count) to cycleCount.toString())
         }
 
-        batteryManager.longPropertyOrNull(BatteryManager.BATTERY_PROPERTY_CURRENT_NOW)?.let { rawCurrent ->
-            val currentMa = microAmpsToMa(rawCurrent).round2()
+        data.currentMa?.let { rawCurrentMa ->
+            val currentMa = rawCurrentMa.round2()
             sessionMinCurrentMa = minOf(sessionMinCurrentMa ?: currentMa, currentMa)
             sessionMaxCurrentMa = maxOf(sessionMaxCurrentMa ?: currentMa, currentMa)
 
@@ -168,24 +135,4 @@ class VMBatteryInfo @Inject constructor(
         return rows
     }
 
-    private fun BatteryManager.longPropertyOrNull(id: Int): Long? {
-        val value = getLongProperty(id)
-        return value.takeIf { it != Long.MIN_VALUE }
-    }
-
-    /**
-     * `BATTERY_PROPERTY_CURRENT_NOW`/`CURRENT_AVERAGE` are documented in µA, but several OEMs
-     * (confirmed on a Samsung Galaxy S24 Ultra here — `adb shell dumpsys battery` reports
-     * `current now: 1039` raw, matching what this property returns, for a device visibly pulling
-     * ~1A over USB) report already-scaled mA instead. A real µA reading for an active phone is
-     * never under [ALREADY_MA_THRESHOLD] in magnitude (that would mean sub-10mA total system
-     * draw), so a raw value under that can only be the buggy already-mA case.
-     */
-    private fun microAmpsToMa(raw: Long): Double =
-        if (abs(raw) < ALREADY_MA_THRESHOLD) raw.toDouble() else raw / 1000.0
-
-    companion object {
-        private const val REFRESH_DELAY_MS = 3000L
-        private const val ALREADY_MA_THRESHOLD = 20_000L
-    }
 }

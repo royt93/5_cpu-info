@@ -665,4 +665,6 @@
     <string name="vip_diagnostic_row_storage_free">Storage free</string>
 
     <string name="temperature_not_supported">Not available</string>
+    <!-- U35 - real-time battery charging current, shown only while actively charging -->
+    <string name="battery_charging_current" translatable="false">Charging Current</string>
 </resources>
