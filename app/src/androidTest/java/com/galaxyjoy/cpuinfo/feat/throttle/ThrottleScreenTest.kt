@@ -55,6 +55,39 @@ class ThrottleScreenTest {
         composeRule.onNodeWithText(appContext.getString(R.string.throttle_no_previous)).assertExists()
     }
 
+    /** U33 — "New personal record" badge. */
+    @Test
+    fun doneState_isNewRecord_showsNewRecordBadge() {
+        val state = VMThrottle.UiState.Done(
+            result(opsPerSecond = 5_000_000L),
+            previous = null,
+            history = emptyList(),
+            isNewRecord = true,
+        )
+
+        composeRule.setContent {
+            CpuInfoTheme { ThrottleScreen(state, noThermalSnapshot, {}, {}, {}, {}) }
+        }
+
+        composeRule.onNodeWithText(appContext.getString(R.string.bench_new_record_badge)).assertExists()
+    }
+
+    @Test
+    fun doneState_notNewRecord_hidesNewRecordBadge() {
+        val state = VMThrottle.UiState.Done(
+            result(opsPerSecond = 5_000_000L),
+            previous = null,
+            history = emptyList(),
+            isNewRecord = false,
+        )
+
+        composeRule.setContent {
+            CpuInfoTheme { ThrottleScreen(state, noThermalSnapshot, {}, {}, {}, {}) }
+        }
+
+        composeRule.onNodeWithText(appContext.getString(R.string.bench_new_record_badge)).assertDoesNotExist()
+    }
+
     @Test
     fun withPreviousRun_showsScoreDeltaPercent() {
         val previous = ThrottleResultPrefs.SavedResult(

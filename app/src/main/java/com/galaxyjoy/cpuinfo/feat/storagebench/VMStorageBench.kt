@@ -2,6 +2,8 @@ package com.galaxyjoy.cpuinfo.feat.storagebench
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.galaxyjoy.cpuinfo.feat.achievement.AchievementLogic
+import com.galaxyjoy.cpuinfo.feat.achievement.AchievementPrefs
 import com.galaxyjoy.cpuinfo.feat.throttle.ThermalStatusProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -15,6 +17,7 @@ class VMStorageBench @Inject constructor(
     private val runner: StorageBenchmarkRunner,
     private val resultPrefs: StorageBenchResultPrefs,
     private val thermalStatusProvider: ThermalStatusProvider,
+    private val achievementPrefs: AchievementPrefs,
 ) : ViewModel() {
 
     sealed interface UiState {
@@ -24,6 +27,8 @@ class VMStorageBench @Inject constructor(
             val result: StorageBenchmark.Result,
             val previous: StorageBenchResultPrefs.SavedResult?,
             val history: List<StorageBenchResultPrefs.SavedResult>,
+            /** U33 — this run's `seqWriteMbPerSec` beat every prior saved run on this device. */
+            val isNewRecord: Boolean = false,
         ) : UiState
         data object Aborted : UiState
     }
@@ -45,9 +50,12 @@ class VMStorageBench @Inject constructor(
 
                     is StorageBenchmarkRunner.State.Finished -> {
                         val previous = resultPrefs.getLastResult()
+                        val previousBest = resultPrefs.getHistory().maxOfOrNull { it.seqWriteMbPerSec }
+                        val isNewRecord = AchievementLogic.isNewRecord(previousBest, state.result.seqWriteMbPerSec)
+                        if (isNewRecord) achievementPrefs.incrementRecordsBroken()
                         resultPrefs.saveResult(state.result)
                         _thermalSnapshot.value = thermalStatusProvider.snapshot()
-                        UiState.Done(state.result, previous, resultPrefs.getHistory())
+                        UiState.Done(state.result, previous, resultPrefs.getHistory(), isNewRecord)
                     }
 
                     StorageBenchmarkRunner.State.Aborted -> UiState.Aborted

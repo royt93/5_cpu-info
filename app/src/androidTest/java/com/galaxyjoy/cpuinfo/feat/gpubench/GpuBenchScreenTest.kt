@@ -86,6 +86,39 @@ class GpuBenchScreenTest {
         composeRule.onNodeWithText(appContext.getString(R.string.gpu_bench_no_previous)).assertExists()
     }
 
+    /** U33 — "New personal record" badge. */
+    @Test
+    fun doneState_isNewRecord_showsNewRecordBadge() {
+        val state = VMGpuBench.UiState.Done(
+            result = GpuBenchmark.Result(avgFps = 42.5, frameCount = 250, durationMs = 5000),
+            previous = null,
+            history = emptyList(),
+            isNewRecord = true,
+        )
+
+        composeRule.setContent {
+            CpuInfoTheme { GpuBenchScreen(state, noThermalSnapshot, { noOpRenderer }, {}, {}, {}, {}) }
+        }
+
+        composeRule.onNodeWithText(appContext.getString(R.string.bench_new_record_badge)).assertExists()
+    }
+
+    @Test
+    fun doneState_notNewRecord_hidesNewRecordBadge() {
+        val state = VMGpuBench.UiState.Done(
+            result = GpuBenchmark.Result(avgFps = 42.5, frameCount = 250, durationMs = 5000),
+            previous = null,
+            history = emptyList(),
+            isNewRecord = false,
+        )
+
+        composeRule.setContent {
+            CpuInfoTheme { GpuBenchScreen(state, noThermalSnapshot, { noOpRenderer }, {}, {}, {}, {}) }
+        }
+
+        composeRule.onNodeWithText(appContext.getString(R.string.bench_new_record_badge)).assertDoesNotExist()
+    }
+
     /** U18 — [com.galaxyjoy.cpuinfo.ui.component.BenchTrendChart] mounts a real MPAndroidChart
      * `LineChart` (an Android View, not Compose) once there are 2+ history points; this just
      * needs to not crash the render, the chart's own drawing isn't asserted on here. */

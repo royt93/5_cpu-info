@@ -257,6 +257,7 @@
     <string name="shield_score_ram_label">RAM</string>
     <string name="shield_score_storage_label">Úložiště</string>
     <string name="shield_score_battery_label">Baterie</string>
+    <string name="shield_score_records_broken">Překonáno benchmarkových rekordů: %1$d</string>
     <string name="shield_score_band_excellent">Vynikající</string>
     <string name="shield_score_band_good">Dobrý</string>
     <string name="shield_score_band_fair">Vyžaduje pozornost</string>
@@ -612,6 +613,9 @@
 
     <!-- U29 - Dopad aktualizace Androidu -->
     <string name="bench_os_update_impact_message">Android aktualizován: %1$s %% oproti stavu před aktualizací</string>
+
+    <!-- U33 - New personal record badge -->
+    <string name="bench_new_record_badge">Nový osobní rekord</string>
 
     <string name="vip_diagnostic_pref_title">Historie diagnostiky VIP</string>
     <string name="vip_diagnostic_pref_summary">Sledujte opotřebení baterie/RAM/úložiště v průběhu měsíců (VIP)</string>

@@ -219,6 +219,7 @@
     <string name="shield_score_ram_label">RAM</string>
     <string name="shield_score_storage_label">Pamięć</string>
     <string name="shield_score_battery_label">Bateria</string>
+    <string name="shield_score_records_broken">Pobito rekordów benchmarku: %1$d</string>
     <string name="shield_score_band_excellent">Doskonały</string>
     <string name="shield_score_band_good">Dobry</string>
     <string name="shield_score_band_fair">Wymaga uwagi</string>
@@ -612,6 +613,9 @@
 
     <!-- U29 - Wpływ aktualizacji Androida -->
     <string name="bench_os_update_impact_message">Zaktualizowano Android: %1$s%% w porównaniu do przed aktualizacją</string>
+
+    <!-- U33 - New personal record badge -->
+    <string name="bench_new_record_badge">Nowy rekord osobisty</string>
 
     <string name="vip_diagnostic_pref_title">Historia diagnostyczna VIP</string>
     <string name="vip_diagnostic_pref_summary">Śledź zużycie baterii/RAM/pamięci przez miesiące (VIP)</string>

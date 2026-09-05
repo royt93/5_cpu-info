@@ -58,6 +58,8 @@
     <string name="shield_score_ram_label">RAM</string>
     <string name="shield_score_storage_label">Bộ nhớ</string>
     <string name="shield_score_battery_label">Pin</string>
+    <!-- U33 - New personal record -->
+    <string name="shield_score_records_broken">%1$d kỷ lục benchmark đã phá</string>
     <string name="shield_score_band_excellent">Xuất sắc</string>
     <string name="shield_score_band_good">Tốt</string>
     <string name="shield_score_band_fair">Cần chú ý</string>
@@ -618,6 +620,9 @@
 
     <!-- U29 - Tác động sau khi cập nhật Android -->
     <string name="bench_os_update_impact_message">Vừa cập nhật Android: %1$s%% so với trước khi cập nhật</string>
+
+    <!-- U33 - New personal record badge -->
+    <string name="bench_new_record_badge">Kỷ lục cá nhân mới</string>
 
     <string name="vip_diagnostic_pref_title">Lịch sử chẩn đoán VIP</string>
     <string name="vip_diagnostic_pref_summary">Theo dõi hao mòn pin/RAM/bộ nhớ qua nhiều tháng (VIP)</string>

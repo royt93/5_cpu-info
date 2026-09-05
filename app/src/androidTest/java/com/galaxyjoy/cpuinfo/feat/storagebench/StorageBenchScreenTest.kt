@@ -48,6 +48,29 @@ class StorageBenchScreenTest {
         composeRule.onNodeWithText(appContext.getString(R.string.bench_percentile_message, 100)).assertExists()
     }
 
+    /** U33 — "New personal record" badge. */
+    @Test
+    fun doneState_isNewRecord_showsNewRecordBadge() {
+        val state = VMStorageBench.UiState.Done(result(100.0), previous = null, history = emptyList(), isNewRecord = true)
+
+        composeRule.setContent {
+            CpuInfoTheme { StorageBenchScreen(state, noThermalSnapshot, {}, {}, {}, {}) }
+        }
+
+        composeRule.onNodeWithText(appContext.getString(R.string.bench_new_record_badge)).assertExists()
+    }
+
+    @Test
+    fun doneState_notNewRecord_hidesNewRecordBadge() {
+        val state = VMStorageBench.UiState.Done(result(100.0), previous = null, history = emptyList(), isNewRecord = false)
+
+        composeRule.setContent {
+            CpuInfoTheme { StorageBenchScreen(state, noThermalSnapshot, {}, {}, {}, {}) }
+        }
+
+        composeRule.onNodeWithText(appContext.getString(R.string.bench_new_record_badge)).assertDoesNotExist()
+    }
+
     @Test
     fun doneState_withFewerThanTwoHistoryEntries_hidesPercentileMessage() {
         val state = VMStorageBench.UiState.Done(result(100.0), previous = null, history = emptyList())

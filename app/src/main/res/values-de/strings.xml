@@ -260,6 +260,7 @@
     <string name="shield_score_ram_label">RAM</string>
     <string name="shield_score_storage_label">Speicher</string>
     <string name="shield_score_battery_label">Akku</string>
+    <string name="shield_score_records_broken">%1$d Benchmark-Rekorde gebrochen</string>
     <string name="shield_score_band_excellent">Ausgezeichnet</string>
     <string name="shield_score_band_good">Gut</string>
     <string name="shield_score_band_fair">Braucht Aufmerksamkeit</string>
@@ -615,6 +616,9 @@
 
     <!-- U29 - Auswirkung des letzten Android-Updates -->
     <string name="bench_os_update_impact_message">Android aktualisiert: %1$s %% gegenüber vor dem Update</string>
+
+    <!-- U33 - New personal record badge -->
+    <string name="bench_new_record_badge">Neuer persönlicher Rekord</string>
 
     <string name="vip_diagnostic_pref_title">VIP-Diagnoseverlauf</string>
     <string name="vip_diagnostic_pref_summary">Akku-/RAM-/Speicherverschleiß über Monate verfolgen (VIP)</string>

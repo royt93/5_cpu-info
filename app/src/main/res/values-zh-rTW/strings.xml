@@ -175,6 +175,7 @@
     <string name="shield_score_ram_label">記憶體</string>
     <string name="shield_score_storage_label">儲存空間</string>
     <string name="shield_score_battery_label">電池</string>
+    <string name="shield_score_records_broken">已打破 %1$d 項效能測試紀錄</string>
     <string name="shield_score_band_excellent">優秀</string>
     <string name="shield_score_band_good">良好</string>
     <string name="shield_score_band_fair">需要注意</string>
@@ -614,6 +615,9 @@
 
     <!-- U29 - Android 更新後的效能影響 -->
     <string name="bench_os_update_impact_message">Android 已更新：較更新前 %1$s%%</string>
+
+    <!-- U33 - New personal record badge -->
+    <string name="bench_new_record_badge">個人新紀錄</string>
 
     <string name="vip_diagnostic_pref_title">VIP 診斷歷史</string>
     <string name="vip_diagnostic_pref_summary">追蹤數月內電池/RAM/儲存空間的耗損 (VIP)</string>

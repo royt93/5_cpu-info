@@ -71,6 +71,8 @@
     <string name="shield_score_ram_label">RAM</string>
     <string name="shield_score_storage_label">Storage</string>
     <string name="shield_score_battery_label">Battery</string>
+    <!-- U33 - shown only once at least 1 benchmark personal record has been broken -->
+    <string name="shield_score_records_broken">%1$d benchmark records broken</string>
     <string name="shield_score_band_excellent">Excellent</string>
     <string name="shield_score_band_good">Good</string>
     <string name="shield_score_band_fair">Needs attention</string>
@@ -643,6 +645,9 @@
 
     <!-- U29 - OS update impact vs the previous Android build -->
     <string name="bench_os_update_impact_message">Android updated: %1$s%% vs before the update</string>
+
+    <!-- U33 - New personal record badge shown on the Done screen of all 4 benchmarks -->
+    <string name="bench_new_record_badge">New personal record</string>
 
     <string name="vip_diagnostic_pref_title">VIP Diagnostic History</string>
     <string name="vip_diagnostic_pref_summary">Track battery/RAM/storage drift over months (VIP)</string>

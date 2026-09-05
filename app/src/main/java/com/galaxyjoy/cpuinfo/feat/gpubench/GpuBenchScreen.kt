@@ -28,6 +28,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -266,6 +267,11 @@ private fun DoneContent(
     )
     Spacer(Modifier.height(20.dp))
 
+    if (state.isNewRecord) {
+        NewRecordBadge()
+        Spacer(Modifier.height(16.dp))
+    }
+
     ResultRow(stringResource(R.string.gpu_bench_fps_label), formatFps(result.avgFps))
 
     Spacer(Modifier.height(16.dp))
@@ -330,6 +336,40 @@ private fun ResultRow(label: String, value: String) {
     ) {
         Text(text = label, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         Text(text = value, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
+    }
+}
+
+/** U33 — shown in [DoneContent] when [VMGpuBench.UiState.Done.isNewRecord] is true. Same small
+ * duplicated composable in each of the 4 `*BenchScreen.kt` files — a 15-line celebratory row
+ * isn't worth a shared module for. */
+@Composable
+private fun NewRecordBadge() {
+    Surface(
+        shape = RoundedCornerShape(12.dp),
+        color = MaterialTheme.colorScheme.tertiaryContainer,
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.baseline_star_rate_24),
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onTertiaryContainer,
+                modifier = Modifier.height(18.dp),
+            )
+            Text(
+                text = stringResource(R.string.bench_new_record_badge),
+                style = MaterialTheme.typography.labelLarge,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onTertiaryContainer,
+                modifier = Modifier.padding(start = 6.dp),
+            )
+        }
     }
 }
 

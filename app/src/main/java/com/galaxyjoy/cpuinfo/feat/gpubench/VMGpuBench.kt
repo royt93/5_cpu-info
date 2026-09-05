@@ -2,6 +2,8 @@ package com.galaxyjoy.cpuinfo.feat.gpubench
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.galaxyjoy.cpuinfo.feat.achievement.AchievementLogic
+import com.galaxyjoy.cpuinfo.feat.achievement.AchievementPrefs
 import com.galaxyjoy.cpuinfo.feat.throttle.ThermalStatusProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,6 +16,7 @@ class VMGpuBench @Inject constructor(
     private val runner: GpuBenchmarkRunner,
     private val resultPrefs: GpuBenchResultPrefs,
     private val thermalStatusProvider: ThermalStatusProvider,
+    private val achievementPrefs: AchievementPrefs,
 ) : ViewModel() {
 
     sealed interface UiState {
@@ -25,6 +28,8 @@ class VMGpuBench @Inject constructor(
             /** U18 — up to [GpuBenchResultPrefs] `MAX_HISTORY_ENTRIES` past runs, oldest first,
              * including the just-saved [result] as the last entry. Used to draw a trend chart. */
             val history: List<GpuBenchResultPrefs.SavedResult>,
+            /** U33 — this run's `avgFps` beat every prior saved run on this device. */
+            val isNewRecord: Boolean = false,
         ) : UiState
         data class Aborted(val reason: GpuBenchmark.AbortReason) : UiState
     }
@@ -44,9 +49,12 @@ class VMGpuBench @Inject constructor(
 
                     is GpuBenchmarkRunner.State.Finished -> {
                         val previous = resultPrefs.getLastResult()
+                        val previousBest = resultPrefs.getHistory().maxOfOrNull { it.avgFps }
+                        val isNewRecord = AchievementLogic.isNewRecord(previousBest, state.result.avgFps)
+                        if (isNewRecord) achievementPrefs.incrementRecordsBroken()
                         resultPrefs.saveResult(state.result)
                         _thermalSnapshot.value = thermalStatusProvider.snapshot()
-                        UiState.Done(state.result, previous, resultPrefs.getHistory())
+                        UiState.Done(state.result, previous, resultPrefs.getHistory(), isNewRecord)
                     }
 
                     is GpuBenchmarkRunner.State.Aborted -> UiState.Aborted(state.reason)

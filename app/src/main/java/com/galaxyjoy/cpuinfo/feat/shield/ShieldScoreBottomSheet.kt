@@ -56,6 +56,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.galaxyjoy.cpuinfo.R
 import com.galaxyjoy.cpuinfo.common.const.AdKeys
+import com.galaxyjoy.cpuinfo.feat.achievement.AchievementPrefs
 import com.galaxyjoy.cpuinfo.feat.setting.BaseRoundedBottomSheet
 import com.galaxyjoy.cpuinfo.feat.vip.streak.CheckInStreak
 import com.galaxyjoy.cpuinfo.feat.vip.streak.CheckInStreakPrefs
@@ -75,6 +76,9 @@ class ShieldScoreBottomSheet : BaseRoundedBottomSheet() {
 
     @Inject
     lateinit var shieldScoreProvider: ShieldScoreProvider
+
+    @Inject
+    lateinit var achievementPrefs: AchievementPrefs
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -97,6 +101,7 @@ class ShieldScoreBottomSheet : BaseRoundedBottomSheet() {
             CpuInfoTheme(useDarkTheme = isDark) {
                 ShieldScoreContent(
                     score = score,
+                    recordsBrokenCount = achievementPrefs.getRecordsBrokenCount(),
                     streak = streakPrefs.getStreak(),
                     hasUnclaimedMilestone = hasUnclaimed,
                     justClaimedBase = justClaimedBase,
@@ -133,6 +138,7 @@ class ShieldScoreBottomSheet : BaseRoundedBottomSheet() {
 @Composable
 private fun ShieldScoreContent(
     score: ShieldScoreCalculator.Result,
+    recordsBrokenCount: Int,
     streak: Int,
     hasUnclaimedMilestone: Boolean,
     justClaimedBase: Boolean,
@@ -173,6 +179,27 @@ private fun ShieldScoreContent(
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
+
+            // U33 — only shown once the user has actually broken a benchmark personal record;
+            // "0 records" is noise, not a stat worth surfacing to someone who's never run a
+            // benchmark or never beaten their own past result.
+            if (recordsBrokenCount > 0) {
+                Spacer(Modifier.height(10.dp))
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        painter = painterResource(R.drawable.baseline_star_rate_24),
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.tertiary,
+                        modifier = Modifier.height(16.dp),
+                    )
+                    Text(
+                        text = stringResource(R.string.shield_score_records_broken, recordsBrokenCount),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(start = 4.dp),
+                    )
+                }
+            }
 
             Spacer(Modifier.height(24.dp))
             Text(

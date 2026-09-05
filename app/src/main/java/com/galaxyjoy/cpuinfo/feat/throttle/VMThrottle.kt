@@ -2,6 +2,8 @@ package com.galaxyjoy.cpuinfo.feat.throttle
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.galaxyjoy.cpuinfo.feat.achievement.AchievementLogic
+import com.galaxyjoy.cpuinfo.feat.achievement.AchievementPrefs
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,6 +16,7 @@ class VMThrottle @Inject constructor(
     private val runner: ThrottleTestRunner,
     private val resultPrefs: ThrottleResultPrefs,
     private val thermalStatusProvider: ThermalStatusProvider,
+    private val achievementPrefs: AchievementPrefs,
 ) : ViewModel() {
 
     sealed interface UiState {
@@ -30,6 +33,8 @@ class VMThrottle @Inject constructor(
             val result: ThrottleFingerprint.Result,
             val previous: ThrottleResultPrefs.SavedResult?,
             val history: List<ThrottleResultPrefs.SavedResult>,
+            /** U33 — this run's `sustainedFreqMhz` beat every prior saved run on this device. */
+            val isNewRecord: Boolean = false,
         ) : UiState
     }
 
@@ -55,9 +60,12 @@ class VMThrottle @Inject constructor(
 
                     is ThrottleTestRunner.State.Finished -> {
                         val previous = resultPrefs.getLastResult()
+                        val previousBest = resultPrefs.getHistory().maxOfOrNull { it.sustainedFreqMhz.toDouble() }
+                        val isNewRecord = AchievementLogic.isNewRecord(previousBest, state.result.sustainedFreqMhz.toDouble())
+                        if (isNewRecord) achievementPrefs.incrementRecordsBroken()
                         resultPrefs.saveResult(state.result)
                         _thermalSnapshot.value = thermalStatusProvider.snapshot()
-                        UiState.Done(state.result, previous, resultPrefs.getHistory())
+                        UiState.Done(state.result, previous, resultPrefs.getHistory(), isNewRecord)
                     }
                 }
             }

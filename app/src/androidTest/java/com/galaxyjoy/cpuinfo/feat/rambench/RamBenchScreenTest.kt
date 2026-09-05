@@ -72,6 +72,39 @@ class RamBenchScreenTest {
         composeRule.onNodeWithText(appContext.getString(R.string.ram_bench_no_previous)).assertExists()
     }
 
+    /** U33 — "New personal record" badge. */
+    @Test
+    fun doneState_isNewRecord_showsNewRecordBadge() {
+        val state = VMRamBench.UiState.Done(
+            result = RamBenchmark.Result(writeMbPerSec = 1234.5, readMbPerSec = 2345.6),
+            previous = null,
+            history = emptyList(),
+            isNewRecord = true,
+        )
+
+        composeRule.setContent {
+            CpuInfoTheme { RamBenchScreen(state, noThermalSnapshot, {}, {}, {}, {}) }
+        }
+
+        composeRule.onNodeWithText(appContext.getString(R.string.bench_new_record_badge)).assertExists()
+    }
+
+    @Test
+    fun doneState_notNewRecord_hidesNewRecordBadge() {
+        val state = VMRamBench.UiState.Done(
+            result = RamBenchmark.Result(writeMbPerSec = 1234.5, readMbPerSec = 2345.6),
+            previous = null,
+            history = emptyList(),
+            isNewRecord = false,
+        )
+
+        composeRule.setContent {
+            CpuInfoTheme { RamBenchScreen(state, noThermalSnapshot, {}, {}, {}, {}) }
+        }
+
+        composeRule.onNodeWithText(appContext.getString(R.string.bench_new_record_badge)).assertDoesNotExist()
+    }
+
     /** U24 — percentile vs this device's own history, shown right below the trend chart. */
     @Test
     fun doneState_withAtLeastTwoHistoryEntries_showsPercentileBetterThanAllPreviousRuns() {
