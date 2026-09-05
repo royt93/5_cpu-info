@@ -597,6 +597,25 @@
     <string name="cluster_bench_share_segment">%1$s (%2$d rdzeni): %3$s op/s</string>
     <string name="cluster_bench_share_text">Test klastrów — %1$s</string>
     <string name="cluster_bench_affinity_warning">⚠ nie udało się przypiąć do rdzeni tego klastra — wynik może być niedokładny</string>
+
+    <string name="silicon_lottery">Silicon Lottery</string>
+    <string name="silicon_lottery_disclaimer_title">Zanim zaczniesz</string>
+    <string name="silicon_lottery_disclaimer_body">Ten test uruchamia krótkie obciążenie CPU kolejno na każdym pojedynczym rdzeniu (nie na całym chipie naraz), aby porównać rzeczywistą wydajność poszczególnych rdzeni — rdzenie z tego samego chipa mogą się nieznacznie różnić jakością. Zajmuje kilka sekund na rdzeń.</string>
+    <string name="silicon_lottery_start_button">Rozpocznij test</string>
+    <string name="silicon_lottery_running_label">Testowanie rdzenia %1$d/%2$d</string>
+    <string name="silicon_lottery_stop_button">Zatrzymaj</string>
+    <string name="silicon_lottery_aborted_overheat">Test pominięty — urządzenie jest teraz zbyt ciepłe. Spróbuj ponownie po ostygnięciu.</string>
+    <string name="silicon_lottery_aborted_interrupted">Test zatrzymany przed zakończeniem.</string>
+    <string name="silicon_lottery_row_label">Rdzeń %1$d</string>
+    <string name="silicon_lottery_ops_value">%1$s ops/s</string>
+    <string name="silicon_lottery_done_button">Gotowe</string>
+    <string name="silicon_lottery_share_button">Udostępnij</string>
+    <string name="silicon_lottery_share_segment">%1$s: %2$s ops/s</string>
+    <string name="silicon_lottery_share_text">Silicon Lottery — %1$s (rozrzut %2$.1f%%)</string>
+    <string name="silicon_lottery_affinity_warning">⚠ nie udało się przypiąć do tego rdzenia — wynik może być niedokładny</string>
+    <string name="silicon_lottery_strongest_label">★ najsilniejszy</string>
+    <string name="silicon_lottery_weakest_label">▼ najsłabszy</string>
+    <string name="silicon_lottery_spread_label">Rozrzut najsilniejszy/najsłabszy rdzeń: %1$.1f%%</string>
     <string name="bench_result_card_title">Wyniki testu wydajności</string>
     <string name="bench_result_card_share_image_button">Udostępnij jako obraz</string>
     <string name="bench_result_card_share_button">Udostępnij kartę wyników</string>

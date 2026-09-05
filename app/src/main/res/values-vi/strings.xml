@@ -604,6 +604,25 @@
     <string name="cluster_bench_share_segment">%1$s (%2$d nhân): %3$s ops/s</string>
     <string name="cluster_bench_share_text">Benchmark cụm nhân — %1$s</string>
     <string name="cluster_bench_affinity_warning">⚠ không pin được vào đúng nhân của cụm này — kết quả có thể không chính xác</string>
+
+    <string name="silicon_lottery">Silicon Lottery</string>
+    <string name="silicon_lottery_disclaimer_title">Trước khi bắt đầu</string>
+    <string name="silicon_lottery_disclaimer_body">Bài test chạy tải CPU ngắn trên từng nhân riêng lẻ (không phải cả chip cùng lúc) để so sánh hiệu năng thật từng nhân — các nhân cùng 1 chip vẫn có thể "chất lượng" khác nhau chút ít. Mất vài giây cho mỗi nhân.</string>
+    <string name="silicon_lottery_start_button">Bắt đầu test</string>
+    <string name="silicon_lottery_running_label">Đang test nhân %1$d/%2$d</string>
+    <string name="silicon_lottery_stop_button">Dừng</string>
+    <string name="silicon_lottery_aborted_overheat">Đã bỏ qua test — máy đang hơi nóng. Thử lại sau khi máy nguội.</string>
+    <string name="silicon_lottery_aborted_interrupted">Test đã dừng trước khi xong.</string>
+    <string name="silicon_lottery_row_label">Nhân %1$d</string>
+    <string name="silicon_lottery_ops_value">%1$s ops/s</string>
+    <string name="silicon_lottery_done_button">Xong</string>
+    <string name="silicon_lottery_share_button">Chia sẻ</string>
+    <string name="silicon_lottery_share_segment">%1$s: %2$s ops/s</string>
+    <string name="silicon_lottery_share_text">Silicon Lottery — %1$s (chênh lệch %2$.1f%%)</string>
+    <string name="silicon_lottery_affinity_warning">⚠ không pin được vào nhân này — kết quả có thể không chính xác</string>
+    <string name="silicon_lottery_strongest_label">★ mạnh nhất</string>
+    <string name="silicon_lottery_weakest_label">▼ yếu nhất</string>
+    <string name="silicon_lottery_spread_label">Chênh lệch nhân mạnh nhất/yếu nhất: %1$.1f%%</string>
     <string name="bench_result_card_title">Kết quả kiểm tra hiệu năng</string>
     <string name="bench_result_card_share_image_button">Chia sẻ ảnh</string>
     <string name="bench_result_card_share_button">Chia sẻ thẻ kết quả</string>

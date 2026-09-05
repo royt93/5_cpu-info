@@ -597,6 +597,25 @@
     <string name="cluster_bench_share_segment">%1$s (%2$d jader): %3$s op/s</string>
     <string name="cluster_bench_share_text">Test clusterů — %1$s</string>
     <string name="cluster_bench_affinity_warning">⚠ nepodařilo se připnout na jádra tohoto clusteru — výsledek nemusí být přesný</string>
+
+    <string name="silicon_lottery">Silicon Lottery</string>
+    <string name="silicon_lottery_disclaimer_title">Než začnete</string>
+    <string name="silicon_lottery_disclaimer_body">Tento test spustí krátkou zátěž CPU postupně na každém jednotlivém jádru (ne na celém čipu najednou), aby porovnal skutečný výkon jednotlivých jader — jádra ze stejného čipu se mohou mírně lišit kvalitou. Trvá pár sekund na jádro.</string>
+    <string name="silicon_lottery_start_button">Spustit test</string>
+    <string name="silicon_lottery_running_label">Testuji jádro %1$d/%2$d</string>
+    <string name="silicon_lottery_stop_button">Zastavit</string>
+    <string name="silicon_lottery_aborted_overheat">Test přeskočen — zařízení je teď příliš teplé. Zkuste to znovu po vychladnutí.</string>
+    <string name="silicon_lottery_aborted_interrupted">Test zastaven před dokončením.</string>
+    <string name="silicon_lottery_row_label">Jádro %1$d</string>
+    <string name="silicon_lottery_ops_value">%1$s ops/s</string>
+    <string name="silicon_lottery_done_button">Hotovo</string>
+    <string name="silicon_lottery_share_button">Sdílet</string>
+    <string name="silicon_lottery_share_segment">%1$s: %2$s ops/s</string>
+    <string name="silicon_lottery_share_text">Silicon Lottery — %1$s (rozptyl %2$.1f%%)</string>
+    <string name="silicon_lottery_affinity_warning">⚠ nepodařilo se připnout na toto jádro — výsledek nemusí být přesný</string>
+    <string name="silicon_lottery_strongest_label">★ nejsilnější</string>
+    <string name="silicon_lottery_weakest_label">▼ nejslabší</string>
+    <string name="silicon_lottery_spread_label">Rozptyl nejsilnějšího a nejslabšího jádra: %1$.1f%%</string>
     <string name="bench_result_card_title">Výsledky testu výkonu</string>
     <string name="bench_result_card_share_image_button">Sdílet jako obrázek</string>
     <string name="bench_result_card_share_button">Sdílet kartu výsledků</string>

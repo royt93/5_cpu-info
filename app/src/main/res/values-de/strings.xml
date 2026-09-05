@@ -600,6 +600,25 @@
     <string name="cluster_bench_share_segment">%1$s (%2$d Kerne): %3$s Ops/s</string>
     <string name="cluster_bench_share_text">Cluster-Benchmark — %1$s</string>
     <string name="cluster_bench_affinity_warning">⚠ Anheften an die Kerne dieses Clusters fehlgeschlagen — Ergebnis könnte ungenau sein</string>
+
+    <string name="silicon_lottery">Silicon Lottery</string>
+    <string name="silicon_lottery_disclaimer_title">Bevor du beginnst</string>
+    <string name="silicon_lottery_disclaimer_body">Dieser Test lässt eine kurze CPU-Last nacheinander auf jedem einzelnen Kern laufen (nicht auf dem ganzen Chip gleichzeitig), um die echte Leistung pro Kern zu vergleichen — Kerne desselben Chips können sich leicht unterscheiden. Dauert ein paar Sekunden pro Kern.</string>
+    <string name="silicon_lottery_start_button">Test starten</string>
+    <string name="silicon_lottery_running_label">Teste Kern %1$d/%2$d</string>
+    <string name="silicon_lottery_stop_button">Stopp</string>
+    <string name="silicon_lottery_aborted_overheat">Test übersprungen — Gerät ist gerade zu warm. Versuche es nach dem Abkühlen erneut.</string>
+    <string name="silicon_lottery_aborted_interrupted">Test vor Abschluss gestoppt.</string>
+    <string name="silicon_lottery_row_label">Kern %1$d</string>
+    <string name="silicon_lottery_ops_value">%1$s ops/s</string>
+    <string name="silicon_lottery_done_button">Fertig</string>
+    <string name="silicon_lottery_share_button">Teilen</string>
+    <string name="silicon_lottery_share_segment">%1$s: %2$s ops/s</string>
+    <string name="silicon_lottery_share_text">Silicon Lottery — %1$s (Streuung %2$.1f%%)</string>
+    <string name="silicon_lottery_affinity_warning">⚠ Anheften an diesen Kern fehlgeschlagen — Ergebnis könnte ungenau sein</string>
+    <string name="silicon_lottery_strongest_label">★ stärkster</string>
+    <string name="silicon_lottery_weakest_label">▼ schwächster</string>
+    <string name="silicon_lottery_spread_label">Streuung stärkster/schwächster Kern: %1$.1f%%</string>
     <string name="bench_result_card_title">Benchmark-Ergebnisse</string>
     <string name="bench_result_card_share_image_button">Als Bild teilen</string>
     <string name="bench_result_card_share_button">Ergebniskarte teilen</string>

@@ -599,6 +599,25 @@
     <string name="cluster_bench_share_segment">%1$s（%2$d 核）：%3$s 次運算/秒</string>
     <string name="cluster_bench_share_text">核心叢集效能測試 — %1$s</string>
     <string name="cluster_bench_affinity_warning">⚠ 無法固定到此叢集的核心 — 結果可能不準確</string>
+
+    <string name="silicon_lottery">矽脂樂透</string>
+    <string name="silicon_lottery_disclaimer_title">開始前</string>
+    <string name="silicon_lottery_disclaimer_body">此測試會依序在每個核心上單獨執行短時間 CPU 負載（而非整顆晶片同時執行),以比較各核心的真實效能 — 同一顆晶片的核心品質仍可能略有差異。每個核心約需數秒。</string>
+    <string name="silicon_lottery_start_button">開始測試</string>
+    <string name="silicon_lottery_running_label">正在測試核心 %1$d/%2$d</string>
+    <string name="silicon_lottery_stop_button">停止</string>
+    <string name="silicon_lottery_aborted_overheat">已略過測試 — 裝置目前過熱，請待裝置降溫後再試一次。</string>
+    <string name="silicon_lottery_aborted_interrupted">測試已在完成前停止。</string>
+    <string name="silicon_lottery_row_label">核心 %1$d</string>
+    <string name="silicon_lottery_ops_value">%1$s ops/s</string>
+    <string name="silicon_lottery_done_button">完成</string>
+    <string name="silicon_lottery_share_button">分享</string>
+    <string name="silicon_lottery_share_segment">%1$s：%2$s ops/s</string>
+    <string name="silicon_lottery_share_text">矽脂樂透 — %1$s（差距 %2$.1f%%）</string>
+    <string name="silicon_lottery_affinity_warning">⚠ 無法固定到此核心 — 結果可能不準確</string>
+    <string name="silicon_lottery_strongest_label">★ 最強</string>
+    <string name="silicon_lottery_weakest_label">▼ 最弱</string>
+    <string name="silicon_lottery_spread_label">最強與最弱核心差距：%1$.1f%%</string>
     <string name="bench_result_card_title">效能測試結果</string>
     <string name="bench_result_card_share_image_button">分享圖片</string>
     <string name="bench_result_card_share_button">分享結果卡片</string>
