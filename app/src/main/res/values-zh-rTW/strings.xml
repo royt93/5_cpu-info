@@ -128,6 +128,16 @@
     <string name="rooted">已 root</string>
     <string name="encrypted_storage">儲存空間已加密</string>
     <string name="security_providers">安全性提供者</string>
+    <string name="not_supported">此 Android 版本不支援</string>
+    <string name="biometric_section">生物辨識與螢幕鎖定</string>
+    <string name="biometric_fingerprint_hardware">指紋硬體</string>
+    <string name="biometric_face_hardware">臉部辨識硬體</string>
+    <string name="biometric_iris_hardware">虹膜辨識硬體</string>
+    <string name="biometric_strong_enrolled">已註冊強生物辨識</string>
+    <string name="biometric_weak_enrolled">已註冊弱生物辨識</string>
+    <string name="biometric_device_credential_set">已設定 PIN/圖形/密碼</string>
+    <string name="screen_lock_set">已設定螢幕鎖定</string>
+    <string name="ime_section">已啟用的鍵盤(是否具備網路權限?)</string>
     <!--Hardware-->
     <string name="battery">電池</string>
     <string name="wireless">無線</string>
@@ -156,6 +166,11 @@
     <string name="battery_unknown">未知</string>
     <string name="battery_unspecified_failure">不明確的問題發生</string>
     <string name="ir_emitter">紅外線發射器</string>
+    <string name="haptics">觸覺回饋</string>
+    <string name="haptics_amplitude_control">振幅控制</string>
+    <string name="haptics_all_primitives">click/tick/thud 效果</string>
+    <string name="haptics_resonant_frequency">共振頻率</string>
+    <string name="haptics_resonant_frequency_value">%.0f Hz</string>
     <!--Prefs-->
     <string name="ram_refreshing">小工具更新頻率</string>
     <string name="general">一般</string>
@@ -176,6 +191,7 @@
     <string name="shield_score_storage_label">儲存空間</string>
     <string name="shield_score_battery_label">電池</string>
     <string name="shield_score_records_broken">已打破 %1$d 項效能測試紀錄</string>
+    <string name="shield_score_reboot_count">已偵測到 %1$d 次重新開機</string>
     <string name="shield_score_band_excellent">優秀</string>
     <string name="shield_score_band_good">良好</string>
     <string name="shield_score_band_fair">需要注意</string>
@@ -706,6 +722,7 @@
     <string name="vip_diagnostic_summary_days_tracked">已追蹤 %1$d 天</string>
     <string name="vip_diagnostic_battery_chart_title">電池電量趨勢</string>
     <string name="vip_diagnostic_summary_cycle_delta">自第一次快照以來充電循環 %1$+d 次</string>
+    <string name="vip_diagnostic_forecast">以目前的耗損速度估計,約還有 %1$d 天會出現明顯劣化(粗略估計,非保證值)</string>
     <string name="vip_diagnostic_row_battery_level">電池電量</string>
     <string name="vip_diagnostic_row_ram_available">可用 RAM</string>
     <string name="vip_diagnostic_row_storage_free">可用儲存空間</string>

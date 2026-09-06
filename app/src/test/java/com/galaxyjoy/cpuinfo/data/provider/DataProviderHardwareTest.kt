@@ -3,6 +3,7 @@ package com.galaxyjoy.cpuinfo.data.provider
 import android.content.ContentResolver
 import android.content.pm.PackageManager
 import android.net.wifi.WifiManager
+import android.os.Vibrator
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Test
@@ -14,11 +15,13 @@ class DataProviderHardwareTest {
     private val packageManager: PackageManager = mockk()
     private val contentResolver: ContentResolver = mockk()
     private val wifiManager: WifiManager = mockk()
+    private val vibrator: Vibrator = mockk(relaxed = true)
     private val provider = DataProviderHardware(
         packageManager = packageManager,
         contentResolver = contentResolver,
         wifiManager = wifiManager,
         irManager = null,
+        vibrator = vibrator,
     )
 
     private fun stubFeature(feature: String, has: Boolean) {
@@ -68,6 +71,20 @@ class DataProviderHardwareTest {
         assertTrue(data.hasWifiPasspoint)
         assertTrue(data.hasWifi5Ghz)
         assertFalse(data.hasWifiP2p)
+    }
+
+    @Test
+    fun `hasHapticsAmplitudeControl reflects the Vibrator capability directly`() {
+        stubFeature(PackageManager.FEATURE_WIFI, false)
+        stubFeature(PackageManager.FEATURE_BLUETOOTH, false)
+        stubFeature(PackageManager.FEATURE_BLUETOOTH_LE, false)
+        stubFeature(PackageManager.FEATURE_LOCATION_GPS, false)
+        stubFeature(PackageManager.FEATURE_NFC, false)
+        stubFeature(PackageManager.FEATURE_NFC_HOST_CARD_EMULATION, false)
+        stubFeature(PackageManager.FEATURE_USB_HOST, false)
+        every { vibrator.hasAmplitudeControl() } returns true
+
+        assertTrue(provider.getHardwareData().hasHapticsAmplitudeControl)
     }
 
     @Test

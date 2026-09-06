@@ -127,6 +127,16 @@
     <string name="rooted">Gerootet</string>
     <string name="encrypted_storage">Verschlüsselter Speicher</string>
     <string name="security_providers">Sicherheitsprovider</string>
+    <string name="not_supported">In dieser Android-Version nicht unterstützt</string>
+    <string name="biometric_section">Biometrie &amp; Bildschirmsperre</string>
+    <string name="biometric_fingerprint_hardware">Fingerabdruck-Hardware</string>
+    <string name="biometric_face_hardware">Gesichtserkennungs-Hardware</string>
+    <string name="biometric_iris_hardware">Iris-Hardware</string>
+    <string name="biometric_strong_enrolled">Starke Biometrie registriert</string>
+    <string name="biometric_weak_enrolled">Schwache Biometrie registriert</string>
+    <string name="biometric_device_credential_set">PIN/Muster/Passwort festgelegt</string>
+    <string name="screen_lock_set">Bildschirmsperre eingerichtet</string>
+    <string name="ime_section">Aktivierte Tastaturen (mit Internetberechtigung?)</string>
     <!--Hardware-->
     <string name="battery">Batterie</string>
     <string name="wireless">Kabellos</string>
@@ -155,6 +165,11 @@
     <string name="battery_unknown">Unbekannt</string>
     <string name="battery_unspecified_failure">Unspezifizierter Fehler</string>
     <string name="ir_emitter">IR Emitter</string>
+    <string name="haptics">Haptik</string>
+    <string name="haptics_amplitude_control">Amplitudensteuerung</string>
+    <string name="haptics_all_primitives">Click/Tick/Thud-Primitive</string>
+    <string name="haptics_resonant_frequency">Resonanzfrequenz</string>
+    <string name="haptics_resonant_frequency_value">%.0f Hz</string>
     <!--Prefs-->
     <string name="ram_refreshing">Widget-Aktualisierung alle</string>
     <string name="general">Allgemein</string>
@@ -261,6 +276,7 @@
     <string name="shield_score_storage_label">Speicher</string>
     <string name="shield_score_battery_label">Akku</string>
     <string name="shield_score_records_broken">%1$d Benchmark-Rekorde gebrochen</string>
+    <string name="shield_score_reboot_count">%1$d Geräteneustarts erkannt</string>
     <string name="shield_score_band_excellent">Ausgezeichnet</string>
     <string name="shield_score_band_good">Gut</string>
     <string name="shield_score_band_fair">Braucht Aufmerksamkeit</string>
@@ -707,6 +723,7 @@
     <string name="vip_diagnostic_summary_days_tracked">Seit %1$d Tagen verfolgt</string>
     <string name="vip_diagnostic_battery_chart_title">Akkustand-Trend</string>
     <string name="vip_diagnostic_summary_cycle_delta">%1$+d Ladezyklen seit der ersten Momentaufnahme</string>
+    <string name="vip_diagnostic_forecast">Bei der aktuellen Verschleißrate noch geschätzt ~%1$d Tage bis zu einer spürbaren Verschlechterung (grobe Schätzung, keine Garantie)</string>
     <string name="vip_diagnostic_row_battery_level">Akkustand</string>
     <string name="vip_diagnostic_row_ram_available">Verfügbarer RAM</string>
     <string name="vip_diagnostic_row_storage_free">Freier Speicher</string>

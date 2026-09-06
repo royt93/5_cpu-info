@@ -1,11 +1,13 @@
 package com.galaxyjoy.cpuinfo.data.provider
 
+import android.app.KeyguardManager
 import android.app.admin.DevicePolicyManager
 import android.content.ContentResolver
 import android.content.pm.PackageManager
 import android.database.Cursor
 import android.net.Uri
 import android.provider.Settings
+import android.view.inputmethod.InputMethodManager
 import com.galaxyjoy.cpuinfo.domain.model.EncryptionStatus
 import io.mockk.Runs
 import io.mockk.every
@@ -22,10 +24,15 @@ import kotlin.test.assertNull
 class DataProviderAndroidTest {
 
     private val contentResolver: ContentResolver = mockk()
-    private val packageManager: PackageManager = mockk()
+    private val packageManager: PackageManager = mockk(relaxed = true)
     private val devicePolicyManager: DevicePolicyManager = mockk()
+    private val keyguardManager: KeyguardManager = mockk(relaxed = true)
+    private val inputMethodManager: InputMethodManager = mockk(relaxed = true)
 
-    private val provider = DataProviderAndroid(contentResolver, packageManager, devicePolicyManager)
+    private val provider = DataProviderAndroid(
+        contentResolver, packageManager, devicePolicyManager,
+        biometricManager = null, keyguardManager = keyguardManager, inputMethodManager = inputMethodManager,
+    )
 
     @Before
     fun setUp() {
@@ -123,6 +130,24 @@ class DataProviderAndroidTest {
         every { cursor.close() } just Runs
 
         assertEquals("ff", provider.getAndroidData().gsfAndroidId)
+    }
+
+    @Test
+    fun `biometric enrollment fields are null when BiometricManager is unavailable`() {
+        stubDefaults()
+        val data = provider.getAndroidData()
+
+        assertNull(data.biometricStrongEnrolled)
+        assertNull(data.biometricWeakEnrolled)
+        assertNull(data.deviceCredentialSet)
+    }
+
+    @Test
+    fun `imeList is empty when getEnabledInputMethodList throws`() {
+        stubDefaults()
+        every { inputMethodManager.enabledInputMethodList } throws SecurityException("no permission")
+
+        assertEquals(emptyList(), provider.getAndroidData().imeList)
     }
 
     @Test

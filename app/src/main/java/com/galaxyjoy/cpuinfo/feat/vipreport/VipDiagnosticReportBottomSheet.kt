@@ -157,6 +157,16 @@ private fun HistoryState(history: List<VipDiagnosticSnapshot>, onSaveClicked: ()
         Spacer(Modifier.height(20.dp))
     }
 
+    val forecast = remember(history) { VipDiagnosticEvaluator.forecastDegradation(history) }
+    if (forecast != null) {
+        Text(
+            text = stringResource(R.string.vip_diagnostic_forecast, forecast.daysUntilThreshold),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        Spacer(Modifier.height(20.dp))
+    }
+
     val batterySeries = remember(history) { VipDiagnosticEvaluator.batteryLevelSeries(history) }
     if (batterySeries.size >= 2) {
         Text(

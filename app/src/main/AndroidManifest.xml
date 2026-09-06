@@ -42,6 +42,11 @@
          without it, registerListener() throws SecurityException on real devices. Discovered via
          real-device instrumented test, not by reading the docs first. -->
     <uses-permission android:name="android.permission.HIGH_SAMPLING_RATE_SENSORS" />
+    <!-- E06 biometric hardware inventory: normal permission (no runtime dialog), required to call
+         android.hardware.biometrics.BiometricManager#canAuthenticate(int) at all — without it every
+         call throws SecurityException on real devices. Discovered via real-device (TECNO KJ7)
+         smoke test logcat, not by reading the docs first. -->
+    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
 
     <queries>
         <intent>

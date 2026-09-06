@@ -75,6 +75,7 @@
     <string name="shield_score_battery_label">Battery</string>
     <!-- U33 - shown only once at least 1 benchmark personal record has been broken -->
     <string name="shield_score_records_broken">%1$d benchmark records broken</string>
+    <string name="shield_score_reboot_count">%1$d device reboots detected</string>
     <string name="shield_score_band_excellent">Excellent</string>
     <string name="shield_score_band_good">Good</string>
     <string name="shield_score_band_fair">Needs attention</string>
@@ -146,6 +147,16 @@
     <string name="rooted">Rooted</string>
     <string name="encrypted_storage">Encrypted Storage</string>
     <string name="security_providers">Security providers</string>
+    <string name="not_supported">Not supported on this Android version</string>
+    <string name="biometric_section">Biometrics &amp; screen lock</string>
+    <string name="biometric_fingerprint_hardware">Fingerprint hardware</string>
+    <string name="biometric_face_hardware">Face hardware</string>
+    <string name="biometric_iris_hardware">Iris hardware</string>
+    <string name="biometric_strong_enrolled">Strong biometric enrolled</string>
+    <string name="biometric_weak_enrolled">Weak biometric enrolled</string>
+    <string name="biometric_device_credential_set">PIN/pattern/password set</string>
+    <string name="screen_lock_set">Screen lock set</string>
+    <string name="ime_section">Enabled keyboards (has Internet permission?)</string>
     <!--Hardware-->
     <string name="battery">Battery</string>
     <string name="wireless">Wireless</string>
@@ -174,6 +185,11 @@
     <string name="battery_unknown">Unknown</string>
     <string name="battery_unspecified_failure">Unspecified failure</string>
     <string name="ir_emitter">IR Emitter</string>
+    <string name="haptics">Haptics</string>
+    <string name="haptics_amplitude_control">Amplitude control</string>
+    <string name="haptics_all_primitives">Click/tick/thud primitives</string>
+    <string name="haptics_resonant_frequency">Resonant frequency</string>
+    <string name="haptics_resonant_frequency_value">%.0f Hz</string>
     <string name="external_facing" tools:ignore="UnusedResources">External</string>
     <!-- DRM tab -->
     <string name="drm_supported">%1$s supported</string>
@@ -739,6 +755,7 @@
     <string name="vip_diagnostic_summary_days_tracked">Tracked for %1$d days</string>
     <string name="vip_diagnostic_battery_chart_title">Battery level trend</string>
     <string name="vip_diagnostic_summary_cycle_delta">%1$+d charge cycles since the first snapshot</string>
+    <string name="vip_diagnostic_forecast">At the current wear rate, estimated ~%1$d days until noticeably degraded (rough estimate, not a guarantee)</string>
     <string name="vip_diagnostic_row_battery_level">Battery level</string>
     <string name="vip_diagnostic_row_ram_available">RAM available</string>
     <string name="vip_diagnostic_row_storage_free">Storage free</string>

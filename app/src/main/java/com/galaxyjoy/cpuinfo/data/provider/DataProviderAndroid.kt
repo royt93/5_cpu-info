@@ -1,18 +1,22 @@
 package com.galaxyjoy.cpuinfo.data.provider
 
 import android.annotation.SuppressLint
+import android.app.KeyguardManager
 import android.app.admin.DevicePolicyManager
 import android.content.ContentResolver
 import android.content.pm.PackageManager
+import android.hardware.biometrics.BiometricManager
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyInfo
 import android.security.keystore.KeyProperties
+import android.view.inputmethod.InputMethodManager
 import androidx.annotation.VisibleForTesting
 import com.galaxyjoy.cpuinfo.domain.model.AndroidData
 import com.galaxyjoy.cpuinfo.domain.model.EncryptionStatus
+import com.galaxyjoy.cpuinfo.domain.model.ImeInfo
 import com.galaxyjoy.cpuinfo.domain.model.SecurityProviderData
 import java.io.BufferedReader
 import java.io.File
@@ -31,6 +35,9 @@ class DataProviderAndroid @Inject constructor(
     private val contentResolver: ContentResolver,
     private val packageManager: PackageManager,
     private val devicePolicyManager: DevicePolicyManager,
+    private val biometricManager: BiometricManager?,
+    private val keyguardManager: KeyguardManager,
+    private val inputMethodManager: InputMethodManager,
 ) {
 
     // Build.* fields are Kotlin platform types (String!) — never actually null on a real device,
@@ -56,7 +63,42 @@ class DataProviderAndroid @Inject constructor(
         securityPatch = Build.VERSION.SECURITY_PATCH ?: "",
         selinuxStatus = readSelinuxStatus(),
         hasHardwareKeystore = isHardwareBackedKeystoreAvailable(),
+        hasFingerprintHardware = packageManager.hasSystemFeature(PackageManager.FEATURE_FINGERPRINT),
+        hasFaceHardware = packageManager.hasSystemFeature(PackageManager.FEATURE_FACE),
+        hasIrisHardware = packageManager.hasSystemFeature(PackageManager.FEATURE_IRIS),
+        biometricStrongEnrolled = canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG),
+        biometricWeakEnrolled = canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_WEAK),
+        deviceCredentialSet = canAuthenticate(BiometricManager.Authenticators.DEVICE_CREDENTIAL),
+        isDeviceSecure = keyguardManager.isDeviceSecure,
+        imeList = getImeList(),
     )
+
+    /** Null when the typed `canAuthenticate(int)` overload doesn't exist (API<30) or
+     * [biometricManager] itself is unavailable (API<29) — "unsupported on this Android version",
+     * distinct from `false` ("supported, but not enrolled/available"). */
+    private fun canAuthenticate(authenticator: Int): Boolean? {
+        val manager = biometricManager ?: return null
+        if (Build.VERSION.SDK_INT < 30) return null
+        return try {
+            manager.canAuthenticate(authenticator) == BiometricManager.BIOMETRIC_SUCCESS
+        } catch (_: Exception) {
+            null
+        }
+    }
+
+    private fun getImeList(): List<ImeInfo> = try {
+        inputMethodManager.enabledInputMethodList.map { info ->
+            val requestsInternet = try {
+                packageManager.checkPermission(android.Manifest.permission.INTERNET, info.packageName) ==
+                    PackageManager.PERMISSION_GRANTED
+            } catch (_: Exception) {
+                false
+            }
+            ImeInfo(label = info.loadLabel(packageManager).toString(), requestsInternet = requestsInternet)
+        }
+    } catch (_: Exception) {
+        emptyList()
+    }
 
     /** Keep in mind that from Android O it is unique per app. */
     @SuppressLint("HardwareIds")

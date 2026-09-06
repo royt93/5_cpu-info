@@ -64,16 +64,30 @@ class FrmTemperature : BaseFrm<FrmTemperatureBinding>(
         }
     }
 
-    private fun toDisplayItems(state: TemperatureData.Available): List<TemperatureItem> = listOf(
-        TemperatureItem(
-            iconRes = temperatureIconProvider.getIcon(TemperatureIconProvider.Type.CPU),
-            name = getString(R.string.cpu),
-            temperature = state.cpuTemp,
-        ),
-        TemperatureItem(
-            iconRes = temperatureIconProvider.getIcon(TemperatureIconProvider.Type.BATTERY),
-            name = getString(R.string.battery),
-            temperature = state.batteryTemp,
-        ),
-    )
+    private fun toDisplayItems(state: TemperatureData.Available): List<TemperatureItem> {
+        val items = mutableListOf(
+            TemperatureItem(
+                iconRes = temperatureIconProvider.getIcon(TemperatureIconProvider.Type.CPU),
+                name = getString(R.string.cpu),
+                temperature = state.cpuTemp,
+            ),
+            TemperatureItem(
+                iconRes = temperatureIconProvider.getIcon(TemperatureIconProvider.Type.BATTERY),
+                name = getString(R.string.battery),
+                temperature = state.batteryTemp,
+            ),
+        )
+        // E07 — every other thermal zone the kernel exposes, reusing the CPU icon since there's no
+        // per-zone icon set (skin/GPU/modem/... aren't drawables this app ships).
+        state.allZones.forEach { zone ->
+            items.add(
+                TemperatureItem(
+                    iconRes = temperatureIconProvider.getIcon(TemperatureIconProvider.Type.CPU),
+                    name = zone.zoneName,
+                    temperature = zone.tempCelsius,
+                ),
+            )
+        }
+        return items
+    }
 }

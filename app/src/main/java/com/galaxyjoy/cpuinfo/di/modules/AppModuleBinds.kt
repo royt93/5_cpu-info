@@ -6,6 +6,7 @@ import com.galaxyjoy.cpuinfo.appinitializers.HealthAlertNotificationInitializer
 import com.galaxyjoy.cpuinfo.appinitializers.NativeToolsInitializer
 import com.galaxyjoy.cpuinfo.appinitializers.InitializerTheme
 import com.galaxyjoy.cpuinfo.appinitializers.InitializerTimber
+import com.galaxyjoy.cpuinfo.appinitializers.RebootStabilityInitializer
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -36,4 +37,8 @@ abstract class AppModuleBinds {
     @Binds
     @IntoSet
     abstract fun provideBenchReminderNotificationInitializer(bind: BenchReminderNotificationInitializer): AppInitializer
+
+    @Binds
+    @IntoSet
+    abstract fun provideRebootStabilityInitializer(bind: RebootStabilityInitializer): AppInitializer
 }

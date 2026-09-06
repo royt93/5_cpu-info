@@ -1,6 +1,7 @@
 package com.galaxyjoy.cpuinfo.data.provider
 
 import android.os.BatteryManager
+import com.galaxyjoy.cpuinfo.domain.model.ThermalZoneReading
 import com.galaxyjoy.cpuinfo.feat.infor.hardware.BatteryStatusProvider
 import com.galaxyjoy.cpuinfo.util.Utils
 import java.io.File
@@ -45,7 +46,34 @@ class DataProviderTemperature @Inject constructor(
      */
     private fun isTemperatureValid(temp: Double): Boolean = temp in -30.0..250.0
 
+    /** E07 full thermal-zone explorer — best-effort glob of every `/sys/class/thermal/thermal_zone*`
+     * the kernel exposes (often 15-30 on a modern SoC: skin/GPU/modem/camera/battery/... in
+     * addition to the CPU zone [findCpuTempPath] already guesses at). Read fresh on every poll
+     * tick, same cadence as [getCpuTemp]/[getBatteryTemperature] — reading a few dozen small sysfs
+     * files every 3s is negligible. A zone that fails to read (permission denied, missing `type`,
+     * garbage `temp`) is silently skipped rather than shown as a fake 0°C row.
+     */
+    fun readAllThermalZones(): List<ThermalZoneReading> {
+        val zoneDirs = File(THERMAL_CLASS_DIR)
+            .listFiles { f -> f.isDirectory && THERMAL_ZONE_NAME_REGEX.matches(f.name) }
+            ?: return emptyList()
+        return zoneDirs.mapNotNull { zoneDir ->
+            val name = readTextLine(File(zoneDir, "type")) ?: return@mapNotNull null
+            val rawTemp = Utils.readOneLine(File(zoneDir, "temp")) ?: return@mapNotNull null
+            val celsius = if (isTemperatureValid(rawTemp)) rawTemp else rawTemp / 1000
+            celsius.takeIf { isTemperatureValid(it) }?.let { ThermalZoneReading(name, it.toFloat()) }
+        }
+    }
+
+    private fun readTextLine(file: File): String? = try {
+        file.bufferedReader().use { it.readLine() }?.trim()?.takeIf { it.isNotEmpty() }
+    } catch (_: Exception) {
+        null
+    }
+
     companion object {
+        private const val THERMAL_CLASS_DIR = "/sys/class/thermal"
+        private val THERMAL_ZONE_NAME_REGEX = Regex("thermal_zone\\d+")
         // Ugly but currently the easiest working solution is to search well known locations.
         // If you know better solution please refactor this :)
         private val CPU_TEMP_FILE_PATHS = listOf(

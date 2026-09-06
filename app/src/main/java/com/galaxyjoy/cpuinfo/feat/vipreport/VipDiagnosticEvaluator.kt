@@ -51,4 +51,32 @@ object VipDiagnosticEvaluator {
      * defensive/consistent with how the other battery fields are guarded throughout this file. */
     fun batteryLevelSeries(history: List<VipDiagnosticSnapshot>): List<Double> =
         history.mapNotNull { snapshot -> snapshot.batteryLevelPercent.takeIf { it >= 0 }?.toDouble() }
+
+    /** E20 — pure linear extrapolation of cycle count over time (no new data collection, only
+     * [VipDiagnosticSnapshot.cycleCount] this file's own [summarize] already validated as
+     * meaningful across snapshots regardless of charge level, unlike `chargeCounterMah`-based
+     * "capacity %" which this file's own doc comment above already ruled out for exactly that
+     * reason). [DEGRADED_CYCLE_COUNT_THRESHOLD] is the commonly-cited Li-ion rule of thumb for
+     * ~80% capacity retention — not a per-device measurement, so this is a rough estimate, not a
+     * guarantee, same honesty standard as every other "Truth"/benchmark feature in this app.
+     */
+    data class BatteryForecast(val cyclesPerDay: Double, val currentCycleCount: Int, val daysUntilThreshold: Long)
+
+    fun forecastDegradation(history: List<VipDiagnosticSnapshot>): BatteryForecast? {
+        val withCycles = history.filter { it.cycleCount >= 0 }
+        if (withCycles.size < 2) return null
+        val oldest = withCycles.first()
+        val newest = withCycles.last()
+        val daysElapsed = (newest.timestampMillis - oldest.timestampMillis) / DAY_MILLIS
+        if (daysElapsed < MIN_DAYS_FOR_FORECAST) return null
+        val cycleDelta = newest.cycleCount - oldest.cycleCount
+        if (cycleDelta <= 0) return null
+        val cyclesPerDay = cycleDelta.toDouble() / daysElapsed
+        val remainingCycles = DEGRADED_CYCLE_COUNT_THRESHOLD - newest.cycleCount
+        val daysUntilThreshold = if (remainingCycles <= 0) 0L else (remainingCycles / cyclesPerDay).toLong()
+        return BatteryForecast(cyclesPerDay, newest.cycleCount, daysUntilThreshold)
+    }
+
+    private const val MIN_DAYS_FOR_FORECAST = 3L
+    private const val DEGRADED_CYCLE_COUNT_THRESHOLD = 500
 }

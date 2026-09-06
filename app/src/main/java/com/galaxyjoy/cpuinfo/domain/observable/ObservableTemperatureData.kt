@@ -37,6 +37,7 @@ class ObservableTemperatureData @Inject constructor(
                 TemperatureData.Available(
                     cpuTemp = cpuTempPath?.let { dataProviderTemperature.getCpuTemp(it) },
                     batteryTemp = dataProviderTemperature.getBatteryTemperature(),
+                    allZones = dataProviderTemperature.readAllThermalZones(),
                 ),
             )
             delay(REFRESH_DELAY_MS)

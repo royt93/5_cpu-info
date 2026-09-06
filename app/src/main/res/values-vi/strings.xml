@@ -60,6 +60,7 @@
     <string name="shield_score_battery_label">Pin</string>
     <!-- U33 - New personal record -->
     <string name="shield_score_records_broken">%1$d kỷ lục benchmark đã phá</string>
+    <string name="shield_score_reboot_count">%1$d lần khởi động lại đã ghi nhận</string>
     <string name="shield_score_band_excellent">Xuất sắc</string>
     <string name="shield_score_band_good">Tốt</string>
     <string name="shield_score_band_fair">Cần chú ý</string>
@@ -129,6 +130,16 @@
     <string name="rooted">Đã root</string>
     <string name="encrypted_storage">Bộ nhớ đã mã hóa</string>
     <string name="security_providers">Nhà cung cấp bảo mật</string>
+    <string name="not_supported">Không hỗ trợ trên phiên bản Android này</string>
+    <string name="biometric_section">Sinh trắc học &amp; khoá màn hình</string>
+    <string name="biometric_fingerprint_hardware">Phần cứng vân tay</string>
+    <string name="biometric_face_hardware">Phần cứng nhận diện khuôn mặt</string>
+    <string name="biometric_iris_hardware">Phần cứng nhận diện mống mắt</string>
+    <string name="biometric_strong_enrolled">Đã đăng ký sinh trắc học mạnh</string>
+    <string name="biometric_weak_enrolled">Đã đăng ký sinh trắc học yếu</string>
+    <string name="biometric_device_credential_set">Đã đặt mã PIN/hình/mật khẩu</string>
+    <string name="screen_lock_set">Đã đặt khoá màn hình</string>
+    <string name="ime_section">Bàn phím đang bật (có quyền Internet?)</string>
     <!--Hardware-->
     <string name="battery">Pin</string>
     <string name="wireless">Không dây</string>
@@ -155,6 +166,11 @@
     <string name="battery_unknown">Không xác định</string>
     <string name="battery_unspecified_failure">Lỗi không xác định</string>
     <string name="ir_emitter">Bộ phát hồng ngoại</string>
+    <string name="haptics">Rung phản hồi</string>
+    <string name="haptics_amplitude_control">Điều khiển cường độ rung</string>
+    <string name="haptics_all_primitives">Hiệu ứng click/tick/thud</string>
+    <string name="haptics_resonant_frequency">Tần số cộng hưởng</string>
+    <string name="haptics_resonant_frequency_value">%.0f Hz</string>
     <string name="external_facing">Ngoài</string>
     <!-- DRM tab -->
     <string name="drm_supported">%1$s được hỗ trợ</string>
@@ -712,6 +728,7 @@
     <string name="vip_diagnostic_summary_days_tracked">Đã theo dõi %1$d ngày</string>
     <string name="vip_diagnostic_battery_chart_title">Xu hướng mức pin</string>
     <string name="vip_diagnostic_summary_cycle_delta">%1$+d chu kỳ sạc kể từ lần lưu đầu tiên</string>
+    <string name="vip_diagnostic_forecast">Với tốc độ hao mòn hiện tại, ước tính còn ~%1$d ngày tới khi pin xuống cấp rõ rệt (ước lượng thô, không phải cam kết chính xác)</string>
     <string name="vip_diagnostic_row_battery_level">Mức pin</string>
     <string name="vip_diagnostic_row_ram_available">RAM khả dụng</string>
     <string name="vip_diagnostic_row_storage_free">Bộ nhớ trống</string>

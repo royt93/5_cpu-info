@@ -72,12 +72,12 @@ class VipDiagnosticContentTest {
      * always today) — seeded directly with an arbitrary [daysAgo] so U20's chart tests can get 2+
      * distinct-calendar-day entries without waiting for real days to pass or fighting the same-day
      * dedup in [VipDiagnosticReportRepository.saveSnapshot]. */
-    private fun fakeSnapshot(daysAgo: Long, batteryLevelPercent: Int) = VipDiagnosticSnapshot(
+    private fun fakeSnapshot(daysAgo: Long, batteryLevelPercent: Int, cycleCount: Int = -1) = VipDiagnosticSnapshot(
         timestampMillis = System.currentTimeMillis() - daysAgo * 24L * 60 * 60 * 1000,
         batteryLevelPercent = batteryLevelPercent,
         designedCapacityMah = 5000.0,
         chargeCounterMah = 4000.0,
-        cycleCount = -1,
+        cycleCount = cycleCount,
         batteryHealth = 2,
         ramAvailablePercentage = 40,
         internalStorageFreeBytes = 10L * 1024 * 1024 * 1024,
@@ -167,5 +167,38 @@ class VipDiagnosticContentTest {
 
         val chartTitle = appContext.getString(R.string.vip_diagnostic_battery_chart_title)
         composeRule.onNodeWithText(chartTitle).assertDoesNotExist()
+    }
+
+    @Test
+    fun historyWithIncreasingCycleCountOverEnoughDays_showsForecastText() {
+        runBlocking {
+            repository.saveSnapshot(fakeSnapshot(daysAgo = 10, batteryLevelPercent = 90, cycleCount = 90))
+            repository.saveSnapshot(fakeSnapshot(daysAgo = 0, batteryLevelPercent = 82, cycleCount = 100))
+        }
+
+        composeRule.setContent {
+            CpuInfoTheme { VipDiagnosticContent(repository = repository) }
+        }
+
+        // 1 cycle/day, threshold 500, currently 100 -> 400 days left (VipDiagnosticEvaluatorTest
+        // covers the exact math; this only checks the forecast text actually reaches the screen).
+        waitForText(appContext.getString(R.string.vip_diagnostic_forecast, 400L))
+    }
+
+    @Test
+    fun historyWithoutCycleCount_hidesForecastText() {
+        runBlocking {
+            repository.saveSnapshot(fakeSnapshot(daysAgo = 10, batteryLevelPercent = 90))
+            repository.saveSnapshot(fakeSnapshot(daysAgo = 0, batteryLevelPercent = 82))
+        }
+
+        composeRule.setContent {
+            CpuInfoTheme { VipDiagnosticContent(repository = repository) }
+        }
+
+        val chartTitle = appContext.getString(R.string.vip_diagnostic_battery_chart_title)
+        waitForText(chartTitle)
+
+        composeRule.onNodeWithText(appContext.getString(R.string.vip_diagnostic_forecast, 400L)).assertDoesNotExist()
     }
 }

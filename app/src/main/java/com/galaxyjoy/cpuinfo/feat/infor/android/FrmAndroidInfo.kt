@@ -71,6 +71,22 @@ class FrmAndroidInfo : BaseRvFragment() {
             data.securityProviders.forEach { items.add(it.name to it.version) }
         }
 
+        fun yesNoOrUnsupported(value: Boolean?) = value?.let { yesNo(it) } ?: getString(R.string.not_supported)
+
+        items.add(getString(R.string.biometric_section) to "")
+        items.add(getString(R.string.biometric_fingerprint_hardware) to yesNo(data.hasFingerprintHardware))
+        items.add(getString(R.string.biometric_face_hardware) to yesNo(data.hasFaceHardware))
+        items.add(getString(R.string.biometric_iris_hardware) to yesNo(data.hasIrisHardware))
+        items.add(getString(R.string.biometric_strong_enrolled) to yesNoOrUnsupported(data.biometricStrongEnrolled))
+        items.add(getString(R.string.biometric_weak_enrolled) to yesNoOrUnsupported(data.biometricWeakEnrolled))
+        items.add(getString(R.string.biometric_device_credential_set) to yesNoOrUnsupported(data.deviceCredentialSet))
+        items.add(getString(R.string.screen_lock_set) to yesNo(data.isDeviceSecure))
+
+        if (data.imeList.isNotEmpty()) {
+            items.add(getString(R.string.ime_section) to "")
+            data.imeList.forEach { ime -> items.add(ime.label to yesNo(ime.requestsInternet)) }
+        }
+
         return items
     }
 

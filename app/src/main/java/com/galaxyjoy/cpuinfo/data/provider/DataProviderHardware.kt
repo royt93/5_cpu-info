@@ -5,20 +5,24 @@ import android.content.ContentResolver
 import android.content.pm.PackageManager
 import android.hardware.ConsumerIrManager
 import android.net.wifi.WifiManager
+import android.os.Build
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.provider.Settings
 import com.galaxyjoy.cpuinfo.domain.model.HardwareData
 import java.io.RandomAccessFile
 import javax.inject.Inject
 
 /**
- * Wireless (Bluetooth/GPS/NFC/Wi-Fi/IR) and USB capability flags — all static for the life of the
- * process, read once by [com.galaxyjoy.cpuinfo.domain.observable.ObservableHardwareData].
+ * Wireless (Bluetooth/GPS/NFC/Wi-Fi/IR), USB, and haptics capability flags — all static for the
+ * life of the process, read once by [com.galaxyjoy.cpuinfo.domain.observable.ObservableHardwareData].
  */
 class DataProviderHardware @Inject constructor(
     private val packageManager: PackageManager,
     private val contentResolver: ContentResolver,
     private val wifiManager: WifiManager,
     private val irManager: ConsumerIrManager?,
+    private val vibrator: Vibrator,
 ) {
 
     @SuppressLint("InlinedApi")
@@ -40,8 +44,29 @@ class DataProviderHardware @Inject constructor(
             wifiMac = getWifiMac(),
             hasIrEmitter = irManager?.hasIrEmitter() == true,
             hasUsbHost = packageManager.hasSystemFeature(PackageManager.FEATURE_USB_HOST),
+            hasHapticsAmplitudeControl = vibrator.hasAmplitudeControl(),
+            hasHapticsAllPrimitives = getHasAllHapticsPrimitives(),
+            hapticsResonantFrequencyHz = getHapticsResonantFrequencyHz(),
         )
     }
+
+    private fun getHasAllHapticsPrimitives(): Boolean? =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            vibrator.areAllPrimitivesSupported(
+                VibrationEffect.Composition.PRIMITIVE_CLICK,
+                VibrationEffect.Composition.PRIMITIVE_TICK,
+                VibrationEffect.Composition.PRIMITIVE_THUD,
+            )
+        } else {
+            null
+        }
+
+    private fun getHapticsResonantFrequencyHz(): Float? =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            vibrator.resonantFrequency.takeIf { !it.isNaN() && it > 0f }
+        } else {
+            null
+        }
 
     private fun getBluetoothMac(): String? = try {
         Settings.Secure.getString(contentResolver, "bluetooth_address").takeIf { !it.isNullOrEmpty() }

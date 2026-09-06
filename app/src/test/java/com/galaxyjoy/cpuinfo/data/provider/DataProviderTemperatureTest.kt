@@ -48,4 +48,11 @@ class DataProviderTemperatureTest {
         // rather than crash (see TemperatureData.Unavailable).
         assertNull(provider.findCpuTempPath())
     }
+
+    @Test
+    fun `readAllThermalZones returns empty list when the thermal class directory does not exist`() {
+        // Same "no hardcoded path exists on the JVM host" reasoning as findCpuTempPath above —
+        // must fail silently to an empty list, not crash or return null.
+        assertEquals(emptyList(), provider.readAllThermalZones())
+    }
 }

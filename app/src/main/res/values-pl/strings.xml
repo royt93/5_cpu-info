@@ -130,6 +130,16 @@
     <string name="rooted">Zrootowany</string>
     <string name="encrypted_storage">Zaszyfrowana pamięć</string>
     <string name="security_providers">Dostawcy zabezpieczeń</string>
+    <string name="not_supported">Niewspierane w tej wersji Androida</string>
+    <string name="biometric_section">Biometria i blokada ekranu</string>
+    <string name="biometric_fingerprint_hardware">Sprzęt czytnika linii papilarnych</string>
+    <string name="biometric_face_hardware">Sprzęt rozpoznawania twarzy</string>
+    <string name="biometric_iris_hardware">Sprzęt rozpoznawania tęczówki</string>
+    <string name="biometric_strong_enrolled">Zarejestrowano silną biometrię</string>
+    <string name="biometric_weak_enrolled">Zarejestrowano słabą biometrię</string>
+    <string name="biometric_device_credential_set">Ustawiono kod PIN/wzór/hasło</string>
+    <string name="screen_lock_set">Ustawiono blokadę ekranu</string>
+    <string name="ime_section">Włączone klawiatury (mają uprawnienie do internetu?)</string>
     <!--Hardware-->
     <string name="battery">Bateria</string>
     <string name="wireless">Komunikacja bezprzewodowa</string>
@@ -156,6 +166,11 @@
     <string name="battery_unknown">Nieznana</string>
     <string name="battery_unspecified_failure">Nieznana usterka</string>
     <string name="ir_emitter">Nadajnik IR</string>
+    <string name="haptics">Wibracje</string>
+    <string name="haptics_amplitude_control">Sterowanie amplitudą</string>
+    <string name="haptics_all_primitives">Efekty click/tick/thud</string>
+    <string name="haptics_resonant_frequency">Częstotliwość rezonansowa</string>
+    <string name="haptics_resonant_frequency_value">%.0f Hz</string>
     <!--Prefs-->
     <string name="ram_refreshing">Odświeżanie widgetu</string>
     <string name="general">Ogólne</string>
@@ -220,6 +235,7 @@
     <string name="shield_score_storage_label">Pamięć</string>
     <string name="shield_score_battery_label">Bateria</string>
     <string name="shield_score_records_broken">Pobito rekordów benchmarku: %1$d</string>
+    <string name="shield_score_reboot_count">Wykryto ponownych uruchomień: %1$d</string>
     <string name="shield_score_band_excellent">Doskonały</string>
     <string name="shield_score_band_good">Dobry</string>
     <string name="shield_score_band_fair">Wymaga uwagi</string>
@@ -704,6 +720,7 @@
     <string name="vip_diagnostic_summary_days_tracked">Śledzone od %1$d dni</string>
     <string name="vip_diagnostic_battery_chart_title">Trend poziomu baterii</string>
     <string name="vip_diagnostic_summary_cycle_delta">%1$+d cykli ładowania od pierwszej migawki</string>
+    <string name="vip_diagnostic_forecast">Przy obecnym tempie zużycia pozostało szacunkowo ~%1$d dni do zauważalnej degradacji (szacunek przybliżony, nie gwarancja)</string>
     <string name="vip_diagnostic_row_battery_level">Poziom baterii</string>
     <string name="vip_diagnostic_row_ram_available">Dostępny RAM</string>
     <string name="vip_diagnostic_row_storage_free">Wolna pamięć</string>

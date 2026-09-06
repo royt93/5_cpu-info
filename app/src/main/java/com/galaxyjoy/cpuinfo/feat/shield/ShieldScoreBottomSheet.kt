@@ -80,6 +80,9 @@ class ShieldScoreBottomSheet : BaseRoundedBottomSheet() {
     @Inject
     lateinit var achievementPrefs: AchievementPrefs
 
+    @Inject
+    lateinit var rebootStabilityPrefs: RebootStabilityPrefs
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -102,6 +105,7 @@ class ShieldScoreBottomSheet : BaseRoundedBottomSheet() {
                 ShieldScoreContent(
                     score = score,
                     recordsBrokenCount = achievementPrefs.getRecordsBrokenCount(),
+                    rebootCount = rebootStabilityPrefs.getRebootCount(),
                     streak = streakPrefs.getStreak(),
                     hasUnclaimedMilestone = hasUnclaimed,
                     justClaimedBase = justClaimedBase,
@@ -139,6 +143,7 @@ class ShieldScoreBottomSheet : BaseRoundedBottomSheet() {
 private fun ShieldScoreContent(
     score: ShieldScoreCalculator.Result,
     recordsBrokenCount: Int,
+    rebootCount: Int,
     streak: Int,
     hasUnclaimedMilestone: Boolean,
     justClaimedBase: Boolean,
@@ -199,6 +204,17 @@ private fun ShieldScoreContent(
                         modifier = Modifier.padding(start = 4.dp),
                     )
                 }
+            }
+
+            // E21 — a running reboot counter since this feature shipped; "0 reboots" during the
+            // very first launch is meaningless (there's nothing to compare against yet).
+            if (rebootCount > 0) {
+                Spacer(Modifier.height(6.dp))
+                Text(
+                    text = stringResource(R.string.shield_score_reboot_count, rebootCount),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
             }
 
             Spacer(Modifier.height(24.dp))

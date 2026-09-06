@@ -9,8 +9,10 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.content.res.Resources
+import android.app.KeyguardManager
 import android.hardware.ConsumerIrManager
 import android.hardware.SensorManager
+import android.hardware.biometrics.BiometricManager
 import android.hardware.camera2.CameraManager
 import android.hardware.display.DisplayManager
 import android.hardware.usb.UsbManager
@@ -18,8 +20,12 @@ import android.media.AudioManager
 import android.net.ConnectivityManager
 import android.net.wifi.WifiManager
 import android.os.BatteryManager
+import android.os.Build
+import android.os.Vibrator
+import android.os.VibratorManager
 import android.os.storage.StorageManager
 import android.telephony.TelephonyManager
+import android.view.inputmethod.InputMethodManager
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
@@ -140,6 +146,40 @@ class AppModule {
     @Singleton
     fun provideBatteryManager(@ApplicationContext appContext: Context): BatteryManager =
         appContext.getSystemService(Context.BATTERY_SERVICE) as BatteryManager
+
+    /** E05 Haptics: `VIBRATOR_SERVICE` is deprecated (API31+) in favor of `VIBRATOR_MANAGER_SERVICE`
+     * -> `.defaultVibrator`, but both resolve to the same [Vibrator] API surface this app reads
+     * (`hasAmplitudeControl()`/`areAllPrimitivesSupported()`), so callers don't need to branch. */
+    @Suppress("DEPRECATION")
+    @Provides
+    @Singleton
+    fun provideVibrator(@ApplicationContext appContext: Context): Vibrator =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            (appContext.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager).defaultVibrator
+        } else {
+            appContext.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        }
+
+    /** E06/E15 Biometric inventory: `null` pre-API29 (`BIOMETRIC_SERVICE` doesn't exist yet) —
+     * callers report "not supported on this Android version" rather than guessing. */
+    @Provides
+    @Singleton
+    fun provideBiometricManager(@ApplicationContext appContext: Context): BiometricManager? =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            appContext.getSystemService(Context.BIOMETRIC_SERVICE) as? BiometricManager
+        } else {
+            null
+        }
+
+    @Provides
+    @Singleton
+    fun provideKeyguardManager(@ApplicationContext appContext: Context): KeyguardManager =
+        appContext.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
+
+    @Provides
+    @Singleton
+    fun provideInputMethodManager(@ApplicationContext appContext: Context): InputMethodManager =
+        appContext.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
     companion object {
         const val USER_PREFERENCES_NAME = "user_preferences"

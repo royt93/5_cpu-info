@@ -10,6 +10,13 @@ import androidx.annotation.Keep
 @Keep
 sealed interface TemperatureData {
     data object Probing : TemperatureData
-    data class Available(val cpuTemp: Float?, val batteryTemp: Float?) : TemperatureData
+
+    /** [allZones] (E07) is a best-effort full `/sys/class/thermal/thermal_zone*` glob, additive to
+     * the 2 well-known [cpuTemp]/[batteryTemp] readings above — defaults to empty so it never
+     * breaks a call site that only cares about the original 2 fields. */
+    data class Available(val cpuTemp: Float?, val batteryTemp: Float?, val allZones: List<ThermalZoneReading> = emptyList()) : TemperatureData
     data object Unavailable : TemperatureData
 }
+
+@Keep
+data class ThermalZoneReading(val zoneName: String, val tempCelsius: Float)

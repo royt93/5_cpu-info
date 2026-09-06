@@ -19,4 +19,10 @@ data class HardwareData(
     val wifiMac: String?,
     val hasIrEmitter: Boolean,
     val hasUsbHost: Boolean,
+    /** E05 haptics profile — no permission needed, pure [android.os.Vibrator] capability reads. */
+    val hasHapticsAmplitudeControl: Boolean,
+    /** Null on API<30 — `areAllPrimitivesSupported` doesn't exist there. */
+    val hasHapticsAllPrimitives: Boolean?,
+    /** Null on API<33, or when the driver reports 0 (unsupported) on API33+. */
+    val hapticsResonantFrequencyHz: Float?,
 )

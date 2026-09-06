@@ -126,6 +126,16 @@
     <string name="rooted">Rootováno</string>
     <string name="encrypted_storage">Šifrované úložiště</string>
     <string name="security_providers">Poskytovatelé zabezpečení</string>
+    <string name="not_supported">Nepodporováno v této verzi Androidu</string>
+    <string name="biometric_section">Biometrie a zámek obrazovky</string>
+    <string name="biometric_fingerprint_hardware">Hardware otisku prstu</string>
+    <string name="biometric_face_hardware">Hardware rozpoznávání obličeje</string>
+    <string name="biometric_iris_hardware">Hardware rozpoznávání duhovky</string>
+    <string name="biometric_strong_enrolled">Registrována silná biometrie</string>
+    <string name="biometric_weak_enrolled">Registrována slabá biometrie</string>
+    <string name="biometric_device_credential_set">Nastaven PIN/gesto/heslo</string>
+    <string name="screen_lock_set">Zámek obrazovky nastaven</string>
+    <string name="ime_section">Aktivní klávesnice (má oprávnění k internetu?)</string>
     <!--Hardware-->
     <string name="battery">Akumulátor</string>
     <string name="wireless">Bezdrátová rozhraní</string>
@@ -152,6 +162,11 @@
     <string name="battery_unknown">Neznámý</string>
     <string name="battery_unspecified_failure">Neurčený nezdar</string>
     <string name="ir_emitter">IR Emitter</string>
+    <string name="haptics">Haptika</string>
+    <string name="haptics_amplitude_control">Ovládání amplitudy</string>
+    <string name="haptics_all_primitives">Primitiva click/tick/thud</string>
+    <string name="haptics_resonant_frequency">Rezonanční frekvence</string>
+    <string name="haptics_resonant_frequency_value">%.0f Hz</string>
     <!--Prefs-->
     <string name="ram_refreshing">Interval opakování načítání hodnot</string>
     <string name="general">Obecné</string>
@@ -258,6 +273,7 @@
     <string name="shield_score_storage_label">Úložiště</string>
     <string name="shield_score_battery_label">Baterie</string>
     <string name="shield_score_records_broken">Překonáno benchmarkových rekordů: %1$d</string>
+    <string name="shield_score_reboot_count">Zaznamenáno restartů zařízení: %1$d</string>
     <string name="shield_score_band_excellent">Vynikající</string>
     <string name="shield_score_band_good">Dobrý</string>
     <string name="shield_score_band_fair">Vyžaduje pozornost</string>
@@ -705,6 +721,7 @@
     <string name="vip_diagnostic_summary_days_tracked">Sledováno %1$d dní</string>
     <string name="vip_diagnostic_battery_chart_title">Trend úrovně baterie</string>
     <string name="vip_diagnostic_summary_cycle_delta">%1$+d nabíjecích cyklů od prvního snímku</string>
+    <string name="vip_diagnostic_forecast">Při aktuální rychlosti opotřebení zbývá odhadem ~%1$d dní do výrazné degradace (hrubý odhad, ne záruka)</string>
     <string name="vip_diagnostic_row_battery_level">Úroveň baterie</string>
     <string name="vip_diagnostic_row_ram_available">Dostupná RAM</string>
     <string name="vip_diagnostic_row_storage_free">Volné úložiště</string>

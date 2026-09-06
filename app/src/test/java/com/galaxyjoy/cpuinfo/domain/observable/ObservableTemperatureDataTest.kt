@@ -28,6 +28,7 @@ class ObservableTemperatureDataTest {
         every { prefs.insert("temp_cpu_path_key", any()) } returns Unit
         every { dataProviderTemperature.getBatteryTemperature() } returns 30f
         every { dataProviderTemperature.getCpuTemp(any()) } returns 40f
+        every { dataProviderTemperature.readAllThermalZones() } returns emptyList()
 
         val emissions = observable.observe().take(3).toList()
 
@@ -44,6 +45,7 @@ class ObservableTemperatureDataTest {
         every { prefs.get("temp_cpu_path_key", "") } returns "/sys/class/thermal/thermal_zone0/temp"
         every { dataProviderTemperature.getBatteryTemperature() } returns 30f
         every { dataProviderTemperature.getCpuTemp(any()) } returns 40f
+        every { dataProviderTemperature.readAllThermalZones() } returns emptyList()
 
         val emissions = observable.observe().take(2).toList()
 
@@ -67,6 +69,7 @@ class ObservableTemperatureDataTest {
         every { prefs.get("temp_cpu_path_key", "") } returns ""
         every { dataProviderTemperature.findCpuTempPath() } returns null
         every { dataProviderTemperature.getBatteryTemperature() } returns 25f
+        every { dataProviderTemperature.readAllThermalZones() } returns emptyList()
 
         val emissions = observable.observe().take(2).toList()
 

@@ -60,6 +60,13 @@ class FrmHardwareInfo : BaseRvFragment() {
         items.add("USB" to "")
         items.add("OTG" to yesNo(data.hasUsbHost))
 
+        items.add(getString(R.string.haptics) to "")
+        items.add(getString(R.string.haptics_amplitude_control) to yesNo(data.hasHapticsAmplitudeControl))
+        data.hasHapticsAllPrimitives?.let { items.add(getString(R.string.haptics_all_primitives) to yesNo(it)) }
+        data.hapticsResonantFrequencyHz?.let {
+            items.add(getString(R.string.haptics_resonant_frequency) to getString(R.string.haptics_resonant_frequency_value, it))
+        }
+
         return items
     }
 }

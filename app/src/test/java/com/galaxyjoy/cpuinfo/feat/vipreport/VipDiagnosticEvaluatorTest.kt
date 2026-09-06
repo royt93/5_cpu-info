@@ -97,4 +97,45 @@ class VipDiagnosticEvaluatorTest {
 
         assertEquals(listOf(90.0, 82.0), VipDiagnosticEvaluator.batteryLevelSeries(history))
     }
+
+    @Test
+    fun `forecastDegradation is null with fewer than 2 cycle-count-having entries`() {
+        assertNull(VipDiagnosticEvaluator.forecastDegradation(emptyList()))
+        assertNull(VipDiagnosticEvaluator.forecastDegradation(listOf(snapshot(0, cycleCount = 50))))
+        // Only 1 of 2 entries has a real cycle count.
+        assertNull(
+            VipDiagnosticEvaluator.forecastDegradation(listOf(snapshot(0, cycleCount = -1), snapshot(10, cycleCount = 60))),
+        )
+    }
+
+    @Test
+    fun `forecastDegradation is null when fewer than 3 days separate oldest and newest`() {
+        val history = listOf(snapshot(0, cycleCount = 50), snapshot(2, cycleCount = 52))
+        assertNull(VipDiagnosticEvaluator.forecastDegradation(history))
+    }
+
+    @Test
+    fun `forecastDegradation is null when cycle count did not increase`() {
+        val history = listOf(snapshot(0, cycleCount = 50), snapshot(30, cycleCount = 50))
+        assertNull(VipDiagnosticEvaluator.forecastDegradation(history))
+    }
+
+    @Test
+    fun `forecastDegradation extrapolates days until the degraded-cycle threshold`() {
+        // 10 cycles over 10 days = 1 cycle/day. Threshold is 500, currently at 100 -> 400 days left.
+        val history = listOf(snapshot(0, cycleCount = 90), snapshot(10, cycleCount = 100))
+
+        val forecast = VipDiagnosticEvaluator.forecastDegradation(history)
+
+        assertEquals(1.0, forecast?.cyclesPerDay)
+        assertEquals(100, forecast?.currentCycleCount)
+        assertEquals(400L, forecast?.daysUntilThreshold)
+    }
+
+    @Test
+    fun `forecastDegradation reports zero days remaining when already past the threshold`() {
+        val history = listOf(snapshot(0, cycleCount = 490), snapshot(10, cycleCount = 510))
+
+        assertEquals(0L, VipDiagnosticEvaluator.forecastDegradation(history)?.daysUntilThreshold)
+    }
 }
