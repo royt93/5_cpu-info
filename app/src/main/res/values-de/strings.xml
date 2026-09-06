@@ -660,6 +660,23 @@
     <string name="ram_truth_share_text_genuine">RAM Truth — %1$s MB getestet, kein virtueller RAM-Einbruch erkannt ✓</string>
     <string name="ram_truth_share_text_suspect">RAM Truth — ⚠ Verdacht auf virtuellen/Swap-RAM, Verlangsamung bei ca. %1$s MB gefunden</string>
 
+    <string name="sensor_truth">Sensor Truth</string>
+    <string name="sensor_truth_disclaimer_title">Bevor du beginnst</string>
+    <string name="sensor_truth_disclaimer_body">Dieser Test misst die tatsächlich gelieferte Abtastrate deines Beschleunigungssensors und Gyroskops und vergleicht sie mit dem, was der Treiber angibt — manche Billiggeräte geben eine Sensorgeschwindigkeit an, die sie nie wirklich erreichen. 3 Sekunden pro Sensor.</string>
+    <string name="sensor_truth_start_button">Test starten</string>
+    <string name="sensor_truth_running_label">Messe Sensor %1$d/%2$d: %3$s</string>
+    <string name="sensor_truth_stop_button">Stopp</string>
+    <string name="sensor_truth_aborted_interrupted">Test vor Abschluss gestoppt.</string>
+    <string name="sensor_truth_verdict_genuine">✓ Echt</string>
+    <string name="sensor_truth_verdict_suspect">⚠ Untererfüllt</string>
+    <string name="sensor_truth_verdict_inconclusive">Nicht eindeutig</string>
+    <string name="sensor_truth_rate_detail">Angegeben %1$s Hz · Geliefert %2$s Hz</string>
+    <string name="sensor_truth_no_advertised_rate">Keine angegebene Rate zum Vergleich, oder Sensor auf diesem Gerät nicht vorhanden.</string>
+    <string name="sensor_truth_done_button">Fertig</string>
+    <string name="sensor_truth_share_button">Teilen</string>
+    <string name="sensor_truth_share_segment">%1$s: %2$s Hz (%3$s)</string>
+    <string name="sensor_truth_share_text">Sensor Truth — %1$s</string>
+
     <string name="bench_result_card_title">Benchmark-Ergebnisse</string>
     <string name="bench_result_card_share_image_button">Als Bild teilen</string>
     <string name="bench_result_card_share_button">Ergebniskarte teilen</string>

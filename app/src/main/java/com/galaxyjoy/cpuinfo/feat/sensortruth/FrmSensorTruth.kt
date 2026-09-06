@@ -1,0 +1,62 @@
+package com.galaxyjoy.cpuinfo.feat.sensortruth
+
+import android.content.Intent
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.galaxyjoy.cpuinfo.R
+import com.galaxyjoy.cpuinfo.ui.theme.CpuInfoTheme
+import dagger.hilt.android.AndroidEntryPoint
+import java.util.Locale
+
+@AndroidEntryPoint
+class FrmSensorTruth : Fragment() {
+
+    private val viewModel: VMSensorTruth by viewModels()
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View = ComposeView(requireContext()).apply {
+        setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+        setContent {
+            CpuInfoTheme {
+                val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+                SensorTruthScreen(
+                    uiState = uiState,
+                    onStartClicked = viewModel::onStartClicked,
+                    onStopClicked = viewModel::onStopClicked,
+                    onDoneClicked = viewModel::onDoneClicked,
+                    onShareClicked = ::shareResult,
+                )
+            }
+        }
+    }
+
+    private fun shareResult(result: SensorTruthBenchmark.Result) {
+        val segments = result.audits.joinToString(" · ") { audit ->
+            val name = getString(sensorNameRes(audit.sensorType))
+            val verdict = when (SensorTruthBenchmark.evaluate(audit)) {
+                SensorTruthBenchmark.Verdict.GENUINE -> getString(R.string.sensor_truth_verdict_genuine)
+                SensorTruthBenchmark.Verdict.SUSPECT_UNDERDELIVERING -> getString(R.string.sensor_truth_verdict_suspect)
+                SensorTruthBenchmark.Verdict.INCONCLUSIVE -> getString(R.string.sensor_truth_verdict_inconclusive)
+            }
+            val rate = String.format(Locale.getDefault(), "%.0f", audit.actualHz)
+            getString(R.string.sensor_truth_share_segment, name, rate, verdict)
+        }
+        val text = getString(R.string.sensor_truth_share_text, segments)
+        val intent = Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_TEXT, text)
+        }
+        startActivity(Intent.createChooser(intent, getString(R.string.sensor_truth_share_button)))
+    }
+}

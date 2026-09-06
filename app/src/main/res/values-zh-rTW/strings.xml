@@ -659,6 +659,23 @@
     <string name="ram_truth_share_text_genuine">記憶體真相 — 已測試 %1$s MB，未偵測到虛擬記憶體斷層 ✓</string>
     <string name="ram_truth_share_text_suspect">記憶體真相 — ⚠ 疑似虛擬/置換記憶體，在約 %1$s MB 處發現變慢</string>
 
+    <string name="sensor_truth">感測器真相</string>
+    <string name="sensor_truth_disclaimer_title">開始前</string>
+    <string name="sensor_truth_disclaimer_body">此測試會量測加速度計與陀螺儀實際傳送的取樣率，並與驅動程式宣稱的數值比較 — 部分低價裝置宣稱的感測器速度實際上從未達到。每個感測器約需 3 秒。</string>
+    <string name="sensor_truth_start_button">開始測試</string>
+    <string name="sensor_truth_running_label">正在量測感測器 %1$d/%2$d：%3$s</string>
+    <string name="sensor_truth_stop_button">停止</string>
+    <string name="sensor_truth_aborted_interrupted">測試已在完成前停止。</string>
+    <string name="sensor_truth_verdict_genuine">✓ 真實</string>
+    <string name="sensor_truth_verdict_suspect">⚠ 未達宣稱速度</string>
+    <string name="sensor_truth_verdict_inconclusive">無法判定</string>
+    <string name="sensor_truth_rate_detail">宣稱 %1$s Hz · 實際 %2$s Hz</string>
+    <string name="sensor_truth_no_advertised_rate">沒有可比較的宣稱速率，或此裝置沒有此感測器。</string>
+    <string name="sensor_truth_done_button">完成</string>
+    <string name="sensor_truth_share_button">分享</string>
+    <string name="sensor_truth_share_segment">%1$s：%2$s Hz（%3$s）</string>
+    <string name="sensor_truth_share_text">感測器真相 — %1$s</string>
+
     <string name="bench_result_card_title">效能測試結果</string>
     <string name="bench_result_card_share_image_button">分享圖片</string>
     <string name="bench_result_card_share_button">分享結果卡片</string>

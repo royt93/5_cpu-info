@@ -692,6 +692,23 @@
     <string name="ram_truth_share_text_genuine">RAM Truth — tested %1$s MB, no virtual RAM cliff detected ✓</string>
     <string name="ram_truth_share_text_suspect">RAM Truth — ⚠ suspect virtual/swap RAM, slowdown found around %1$s MB</string>
 
+    <string name="sensor_truth">Sensor Truth</string>
+    <string name="sensor_truth_disclaimer_title">Before you start</string>
+    <string name="sensor_truth_disclaimer_body">This test measures the real delivered sample rate of your accelerometer and gyroscope and compares it against what the driver advertises — some budget devices claim a sensor speed they never actually sustain. 3 seconds per sensor.</string>
+    <string name="sensor_truth_start_button">Start test</string>
+    <string name="sensor_truth_running_label">Measuring sensor %1$d/%2$d: %3$s</string>
+    <string name="sensor_truth_stop_button">Stop</string>
+    <string name="sensor_truth_aborted_interrupted">Test stopped before it finished.</string>
+    <string name="sensor_truth_verdict_genuine">✓ Genuine</string>
+    <string name="sensor_truth_verdict_suspect">⚠ Underdelivering</string>
+    <string name="sensor_truth_verdict_inconclusive">Inconclusive</string>
+    <string name="sensor_truth_rate_detail">Advertised %1$s Hz · Delivered %2$s Hz</string>
+    <string name="sensor_truth_no_advertised_rate">No advertised rate to compare against, or sensor missing on this device.</string>
+    <string name="sensor_truth_done_button">Done</string>
+    <string name="sensor_truth_share_button">Share</string>
+    <string name="sensor_truth_share_segment">%1$s: %2$s Hz (%3$s)</string>
+    <string name="sensor_truth_share_text">Sensor Truth — %1$s</string>
+
     <string name="bench_result_card_title">Benchmark results</string>
     <string name="bench_result_card_share_image_button">Share as image</string>
     <string name="bench_result_card_share_button">Share benchmark card</string>

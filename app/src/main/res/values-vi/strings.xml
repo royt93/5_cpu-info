@@ -665,6 +665,23 @@
     <string name="ram_truth_share_text_genuine">RAM Truth — đã test %1$s MB, không phát hiện điểm chậm RAM ảo ✓</string>
     <string name="ram_truth_share_text_suspect">RAM Truth — ⚠ nghi ngờ RAM ảo/swap, phát hiện chậm hẳn khoảng %1$s MB</string>
 
+    <string name="sensor_truth">Sensor Truth</string>
+    <string name="sensor_truth_disclaimer_title">Trước khi bắt đầu</string>
+    <string name="sensor_truth_disclaimer_body">Bài test đo tốc độ lấy mẫu thật của gia tốc kế và con quay hồi chuyển, so với thông số driver khai — 1 số máy giá rẻ khai tốc độ cảm biến mà không bao giờ đạt được thật. 3 giây mỗi cảm biến.</string>
+    <string name="sensor_truth_start_button">Bắt đầu test</string>
+    <string name="sensor_truth_running_label">Đang đo cảm biến %1$d/%2$d: %3$s</string>
+    <string name="sensor_truth_stop_button">Dừng</string>
+    <string name="sensor_truth_aborted_interrupted">Test đã dừng trước khi xong.</string>
+    <string name="sensor_truth_verdict_genuine">✓ Chính hãng</string>
+    <string name="sensor_truth_verdict_suspect">⚠ Không đạt tốc độ khai</string>
+    <string name="sensor_truth_verdict_inconclusive">Chưa đủ dữ liệu</string>
+    <string name="sensor_truth_rate_detail">Khai báo %1$s Hz · Thực tế %2$s Hz</string>
+    <string name="sensor_truth_no_advertised_rate">Không có tốc độ khai báo để so sánh, hoặc máy không có cảm biến này.</string>
+    <string name="sensor_truth_done_button">Xong</string>
+    <string name="sensor_truth_share_button">Chia sẻ</string>
+    <string name="sensor_truth_share_segment">%1$s: %2$s Hz (%3$s)</string>
+    <string name="sensor_truth_share_text">Sensor Truth — %1$s</string>
+
     <string name="bench_result_card_title">Kết quả kiểm tra hiệu năng</string>
     <string name="bench_result_card_share_image_button">Chia sẻ ảnh</string>
     <string name="bench_result_card_share_button">Chia sẻ thẻ kết quả</string>

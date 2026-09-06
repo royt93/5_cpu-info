@@ -37,6 +37,11 @@
          at first launch — see FrmSettings.wireHealthAlertPref(). Pre-API33 devices need no runtime
          grant for notifications, so this declaration alone is enough there. -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!-- E02 Sensor Truth: normal permission (no runtime dialog), required on API31+ to register a
+         SensorEventListener at SENSOR_DELAY_FASTEST (period 0 -> "as fast as the driver allows") —
+         without it, registerListener() throws SecurityException on real devices. Discovered via
+         real-device instrumented test, not by reading the docs first. -->
+    <uses-permission android:name="android.permission.HIGH_SAMPLING_RATE_SENSORS" />
 
     <queries>
         <intent>

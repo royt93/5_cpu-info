@@ -657,6 +657,23 @@
     <string name="ram_truth_share_text_genuine">RAM Truth — przetestowano %1$s MB, nie wykryto spadku wirtualnej RAM ✓</string>
     <string name="ram_truth_share_text_suspect">RAM Truth — ⚠ podejrzenie wirtualnej/swap RAM, spowolnienie znalezione około %1$s MB</string>
 
+    <string name="sensor_truth">Sensor Truth</string>
+    <string name="sensor_truth_disclaimer_title">Zanim zaczniesz</string>
+    <string name="sensor_truth_disclaimer_body">Ten test mierzy rzeczywistą dostarczaną częstotliwość próbkowania akcelerometru i żyroskopu i porównuje ją z tym, co deklaruje sterownik — niektóre tanie urządzenia deklarują szybkość czujnika, której nigdy nie osiągają. 3 sekundy na czujnik.</string>
+    <string name="sensor_truth_start_button">Rozpocznij test</string>
+    <string name="sensor_truth_running_label">Mierzenie czujnika %1$d/%2$d: %3$s</string>
+    <string name="sensor_truth_stop_button">Zatrzymaj</string>
+    <string name="sensor_truth_aborted_interrupted">Test zatrzymany przed zakończeniem.</string>
+    <string name="sensor_truth_verdict_genuine">✓ Oryginalny</string>
+    <string name="sensor_truth_verdict_suspect">⚠ Nie osiąga deklarowanej szybkości</string>
+    <string name="sensor_truth_verdict_inconclusive">Brak jednoznacznego wyniku</string>
+    <string name="sensor_truth_rate_detail">Deklarowano %1$s Hz · Dostarczono %2$s Hz</string>
+    <string name="sensor_truth_no_advertised_rate">Brak deklarowanej częstotliwości do porównania lub urządzenie nie ma tego czujnika.</string>
+    <string name="sensor_truth_done_button">Gotowe</string>
+    <string name="sensor_truth_share_button">Udostępnij</string>
+    <string name="sensor_truth_share_segment">%1$s: %2$s Hz (%3$s)</string>
+    <string name="sensor_truth_share_text">Sensor Truth — %1$s</string>
+
     <string name="bench_result_card_title">Wyniki testu wydajności</string>
     <string name="bench_result_card_share_image_button">Udostępnij jako obraz</string>
     <string name="bench_result_card_share_button">Udostępnij kartę wyników</string>

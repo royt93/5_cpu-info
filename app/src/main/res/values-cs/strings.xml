@@ -658,6 +658,23 @@
     <string name="ram_truth_share_text_genuine">RAM Truth — otestováno %1$s MB, pokles u virtuální RAM nezjištěn ✓</string>
     <string name="ram_truth_share_text_suspect">RAM Truth — ⚠ podezření na virtuální/swap RAM, zpomalení nalezeno kolem %1$s MB</string>
 
+    <string name="sensor_truth">Sensor Truth</string>
+    <string name="sensor_truth_disclaimer_title">Než začnete</string>
+    <string name="sensor_truth_disclaimer_body">Tento test měří skutečnou dodávanou vzorkovací frekvenci akcelerometru a gyroskopu a porovnává ji s tím, co udává ovladač — některá levná zařízení uvádějí rychlost senzoru, kterou nikdy skutečně nedosáhnou. 3 sekundy na senzor.</string>
+    <string name="sensor_truth_start_button">Spustit test</string>
+    <string name="sensor_truth_running_label">Měřím senzor %1$d/%2$d: %3$s</string>
+    <string name="sensor_truth_stop_button">Zastavit</string>
+    <string name="sensor_truth_aborted_interrupted">Test zastaven před dokončením.</string>
+    <string name="sensor_truth_verdict_genuine">✓ Pravý</string>
+    <string name="sensor_truth_verdict_suspect">⚠ Nedosahuje deklarované rychlosti</string>
+    <string name="sensor_truth_verdict_inconclusive">Nelze určit</string>
+    <string name="sensor_truth_rate_detail">Deklarováno %1$s Hz · Skutečnost %2$s Hz</string>
+    <string name="sensor_truth_no_advertised_rate">Není k dispozici deklarovaná rychlost k porovnání, nebo zařízení tento senzor nemá.</string>
+    <string name="sensor_truth_done_button">Hotovo</string>
+    <string name="sensor_truth_share_button">Sdílet</string>
+    <string name="sensor_truth_share_segment">%1$s: %2$s Hz (%3$s)</string>
+    <string name="sensor_truth_share_text">Sensor Truth — %1$s</string>
+
     <string name="bench_result_card_title">Výsledky testu výkonu</string>
     <string name="bench_result_card_share_image_button">Sdílet jako obrázek</string>
     <string name="bench_result_card_share_button">Sdílet kartu výsledků</string>
