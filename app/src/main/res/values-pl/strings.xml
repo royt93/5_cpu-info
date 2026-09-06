@@ -637,6 +637,26 @@
     <string name="storage_truth_share_text_genuine">Storage Truth — przetestowano %1$s MB, nie wykryto fałszywej pojemności ✓</string>
     <string name="storage_truth_share_text_suspect">Storage Truth — ⚠ podejrzenie fałszywej pojemności, uszkodzenie znalezione około %1$s MB</string>
 
+    <string name="ram_truth">RAM Truth</string>
+    <string name="ram_truth_disclaimer_title">Zanim zaczniesz</string>
+    <string name="ram_truth_disclaimer_body">Ten test stopniowo przydziela i dotyka rzeczywistej pamięci, mierząc każdy krok, aby wykryć nagłe spowolnienie — typowy objaw marketingu "wirtualnej/rozszerzonej RAM", gdzie część deklarowanej pojemności to w rzeczywistości swap oparty na pamięci masowej, a nie prawdziwe kości. Testuje tylko bezpieczną część aktualnie wolnej pamięci, nigdy całego urządzenia — intensywna aktywność aplikacji w tle może czasem zaburzyć wynik. Zajmuje kilka sekund.</string>
+    <string name="ram_truth_start_button">Rozpocznij test</string>
+    <string name="ram_truth_running_label">Testowanie bloku %1$d/%2$d</string>
+    <string name="ram_truth_stop_button">Zatrzymaj</string>
+    <string name="ram_truth_aborted_interrupted">Test zatrzymany przed zakończeniem.</string>
+    <string name="ram_truth_aborted_insufficient_memory">Za mało wolnej pamięci, aby bezpiecznie uruchomić ten test.</string>
+    <string name="ram_truth_aborted_low_memory">Test zatrzymany — system zgłosił mało pamięci.</string>
+    <string name="ram_truth_verdict_genuine">✓ Oryginalna — nie wykryto spadku wirtualnej RAM</string>
+    <string name="ram_truth_verdict_suspect">⚠ Podejrzenie wirtualnej/swap RAM</string>
+    <string name="ram_truth_verdict_inconclusive">Brak jednoznacznego wyniku</string>
+    <string name="ram_truth_tested_label">Przetestowano</string>
+    <string name="ram_truth_tested_value">%1$s MB</string>
+    <string name="ram_truth_cliff_detail">Spowolnienie znalezione około %1$s MB — ta pamięć może być swapem, nie prawdziwą RAM.</string>
+    <string name="ram_truth_done_button">Gotowe</string>
+    <string name="ram_truth_share_button">Udostępnij</string>
+    <string name="ram_truth_share_text_genuine">RAM Truth — przetestowano %1$s MB, nie wykryto spadku wirtualnej RAM ✓</string>
+    <string name="ram_truth_share_text_suspect">RAM Truth — ⚠ podejrzenie wirtualnej/swap RAM, spowolnienie znalezione około %1$s MB</string>
+
     <string name="bench_result_card_title">Wyniki testu wydajności</string>
     <string name="bench_result_card_share_image_button">Udostępnij jako obraz</string>
     <string name="bench_result_card_share_button">Udostępnij kartę wyników</string>

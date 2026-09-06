@@ -639,6 +639,26 @@
     <string name="storage_truth_share_text_genuine">儲存空間真相 — 已測試 %1$s MB，未偵測到容量造假 ✓</string>
     <string name="storage_truth_share_text_suspect">儲存空間真相 — ⚠ 疑似容量造假，在約 %1$s MB 處發現損壞</string>
 
+    <string name="ram_truth">記憶體真相</string>
+    <string name="ram_truth_disclaimer_title">開始前</string>
+    <string name="ram_truth_disclaimer_body">此測試會逐步配置並觸碰真實記憶體，量測每個步驟，尋找突然變慢的情況 — 這是「虛擬/擴充記憶體」行銷手法的典型特徵，宣稱的部分容量實際上是以儲存空間模擬的置換空間，而非真正的記憶體晶片。僅測試目前可用記憶體中安全的一部分，絕不會用盡整台裝置 — 背景應用程式活動頻繁時，結果可能偶爾受影響。約需數秒。</string>
+    <string name="ram_truth_start_button">開始測試</string>
+    <string name="ram_truth_running_label">正在測試區塊 %1$d/%2$d</string>
+    <string name="ram_truth_stop_button">停止</string>
+    <string name="ram_truth_aborted_interrupted">測試已在完成前停止。</string>
+    <string name="ram_truth_aborted_insufficient_memory">目前可用記憶體不足，無法安全執行此測試。</string>
+    <string name="ram_truth_aborted_low_memory">測試已停止 — 系統回報記憶體不足。</string>
+    <string name="ram_truth_verdict_genuine">✓ 真實 — 未偵測到虛擬記憶體斷層</string>
+    <string name="ram_truth_verdict_suspect">⚠ 疑似虛擬/置換記憶體</string>
+    <string name="ram_truth_verdict_inconclusive">無法判定</string>
+    <string name="ram_truth_tested_label">已測試</string>
+    <string name="ram_truth_tested_value">%1$s MB</string>
+    <string name="ram_truth_cliff_detail">在約 %1$s MB 處發現變慢 — 該部分記憶體可能是置換空間，而非真實記憶體。</string>
+    <string name="ram_truth_done_button">完成</string>
+    <string name="ram_truth_share_button">分享</string>
+    <string name="ram_truth_share_text_genuine">記憶體真相 — 已測試 %1$s MB，未偵測到虛擬記憶體斷層 ✓</string>
+    <string name="ram_truth_share_text_suspect">記憶體真相 — ⚠ 疑似虛擬/置換記憶體，在約 %1$s MB 處發現變慢</string>
+
     <string name="bench_result_card_title">效能測試結果</string>
     <string name="bench_result_card_share_image_button">分享圖片</string>
     <string name="bench_result_card_share_button">分享結果卡片</string>

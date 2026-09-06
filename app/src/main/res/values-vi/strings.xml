@@ -645,6 +645,26 @@
     <string name="storage_truth_share_text_genuine">Storage Truth — đã test %1$s MB, không phát hiện dung lượng giả ✓</string>
     <string name="storage_truth_share_text_suspect">Storage Truth — ⚠ nghi ngờ dung lượng giả, phát hiện lỗi khoảng %1$s MB</string>
 
+    <string name="ram_truth">RAM Truth</string>
+    <string name="ram_truth_disclaimer_title">Trước khi bắt đầu</string>
+    <string name="ram_truth_disclaimer_body">Bài test cấp phát và chạm dần vào bộ nhớ thật, đo thời gian từng bước, để tìm điểm chậm đột ngột — dấu hiệu của chiêu marketing "RAM ảo/mở rộng" khi 1 phần dung lượng quảng cáo thực ra là swap dựa trên bộ nhớ trong, không phải chip RAM thật. Chỉ thử trên 1 phần an toàn của bộ nhớ đang trống, không bao giờ dùng hết máy — app nền hoạt động mạnh đôi khi có thể làm lệch kết quả. Mất vài giây.</string>
+    <string name="ram_truth_start_button">Bắt đầu test</string>
+    <string name="ram_truth_running_label">Đang test khối %1$d/%2$d</string>
+    <string name="ram_truth_stop_button">Dừng</string>
+    <string name="ram_truth_aborted_interrupted">Test đã dừng trước khi xong.</string>
+    <string name="ram_truth_aborted_insufficient_memory">Không đủ bộ nhớ trống để chạy test này an toàn lúc này.</string>
+    <string name="ram_truth_aborted_low_memory">Test đã dừng — hệ thống báo bộ nhớ thấp.</string>
+    <string name="ram_truth_verdict_genuine">✓ Chính hãng — không phát hiện điểm chậm RAM ảo</string>
+    <string name="ram_truth_verdict_suspect">⚠ Nghi ngờ RAM ảo/swap</string>
+    <string name="ram_truth_verdict_inconclusive">Chưa đủ dữ liệu kết luận</string>
+    <string name="ram_truth_tested_label">Đã kiểm tra</string>
+    <string name="ram_truth_tested_value">%1$s MB</string>
+    <string name="ram_truth_cliff_detail">Phát hiện chậm hẳn khoảng %1$s MB — phần bộ nhớ đó có thể là swap, không phải RAM thật.</string>
+    <string name="ram_truth_done_button">Xong</string>
+    <string name="ram_truth_share_button">Chia sẻ</string>
+    <string name="ram_truth_share_text_genuine">RAM Truth — đã test %1$s MB, không phát hiện điểm chậm RAM ảo ✓</string>
+    <string name="ram_truth_share_text_suspect">RAM Truth — ⚠ nghi ngờ RAM ảo/swap, phát hiện chậm hẳn khoảng %1$s MB</string>
+
     <string name="bench_result_card_title">Kết quả kiểm tra hiệu năng</string>
     <string name="bench_result_card_share_image_button">Chia sẻ ảnh</string>
     <string name="bench_result_card_share_button">Chia sẻ thẻ kết quả</string>

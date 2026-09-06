@@ -638,6 +638,26 @@
     <string name="storage_truth_share_text_genuine">Storage Truth — otestováno %1$s MB, falešná kapacita nezjištěna ✓</string>
     <string name="storage_truth_share_text_suspect">Storage Truth — ⚠ podezření na falešnou kapacitu, poškození nalezeno kolem %1$s MB</string>
 
+    <string name="ram_truth">RAM Truth</string>
+    <string name="ram_truth_disclaimer_title">Než začnete</string>
+    <string name="ram_truth_disclaimer_body">Tento test postupně alokuje a dotýká se skutečné paměti, měří každý krok a hledá náhlé zpomalení — typický příznak marketingové "virtuální/rozšířené RAM", kde je část udávané kapacity ve skutečnosti swap na úložišti, ne skutečné čipy. Testuje jen bezpečnou část aktuálně volné paměti, nikdy celé zařízení — intenzivní aktivita aplikací na pozadí může výsledek občas zkreslit. Trvá pár sekund.</string>
+    <string name="ram_truth_start_button">Spustit test</string>
+    <string name="ram_truth_running_label">Testuji blok %1$d/%2$d</string>
+    <string name="ram_truth_stop_button">Zastavit</string>
+    <string name="ram_truth_aborted_interrupted">Test zastaven před dokončením.</string>
+    <string name="ram_truth_aborted_insufficient_memory">Nedostatek volné paměti pro bezpečné spuštění tohoto testu.</string>
+    <string name="ram_truth_aborted_low_memory">Test zastaven — systém hlásil nedostatek paměti.</string>
+    <string name="ram_truth_verdict_genuine">✓ Pravá — nebyl zjištěn pokles u virtuální RAM</string>
+    <string name="ram_truth_verdict_suspect">⚠ Podezření na virtuální/swap RAM</string>
+    <string name="ram_truth_verdict_inconclusive">Nelze určit</string>
+    <string name="ram_truth_tested_label">Otestováno</string>
+    <string name="ram_truth_tested_value">%1$s MB</string>
+    <string name="ram_truth_cliff_detail">Zpomalení nalezeno kolem %1$s MB — tato paměť může být swap, ne skutečná RAM.</string>
+    <string name="ram_truth_done_button">Hotovo</string>
+    <string name="ram_truth_share_button">Sdílet</string>
+    <string name="ram_truth_share_text_genuine">RAM Truth — otestováno %1$s MB, pokles u virtuální RAM nezjištěn ✓</string>
+    <string name="ram_truth_share_text_suspect">RAM Truth — ⚠ podezření na virtuální/swap RAM, zpomalení nalezeno kolem %1$s MB</string>
+
     <string name="bench_result_card_title">Výsledky testu výkonu</string>
     <string name="bench_result_card_share_image_button">Sdílet jako obrázek</string>
     <string name="bench_result_card_share_button">Sdílet kartu výsledků</string>
