@@ -37,6 +37,7 @@ class FrmAndroidInfo : BaseRvFragment() {
     private fun toDisplayItems(data: AndroidData): List<Pair<String, String>> {
         val yes = getString(R.string.yes)
         val no = getString(R.string.no)
+        val unknown = getString(R.string.unknown)
         fun yesNo(value: Boolean) = if (value) yes else no
 
         val items = mutableListOf<Pair<String, String>>()
@@ -103,7 +104,9 @@ class FrmAndroidInfo : BaseRvFragment() {
             return if (slashIndex > 0) {
                 flattened.substring(0, slashIndex) to flattened.substring(slashIndex + 1)
             } else {
-                flattened to ""
+                // A malformed entry (no '/') would otherwise pair with an empty 2nd value, which
+                // AdtInfoItems renders as section-header styling instead of a normal row.
+                flattened to unknown
             }
         }
 

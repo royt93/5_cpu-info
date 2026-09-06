@@ -50,20 +50,31 @@ class DataProviderHardware @Inject constructor(
         )
     }
 
+    /** Vendor vibrator HAL implementations are known to be flaky about these two calls on some
+     * OEM devices — try/catch like every other risky OS call in this file (e.g. [getBluetoothMac]
+     * below), so a bad HAL can't crash the whole Hardware Info screen. */
     private fun getHasAllHapticsPrimitives(): Boolean? =
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            vibrator.areAllPrimitivesSupported(
-                VibrationEffect.Composition.PRIMITIVE_CLICK,
-                VibrationEffect.Composition.PRIMITIVE_TICK,
-                VibrationEffect.Composition.PRIMITIVE_THUD,
-            )
+            try {
+                vibrator.areAllPrimitivesSupported(
+                    VibrationEffect.Composition.PRIMITIVE_CLICK,
+                    VibrationEffect.Composition.PRIMITIVE_TICK,
+                    VibrationEffect.Composition.PRIMITIVE_THUD,
+                )
+            } catch (_: Exception) {
+                null
+            }
         } else {
             null
         }
 
     private fun getHapticsResonantFrequencyHz(): Float? =
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            vibrator.resonantFrequency.takeIf { !it.isNaN() && it > 0f }
+            try {
+                vibrator.resonantFrequency.takeIf { !it.isNaN() && it > 0f }
+            } catch (_: Exception) {
+                null
+            }
         } else {
             null
         }

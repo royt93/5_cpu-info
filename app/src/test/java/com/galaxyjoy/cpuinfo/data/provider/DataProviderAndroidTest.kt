@@ -264,11 +264,33 @@ class DataProviderAndroidTest {
     }
 
     @Test
-    fun `isProxyActive reflects ConnectivityManager defaultProxy presence`() {
+    fun `isProxyActive is true when defaultProxy has a real host`() {
         stubDefaults()
-        every { connectivityManager.defaultProxy } returns mockk()
+        val proxy: android.net.ProxyInfo = mockk()
+        every { proxy.host } returns "proxy.example.com"
+        every { connectivityManager.defaultProxy } returns proxy
 
         assertEquals(true, provider.getAndroidData().isProxyActive)
+    }
+
+    @Test
+    fun `isProxyActive is false when defaultProxy is null`() {
+        stubDefaults()
+        every { connectivityManager.defaultProxy } returns null
+
+        assertEquals(false, provider.getAndroidData().isProxyActive)
+    }
+
+    @Test
+    fun `isProxyActive is false when defaultProxy is non-null but has a blank host`() {
+        // Regression: some Android versions/network configs return a non-null ProxyInfo with a
+        // blank host even when no proxy is actually configured — a null-check alone false-positives.
+        stubDefaults()
+        val proxy: android.net.ProxyInfo = mockk()
+        every { proxy.host } returns ""
+        every { connectivityManager.defaultProxy } returns proxy
+
+        assertEquals(false, provider.getAndroidData().isProxyActive)
     }
 
     @Test

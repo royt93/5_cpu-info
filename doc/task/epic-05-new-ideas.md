@@ -7,7 +7,23 @@
 > "Truth series" (#1-#4) tự hội tụ nội tại — cùng 1 agent nhận ra 4 ý nối tiếp đúng mạch sản phẩm
 > đã có (U01 Device Truth Score, U02 Throttling Fingerprint).
 
-## 🏆 Top pick — "Truth Series" mở rộng (nối mạch U01/U02 đã có)
+## 🔍 Audit toàn bộ epic-05 (2026-09-06) — 3 subagent độc lập, sau khi E01-E10/E12/E14/E17-E21 đã push
+
+Sau khi hoàn tất toàn bộ epic-05 (Truth Series + Quick-win bundle + Privacy/security bundle + E10), chạy 3 subagent audit độc lập song song (không thấy code/kết luận của nhau), mỗi agent phụ trách 1 cụm feature, yêu cầu tìm bug thật + chấm điểm /10.
+
+**Kết quả**: Truth Series (E01-E04) **8.5/10** — không có bug thật, logic an toàn RAM (RAM Truth) được xác nhận không thể bypass. Quick-win bundle (E05-E21) **6/10** — 2 bug thật. Privacy/security + E10 **7/10** — 2 bug thật + 2 vấn đề nhỏ.
+
+**4 bug thật đã sửa ngay sau audit**:
+1. **`getHasAllHapticsPrimitives()`/`getHapticsResonantFrequencyHz()` (E05, `DataProviderHardware.kt`) không có try/catch** — 2 API vibrator HAL (API30+/33+) nổi tiếng không ổn định trên HAL của một số OEM, có thể crash thẳng màn Hardware Info. Mọi API rủi ro khác trong cùng file (`getBluetoothMac`, `getWifiMac`...) đều đã bọc try/catch — 2 hàm mới thêm quên làm theo. Đã bọc lại.
+2. **`RebootStabilityDetector` (E21) dùng sai tín hiệu để phát hiện reboot** — công thức gốc `System.currentTimeMillis() - SystemClock.elapsedRealtime()` bị lệch bởi **bất kỳ thay đổi đồng hồ hệ thống nào** (đồng bộ NTP, đổi giờ tay, đổi múi giờ) — không chỉ do reboot thật, đúng thứ mà comment code gốc khẳng định sai là "không xảy ra". Rủi ro thật trên chính loại máy giá rẻ đã dùng để smoke test (đồng hồ RTC sai cho tới khi mạng đồng bộ lại). **Sửa triệt để**: đổi sang `Settings.Global.BOOT_COUNT` — bộ đếm nguyên do OS duy trì, tăng đúng 1 lần mỗi lần boot thật, miễn nhiễm hoàn toàn với thay đổi đồng hồ, không cần phép toán thời gian nào. Đơn giản hơn code cũ và đúng hơn.
+3. **`fsTypeForPath()` (E10, `DataProviderStorage.kt`) không khớp được mount point gốc `/`** — nối chuỗi `"${it.mountPoint}/"` khi `mountPoint == "/"` ra `"//"`, không bao giờ khớp path thật nào, âm thầm vô hiệu hoá root như catch-all fallback — đúng cái bug mà doc comment tự nhận đã xử lý ("mount point cha") nhưng lại sót đúng trường hợp mount point cha phổ biến nhất. Sửa bằng `trimEnd('/')` trước khi nối.
+4. **`isProxyActive` (E17, `DataProviderAndroid.kt`) chỉ null-check `ProxyInfo`** — `ConnectivityManager.getDefaultProxy()` được biết là trả về `ProxyInfo` non-null với host rỗng/null trên một số phiên bản Android/cấu hình mạng dù không hề có proxy — field bảo mật ("proxy đang hoạt động") có thể báo `true` sai. Sửa bằng kiểm tra thêm `host` không rỗng.
+
+**2 vấn đề nhỏ cũng sửa luôn (không phải bug nghiêm trọng nhưng rẻ để sửa)**: `componentRow()` (E12, `FrmAndroidInfo.kt`) khi gặp chuỗi component dị dạng (không có `/`) trả về value rỗng → bị `AdtInfoItems` hiển thị nhầm thành section-header màu cam thay vì dòng thường — sửa bằng giá trị fallback `unknown` non-empty. `getExtraVolumes()` (E10) dedup bằng so sánh chuỗi path thô, không chuẩn hoá — 2 subsystem khác nhau (`StorageManager` vs `Environment`) không đảm bảo trả cùng 1 chuỗi cho cùng 1 volume thật (symlink/alias) — sửa bằng `File.canonicalPath`.
+
+**Không sửa (đã xác nhận không phải bug, chỉ là hạn chế đã biết từ trước)**: Truth Series không dừng benchmark khi app bị background (chỉ dừng lúc `onCleared()` thật) — hành vi này kế thừa y hệt từ `ClusterBenchmarkRunner` đã audit trước đó, không phải lỗi mới, không sửa trong đợt này để tránh mở rộng phạm vi ngoài audit.
+
+**Test**: 12 test mới/sửa (`RebootStabilityDetectorTest` viết lại hoàn toàn cho model boot-count, `DataProviderStorageTest` +6 case cho `fsTypeForPath`/canonical-path dedup, `DataProviderAndroidTest` +2 case cho proxy host rỗng/null). `testDevDebugUnitTest` full suite pass sau khi sửa.
 
 ### ✅ E01 — Storage Truth / Fake Capacity Detector — Đã xong (2026-09-05, quick scan tier)
 Sparse-pattern write/read/verify trên toàn dải dung lượng khai báo (kiểu H2testw, không cần fill hết) để phát hiện flash giả báo sai dung lượng (128GB thật ra chỉ 8GB) — lừa đảo phổ biến trên máy xách tay/refurb. Quét nhanh free, quét sâu (lưới dày hơn) VIP-gated + thẻ chia sẻ "Genuine/Fake Storage".

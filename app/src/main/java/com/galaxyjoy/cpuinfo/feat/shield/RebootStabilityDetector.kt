@@ -1,16 +1,17 @@
 package com.galaxyjoy.cpuinfo.feat.shield
 
-import kotlin.math.abs
-
-/** E21 — pure boot-time comparison, no Android deps so it's plain-JVM testable.
- * Boot time = wall clock minus uptime; it shifts by more than [TOLERANCE_MILLIS] only across an
- * actual reboot (clock drift/NTP adjustment alone doesn't move it that far). */
+/** E21 — pure boot-count comparison, no Android deps so it's plain-JVM testable.
+ *
+ * Originally computed boot time as `wall-clock minus uptime` and flagged a reboot when that
+ * shifted by more than a tolerance — but that value shifts by exactly the size of ANY wall-clock
+ * adjustment (NTP sync, manual date/timezone change), which is indistinguishable from a real
+ * reboot with that approach and produces false positives, especially on budget devices whose RTC
+ * is wrong until the network fixes it. `Settings.Global.BOOT_COUNT` is a monotonic counter the OS
+ * itself maintains and increments once per real boot — immune to clock changes entirely. */
 object RebootStabilityDetector {
 
-    private const val TOLERANCE_MILLIS = 60_000L
-
-    fun isNewBoot(currentBootTimeMillis: Long, lastKnownBootTimeMillis: Long): Boolean {
-        if (lastKnownBootTimeMillis < 0) return false
-        return abs(currentBootTimeMillis - lastKnownBootTimeMillis) > TOLERANCE_MILLIS
+    fun isNewBoot(currentBootCount: Int, lastKnownBootCount: Int): Boolean {
+        if (lastKnownBootCount < 0) return false
+        return currentBootCount != lastKnownBootCount
     }
 }

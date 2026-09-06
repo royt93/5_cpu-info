@@ -87,7 +87,7 @@ class DataProviderAndroid @Inject constructor(
         isScreenCaptureDisabledByPolicy = getIsScreenCaptureDisabledByPolicy(),
         restrictedActions = getRestrictedActions(),
         isVpnActive = getIsVpnActive(),
-        isProxyActive = connectivityManager.defaultProxy != null,
+        isProxyActive = getIsProxyActive(),
         allowsCleartextTraffic = getAllowsCleartextTraffic(),
     )
 
@@ -172,6 +172,15 @@ class DataProviderAndroid @Inject constructor(
         val network = connectivityManager.activeNetwork
         network != null &&
             connectivityManager.getNetworkCapabilities(network)?.hasTransport(NetworkCapabilities.TRANSPORT_VPN) == true
+    } catch (_: Exception) {
+        false
+    }
+
+    /** `getDefaultProxy()` is known to return a non-null [android.net.ProxyInfo] with a blank/null
+     * host on some Android versions/network configs even when no proxy is actually configured —
+     * a null-check on the object alone isn't enough. */
+    private fun getIsProxyActive(): Boolean = try {
+        !connectivityManager.defaultProxy?.host.isNullOrBlank()
     } catch (_: Exception) {
         false
     }

@@ -98,6 +98,32 @@ class DataProviderStorageTest {
     }
 
     @Test
+    fun `fsTypeForPath matches an exact mount point`() {
+        val mounts = listOf(MountEntry("/data", "ext4"))
+        assertEquals("ext4", DataProviderStorage.fsTypeForPath("/data", mounts))
+    }
+
+    @Test
+    fun `fsTypeForPath picks the longest matching prefix`() {
+        val mounts = listOf(MountEntry("/storage/emulated", "sdcardfs"), MountEntry("/storage/emulated/0", "fuse"))
+        assertEquals("fuse", DataProviderStorage.fsTypeForPath("/storage/emulated/0/DCIM", mounts))
+    }
+
+    @Test
+    fun `fsTypeForPath falls back to root as a catch-all`() {
+        // Regression: naively building the prefix as "\${mountPoint}/" for root ("/") produces
+        // "//", which never matches any real absolute path — root must still work as a fallback.
+        val mounts = listOf(MountEntry("/", "ext4"))
+        assertEquals("ext4", DataProviderStorage.fsTypeForPath("/data/anything", mounts))
+    }
+
+    @Test
+    fun `fsTypeForPath returns null when nothing matches`() {
+        val mounts = listOf(MountEntry("/data", "ext4"))
+        assertNull(DataProviderStorage.fsTypeForPath("/storage/emulated/0", mounts))
+    }
+
+    @Test
     fun `getExtraVolumes skips volumes with no directory`() {
         val volume: StorageVolume = mockk()
         every { volume.directory } returns null
@@ -108,12 +134,31 @@ class DataProviderStorageTest {
 
     @Test
     fun `getExtraVolumes skips paths already covered elsewhere`() {
-        val coveredPath = System.getProperty("java.io.tmpdir")!!
+        // getExtraVolumes canonicalizes its own side of the comparison (symlink/alias-proof), so
+        // the covered-paths set passed in must already be canonical too — exactly what the real
+        // caller (getCoveredPaths()) does. A raw, non-canonical tmpdir path (e.g. "/tmp" on a host
+        // where it's a symlink to "/private/tmp") would NOT match here, by design.
+        val tmpDir = java.io.File(System.getProperty("java.io.tmpdir")!!)
+        val canonicalCoveredPath = tmpDir.canonicalPath
         val volume: StorageVolume = mockk()
-        every { volume.directory } returns java.io.File(coveredPath)
+        every { volume.directory } returns tmpDir
         every { storageManager.storageVolumes } returns listOf(volume)
 
-        assertTrue(provider.getExtraVolumes(setOf(coveredPath)).isEmpty())
+        assertTrue(provider.getExtraVolumes(setOf(canonicalCoveredPath)).isEmpty())
+    }
+
+    @Test
+    fun `getExtraVolumes is not fooled by a non-canonical but equivalent covered path`() {
+        // Regression: StorageManager's StorageVolume.directory and Environment.get*Directory()
+        // are different subsystems and aren't guaranteed to return byte-identical path strings
+        // for the same real volume — canonicalization must bridge that, not exact string equality.
+        val tmpDir = java.io.File(System.getProperty("java.io.tmpdir")!!)
+        val nonCanonicalCoveredPath = tmpDir.path + "/."
+        val volume: StorageVolume = mockk()
+        every { volume.directory } returns tmpDir
+        every { storageManager.storageVolumes } returns listOf(volume)
+
+        assertTrue(provider.getExtraVolumes(setOf(java.io.File(nonCanonicalCoveredPath).canonicalPath)).isEmpty())
     }
 
     @Test

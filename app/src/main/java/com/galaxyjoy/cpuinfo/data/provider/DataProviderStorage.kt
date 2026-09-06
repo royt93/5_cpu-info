@@ -47,12 +47,15 @@ class DataProviderStorage @Inject constructor(
     }
 
     /** Paths already surfaced by [getInternalVolume]/[getExternalVolume]/[findSdCardVolume] — fed
-     * into [getExtraVolumes] so it only reports genuinely additional volumes. */
+     * into [getExtraVolumes] so it only reports genuinely additional volumes. Normalized via
+     * [canonicalPath] since `StorageManager.getStorageVolumes()` (a different subsystem than
+     * `Environment.get*Directory()`) isn't guaranteed to return byte-identical strings for the
+     * same real volume (e.g. `/storage/emulated/0` vs a `/storage/self/primary` alias). */
     @Suppress("DEPRECATION")
     fun getCoveredPaths(): Set<String> = setOfNotNull(
-        Environment.getDataDirectory().path,
-        Environment.getExternalStorageDirectory().path,
-        getExternalSdMounts().firstOrNull()?.substringBefore(":"),
+        canonicalPath(Environment.getDataDirectory().path),
+        canonicalPath(Environment.getExternalStorageDirectory().path),
+        getExternalSdMounts().firstOrNull()?.substringBefore(":")?.let(::canonicalPath),
     )
 
     /** E10 — every volume [StorageManager.getStorageVolumes] reports that isn't already covered
@@ -63,7 +66,7 @@ class DataProviderStorage @Inject constructor(
     fun getExtraVolumes(alreadyCoveredPaths: Set<String>): List<StorageVolumeInfo> = try {
         storageManager.storageVolumes.mapNotNull { volume ->
             val directory = volume.directory ?: return@mapNotNull null
-            if (directory.path in alreadyCoveredPaths) return@mapNotNull null
+            if (canonicalPath(directory.path) in alreadyCoveredPaths) return@mapNotNull null
             if (!directory.exists() || directory.totalSpace <= 0) return@mapNotNull null
             StorageVolumeInfo(
                 label = volume.getDescription(appContext),
@@ -77,13 +80,13 @@ class DataProviderStorage @Inject constructor(
         emptyList()
     }
 
-    /** Longest-prefix match against `/proc/mounts` entries — a real mount point is sometimes a
-     * parent directory of the path callers ask about (e.g. `/storage/emulated` vs
-     * `/storage/emulated/0`), so an exact-match-only lookup would miss it. */
-    private fun fsTypeForPath(path: String): String? = readMountEntries()
-        .filter { path == it.mountPoint || path.startsWith("${it.mountPoint}/") }
-        .maxByOrNull { it.mountPoint.length }
-        ?.fsType
+    private fun canonicalPath(path: String): String = try {
+        File(path).canonicalPath
+    } catch (_: Exception) {
+        path
+    }
+
+    private fun fsTypeForPath(path: String): String? = fsTypeForPath(path, readMountEntries())
 
     private fun readMountEntries(): List<MountEntry> = try {
         File("/proc/mounts").bufferedReader().useLines { lines ->
@@ -161,6 +164,22 @@ class DataProviderStorage @Inject constructor(
          * [MountEntry], or null for a malformed/short line. Pure so the fs-type-matching logic
          * ([fsTypeForPath]) is unit-testable without a real `/proc/mounts` file.
          */
+        /**
+         * Longest-prefix match of [path] against [mounts] — a real mount point is sometimes a
+         * parent directory of the path callers ask about (e.g. `/storage/emulated` vs
+         * `/storage/emulated/0`), so an exact-match-only lookup would miss it.
+         *
+         * `trimEnd('/')` on the mount point before appending the separator matters specifically
+         * for root (`mountPoint == "/"`): naively appending `"/"` would build the prefix `"//"`,
+         * which never matches any real absolute path, silently breaking root as a catch-all
+         * fallback. Pure (mount list passed in) so this is unit-testable without a real device.
+         */
+        @VisibleForTesting(otherwise = VisibleForTesting.PACKAGE_PRIVATE)
+        internal fun fsTypeForPath(path: String, mounts: List<MountEntry>): String? = mounts
+            .filter { path == it.mountPoint || path.startsWith("${it.mountPoint.trimEnd('/')}/") }
+            .maxByOrNull { it.mountPoint.length }
+            ?.fsType
+
         @VisibleForTesting(otherwise = VisibleForTesting.PACKAGE_PRIVATE)
         internal fun parseMountLine(line: String): MountEntry? {
             val fields = line.split(" ")
