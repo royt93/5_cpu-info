@@ -41,7 +41,8 @@ class AdtStorage(private val storageList: List<StorageItem>) :
             val usedPercent = (storageItem.storageUsed.toFloat()
                     / storageItem.storageTotal.toFloat() * 100.0).round2()
 
-            val storageDesc = "${storageItem.type}: $usedReadable / $totalReadable ($usedPercent%)"
+            val fsTypeSuffix = storageItem.fsType?.let { " · $it" } ?: ""
+            val storageDesc = "${storageItem.type}: $usedReadable / $totalReadable ($usedPercent%)$fsTypeSuffix"
             storageDescriptionTv.text = storageDesc
 
             storageProgress.iconImageResource = storageItem.iconRes

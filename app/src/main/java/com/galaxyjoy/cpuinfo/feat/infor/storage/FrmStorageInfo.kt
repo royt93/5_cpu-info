@@ -78,13 +78,20 @@ class FrmStorageInfo : BaseRvFragment() {
     private fun toDisplayItems(data: StorageData): List<StorageItem> {
         val items = mutableListOf<StorageItem>()
         items.add(
-            StorageItem(getString(R.string.internal), R.drawable.ic_root, data.internal.totalBytes, data.internal.usedBytes)
+            StorageItem(
+                getString(R.string.internal), R.drawable.ic_root,
+                data.internal.totalBytes, data.internal.usedBytes, data.internal.fsType,
+            )
         )
         data.external?.let {
-            items.add(StorageItem(getString(R.string.external), R.drawable.ic_folder, it.totalBytes, it.usedBytes))
+            items.add(StorageItem(getString(R.string.external), R.drawable.ic_folder, it.totalBytes, it.usedBytes, it.fsType))
         }
         data.sdCard?.let {
-            items.add(StorageItem(getString(R.string.external), R.drawable.ic_sdcard, it.totalBytes, it.usedBytes))
+            items.add(StorageItem(getString(R.string.external), R.drawable.ic_sdcard, it.totalBytes, it.usedBytes, it.fsType))
+        }
+        data.extraVolumes.forEach {
+            val icon = if (it.isRemovable) R.drawable.ic_sdcard else R.drawable.ic_folder
+            items.add(StorageItem(it.label, icon, it.totalBytes, it.usedBytes, it.fsType))
         }
         return items
     }

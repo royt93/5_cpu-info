@@ -31,6 +31,7 @@ class ObservableStorageData @Inject constructor(
                 internal = dataProviderStorage.getInternalVolume(),
                 external = dataProviderStorage.getExternalVolume(),
                 sdCard = dataProviderStorage.findSdCardVolume(),
+                extraVolumes = dataProviderStorage.getExtraVolumes(dataProviderStorage.getCoveredPaths()),
             ),
         )
     }

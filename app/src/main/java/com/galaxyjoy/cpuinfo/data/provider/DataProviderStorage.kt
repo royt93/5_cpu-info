@@ -1,9 +1,13 @@
 package com.galaxyjoy.cpuinfo.data.provider
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Environment
+import android.os.storage.StorageManager
 import androidx.annotation.VisibleForTesting
 import com.galaxyjoy.cpuinfo.domain.model.StorageVolume
+import com.galaxyjoy.cpuinfo.domain.model.StorageVolumeInfo
+import dagger.hilt.android.qualifiers.ApplicationContext
 import timber.log.Timber
 import java.io.BufferedReader
 import java.io.DataInputStream
@@ -12,19 +16,22 @@ import java.io.FileInputStream
 import java.io.InputStreamReader
 import javax.inject.Inject
 
-class DataProviderStorage @Inject constructor() {
+class DataProviderStorage @Inject constructor(
+    @ApplicationContext private val appContext: Context,
+    private val storageManager: StorageManager,
+) {
 
     @Suppress("DEPRECATION")
     fun getInternalVolume(): StorageVolume {
         val path = Environment.getDataDirectory()
-        return StorageVolume(path.totalSpace, path.totalSpace - path.usableSpace)
+        return StorageVolume(path.totalSpace, path.totalSpace - path.usableSpace, fsTypeForPath(path.path))
     }
 
     @Suppress("DEPRECATION")
     fun getExternalVolume(): StorageVolume? {
         if (Environment.getExternalStorageState() != Environment.MEDIA_MOUNTED) return null
         val path = Environment.getExternalStorageDirectory()
-        return StorageVolume(path.totalSpace, path.totalSpace - path.usableSpace)
+        return StorageVolume(path.totalSpace, path.totalSpace - path.usableSpace, fsTypeForPath(path.path))
     }
 
     /**
@@ -36,7 +43,54 @@ class DataProviderStorage @Inject constructor() {
         val mountPoint = getExternalSdMounts().firstOrNull()?.substringBefore(":") ?: return null
         val file = File(mountPoint)
         if (!file.exists() || file.totalSpace <= 0) return null
-        return StorageVolume(file.totalSpace, file.totalSpace - file.usableSpace)
+        return StorageVolume(file.totalSpace, file.totalSpace - file.usableSpace, fsTypeForPath(mountPoint))
+    }
+
+    /** Paths already surfaced by [getInternalVolume]/[getExternalVolume]/[findSdCardVolume] — fed
+     * into [getExtraVolumes] so it only reports genuinely additional volumes. */
+    @Suppress("DEPRECATION")
+    fun getCoveredPaths(): Set<String> = setOfNotNull(
+        Environment.getDataDirectory().path,
+        Environment.getExternalStorageDirectory().path,
+        getExternalSdMounts().firstOrNull()?.substringBefore(":"),
+    )
+
+    /** E10 — every volume [StorageManager.getStorageVolumes] reports that isn't already covered
+     * by [getInternalVolume]/[getExternalVolume]/[findSdCardVolume] (matched by directory path),
+     * e.g. a 2nd SD card or a USB OTG drive. Uses the real API instead of another `/proc/mounts`
+     * guess — [StorageVolume.getDirectory] is nullable (not fully mounted / no accessible path),
+     * volumes without one are skipped rather than shown with fake 0-byte totals. */
+    fun getExtraVolumes(alreadyCoveredPaths: Set<String>): List<StorageVolumeInfo> = try {
+        storageManager.storageVolumes.mapNotNull { volume ->
+            val directory = volume.directory ?: return@mapNotNull null
+            if (directory.path in alreadyCoveredPaths) return@mapNotNull null
+            if (!directory.exists() || directory.totalSpace <= 0) return@mapNotNull null
+            StorageVolumeInfo(
+                label = volume.getDescription(appContext),
+                isRemovable = volume.isRemovable,
+                totalBytes = directory.totalSpace,
+                usedBytes = directory.totalSpace - directory.usableSpace,
+                fsType = fsTypeForPath(directory.path),
+            )
+        }
+    } catch (_: Exception) {
+        emptyList()
+    }
+
+    /** Longest-prefix match against `/proc/mounts` entries — a real mount point is sometimes a
+     * parent directory of the path callers ask about (e.g. `/storage/emulated` vs
+     * `/storage/emulated/0`), so an exact-match-only lookup would miss it. */
+    private fun fsTypeForPath(path: String): String? = readMountEntries()
+        .filter { path == it.mountPoint || path.startsWith("${it.mountPoint}/") }
+        .maxByOrNull { it.mountPoint.length }
+        ?.fsType
+
+    private fun readMountEntries(): List<MountEntry> = try {
+        File("/proc/mounts").bufferedReader().useLines { lines ->
+            lines.mapNotNull(::parseMountLine).toList()
+        }
+    } catch (_: Exception) {
+        emptyList()
     }
 
     @Suppress("DEPRECATION")
@@ -101,5 +155,20 @@ class DataProviderStorage @Inject constructor() {
             if (alreadyFound.any { it.endsWith(mountPoint.substring(lastSlash)) }) return null
             return mountPoint
         }
+
+        /**
+         * Parses one `/proc/mounts` line (`device mountPoint fsType options dump pass`) into a
+         * [MountEntry], or null for a malformed/short line. Pure so the fs-type-matching logic
+         * ([fsTypeForPath]) is unit-testable without a real `/proc/mounts` file.
+         */
+        @VisibleForTesting(otherwise = VisibleForTesting.PACKAGE_PRIVATE)
+        internal fun parseMountLine(line: String): MountEntry? {
+            val fields = line.split(" ")
+            if (fields.size < 3) return null
+            return MountEntry(mountPoint = fields[1], fsType = fields[2])
+        }
     }
 }
+
+@VisibleForTesting(otherwise = VisibleForTesting.PACKAGE_PRIVATE)
+internal data class MountEntry(val mountPoint: String, val fsType: String)
