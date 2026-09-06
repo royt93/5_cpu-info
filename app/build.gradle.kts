@@ -108,7 +108,7 @@ android {
             buildConfigField("String", "ADMOB_INTERSTITIAL_ID", "\"ca-app-pub-3940256099942544/1033173712\"")
             buildConfigField("String", "ADMOB_APP_OPEN_ID", "\"ca-app-pub-3940256099942544/9257395921\"")
             buildConfigField("String", "ADMOB_REWARDED_ID", "\"ca-app-pub-3940256099942544/5224354917\"")
-            buildConfigField("Boolean", "IS_ENABLE_ADMOB", "false") // false = AppLovin MAX
+            buildConfigField("Boolean", "IS_ENABLE_ADMOB", "true") // false = AppLovin MAX
 
             signingConfig = signingConfigs.getByName("debug")
             isMinifyEnabled = false
@@ -123,7 +123,7 @@ android {
             // TODO: Thay test ID bằng AdMob Rewarded ID prod khi có (hỏi user). Test ID hiện tại
             // KHÔNG kiếm tiền — chỉ giữ để release build không crash khi rewarded button được bấm.
             buildConfigField("String", "ADMOB_REWARDED_ID", "\"ca-app-pub-3940256099942544/5224354917\"")
-            buildConfigField("Boolean", "IS_ENABLE_ADMOB", "false") // false = AppLovin MAX
+            buildConfigField("Boolean", "IS_ENABLE_ADMOB", "true") // false = AppLovin MAX
 
             signingConfig = signingConfigs.findByName("release")
             isMinifyEnabled = true
