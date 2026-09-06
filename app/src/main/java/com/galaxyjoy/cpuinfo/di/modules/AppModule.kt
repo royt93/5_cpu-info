@@ -21,6 +21,7 @@ import android.net.ConnectivityManager
 import android.net.wifi.WifiManager
 import android.os.BatteryManager
 import android.os.Build
+import android.os.UserManager
 import android.os.Vibrator
 import android.os.VibratorManager
 import android.os.storage.StorageManager
@@ -180,6 +181,11 @@ class AppModule {
     @Singleton
     fun provideInputMethodManager(@ApplicationContext appContext: Context): InputMethodManager =
         appContext.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+
+    @Provides
+    @Singleton
+    fun provideUserManager(@ApplicationContext appContext: Context): UserManager =
+        appContext.getSystemService(Context.USER_SERVICE) as UserManager
 
     companion object {
         const val USER_PREFERENCES_NAME = "user_preferences"

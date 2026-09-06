@@ -137,6 +137,16 @@
     <string name="biometric_device_credential_set">PIN/Muster/Passwort festgelegt</string>
     <string name="screen_lock_set">Bildschirmsperre eingerichtet</string>
     <string name="ime_section">Aktivierte Tastaturen (mit Internetberechtigung?)</string>
+    <string name="privacy_security_section">Datenschutz &amp; Sicherheit</string>
+    <string name="device_admin_active">Geräteadministrator aktiv</string>
+    <string name="camera_disabled_by_policy">Kamera durch Richtlinie deaktiviert</string>
+    <string name="screen_capture_disabled_by_policy">Bildschirmaufnahme durch Richtlinie deaktiviert</string>
+    <string name="vpn_active">VPN aktiv</string>
+    <string name="proxy_active">System-Proxy aktiv</string>
+    <string name="allows_cleartext_traffic">Erlaubt unverschlüsselten Datenverkehr</string>
+    <string name="notification_listener_section">Apps mit Benachrichtigungszugriff</string>
+    <string name="accessibility_service_section">Aktive Bedienungshilfen-Dienste</string>
+    <string name="restricted_actions_section">Eingeschränkte Aktionen (MDM/Kindersicherung)</string>
     <!--Hardware-->
     <string name="battery">Batterie</string>
     <string name="wireless">Kabellos</string>

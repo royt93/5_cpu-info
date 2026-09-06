@@ -4,10 +4,15 @@ import android.annotation.SuppressLint
 import android.app.KeyguardManager
 import android.app.admin.DevicePolicyManager
 import android.content.ContentResolver
+import android.content.Context
+import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.hardware.biometrics.BiometricManager
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.net.Uri
 import android.os.Build
+import android.os.UserManager
 import android.provider.Settings
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyInfo
@@ -18,6 +23,7 @@ import com.galaxyjoy.cpuinfo.domain.model.AndroidData
 import com.galaxyjoy.cpuinfo.domain.model.EncryptionStatus
 import com.galaxyjoy.cpuinfo.domain.model.ImeInfo
 import com.galaxyjoy.cpuinfo.domain.model.SecurityProviderData
+import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.BufferedReader
 import java.io.File
 import java.io.InputStreamReader
@@ -32,12 +38,15 @@ import javax.inject.Inject
  * [com.galaxyjoy.cpuinfo.domain.observable.ObservableAndroidData].
  */
 class DataProviderAndroid @Inject constructor(
+    @ApplicationContext private val appContext: Context,
     private val contentResolver: ContentResolver,
     private val packageManager: PackageManager,
     private val devicePolicyManager: DevicePolicyManager,
     private val biometricManager: BiometricManager?,
     private val keyguardManager: KeyguardManager,
     private val inputMethodManager: InputMethodManager,
+    private val userManager: UserManager,
+    private val connectivityManager: ConnectivityManager,
 ) {
 
     // Build.* fields are Kotlin platform types (String!) — never actually null on a real device,
@@ -71,6 +80,15 @@ class DataProviderAndroid @Inject constructor(
         deviceCredentialSet = canAuthenticate(BiometricManager.Authenticators.DEVICE_CREDENTIAL),
         isDeviceSecure = keyguardManager.isDeviceSecure,
         imeList = getImeList(),
+        notificationListenerPackages = getEnabledNotificationListeners(),
+        accessibilityServices = getAccessibilityServices(),
+        hasActiveDeviceAdmin = getHasActiveDeviceAdmin(),
+        isCameraDisabledByPolicy = getIsCameraDisabledByPolicy(),
+        isScreenCaptureDisabledByPolicy = getIsScreenCaptureDisabledByPolicy(),
+        restrictedActions = getRestrictedActions(),
+        isVpnActive = getIsVpnActive(),
+        isProxyActive = connectivityManager.defaultProxy != null,
+        allowsCleartextTraffic = getAllowsCleartextTraffic(),
     )
 
     /** Null when the typed `canAuthenticate(int)` overload doesn't exist (API<30) or
@@ -98,6 +116,72 @@ class DataProviderAndroid @Inject constructor(
         }
     } catch (_: Exception) {
         emptyList()
+    }
+
+    /** `NotificationManager.getEnabledListenerPackages()` is `@SystemApi`-only (not in the public
+     * SDK — verified via `javap` on `android-37/android.jar`: absent). The same info is exposed
+     * through the `enabled_notification_listeners` Secure Settings key instead — no typed
+     * `Settings.Secure` constant for it either (also hidden), but the setting value itself is a
+     * normal, freely-readable ContentProvider row, same as `ENABLED_ACCESSIBILITY_SERVICES` below. */
+    private fun getEnabledNotificationListeners(): List<String> = try {
+        Settings.Secure.getString(contentResolver, "enabled_notification_listeners")
+            ?.split(':')
+            ?.filter { it.isNotBlank() }
+            ?: emptyList()
+    } catch (_: Exception) {
+        emptyList()
+    }
+
+    /** `ENABLED_ACCESSIBILITY_SERVICES` is a colon-separated `package/service` component list —
+     * same settings key the system Accessibility screen itself reads. */
+    private fun getAccessibilityServices(): List<String> = try {
+        Settings.Secure.getString(contentResolver, Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES)
+            ?.split(':')
+            ?.filter { it.isNotBlank() }
+            ?: emptyList()
+    } catch (_: Exception) {
+        emptyList()
+    }
+
+    private fun getHasActiveDeviceAdmin(): Boolean = try {
+        devicePolicyManager.activeAdmins?.isNotEmpty() == true
+    } catch (_: Exception) {
+        false
+    }
+
+    private fun getIsCameraDisabledByPolicy(): Boolean = try {
+        devicePolicyManager.getCameraDisabled(null)
+    } catch (_: Exception) {
+        false
+    }
+
+    private fun getIsScreenCaptureDisabledByPolicy(): Boolean = try {
+        devicePolicyManager.getScreenCaptureDisabled(null)
+    } catch (_: Exception) {
+        false
+    }
+
+    private fun getRestrictedActions(): List<String> = try {
+        val restrictions = userManager.getUserRestrictions()
+        restrictions.keySet().filter { restrictions.getBoolean(it) }
+    } catch (_: Exception) {
+        emptyList()
+    }
+
+    private fun getIsVpnActive(): Boolean = try {
+        val network = connectivityManager.activeNetwork
+        network != null &&
+            connectivityManager.getNetworkCapabilities(network)?.hasTransport(NetworkCapabilities.TRANSPORT_VPN) == true
+    } catch (_: Exception) {
+        false
+    }
+
+    @Suppress("DEPRECATION")
+    private fun getAllowsCleartextTraffic(): Boolean = try {
+        (packageManager.getApplicationInfo(appContext.packageName, 0).flags and
+            ApplicationInfo.FLAG_USES_CLEARTEXT_TRAFFIC) != 0
+    } catch (_: Exception) {
+        false
     }
 
     /** Keep in mind that from Android O it is unique per app. */

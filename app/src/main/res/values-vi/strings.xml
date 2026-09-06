@@ -140,6 +140,16 @@
     <string name="biometric_device_credential_set">Đã đặt mã PIN/hình/mật khẩu</string>
     <string name="screen_lock_set">Đã đặt khoá màn hình</string>
     <string name="ime_section">Bàn phím đang bật (có quyền Internet?)</string>
+    <string name="privacy_security_section">Quyền riêng tư &amp; bảo mật</string>
+    <string name="device_admin_active">Quản trị thiết bị đang hoạt động</string>
+    <string name="camera_disabled_by_policy">Camera bị khoá bởi chính sách</string>
+    <string name="screen_capture_disabled_by_policy">Chụp màn hình bị khoá bởi chính sách</string>
+    <string name="vpn_active">VPN đang hoạt động</string>
+    <string name="proxy_active">Proxy hệ thống đang hoạt động</string>
+    <string name="allows_cleartext_traffic">Cho phép truyền dữ liệu không mã hoá</string>
+    <string name="notification_listener_section">Ứng dụng có quyền đọc thông báo</string>
+    <string name="accessibility_service_section">Dịch vụ trợ năng đang hoạt động</string>
+    <string name="restricted_actions_section">Hành động bị hạn chế (MDM/kiểm soát phụ huynh)</string>
     <!--Hardware-->
     <string name="battery">Pin</string>
     <string name="wireless">Không dây</string>

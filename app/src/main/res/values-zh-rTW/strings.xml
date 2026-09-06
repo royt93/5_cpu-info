@@ -138,6 +138,16 @@
     <string name="biometric_device_credential_set">已設定 PIN/圖形/密碼</string>
     <string name="screen_lock_set">已設定螢幕鎖定</string>
     <string name="ime_section">已啟用的鍵盤(是否具備網路權限?)</string>
+    <string name="privacy_security_section">隱私與安全</string>
+    <string name="device_admin_active">裝置管理員已啟用</string>
+    <string name="camera_disabled_by_policy">相機已被原則停用</string>
+    <string name="screen_capture_disabled_by_policy">螢幕擷取已被原則停用</string>
+    <string name="vpn_active">VPN 使用中</string>
+    <string name="proxy_active">系統代理伺服器使用中</string>
+    <string name="allows_cleartext_traffic">允許未加密流量</string>
+    <string name="notification_listener_section">具有通知讀取權限的應用程式</string>
+    <string name="accessibility_service_section">已啟用的無障礙服務</string>
+    <string name="restricted_actions_section">受限制的動作(MDM/家長監護)</string>
     <!--Hardware-->
     <string name="battery">電池</string>
     <string name="wireless">無線</string>

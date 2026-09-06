@@ -140,6 +140,16 @@
     <string name="biometric_device_credential_set">Ustawiono kod PIN/wzór/hasło</string>
     <string name="screen_lock_set">Ustawiono blokadę ekranu</string>
     <string name="ime_section">Włączone klawiatury (mają uprawnienie do internetu?)</string>
+    <string name="privacy_security_section">Prywatność i bezpieczeństwo</string>
+    <string name="device_admin_active">Aktywny administrator urządzenia</string>
+    <string name="camera_disabled_by_policy">Kamera zablokowana przez zasadę</string>
+    <string name="screen_capture_disabled_by_policy">Nagrywanie ekranu zablokowane przez zasadę</string>
+    <string name="vpn_active">VPN aktywne</string>
+    <string name="proxy_active">Aktywne proxy systemowe</string>
+    <string name="allows_cleartext_traffic">Zezwala na niezaszyfrowany ruch</string>
+    <string name="notification_listener_section">Aplikacje z dostępem do powiadomień</string>
+    <string name="accessibility_service_section">Aktywne usługi ułatwień dostępu</string>
+    <string name="restricted_actions_section">Ograniczone działania (MDM/kontrola rodzicielska)</string>
     <!--Hardware-->
     <string name="battery">Bateria</string>
     <string name="wireless">Komunikacja bezprzewodowa</string>

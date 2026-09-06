@@ -136,6 +136,16 @@
     <string name="biometric_device_credential_set">Nastaven PIN/gesto/heslo</string>
     <string name="screen_lock_set">Zámek obrazovky nastaven</string>
     <string name="ime_section">Aktivní klávesnice (má oprávnění k internetu?)</string>
+    <string name="privacy_security_section">Soukromí a zabezpečení</string>
+    <string name="device_admin_active">Aktivní správa zařízení</string>
+    <string name="camera_disabled_by_policy">Kamera zakázána zásadou</string>
+    <string name="screen_capture_disabled_by_policy">Snímání obrazovky zakázáno zásadou</string>
+    <string name="vpn_active">VPN aktivní</string>
+    <string name="proxy_active">Systémová proxy aktivní</string>
+    <string name="allows_cleartext_traffic">Povoluje nešifrovaný přenos dat</string>
+    <string name="notification_listener_section">Aplikace s přístupem k oznámením</string>
+    <string name="accessibility_service_section">Aktivní služby usnadnění</string>
+    <string name="restricted_actions_section">Omezené akce (MDM/rodičovská kontrola)</string>
     <!--Hardware-->
     <string name="battery">Akumulátor</string>
     <string name="wireless">Bezdrátová rozhraní</string>

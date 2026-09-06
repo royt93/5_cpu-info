@@ -157,6 +157,16 @@
     <string name="biometric_device_credential_set">PIN/pattern/password set</string>
     <string name="screen_lock_set">Screen lock set</string>
     <string name="ime_section">Enabled keyboards (has Internet permission?)</string>
+    <string name="privacy_security_section">Privacy &amp; security</string>
+    <string name="device_admin_active">Device admin active</string>
+    <string name="camera_disabled_by_policy">Camera disabled by policy</string>
+    <string name="screen_capture_disabled_by_policy">Screen capture disabled by policy</string>
+    <string name="vpn_active">VPN active</string>
+    <string name="proxy_active">System proxy active</string>
+    <string name="allows_cleartext_traffic">Allows cleartext traffic</string>
+    <string name="notification_listener_section">Notification listener access</string>
+    <string name="accessibility_service_section">Active accessibility services</string>
+    <string name="restricted_actions_section">Restricted actions (MDM/parental controls)</string>
     <!--Hardware-->
     <string name="battery">Battery</string>
     <string name="wireless">Wireless</string>

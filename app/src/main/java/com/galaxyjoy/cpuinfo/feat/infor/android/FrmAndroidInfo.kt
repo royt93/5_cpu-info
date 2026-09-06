@@ -87,6 +87,39 @@ class FrmAndroidInfo : BaseRvFragment() {
             data.imeList.forEach { ime -> items.add(ime.label to yesNo(ime.requestsInternet)) }
         }
 
+        items.add(getString(R.string.privacy_security_section) to "")
+        items.add(getString(R.string.device_admin_active) to yesNo(data.hasActiveDeviceAdmin))
+        items.add(getString(R.string.camera_disabled_by_policy) to yesNo(data.isCameraDisabledByPolicy))
+        items.add(getString(R.string.screen_capture_disabled_by_policy) to yesNo(data.isScreenCaptureDisabledByPolicy))
+        items.add(getString(R.string.vpn_active) to yesNo(data.isVpnActive))
+        items.add(getString(R.string.proxy_active) to yesNo(data.isProxyActive))
+        items.add(getString(R.string.allows_cleartext_traffic) to yesNo(data.allowsCleartextTraffic))
+
+        // Both settings keys store colon-separated `package/ServiceClassName` component strings —
+        // split into (package, class) so the row renders as a normal label/value pair instead of
+        // an empty-value row (AdtInfoItems treats an empty 2nd value as a section-header style).
+        fun componentRow(flattened: String): Pair<String, String> {
+            val slashIndex = flattened.indexOf('/')
+            return if (slashIndex > 0) {
+                flattened.substring(0, slashIndex) to flattened.substring(slashIndex + 1)
+            } else {
+                flattened to ""
+            }
+        }
+
+        if (data.notificationListenerPackages.isNotEmpty()) {
+            items.add(getString(R.string.notification_listener_section) to "")
+            data.notificationListenerPackages.forEach { items.add(componentRow(it)) }
+        }
+        if (data.accessibilityServices.isNotEmpty()) {
+            items.add(getString(R.string.accessibility_service_section) to "")
+            data.accessibilityServices.forEach { items.add(componentRow(it)) }
+        }
+        if (data.restrictedActions.isNotEmpty()) {
+            items.add(getString(R.string.restricted_actions_section) to "")
+            data.restrictedActions.forEach { items.add(it to yes) }
+        }
+
         return items
     }
 
