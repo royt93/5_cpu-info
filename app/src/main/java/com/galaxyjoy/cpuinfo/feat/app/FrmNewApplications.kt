@@ -9,6 +9,9 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
@@ -19,8 +22,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.content.ContextCompat
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.roy.sdkadbmob.AdManager
@@ -71,15 +76,9 @@ class FrmNewApplications : Fragment() {
                         onAppUninstallClicked = viewModel::onAppUninstallClicked,
                         onAppSettingsClicked = viewModel::onAppSettingsClicked,
                         onNativeLibsClicked = viewModel::onNativeLibsClicked,
-                        onSystemAppsSwitched = viewModel::onSystemAppsSwitched,
                         onPermissionsClicked = viewModel::onPermissionsClicked,
                         onPermissionsDialogDismissed = viewModel::onPermissionsDialogDismissed,
                         onOpenPlayStore = viewModel::onOpenPlayStore,
-                        onSortClicked = ::onSortClicked,
-                        onRateClicked = { activity?.let { it.rateApp(it.packageName) } },
-                        onMoreAppsClicked = { activity?.moreApp() },
-                        onShareClicked = { activity?.shareApp() },
-                        onPolicyClicked = { context?.openBrowserPolicy() },
                     )
                 }
             }
@@ -89,6 +88,55 @@ class FrmNewApplications : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         registerObservers()
+        requireActivity().addMenuProvider(appsMenuProvider, viewLifecycleOwner, Lifecycle.State.RESUMED)
+    }
+
+    /**
+     * Gộp menu 3 chấm của tab Ứng dụng vào Toolbar chung của Activity thay vì render
+     * riêng 1 app bar Compose thứ 2 — tránh 2 app bar chồng nhau. MenuHost tự add/remove
+     * item theo lifecycle của viewLifecycleOwner, không cần code show/hide thủ công theo tab.
+     */
+    private val appsMenuProvider = object : MenuProvider {
+        override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+            menuInflater.inflate(R.menu.menu_apps_actions, menu)
+        }
+
+        override fun onPrepareMenu(menu: Menu) {
+            menu.findItem(R.id.menuAppsShowSystem)?.isChecked = viewModel.uiStateFlow.value.withSystemApps
+        }
+
+        override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+            return when (menuItem.itemId) {
+                R.id.menuAppsShowSystem -> {
+                    viewModel.onSystemAppsSwitched(!menuItem.isChecked)
+                    // Submenu popups don't reliably re-trigger onPrepareMenu on their own —
+                    // force it so the checkbox reflects the new state next time it's opened.
+                    requireActivity().invalidateMenu()
+                    true
+                }
+                R.id.menuAppsSort -> {
+                    onSortClicked()
+                    true
+                }
+                R.id.menuAppsRate -> {
+                    activity?.let { it.rateApp(it.packageName) }
+                    true
+                }
+                R.id.menuAppsMore -> {
+                    activity?.moreApp()
+                    true
+                }
+                R.id.menuAppsShare -> {
+                    activity?.shareApp()
+                    true
+                }
+                R.id.menuAppsPolicy -> {
+                    context?.openBrowserPolicy()
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
     override fun onStop() {

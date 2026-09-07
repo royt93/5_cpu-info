@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menuAppsShowSystem"
+        android:checkable="true"
+        android:title="@string/apps_show_system_apps" />
+    <item
+        android:id="@+id/menuAppsSort"
+        android:icon="@drawable/ic_sort"
+        android:title="@string/apps_sort_order" />
+    <item
+        android:id="@+id/menuAppsRate"
+        android:icon="@drawable/baseline_star_rate_24"
+        android:title="@string/rate_app" />
+    <item
+        android:id="@+id/menuAppsMore"
+        android:title="@string/more_app" />
+    <item
+        android:id="@+id/menuAppsShare"
+        android:title="@string/share_app" />
+    <item
+        android:id="@+id/menuAppsPolicy"
+        android:title="@string/term_policy" />
+
+</menu>

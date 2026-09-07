@@ -15,14 +15,10 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
@@ -52,9 +48,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.galaxyjoy.cpuinfo.domain.model.ExtendedApplicationData
 import com.galaxyjoy.cpuinfo.ui.component.CpuSnackbar
-import com.galaxyjoy.cpuinfo.ui.component.CpuSwitchBox
 import com.galaxyjoy.cpuinfo.ui.component.DraggableBox
-import com.galaxyjoy.cpuinfo.ui.component.SurfaceTopAppBar
 import com.galaxyjoy.cpuinfo.ui.theme.CpuInfoTheme
 import com.galaxyjoy.cpuinfo.ui.theme.rowActionIconSize
 import com.galaxyjoy.cpuinfo.ui.theme.spacingSmall
@@ -76,15 +70,9 @@ fun ApplicationsScreen(
     onAppUninstallClicked: (id: String) -> Unit,
     onAppSettingsClicked: (id: String) -> Unit,
     onNativeLibsClicked: (nativeLibraryDir: String) -> Unit,
-    onSystemAppsSwitched: (enabled: Boolean) -> Unit,
     onPermissionsClicked: (packageName: String, appName: String) -> Unit = { _, _ -> },
     onPermissionsDialogDismissed: () -> Unit = {},
     onOpenPlayStore: (packageName: String) -> Unit = {},
-    onSortClicked: () -> Unit = {},
-    onRateClicked: () -> Unit = {},
-    onMoreAppsClicked: () -> Unit = {},
-    onShareClicked: () -> Unit = {},
-    onPolicyClicked: () -> Unit = {},
 ) {
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
@@ -100,17 +88,6 @@ fun ApplicationsScreen(
         }
     }
     Scaffold(
-        topBar = {
-            TopBar(
-                withSystemApps = uiState.withSystemApps,
-                onSystemAppsSwitched = onSystemAppsSwitched,
-                onSortClicked = onSortClicked,
-                onRateClicked = onRateClicked,
-                onMoreAppsClicked = onMoreAppsClicked,
-                onShareClicked = onShareClicked,
-                onPolicyClicked = onPolicyClicked,
-            )
-        },
         snackbarHost = {
             SnackbarHost(snackbarHostState) { data ->
                 CpuSnackbar(data)
@@ -156,117 +133,6 @@ fun ApplicationsScreen(
             onDismiss = onPermissionsDialogDismissed,
         )
     }
-}
-
-@Composable
-private fun TopBar(
-    withSystemApps: Boolean,
-    onSystemAppsSwitched: (enabled: Boolean) -> Unit,
-    onSortClicked: () -> Unit,
-    onRateClicked: () -> Unit,
-    onMoreAppsClicked: () -> Unit,
-    onShareClicked: () -> Unit,
-    onPolicyClicked: () -> Unit,
-) {
-    var showMenu by remember { mutableStateOf(false) }
-    SurfaceTopAppBar(
-        title = stringResource(id = R.string.applications),
-        actions = {
-            IconButton(onClick = { showMenu = !showMenu }) {
-                Icon(
-                    imageVector = Icons.Default.MoreVert,
-                    contentDescription = stringResource(id = R.string.apps_more_options)
-                )
-            }
-            DropdownMenu(
-                expanded = showMenu,
-                onDismissRequest = { showMenu = false }
-            ) {
-                DropdownMenuItem(
-                    text = {
-                        CpuSwitchBox(
-                            text = stringResource(id = R.string.apps_show_system_apps),
-                            isChecked = withSystemApps,
-                            onCheckedChange = { onSystemAppsSwitched(!withSystemApps) }
-                        )
-                    },
-                    onClick = { onSystemAppsSwitched(!withSystemApps) },
-                )
-                DropdownMenuItem(
-                    text = {
-                        Text(
-                            text = stringResource(id = R.string.apps_sort_order),
-                            style = MaterialTheme.typography.bodyMedium,
-                        )
-                    },
-                    leadingIcon = {
-                        Icon(painter = painterResource(id = R.drawable.ic_sort), contentDescription = null)
-                    },
-                    onClick = {
-                        showMenu = false
-                        onSortClicked()
-                    },
-                )
-                DropdownMenuItem(
-                    text = {
-                        Text(
-                            text = stringResource(id = R.string.rate_app),
-                            style = MaterialTheme.typography.bodyMedium,
-                        )
-                    },
-                    leadingIcon = {
-                        Icon(painter = painterResource(id = R.drawable.baseline_star_rate_24), contentDescription = null)
-                    },
-                    onClick = {
-                        showMenu = false
-                        onRateClicked()
-                    },
-                )
-                DropdownMenuItem(
-                    text = {
-                        Text(
-                            text = stringResource(id = R.string.more_app),
-                            style = MaterialTheme.typography.bodyMedium,
-                        )
-                    },
-                    leadingIcon = {
-                        Icon(painter = painterResource(id = R.drawable.baseline_star_rate_24), contentDescription = null)
-                    },
-                    onClick = {
-                        showMenu = false
-                        onMoreAppsClicked()
-                    },
-                )
-                DropdownMenuItem(
-                    text = {
-                        Text(
-                            text = stringResource(id = R.string.share_app),
-                            style = MaterialTheme.typography.bodyMedium,
-                        )
-                    },
-                    leadingIcon = {
-                        Icon(painter = painterResource(id = R.drawable.baseline_star_rate_24), contentDescription = null)
-                    },
-                    onClick = {
-                        showMenu = false
-                        onShareClicked()
-                    },
-                )
-                DropdownMenuItem(
-                    text = {
-                        Text(
-                            text = stringResource(id = R.string.term_policy),
-                            style = MaterialTheme.typography.bodyMedium,
-                        )
-                    },
-                    onClick = {
-                        showMenu = false
-                        onPolicyClicked()
-                    },
-                )
-            }
-        }
-    )
 }
 
 @Composable
@@ -674,7 +540,6 @@ private fun ApplicationInfoPreview() {
             onAppSettingsClicked = {},
             onAppUninstallClicked = {},
             onNativeLibsClicked = {},
-            onSystemAppsSwitched = {},
         )
     }
 }
