@@ -8,8 +8,9 @@ Spec gốc của template: `doc/AD_PROMPT_AOS.MD`
 
 ## Provider runtime
 
-- **Active**: AppLovin MAX
-- **Fallback**: AdMob (flip `BuildConfig.IS_ENABLE_ADMOB=true` để activate)
+- **Active**: AdMob (`BuildConfig.IS_ENABLE_ADMOB=true` cho cả debug + release, xem commit `e1e8906`)
+- **Fallback**: AppLovin MAX (flip `IS_ENABLE_ADMOB=false` trong `app/build.gradle.kts` để quay lại)
+- **Lưu ý**: `ADMOB_REWARDED_ID` production hiện vẫn là test ID (`ca-app-pub-3940256099942544/...`) — Banner/Interstitial/AppOpen đã có ID prod thật, riêng Rewarded chưa (xem `TODO` ở `app/build.gradle.kts`, cần ID thật trước khi phát hành bản kiếm tiền từ rewarded).
 - **VIP feature**: built-in từ SDK v1.1.4 (Step 9 của template) — không re-implement trong app code.
 
 ## 1. Touchpoint table
@@ -17,7 +18,7 @@ Spec gốc của template: `doc/AD_PROMPT_AOS.MD`
 | Slot          | File hiện tại                                       | Trigger                                               | API mới                                 | API cũ thay thế                                  |
 |---------------|-----------------------------------------------------|-------------------------------------------------------|-----------------------------------------|--------------------------------------------------|
 | Banner        | `feat/ActHost.kt`                                    | `onCreate` — auto pause/resume/destroy via lib lifecycle | `AdManager.loadBanner(...)`             | `AdManager.bannerResume/Pause/Destroy` (đã xoá) |
-| Interstitial  | `feat/app/FrmApplications.kt`                        | Nút Sort A/Z (`menuActionSorting`)                    | `AdManager.showInterstitial(activity)`  | giữ nguyên signature, lib auto throttle          |
+| Interstitial  | `feat/app/FrmNewApplications.kt`                     | Nút Sort A/Z (`menuActionSorting`)                    | `AdManager.showInterstitial(activity)`  | giữ nguyên signature, lib auto throttle          |
 | App Open      | `feat/SplashActivity.kt` + `ProcessLifecycleOwner` | warmup ở splash + auto-show khi resume foreground     | `AdManager.awaitSplashComplete` (suspend) | `AdManager.initSplashScreen(...)` (đã xoá)      |
 | Rewarded      | `feat/vip/FVipManagement.kt`                         | Nút "Watch ad → 3 days VIP"                           | `AdManager.showRewarded(activity) { earned -> }` | (chưa có trước migrate)                          |
 

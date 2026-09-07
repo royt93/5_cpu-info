@@ -4,19 +4,22 @@
 
 ## 🏆 Top pick (3 nguồn AI độc lập cùng tự đề xuất — tín hiệu rất mạnh)
 
-### U01 — "Device Truth Score" / Chip authenticity check / "Silicon Detective"
+### ✅U01 — "Device Truth Score" / Chip authenticity check / "Silicon Detective"
+**Đã xong** (Sprint 6, commit `461dce3`) — `feat/truth/{DeviceTruthProvider,DeviceTruthEvaluator,DeviceTruthBottomSheet,ChipCatalog}.kt`.
 Đối chiếu thông tin SoC thật từ native `cpuinfo` (microarchitecture, ISA, core topology, và sâu hơn: thanh ghi phần cứng `MIDR`/`MPIDR`/`REVIDR`/CPU Part number — đọc trực tiếp tầng Native, bỏ qua hoàn toàn chuỗi giả mạo trong `Build.MODEL`/`/proc/cpuinfo`) với `Build` fields, ABI, GPU/Vulkan, camera metadata → phát hiện firmware giả spec, chip dựng/re-marked, máy refurb/xách tay khai sai model, xác định silicon stepping/revision. Xuất bằng chứng từng điểm mismatch cụ thể, không chỉ 1 điểm số mơ hồ.
 **Giá trị**: cực cao cho thị trường mua bán máy cũ — không competitor nào (CPU-Z, AIDA64) làm sâu tới mức "phát hiện giả mạo bằng thanh ghi phần cứng", họ chỉ hiển thị info bề mặt.
 **Nguồn**: Codex (P0, "Device Truth Score") + Claude CLI ("Chip authenticity check") + Gemini CLI ("Silicon Detective — SoC Binning Verification") — **3 nguồn độc lập, không thấy bài nhau, cùng hội tụ về đúng 1 ý tưởng cốt lõi**.
 **Effort**: L (cần nghiên cứu kỹ database chipset thật vs khai báo + đọc thanh ghi native).
 
-### U02 — Throttling Fingerprint / Freq-vs-temp curve / "Hardware Degradation Audit"
+### ✅U02 — Throttling Fingerprint / Freq-vs-temp curve / "Hardware Degradation Audit"
+**Đã xong** (Sprint 4, commit `94f1223`) — `feat/throttle/{ThrottleFingerprint,ThrottleTestRunner,ThrottleResultPrefs,VMThrottle,ThrottleScreen,FrmThrottle}.kt`.
 Chạy workload ngắn có kiểm soát (Gemini CLI đề xuất cụ thể: stress test 60s đa luồng native), ghi xung từng cluster + thermal status + pin theo thời gian thực → "đường cong chịu tải" so sánh được trước/sau khi thay pin, update ROM, thay keo tản nhiệt. So sánh tỷ lệ suy giảm hiệu năng Cold state vs Throttled state, xuất "Hardware Health Card" đồ hoạ có thể chia sẻ (watermark VIP). Tận dụng infra `ObservableCpuData` polling đã có sẵn (Epic 2 Story 6, T2.18) + `feat/temp`.
 **Giá trị**: chưa app nào trong phân khúc trực quan hoá tương quan freq-temp tốt, và "chứng nhận sức khỏe phần cứng" chia sẻ được là hook viral tự nhiên.
 **Nguồn**: Codex ("Throttling Fingerprint") + Claude CLI ("Freq-vs-temp correlation live graph") + Gemini CLI ("VIP Hardware Degradation & Thermal Throttling Audit") — **3 nguồn độc lập cùng ý tưởng cốt lõi**.
 **Effort**: M-L. Lịch sử dài hạn có thể là tính năng VIP-only (monetization hook tự nhiên).
 
-### U12 — "AI Readiness Score" (mới, Gemini CLI)
+### ✅U12 — "AI Readiness Score" (mới, Gemini CLI)
+**Đã xong** (Sprint 8, commit `b8693c1`) — `feat/airead/{AiReadinessProvider,AiReadinessEvaluator,AiReadinessBar,AiReadinessBottomSheet}.kt`.
 Tổng hợp các cờ tập lệnh AI mà `libcpuinfo` đã có sẵn nhưng chưa khai thác (`cpuinfo_has_arm_i8mm`, `cpuinfo_has_arm_bf16`, `cpuinfo_has_arm_neon_dot`, `cpuinfo_has_arm_sve/sve2`) cùng RAM khả dụng + số core hiệu năng cao → chấm điểm "máy chạy được on-device LLM cỡ nào" (vd "Đạt chuẩn chạy LLM 3B" / "Đạt chuẩn xử lý ảnh GenAI"). Dùng chung nền tảng dữ liệu với F10 (Epic 3, NPU/AI Capability Detection).
 **Giá trị**: đúng xu hướng on-device AI 2025-2026 (Gemini Nano và tương tự), chưa app system-info nào trên Play Store có chỉ số này — timing tốt.
 **Nguồn**: Gemini CLI (1 nguồn, nhưng dữ liệu nền `libcpuinfo` cực kỳ cụ thể và đã sẵn có, effort MVP thấp vì F10 đã build data layer).

@@ -22,7 +22,7 @@ Task mới (feature ý tưởng, bugfix, tech debt...) luôn thêm vào đúng 1
 
 1. **Thứ tự sprint**: (1) Bugfix crash-risk nhanh → (2) Tech debt/kiến trúc (Applications migration trước) → (3) Feature mới. Làm tuần tự, không xen kẽ trừ U09/U10 (xem dưới).
 2. **Applications duplicate (B03)**: giữ bản Compose mới (`FrmNewApplications`), xoá bản View+RxJava cũ (`FrmApplications`). Làm ở Sprint 2, kèm fix bug crash Android 14+ mới phát hiện (B03b — thiếu `RECEIVER_EXPORTED` flag).
-3. **Flagship USP (Epic 4)**: làm cả 3 — U09+U10 (VIP streak/Shield Score, effort thấp, có thể xen kẽ ngay) → U02 (Throttling Fingerprint) → U01 (Device Truth Score). Chi tiết thứ tự và lý do ở `epic-04-unique-ideas.md`.
+3. **Flagship USP (Epic 4)**: làm cả 3 — U09+U10 (VIP streak/Shield Score) → U02 (Throttling Fingerprint) → U01 (Device Truth Score). **Đã xong cả 3** (kèm U12 AI Readiness Score làm thêm) — xem trạng thái ✅ ở `epic-04-unique-ideas.md`.
 
 ## Cấu trúc backlog
 
