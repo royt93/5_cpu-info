@@ -29,7 +29,7 @@ Task mới (feature ý tưởng, bugfix, tech debt...) luôn thêm vào đúng 1
 | File | Nội dung | Số item |
 |---|---|---|
 | [epic-01-bugfix.md](epic-01-bugfix.md) | Bug cần fix, chia P0 (crash/sai dữ liệu nghiêm trọng) → P2 (cosmetic) | 32 |
-| [epic-02-techdebt.md](epic-02-techdebt.md) | Refactor, migration kiến trúc dang dở, test gap, CI/build hygiene | 30 task, 10 story |
+| [epic-02-techdebt.md](epic-02-techdebt.md) | Refactor, migration kiến trúc dang dở, test gap, CI/build hygiene | 37 task, 11 story |
 | [epic-03-new-features.md](epic-03-new-features.md) | Feature mới, gap vs CPU-Z/AIDA64/Device Info HW | 12 |
 | [epic-04-unique-ideas.md](epic-04-unique-ideas.md) | Ý tưởng độc quyền (USP) — U01/U02 được **3 AI review độc lập** cùng tự đề xuất | 16 |
 | [feature.md](feature.md) | Roadmap enhancement đợt 1-2 (đã ship) + Ideas | — |
