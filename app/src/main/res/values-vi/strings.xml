@@ -20,6 +20,7 @@
     <string name="network">Mạng</string>
     <string name="audio">Âm thanh</string>
     <string name="export_format_title">Định dạng xuất</string>
+    <string name="share_device_info_menu_title">Chia sẻ thông tin máy</string>
     <string name="export_as_text">Văn bản thuần</string>
     <string name="export_as_image">Hình ảnh (chia sẻ)</string>
     <string name="device_card_row_cores">Số nhân</string>

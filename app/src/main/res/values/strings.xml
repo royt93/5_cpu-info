@@ -21,6 +21,7 @@
     <string name="network">Network</string>
     <string name="audio">Audio</string>
     <string name="export_format_title">Export format</string>
+    <string name="share_device_info_menu_title">Share device info</string>
     <string name="export_as_text">Plain text</string>
     <string name="export_as_json" translatable="false">JSON</string>
     <string name="export_as_image">Image (share)</string>
