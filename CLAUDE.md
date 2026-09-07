@@ -53,8 +53,8 @@ Release signing đọc trực tiếp từ private sibling repo `../../../../myKe
 
 ### Hệ thống quảng cáo
 Chi tiết đầy đủ ở `doc/AD.MD`. Tóm tắt:
-- Provider hiện tại: **AppLovin MAX** thông qua SDK wrapper `com.github.royt93:AdmobWrapper:1.1.5` (cài qua JitPack — repo đã được thêm vào `allprojects.repositories`). Flag `BuildConfig.IS_ENABLE_ADMOB = false` switch về AppLovin; bật lên là dùng AdMob ID trong cùng file `build.gradle.kts`.
-- 3 touchpoint: App Open (`SplashActivity`), Banner (`ActHost` bottom — có lifecycle hooks `bannerResume/Pause/Destroy`), Interstitial (`FrmApplications` — nút Sort A/Z). Preload interstitial gọi trong `ActHost.onCreate`.
+- Provider hiện tại: **AdMob** (active, `BuildConfig.IS_ENABLE_ADMOB = true` cho cả debug + release) thông qua SDK wrapper `com.github.royt93:AdmobApplovinWrapper:1.1.5` (cài qua JitPack — repo đã được thêm vào `allprojects.repositories`). Flip `IS_ENABLE_ADMOB = false` trong `app/build.gradle.kts` để quay lại AppLovin MAX (fallback). **Lưu ý**: `ADMOB_REWARDED_ID` production hiện vẫn là test ID — Rewarded chưa monetize thật (xem TODO ở `app/build.gradle.kts`, làm ở đợt sau).
+- 3 touchpoint: App Open (`SplashActivity`), Banner (`ActHost` bottom — lib tự quản lý qua `ActivityLifecycleCallbacks`, app chỉ giữ `adView` field để gọi `bannerDestroy()` thủ công khi VIP toggle giữa session), Interstitial (`FrmNewApplications` — nút Sort A/Z). Preload interstitial gọi trong `ActHost.onCreate`.
 - Init flow trong `GalaxyApp.setupAd()`: `AdManager.setConfig(adConfig) → AdManager.initialize(this) { ... }`. Thứ tự này **bắt buộc** — SDK sẽ no-op hoặc crash nếu đảo.
 - SDK tự throttle (min 60s giữa fullscreen, max 6/session, 5/ngày) → không cần thêm logic gating ở app layer.
 - VIP whitelist GAID cứng (`getMyVipGAIDSet()`) đã được xoá khỏi `GalaxyApp.kt` — SDK dùng danh sách nội bộ + `vipKeySecret` (xem `doc/task/feature.md` đợt 2 #7).
