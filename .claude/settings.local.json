@@ -6,7 +6,7 @@
       "Bash(git restore *)",
       "Bash(git add *)",
       "Bash(git commit -m ' *)",
-      "Bash(find /Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260323_cpu-info/app/src/main/res/values* -name \"strings.xml\" -type f)",
+      "Bash(find /Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260517_cpu-info/app/src/main/res -name \"strings.xml\" -type f)",
       "WebSearch",
       "Bash(xargs ls *)",
       "Bash(xxd)",
