@@ -6,6 +6,7 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.github.mikephil.charting.charts.LineChart
@@ -32,6 +33,16 @@ class FrmSensorsInfo :
 
     private val viewModel: VMSensorsInfo by viewModels()
 
+    // F12 — waveform header is item 0 of the ConcatAdapter below (not a sticky sibling view), so
+    // one-time chart setup runs from onViewHolderCreated (fired exactly when RecyclerView creates
+    // the view holder) and live updates go through withViews() rather than notifyItemChanged, to
+    // avoid rebinding/flickering on every waveform sample.
+    private val waveformHeaderAdapter = AdtSensorWaveformHeader(onViewHolderCreated = { holder ->
+        setUpMultiAxisChart(holder.chartAccelerometer)
+        setUpMultiAxisChart(holder.chartGyroscope)
+        setUpSingleAxisChart(holder.chartBarometer)
+    })
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -48,7 +59,7 @@ class FrmSensorsInfo :
             viewLifecycleOwner,
             ListLiveDataObserver(adtInfoItems),
         )
-        binding.rv.adapter = adtInfoItems
+        binding.rv.adapter = ConcatAdapter(waveformHeaderAdapter, adtInfoItems)
 
         binding.fabSensorTest.setOnClickListener {
             SensorTestBottomSheet().show(childFragmentManager, SensorTestBottomSheet.TAG)
@@ -56,19 +67,17 @@ class FrmSensorsInfo :
 
         binding.rv.shrinkFabOnScroll(binding.fabSensorTest)
 
-        setUpMultiAxisChart(binding.chartAccelerometer)
-        setUpMultiAxisChart(binding.chartGyroscope)
-        setUpSingleAxisChart(binding.chartBarometer)
-
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.waveformState.collect { state ->
-                binding.waveformAccelerometerGroup.visibility = if (state.hasAccelerometer) View.VISIBLE else View.GONE
-                binding.waveformGyroscopeGroup.visibility = if (state.hasGyroscope) View.VISIBLE else View.GONE
-                binding.waveformBarometerGroup.visibility = if (state.hasBarometer) View.VISIBLE else View.GONE
+                waveformHeaderAdapter.withViews {
+                    accelerometerGroup.visibility = if (state.hasAccelerometer) View.VISIBLE else View.GONE
+                    gyroscopeGroup.visibility = if (state.hasGyroscope) View.VISIBLE else View.GONE
+                    barometerGroup.visibility = if (state.hasBarometer) View.VISIBLE else View.GONE
 
-                updateMultiAxisChart(binding.chartAccelerometer, state.accelerometer)
-                updateMultiAxisChart(binding.chartGyroscope, state.gyroscope)
-                updateSingleAxisChart(binding.chartBarometer, state.barometer)
+                    updateMultiAxisChart(chartAccelerometer, state.accelerometer)
+                    updateMultiAxisChart(chartGyroscope, state.gyroscope)
+                    updateSingleAxisChart(chartBarometer, state.barometer)
+                }
             }
         }
     }

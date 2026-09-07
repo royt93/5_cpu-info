@@ -10,10 +10,13 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.longClick
+import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
+import androidx.test.espresso.UiController
+import androidx.test.espresso.ViewAction
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
@@ -29,6 +32,9 @@ import com.galaxyjoy.cpuinfo.feat.ActHost
 import com.galaxyjoy.cpuinfo.feat.app.APPLICATIONS_LIST_TAG
 import com.galaxyjoy.cpuinfo.feat.infor.cpu.ClusterTopologyBuilder
 import com.galaxyjoy.cpuinfo.widget.progress.IconRoundCornerProgressBar
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+import org.hamcrest.Matcher
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
@@ -550,6 +556,139 @@ class ActHostSmokeTest {
         // Back on ActHost without a crash — the CPU tab (default) is still there.
         onView(withId(R.id.rv))
             .check(matches(hasDescendant(isAssignableFrom(IconRoundCornerProgressBar::class.java))))
+    }
+
+    /**
+     * Deterministic replacement for a fling-based `swipeUp()`: reads the RecyclerView's real
+     * adapter item count at runtime and animates straight to the last position via
+     * `smoothScrollToPosition` — guaranteed to move item 0 (the header) out of the visible
+     * viewport regardless of device font scale or list length, unlike a fixed number of
+     * `swipeUp()` gestures (Espresso's fling distance/momentum isn't reliably tracked by
+     * `composeRule.waitForIdle()`, which only synchronizes Compose's own clock, not the plain
+     * Android RecyclerView's fling animation underneath it). Deliberately `smoothScrollToPosition`
+     * rather than the instant `scrollToPosition`: the latter jumps the layout position directly
+     * without dispatching `onScrolled(dx, dy)` deltas, so `shrinkFabOnScroll` (which listens for
+     * exactly those deltas) would never fire — an animated scroll is required to exercise that
+     * regression guard for real.
+     */
+    private fun scrollRecyclerViewToLastItem() {
+        onView(withId(R.id.rv)).perform(object : ViewAction {
+            override fun getConstraints(): Matcher<View> = isAssignableFrom(RecyclerView::class.java)
+            override fun getDescription() = "smooth-scroll RecyclerView to its last item"
+            override fun perform(uiController: UiController, view: View) {
+                val recyclerView = view as RecyclerView
+                val itemCount = recyclerView.adapter?.itemCount ?: 0
+                if (itemCount > 0) {
+                    recyclerView.smoothScrollToPosition(itemCount - 1)
+                }
+                uiController.loopMainThreadUntilIdle()
+            }
+        })
+    }
+
+    /**
+     * Polls until [matcher] resolves to a displayed view — RecyclerView creates a ConcatAdapter's
+     * header view holder lazily on its first layout pass, which doesn't necessarily land within
+     * the same frame as `composeRule.waitForIdle()` (Compose-only idling) or even
+     * `Espresso.onIdle()` right after a tab switch, so a single immediate check can transiently
+     * find nothing yet.
+     */
+    private fun waitForViewDisplayed(matcher: Matcher<View>, timeoutMillis: Long = 5_000) {
+        composeRule.waitUntil(timeoutMillis = timeoutMillis) {
+            runCatching { onView(matcher).check(matches(isDisplayed())) }.isSuccess
+        }
+    }
+
+    /**
+     * Same idea as [composeTextPresent] wrapped for a poll — tolerates the transient "No compose
+     * hierarchies found" `IllegalStateException` that can fire mid-poll right after a
+     * RecyclerView-hosted ComposeView header (item 0 of a ConcatAdapter) detaches/re-attaches
+     * during a tab switch or scroll — a narrower, more frequent version of the same race already
+     * documented on [waitForComposeText] above, since RecyclerView creates that view holder
+     * lazily on layout rather than synchronously like a directly-inflated ComposeView.
+     */
+    private fun composeTextPresent(label: String): Boolean =
+        runCatching { composeRule.onAllNodesWithText(label).fetchSemanticsNodes().isNotEmpty() }
+            .getOrDefault(false)
+
+    private fun waitForComposeTextResilient(label: String, timeoutMillis: Long = 5_000) {
+        composeRule.waitUntil(timeoutMillis = timeoutMillis) { composeTextPresent(label) }
+    }
+
+    private fun waitUntilComposeTextGone(label: String, timeoutMillis: Long = 5_000) {
+        composeRule.waitUntil(timeoutMillis = timeoutMillis) { !composeTextPresent(label) }
+    }
+
+    @Test
+    fun cpuTabHeaderScrollsAwayInsteadOfStayingSticky() {
+        // Regression guard: the cluster/AI-readiness/capability header used to be a sticky
+        // ComposeView sibling pinned above the RecyclerView (frm_cpu_info.xml) — it's now item 0
+        // of the RecyclerView's ConcatAdapter (FrmCpuInfo.kt/ComposeHeaderAdapter.kt), so it must
+        // scroll away with the per-core list below, and shrinkFabOnScroll (fed by the
+        // RecyclerView's own scroll deltas) must still react to a real scroll.
+        onView(withId(R.id.menuHardware)).perform(click())
+        val headerLabel = composeRule.activity.getString(R.string.ai_readiness_bar_label)
+        waitForComposeTextResilient(headerLabel)
+        composeRule.onNodeWithText(headerLabel).assertExists()
+        onView(withId(R.id.fabDeviceTruth)).check(matches(isDisplayed()))
+
+        scrollRecyclerViewToLastItem()
+        composeRule.waitForIdle()
+
+        waitUntilComposeTextGone(headerLabel)
+        onView(withId(R.id.rv)).check(matches(isDisplayed()))
+        onView(withId(R.id.fabDeviceTruth)).check { view, _ ->
+            assertFalse(
+                "FAB should have shrunk on scroll — shrinkFabOnScroll must still receive real RecyclerView scroll deltas",
+                (view as ExtendedFloatingActionButton).isExtended,
+            )
+        }
+    }
+
+    @Test
+    fun gpuTabHeaderScrollsAwayInsteadOfStayingSticky() {
+        // Regression guard: the Vulkan/GLES detail bar used to be a sticky ComposeView sibling
+        // pinned above the RecyclerView (frm_gpu_info.xml) — it's now item 0 of the RecyclerView's
+        // ConcatAdapter (FrmGpuInfo.kt/ComposeHeaderAdapter.kt), so it must scroll away with the
+        // vendor/renderer/extensions rows below instead of pinning to the top.
+        onView(withId(R.id.menuHardware)).perform(click())
+        composeRule.waitForIdle()
+        clickTabByText(composeRule.activity.getString(R.string.gpu))
+        composeRule.waitForIdle()
+
+        val headerLabel = composeRule.activity.getString(R.string.graphics_detail_bar_label)
+        waitForComposeTextResilient(headerLabel)
+        composeRule.onNodeWithText(headerLabel).assertExists()
+
+        scrollRecyclerViewToLastItem()
+        composeRule.waitForIdle()
+
+        waitUntilComposeTextGone(headerLabel)
+        onView(withId(R.id.rv)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun sensorsTabWaveformHeaderIsInsideRecyclerViewInsteadOfAStickySibling() {
+        // Regression guard: the 3-chart waveform row used to be a sticky sibling view pinned
+        // above the RecyclerView (frm_sensors_info.xml, a LinearLayoutCompat next to — not
+        // inside — the RecyclerView) — it's now item 0 of the RecyclerView's ConcatAdapter
+        // (AdtSensorWaveformHeader.kt/FrmSensorsInfo.kt). Structural proof rather than a live
+        // scroll: on this device the sensor value list (accelerometer/magnetometer/proximity/
+        // orientation — no gyroscope or barometer) is short enough that the whole screen's
+        // content fits without anything left to scroll (confirmed manually: a full-height swipe
+        // moves nothing), so "does it visually scroll away" isn't reliably exercisable here.
+        // Asserting chartAccelerometer is a DESCENDANT of the RecyclerView is scroll-independent
+        // and would fail against the old sticky-sibling layout regardless of list length — CPU's
+        // sibling test above already covers the shrinkFabOnScroll-must-fire-on-real-scroll risk,
+        // shared by both screens via the same extension function.
+        onView(withId(R.id.menuHardware)).perform(click())
+        composeRule.waitForIdle()
+        clickTabByText(composeRule.activity.getString(R.string.sensors))
+        composeRule.waitForIdle()
+
+        waitForViewDisplayed(withId(R.id.chartAccelerometer))
+        onView(withId(R.id.rv)).check(matches(hasDescendant(withId(R.id.chartAccelerometer))))
+        onView(withId(R.id.fabSensorTest)).check(matches(isDisplayed()))
     }
 
     // No instrumented test for the Dashboard (F01) or Storage Benchmark (F06) tabs: navigating to

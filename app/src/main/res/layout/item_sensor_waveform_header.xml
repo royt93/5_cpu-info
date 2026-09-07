@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- F12 — live waveform (last 50 samples) for the 3 sensor types worth charting. Inflated as
+     item 0 of FrmSensorsInfo's RecyclerView ConcatAdapter (see AdtSensorWaveformHeader.kt), not a
+     sticky sibling view, so it scrolls away with the sensor value rows below. Each group's
+     visibility is toggled in FrmSensorsInfo.kt based on whether the device actually has that
+     sensor — never shows a permanently-empty chart. -->
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/waveformRow"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingHorizontal="8dp"
+    android:paddingTop="8dp">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/waveformAccelerometerGroup"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:paddingHorizontal="4dp">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            style="@style/TextAnnotation1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sensor_waveform_accelerometer" />
+
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/chartAccelerometer"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:layout_marginTop="4dp" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/waveformGyroscopeGroup"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:paddingHorizontal="4dp">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            style="@style/TextAnnotation1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sensor_waveform_gyroscope" />
+
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/chartGyroscope"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:layout_marginTop="4dp" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/waveformBarometerGroup"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:paddingHorizontal="4dp">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            style="@style/TextAnnotation1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sensor_waveform_barometer" />
+
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/chartBarometer"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:layout_marginTop="4dp" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</androidx.appcompat.widget.LinearLayoutCompat>

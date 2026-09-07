@@ -7,31 +7,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <!-- F09/U06 — cluster topology summary (Prime/Performance/Efficiency) is item 0 of this
+             RecyclerView's ConcatAdapter (see FrmCpuInfo.kt), not a sticky sibling view, so it
+             scrolls away with the per-core list below instead of pinning to the top. -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <!-- F09/U06 — cluster topology summary (Prime/Performance/Efficiency), always
-                 visible above the flat per-core list below rather than replacing it. -->
-            <androidx.compose.ui.platform.ComposeView
-                android:id="@+id/clusterTopologyCompose"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:clipToPadding="false"
-                android:paddingStart="8dp"
-                android:paddingTop="8dp"
-                android:paddingEnd="8dp"
-                android:paddingBottom="72dp"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-
-        </LinearLayout>
+            android:clipToPadding="false"
+            android:paddingStart="8dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="72dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
         <!-- U01 entry point — device authenticity check, contextually belongs on the CPU tab
              rather than the shared toolbar (which already has Shield/VIP/Share). Extended FAB,

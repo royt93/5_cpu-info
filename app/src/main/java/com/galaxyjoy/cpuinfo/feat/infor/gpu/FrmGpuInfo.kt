@@ -27,8 +27,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.galaxyjoy.cpuinfo.R
@@ -36,6 +36,7 @@ import com.galaxyjoy.cpuinfo.databinding.FrmGpuInfoBinding
 import com.galaxyjoy.cpuinfo.domain.model.GpuData
 import com.galaxyjoy.cpuinfo.feat.infor.base.AdtInfoItems
 import com.galaxyjoy.cpuinfo.feat.infor.base.BaseFrm
+import com.galaxyjoy.cpuinfo.feat.infor.base.ComposeHeaderAdapter
 import com.galaxyjoy.cpuinfo.feat.infor.base.copyToClipboardAndNotify
 import com.galaxyjoy.cpuinfo.ui.theme.CpuInfoTheme
 import com.galaxyjoy.cpuinfo.util.DividerItemDecoration
@@ -109,42 +110,42 @@ class FrmGpuInfo : BaseFrm<FrmGpuInfoBinding>(R.layout.frm_gpu_info), AdtInfoIte
             viewLifecycleOwner,
             ListLiveDataObserver(adtInfoItems),
         )
-        binding.rv.adapter = adtInfoItems
 
         // F08 — the Compose summary bar/detail sheet needs the same GpuData the list shows,
         // including glExtensions which only arrives once GLSurfaceView's onSurfaceCreated()
         // callback fires (asynchronous, after first render).
         val gpuDataState = mutableStateOf<GpuData?>(null)
-        viewModel.viewState.observe(viewLifecycleOwner) { state ->
-            displayItems.replace(toDisplayItems(state.gpuData))
-            gpuDataState.value = state.gpuData
-        }
-
         val vulkanCapability = graphicsDetailProvider.vulkanCapability()
-        binding.graphicsDetailCompose.apply {
-            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-            setContent {
-                CpuInfoTheme {
-                    var showDetail by remember { mutableStateOf(false) }
-                    val gpuData = gpuDataState.value
-                    if (gpuData != null) {
-                        val extensions = GraphicsExtensionParser.parse(gpuData.glExtensions)
-                        GraphicsDetailBar(
+
+        // F08 — header is item 0 of this ConcatAdapter (not a sticky ComposeView sibling) so it
+        // scrolls away with the vendor/renderer/extensions rows below.
+        val headerAdapter = ComposeHeaderAdapter {
+            CpuInfoTheme {
+                var showDetail by remember { mutableStateOf(false) }
+                val gpuData = gpuDataState.value
+                if (gpuData != null) {
+                    val extensions = GraphicsExtensionParser.parse(gpuData.glExtensions)
+                    GraphicsDetailBar(
+                        gpuData = gpuData,
+                        extensionCount = extensions.size,
+                        onClick = { showDetail = true },
+                    )
+                    if (showDetail) {
+                        GraphicsDetailBottomSheet(
                             gpuData = gpuData,
-                            extensionCount = extensions.size,
-                            onClick = { showDetail = true },
+                            vulkanCapability = vulkanCapability,
+                            extensions = extensions,
+                            onDismiss = { showDetail = false },
                         )
-                        if (showDetail) {
-                            GraphicsDetailBottomSheet(
-                                gpuData = gpuData,
-                                vulkanCapability = vulkanCapability,
-                                extensions = extensions,
-                                onDismiss = { showDetail = false },
-                            )
-                        }
                     }
                 }
             }
+        }
+        binding.rv.adapter = ConcatAdapter(headerAdapter, adtInfoItems)
+
+        viewModel.viewState.observe(viewLifecycleOwner) { state ->
+            displayItems.replace(toDisplayItems(state.gpuData))
+            gpuDataState.value = state.gpuData
         }
     }
 

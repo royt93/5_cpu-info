@@ -3,8 +3,8 @@ package com.galaxyjoy.cpuinfo.feat.infor.cpu
 import android.os.Bundle
 import android.view.View
 import androidx.compose.foundation.layout.Column
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.galaxyjoy.cpuinfo.R
@@ -18,6 +18,7 @@ import com.galaxyjoy.cpuinfo.feat.canmydevice.CanMyDeviceBottomSheet
 import com.galaxyjoy.cpuinfo.feat.canmydevice.CanMyDeviceProvider
 import com.galaxyjoy.cpuinfo.feat.infor.base.AdtInfoItems
 import com.galaxyjoy.cpuinfo.feat.infor.base.BaseFrm
+import com.galaxyjoy.cpuinfo.feat.infor.base.ComposeHeaderAdapter
 import com.galaxyjoy.cpuinfo.feat.infor.base.copyToClipboardAndNotify
 import com.galaxyjoy.cpuinfo.feat.infor.base.shrinkFabOnScroll
 import com.galaxyjoy.cpuinfo.feat.truth.DeviceTruthBottomSheet
@@ -61,7 +62,25 @@ class FrmCpuInfo : BaseFrm<FrmCpuInfoBinding>(R.layout.frm_cpu_info), AdtInfoIte
             viewLifecycleOwner,
             ListLiveDataObserver(adtCpuInfo),
         )
-        binding.rv.adapter = adtCpuInfo
+
+        // F09/U06 — cluster topology + AI readiness + capability bar are item 0 of this
+        // ConcatAdapter (not a sticky ComposeView sibling) so they scroll away with the rest of
+        // the list through the RecyclerView's own scroll, keeping shrinkFabOnScroll below fed
+        // with real scroll deltas.
+        val headerAdapter = ComposeHeaderAdapter {
+            CpuInfoTheme {
+                Column {
+                    ClusterTopologyScreen(clusters = clusterTopologyProvider.clusters())
+                    AiReadinessBar(result = aiReadinessProvider.evaluate()) {
+                        AiReadinessBottomSheet().show(childFragmentManager, AiReadinessBottomSheet.TAG)
+                    }
+                    CanMyDeviceBar(result = canMyDeviceProvider.evaluate()) {
+                        CanMyDeviceBottomSheet().show(childFragmentManager, CanMyDeviceBottomSheet.TAG)
+                    }
+                }
+            }
+        }
+        binding.rv.adapter = ConcatAdapter(headerAdapter, adtCpuInfo)
 
         viewModel.viewState.observe(viewLifecycleOwner) { state ->
             displayItems.replace(toDisplayItems(state.cpuData))
@@ -71,23 +90,6 @@ class FrmCpuInfo : BaseFrm<FrmCpuInfoBinding>(R.layout.frm_cpu_info), AdtInfoIte
             DeviceTruthBottomSheet().show(childFragmentManager, DeviceTruthBottomSheet.TAG)
         }
         binding.rv.shrinkFabOnScroll(binding.fabDeviceTruth)
-
-        binding.clusterTopologyCompose.apply {
-            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-            setContent {
-                CpuInfoTheme {
-                    Column {
-                        ClusterTopologyScreen(clusters = clusterTopologyProvider.clusters())
-                        AiReadinessBar(result = aiReadinessProvider.evaluate()) {
-                            AiReadinessBottomSheet().show(childFragmentManager, AiReadinessBottomSheet.TAG)
-                        }
-                        CanMyDeviceBar(result = canMyDeviceProvider.evaluate()) {
-                            CanMyDeviceBottomSheet().show(childFragmentManager, CanMyDeviceBottomSheet.TAG)
-                        }
-                    }
-                }
-            }
-        }
     }
 
     private fun toDisplayItems(data: CpuData): List<CpuRow> {
