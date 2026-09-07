@@ -32,7 +32,7 @@
     <string name="language_picker_title">Vyberte jazyk</string>
     <string name="language_system_default">Výchozí systému</string>
     <string name="language_change">Změnit jazyk</string>
-    <string name="running_gc">Spouštění čištění</string>
+    <string name="running_gc">Spouštění Garbage Collector</string>
     <string name="text_copied">Hodnota zkopírována</string>
     <string name="external_facing">Externí</string>
     <string name="drm_supported">%1$s podporováno</string>
@@ -65,7 +65,7 @@
     <string name="display_cutout">Výřez displeje</string>
     <string name="display_cutout_none">Žádný</string>
     <string name="display_cutout_rects">%1$d obdélníků</string>
-    <string name="action_gc">Sběrač odpadu</string>
+    <string name="action_gc">Garbage Collector</string>
     <string name="media">Média</string>
     <string name="network">Síť</string>
     <string name="audio">Zvuk</string>
@@ -210,8 +210,8 @@
     <string name="vip_gift_button">Darovat příteli 1 den VIP</string>
     <string name="vip_gift_share_message">Používám CPU Info — tady je bezplatný dárkový kód na 1 den VIP! Vlož ho do pole pro uplatnění kódu na obrazovce VIP: %1$s</string>
     <string name="vip_gift_share_chooser_title">Sdílet dárkový kód VIP</string>
-    <string name="vip_gift_already_generated_today">Dnes už jsi vygeneroval dárkový kód — zkus to znovu zítra</string>
-    <string name="vip_gift_already_redeemed_today">Dnes už jsi uplatnil dárkový kód — zkus to znovu zítra</string>
+    <string name="vip_gift_already_generated_today">Dnes už jste vygenerovali dárkový kód — zkuste to znovu zítra</string>
+    <string name="vip_gift_already_redeemed_today">Dnes už jste uplatnili dárkový kód — zkuste to znovu zítra</string>
     <string name="vip_watch_ad_failed">Reklama není dostupná, zkuste to později.</string>
     <string name="vip_buy_30d_locked">Koupit VIP na 30 dnů — brzy</string>
     <string name="vip_buy_90d_locked">Koupit VIP na 90 dnů — brzy</string>
@@ -256,11 +256,11 @@
     <string name="throttle_compare_previous">%1$+d %% oproti poslednímu testu</string>
     <string name="throttle_no_previous">Toto je váš první test</string>
     <string name="throttle_benchmark_score_label">Skóre testu</string>
-    <string name="throttle_benchmark_score_value">%1$s op/s</string>
+    <string name="throttle_benchmark_score_value">%1$s ops/s</string>
     <string name="throttle_score_compare_previous">%1$+d%% oproti poslednímu skóre</string>
     <string name="throttle_share_button">Sdílet výsledek</string>
     <string name="throttle_done_button">Hotovo</string>
-    <string name="throttle_share_text">Throttling Fingerprint — CPU Info\nŠpička: %1$d MHz\nUstálená: %2$d MHz\nPokles: %3$d %%\nMax. teplota: %4$d°C\nSkóre testu: %5$d op/s</string>
+    <string name="throttle_share_text">Throttling Fingerprint — CPU Info\nŠpička: %1$d MHz\nUstálená: %2$d MHz\nPokles: %3$d %%\nMax. teplota: %4$d°C\nSkóre testu: %5$d ops/s</string>
     <!--Security checklist (F04)-->
     <string name="security_patch_level">Bezpečnostní záplata</string>
     <string name="selinux_status">SELinux</string>
@@ -617,10 +617,10 @@
     <string name="cluster_bench_aborted_overheat">Test přeskočen — zařízení je teď příliš teplé. Zkuste to znovu po vychladnutí.</string>
     <string name="cluster_bench_aborted_interrupted">Test byl zastaven před dokončením.</string>
     <string name="cluster_bench_row_label">%1$s (%2$d jader)</string>
-    <string name="cluster_bench_ops_value">%1$s op/s</string>
+    <string name="cluster_bench_ops_value">%1$s ops/s</string>
     <string name="cluster_bench_done_button">Hotovo</string>
     <string name="cluster_bench_share_button">Sdílet</string>
-    <string name="cluster_bench_share_segment">%1$s (%2$d jader): %3$s op/s</string>
+    <string name="cluster_bench_share_segment">%1$s (%2$d jader): %3$s ops/s</string>
     <string name="cluster_bench_share_text">Test clusterů — %1$s</string>
     <string name="cluster_bench_affinity_warning">⚠ nepodařilo se připnout na jádra tohoto clusteru — výsledek nemusí být přesný</string>
 

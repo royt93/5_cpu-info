@@ -116,8 +116,8 @@
     <string name="dp_width">Szerokość Dp</string>
     <string name="dp_height">Wysokość Dp</string>
     <string name="density">Gęstość</string>
-    <string name="absolute_width">Dostępna szerokość</string>
-    <string name="absolute_height">Dostępna wysokość</string>
+    <string name="absolute_width">Bezwzględna szerokość</string>
+    <string name="absolute_height">Bezwzględna wysokość</string>
     <string name="refresh_rate">Odświeżanie</string>
     <string name="orientation">Orientacja</string>
     <!--Android-->
@@ -126,7 +126,7 @@
     <string name="model">Model</string>
     <string name="manufacturer">Producent</string>
     <string name="board">Płyta główna</string>
-    <string name="serial">Serial</string>
+    <string name="serial">Numer seryjny</string>
     <string name="rooted">Zrootowany</string>
     <string name="encrypted_storage">Zaszyfrowana pamięć</string>
     <string name="security_providers">Dostawcy zabezpieczeń</string>
@@ -282,11 +282,11 @@
     <string name="throttle_compare_previous">%1$+d%% w porównaniu do ostatniego testu</string>
     <string name="throttle_no_previous">To Twój pierwszy test</string>
     <string name="throttle_benchmark_score_label">Wynik testu</string>
-    <string name="throttle_benchmark_score_value">%1$s op/s</string>
+    <string name="throttle_benchmark_score_value">%1$s ops/s</string>
     <string name="throttle_score_compare_previous">%1$+d%% vs poprzedni wynik</string>
     <string name="throttle_share_button">Udostępnij wynik</string>
     <string name="throttle_done_button">Gotowe</string>
-    <string name="throttle_share_text">Throttling Fingerprint — CPU Info\nSzczyt: %1$d MHz\nUstabilizowana: %2$d MHz\nSpadek: %3$d%%\nMaks. temp.: %4$d°C\nWynik testu: %5$d op/s</string>
+    <string name="throttle_share_text">Throttling Fingerprint — CPU Info\nSzczyt: %1$d MHz\nUstabilizowana: %2$d MHz\nSpadek: %3$d%%\nMaks. temp.: %4$d°C\nWynik testu: %5$d ops/s</string>
     <!--Security checklist (F04)-->
     <string name="security_patch_level">Poprawka zabezpieczeń</string>
     <string name="selinux_status">SELinux</string>
@@ -459,7 +459,7 @@
     <string name="fleet_compare_disclaimer">Porównuje Twoje urządzenie z małą, offline\'ową tabelą referencyjną znanych modeli — żadne dane o Twoim urządzeniu nigdzie nie są wysyłane. Zgłaszana pamięć RAM/pamięć masowa jest zwykle nieco niższa niż podana wartość reklamowa.</string>
     <string name="network_wifi_section">Wi-Fi</string>
     <string name="network_status">Stan</string>
-    <string name="network_disconnected">Niepołączono</string>
+    <string name="network_disconnected">Nie połączono</string>
     <string name="network_connected">Połączono</string>
     <string name="network_ssid">Nazwa sieci (SSID)</string>
     <string name="network_bssid">Punkt dostępu (BSSID)</string>
@@ -617,10 +617,10 @@
     <string name="cluster_bench_aborted_overheat">Test pominięty — urządzenie jest teraz zbyt ciepłe. Spróbuj ponownie po ostygnięciu.</string>
     <string name="cluster_bench_aborted_interrupted">Test zatrzymany przed zakończeniem.</string>
     <string name="cluster_bench_row_label">%1$s (%2$d rdzeni)</string>
-    <string name="cluster_bench_ops_value">%1$s op/s</string>
+    <string name="cluster_bench_ops_value">%1$s ops/s</string>
     <string name="cluster_bench_done_button">Gotowe</string>
     <string name="cluster_bench_share_button">Udostępnij</string>
-    <string name="cluster_bench_share_segment">%1$s (%2$d rdzeni): %3$s op/s</string>
+    <string name="cluster_bench_share_segment">%1$s (%2$d rdzeni): %3$s ops/s</string>
     <string name="cluster_bench_share_text">Test klastrów — %1$s</string>
     <string name="cluster_bench_affinity_warning">⚠ nie udało się przypiąć do rdzeni tego klastra — wynik może być niedokładny</string>
 

@@ -116,7 +116,7 @@
     <string name="absolute_width">Absolute Breite</string>
     <string name="absolute_height">Absolute Höhe</string>
     <string name="refresh_rate">Bildwiederholrate</string>
-    <string name="orientation">Rotation</string>
+    <string name="orientation">Ausrichtung</string>
     <!--Android-->
     <string name="codename">Codename</string>
     <string name="brand">Marke</string>
@@ -533,9 +533,9 @@
     <string name="can_my_device_q_slow_motion">240fps+ Zeitlupenvideos aufnehmen?</string>
     <string name="can_my_device_q_vulkan_gaming">Grafikintensive Spiele über Vulkan spielen?</string>
     <string name="can_my_device_q_on_device_ai">Kleines LLM/KI-Modell lokal auf dem Gerät ausführen?</string>
-    <string name="pref_rate_app_summary">Wenn Ihnen die App gefällt, freuen wir uns über eine 5-Sterne-Bewertung!</string>
-    <string name="pref_more_app_summary">Entdecken Sie weitere spannende Apps von uns im Play Store!</string>
-    <string name="pref_share_app_summary">Diese App ist großartig — teilen Sie sie mit Ihren Freunden!</string>
+    <string name="pref_rate_app_summary">Wenn dir die App gefällt, freuen wir uns über eine 5-Sterne-Bewertung!</string>
+    <string name="pref_more_app_summary">Entdecke weitere spannende Apps von uns im Play Store!</string>
+    <string name="pref_share_app_summary">Diese App ist großartig — teile sie mit deinen Freunden!</string>
     <string name="pref_policy_app_summary">Nutzungsbedingungen und Datenschutzrichtlinie</string>
     <string name="splash_ad_notice">Hinweis: Bei dieser Aktion wird möglicherweise Werbung angezeigt</string>
     <!--Realtime Dashboard (F01)-->
