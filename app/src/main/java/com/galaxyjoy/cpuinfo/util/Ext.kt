@@ -2,12 +2,14 @@
 
 package com.galaxyjoy.cpuinfo.util
 
+import android.animation.ObjectAnimator
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.net.Uri
 import android.os.Build
+import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
@@ -125,6 +127,40 @@ fun Context.isNightMode(): Boolean =
     (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
 
 /**
+ * The general "accent" color for small UI elements drawn on the app's normal surface/background —
+ * section header text, progress bar fill, highlight icons (`R.color.accent`'s old static role
+ * throughout `feat/infor` — `AdtInfoItems`, `view_holder_cpu_frequency.xml`'s progressColor,
+ * `vi_item_storage.xml`, etc.). Unlike [resolveActionBarColor], this always uses `primary`
+ * (never `primaryContainer`) regardless of theme: here `primary` is a FOREGROUND accent against
+ * the theme's own neutral surface (light: dark-saturated text on a light row = fine; dark:
+ * light/pastel text on a dark row = ALSO fine) — it's only a problem as a large filled
+ * BACKGROUND in dark mode (see [resolveActionBarColor] kdoc), which this usage never is.
+ */
+fun Context.resolveAccentColor(useDarkTheme: Boolean): Int {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        val scheme = if (useDarkTheme) dynamicDarkColorScheme(this) else dynamicLightColorScheme(this)
+        scheme.primary.toArgb()
+    } else {
+        ContextCompat.getColor(this, R.color.accent)
+    }
+}
+
+/**
+ * Text/icon color for content drawn ON an [resolveAccentColor]-filled element (a solid button
+ * background, e.g. VIP screen's "Kích hoạt"/"Watch ad" buttons — old static
+ * `@color/btn_primary_activate_text`). Always `onPrimary` (matches [resolveAccentColor] always
+ * using `primary`, never `primaryContainer`).
+ */
+fun Context.resolveOnAccentColor(useDarkTheme: Boolean): Int {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        val scheme = if (useDarkTheme) dynamicDarkColorScheme(this) else dynamicLightColorScheme(this)
+        scheme.onPrimary.toArgb()
+    } else {
+        ContextCompat.getColor(this, R.color.btn_primary_activate_text)
+    }
+}
+
+/**
  * The color for text/icons drawn ON [resolveActionBarColor] (title, tab labels, bottom nav
  * icons, menu action icons) — the counterpart token to whichever role [resolveActionBarColor]
  * picked (`onPrimary` for light's `primary`, `onPrimaryContainer` for dark's `primaryContainer`).
@@ -210,4 +246,61 @@ fun android.view.View.applyStatusBarColorToToolbar(color: Int) {
         v.updatePadding(top = initialPadding + top)
         insets
     }
+}
+
+private const val SKELETON_PULSE_DURATION_MS = 800L
+
+/**
+ * Starts an infinite alpha pulse on [this] view (a `layout_skeleton_list.xml` overlay) — a
+ * hand-rolled placeholder-loading affordance rather than a true diagonal shimmer sweep, to avoid
+ * pulling in a new UI library for what most tabs show for well under a second (they read
+ * hardware/system data directly, no network) — matches the existing hand-rolled
+ * `ObjectAnimator`-based pulse/glow pattern already used for the VIP crown badge
+ * ([com.galaxyjoy.cpuinfo.feat.vip.FVipManagement]) rather than introducing a second animation
+ * approach. Call [stopSkeletonPulse] once real data arrives.
+ */
+fun View.startSkeletonPulse() {
+    visibility = View.VISIBLE
+    alpha = 1f
+    tag = ObjectAnimator.ofFloat(this, View.ALPHA, 1f, 0.4f).apply {
+        duration = SKELETON_PULSE_DURATION_MS
+        repeatMode = ObjectAnimator.REVERSE
+        repeatCount = ObjectAnimator.INFINITE
+        start()
+    }
+}
+
+/** Stops the pulse started by [startSkeletonPulse] and hides the skeleton overlay. */
+fun View.stopSkeletonPulse() {
+    (tag as? ObjectAnimator)?.cancel()
+    tag = null
+    alpha = 1f
+    visibility = View.GONE
+}
+
+/**
+ * Shows [this] skeleton overlay (pulsing) until [adapter] reports its first real data, then
+ * hides it — generic across every info tab regardless of whether that adapter's data arrives via
+ * LiveData/Flow observation or is already present synchronously at call time. Takes the adapter
+ * explicitly rather than reading it off the `RecyclerView` — matters for `ConcatAdapter` cases
+ * (e.g. FrmCpuInfo's Compose header + list): the *outer* `ConcatAdapter.itemCount` is never 0
+ * (the header alone counts as 1), so pass the inner data-bearing adapter (e.g. `AdtCpuInfo`) here,
+ * not the `ConcatAdapter` itself, or the skeleton would never show.
+ */
+fun View.hideSkeletonAfterFirstData(adapter: androidx.recyclerview.widget.RecyclerView.Adapter<*>) {
+    if (adapter.itemCount > 0) {
+        stopSkeletonPulse()
+        return
+    }
+    startSkeletonPulse()
+    val skeleton = this
+    adapter.registerAdapterDataObserver(object : androidx.recyclerview.widget.RecyclerView.AdapterDataObserver() {
+        private fun hideIfHasData() {
+            if (adapter.itemCount == 0) return
+            skeleton.stopSkeletonPulse()
+            adapter.unregisterAdapterDataObserver(this)
+        }
+        override fun onChanged() = hideIfHasData()
+        override fun onItemRangeInserted(positionStart: Int, itemCount: Int) = hideIfHasData()
+    })
 }

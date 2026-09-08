@@ -7,6 +7,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.galaxyjoy.cpuinfo.R
 import com.galaxyjoy.cpuinfo.util.Utils
+import com.galaxyjoy.cpuinfo.util.isNightMode
+import com.galaxyjoy.cpuinfo.util.resolveAccentColor
 import com.galaxyjoy.cpuinfo.util.round2
 import com.galaxyjoy.cpuinfo.widget.progress.IconRoundCornerProgressBar
 
@@ -34,6 +36,12 @@ class AdtStorage(private val storageList: List<StorageItem>) :
             itemView.findViewById(R.id.storageDescriptionTv)
         private val storageProgress: IconRoundCornerProgressBar =
             itemView.findViewById(R.id.storageProgress)
+
+        init {
+            // XML's app:progressColor="@color/primary" is static — same fix as AdtCpuInfo.
+            val ctx = itemView.context
+            storageProgress.progressColor = ctx.resolveAccentColor(ctx.isNightMode())
+        }
 
         fun bindViewHolder(storageItem: StorageItem) {
             val totalReadable = Utils.humanReadableByteCount(storageItem.storageTotal)

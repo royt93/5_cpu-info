@@ -26,6 +26,8 @@
              same shrink-on-scroll style as the Sensors tab's FAB (see FabScrollBehavior.kt):
              shows its label at rest, shrinks to an icon-only pill while the list scrolls so it
              never permanently dominates the screen or covers content. -->
+        <include layout="@layout/layout_skeleton_list" />
+
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/fabDeviceTruth"
             android:layout_width="wrap_content"

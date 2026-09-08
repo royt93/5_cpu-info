@@ -3,16 +3,24 @@ package com.galaxyjoy.cpuinfo.feat.setting
 import android.Manifest
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.content.res.ColorStateList
 import android.os.Build
 import android.os.Bundle
+import android.view.View
+import android.view.ViewGroup
+import android.widget.CompoundButton
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.core.widget.CompoundButtonCompat
 import androidx.fragment.app.FragmentManager
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.RecyclerView
+import com.galaxyjoy.cpuinfo.util.isNightMode
+import com.galaxyjoy.cpuinfo.util.resolveAccentColor
 import com.galaxyjoy.cpuinfo.BuildConfig
 import com.galaxyjoy.cpuinfo.R
 import com.galaxyjoy.cpuinfo.ext.openBrowserPolicy
@@ -130,6 +138,68 @@ class FrmSettings : PreferenceFragmentCompat(),
                 readTemperatureUnitLabel(currentTemperatureUnitValue())
             findPreference<Preference>(KEY_THEME_CONFIG)?.summary = readThemeLabel(currentThemeValue())
             Toast.makeText(requireContext(), R.string.backup_import_success, Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        applyDynamicAccentToPreferenceViews()
+    }
+
+    /**
+     * androidx.preference has no public per-instance hook for either of these, both driven by the
+     * static theme default (`colorControlActivated`/`colorAccent` = `@color/accent`) — found both
+     * still cyan during Material You audit:
+     *  - `SwitchPreferenceCompat`'s ON-state track/thumb tint.
+     *  - `PreferenceCategory` title text color (`?attr/colorAccent` by default style).
+     * Walks the actual `RecyclerView` children to fix both directly. `PreferenceCategory` titles
+     * aren't otherwise distinguishable from a regular `Preference`'s title in the View tree, so
+     * they're detected by matching the OLD static accent color the system painted them with —
+     * regular titles use a different (text primary) color and are left untouched.
+     */
+    private fun applyDynamicAccentToPreferenceViews() {
+        val ctx = requireContext()
+        val staticAccent = ContextCompat.getColor(ctx, R.color.accent)
+        // A single flat ColorStateList.valueOf(accent) would tint BOTH checked and unchecked
+        // switch states the same color, losing the visual on/off distinction (audit self-review
+        // — caught before this ever shipped). Unchecked keeps the same neutral gray the OS
+        // default used (@color/progressBackground, already the app's standard "track" gray).
+        val accentColor = ctx.resolveAccentColor(ctx.isNightMode())
+        val uncheckedColor = ContextCompat.getColor(ctx, R.color.progressBackground)
+        val tint = ColorStateList(
+            arrayOf(
+                intArrayOf(android.R.attr.state_checked),
+                intArrayOf(-android.R.attr.state_checked),
+            ),
+            intArrayOf(accentColor, uncheckedColor),
+        )
+        val rv = listView ?: return
+        rv.addOnChildAttachStateChangeListener(object : RecyclerView.OnChildAttachStateChangeListener {
+            override fun onChildViewAttachedToWindow(attached: View) =
+                tintPreferenceView(attached, staticAccent, accentColor, tint)
+            override fun onChildViewDetachedFromWindow(detached: View) = Unit
+        })
+        for (i in 0 until rv.childCount) {
+            tintPreferenceView(rv.getChildAt(i), staticAccent, accentColor, tint)
+        }
+    }
+
+    private fun tintPreferenceView(view: View, staticAccent: Int, accentColor: Int, switchTint: ColorStateList) {
+        when {
+            view is CompoundButton -> CompoundButtonCompat.setButtonTintList(view, switchTint)
+            // Flat accentColor, NOT switchTint: TextView isn't Checkable, so its drawable state
+            // never contains state_checked, meaning switchTint's `-state_checked` item would
+            // always match and silently paint every category title gray (progressBackground)
+            // instead of the accent color (bug found + fixed during this round's audit — the
+            // instrumented test only asserted "not the old cyan", which a wrong gray also
+            // satisfies, so it didn't catch this).
+            view is android.widget.TextView && isLikelyCategoryTitle(view.currentTextColor, staticAccent) ->
+                view.setTextColor(accentColor)
+        }
+        if (view is ViewGroup) {
+            for (i in 0 until view.childCount) {
+                tintPreferenceView(view.getChildAt(i), staticAccent, accentColor, switchTint)
+            }
         }
     }
 
@@ -433,3 +503,13 @@ class FrmSettings : PreferenceFragmentCompat(),
         }
     }
 }
+
+/**
+ * `PreferenceCategory` titles aren't otherwise distinguishable from a regular `Preference`'s
+ * title in the rendered View tree — this is the actual decision `tintPreferenceView` uses: a
+ * `TextView` gets re-tinted only if the system already painted it with the OLD static accent
+ * color (which only `PreferenceCategory`'s default style does). Pulled out as a pure top-level
+ * function so it's JVM-testable without a real Android view tree (see `FrmSettingsTest`).
+ */
+internal fun isLikelyCategoryTitle(currentTextColor: Int, staticAccentColor: Int): Boolean =
+    currentTextColor == staticAccentColor

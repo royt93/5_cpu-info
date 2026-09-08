@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.galaxyjoy.cpuinfo.R
 import com.galaxyjoy.cpuinfo.databinding.ViewHolderCpuFrequencyBinding
 import com.galaxyjoy.cpuinfo.feat.infor.base.AdtInfoItems
+import com.galaxyjoy.cpuinfo.util.isNightMode
+import com.galaxyjoy.cpuinfo.util.resolveAccentColor
 
 /** One row of [FrmCpuInfo]'s list — either a live per-core frequency gauge or a plain title/value line. */
 sealed interface CpuRow {
@@ -60,6 +62,13 @@ class AdtCpuInfo(
     class FrequencyViewHolder(
         private val binding: ViewHolderCpuFrequencyBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
+
+        init {
+            // XML's app:progressColor="@color/primary" is static — same fix as the toolbar/tab
+            // audit, applied here since this progress bar's fill was still showing static teal.
+            val ctx = binding.root.context
+            binding.progressBarFrequency.progressColor = ctx.resolveAccentColor(ctx.isNightMode())
+        }
 
         fun bind(row: CpuRow.FrequencyRow) {
             binding.currentFrequency = row.current

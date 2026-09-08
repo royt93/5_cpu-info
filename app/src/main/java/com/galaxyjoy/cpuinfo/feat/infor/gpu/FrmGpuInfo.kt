@@ -40,6 +40,7 @@ import com.galaxyjoy.cpuinfo.feat.infor.base.ComposeHeaderAdapter
 import com.galaxyjoy.cpuinfo.feat.infor.base.copyToClipboardAndNotify
 import com.galaxyjoy.cpuinfo.ui.theme.CpuInfoTheme
 import com.galaxyjoy.cpuinfo.util.DividerItemDecoration
+import com.galaxyjoy.cpuinfo.util.hideSkeletonAfterFirstData
 import com.galaxyjoy.cpuinfo.util.lifecycle.ListLiveData
 import com.galaxyjoy.cpuinfo.util.lifecycle.ListLiveDataObserver
 import dagger.hilt.android.AndroidEntryPoint
@@ -142,6 +143,8 @@ class FrmGpuInfo : BaseFrm<FrmGpuInfoBinding>(R.layout.frm_gpu_info), AdtInfoIte
             }
         }
         binding.rv.adapter = ConcatAdapter(headerAdapter, adtInfoItems)
+        // Same reasoning as FrmCpuInfo.kt — watch adtInfoItems, not the outer ConcatAdapter.
+        view.findViewById<View>(R.id.skeletonContainer)?.hideSkeletonAfterFirstData(adtInfoItems)
 
         viewModel.viewState.observe(viewLifecycleOwner) { state ->
             displayItems.replace(toDisplayItems(state.gpuData))

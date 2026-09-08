@@ -59,6 +59,9 @@ class ActHost : BaseActivity() {
 
     private companion object {
         private const val TAG = "roy93~ActHost"
+
+        /** Alpha (0-255) for the bottom nav's selected-item indicator pill — translucent so it reads as a highlight, not a solid fill. */
+        private const val NAV_ACTIVE_INDICATOR_ALPHA = 60
     }
 
     private lateinit var navController: NavController
@@ -271,6 +274,13 @@ class ActHost : BaseActivity() {
         binding.bottomNavigation.setBackgroundColor(actionBarColor)
         binding.bottomNavigation.itemIconTintList = android.content.res.ColorStateList.valueOf(actionBarContentColor)
         binding.bottomNavigation.itemTextColor = android.content.res.ColorStateList.valueOf(actionBarContentColor)
+        // Selected item's "active indicator" pill defaults to the theme's own
+        // ?attr/colorSecondaryContainer (untouched by our dynamic overrides above) — looked
+        // mismatched/low-contrast against the dynamic bg. A translucent version of the resolved
+        // content color reads as a coherent highlight regardless of theme/wallpaper.
+        binding.bottomNavigation.itemActiveIndicatorColor = android.content.res.ColorStateList.valueOf(
+            androidx.core.graphics.ColorUtils.setAlphaComponent(actionBarContentColor, NAV_ACTIVE_INDICATOR_ALPHA),
+        )
         val initialPadding = binding.bottomNavigation.paddingBottom
         ViewCompat.setOnApplyWindowInsetsListener(binding.bottomNavigation) { v, insets ->
             val navBarInset = insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom

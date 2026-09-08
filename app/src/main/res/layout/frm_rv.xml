@@ -13,6 +13,8 @@
             android:scrollbars="vertical"
             tools:listitem="@layout/vi_item_value" />
 
+        <include layout="@layout/layout_skeleton_list" />
+
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>

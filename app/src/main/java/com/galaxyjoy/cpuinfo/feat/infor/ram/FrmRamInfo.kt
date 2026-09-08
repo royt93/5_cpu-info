@@ -20,6 +20,7 @@ import com.galaxyjoy.cpuinfo.feat.infor.base.BaseFrm
 import com.galaxyjoy.cpuinfo.feat.infor.base.copyToClipboardAndNotify
 import com.galaxyjoy.cpuinfo.util.DividerItemDecoration
 import com.galaxyjoy.cpuinfo.util.Utils
+import com.galaxyjoy.cpuinfo.util.hideSkeletonAfterFirstData
 import com.galaxyjoy.cpuinfo.util.lifecycle.ListLiveData
 import com.galaxyjoy.cpuinfo.util.lifecycle.ListLiveDataObserver
 import com.galaxyjoy.cpuinfo.util.runOnApiBelow
@@ -50,6 +51,7 @@ class FrmRamInfo : BaseFrm<FrmRecyclerViewBinding>(R.layout.frm_recycler_view),
             ListLiveDataObserver(adtInfoItems),
         )
         binding.rv.adapter = adtInfoItems
+        view.findViewById<View>(R.id.skeletonContainer)?.hideSkeletonAfterFirstData(adtInfoItems)
 
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(object : MenuProvider {

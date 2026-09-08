@@ -8,6 +8,8 @@ import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.galaxyjoy.cpuinfo.R
+import com.galaxyjoy.cpuinfo.util.isNightMode
+import com.galaxyjoy.cpuinfo.util.resolveAccentColor
 
 /**
  * Adapter for all info items inside [BaseRvFragment]. It should support two types of layouts:
@@ -76,7 +78,12 @@ class AdtInfoItems(
             valueTv.text = item.second
 
             if (item.second.isEmpty()) {
-                titleTv.setTextColor(ContextCompat.getColor(titleTv.context, R.color.accent))
+                // R.color.accent was static — Material You audit found this the single shared
+                // spot behind "still cyan" complaints across nearly every info tab (CPU/RAM/
+                // Android/Audio/Battery/...), since they all render section headers through this
+                // one adapter.
+                val ctx = titleTv.context
+                titleTv.setTextColor(ctx.resolveAccentColor(ctx.isNightMode()))
                 valueTv.visibility = View.GONE
             } else {
                 titleTv.setTextColor(

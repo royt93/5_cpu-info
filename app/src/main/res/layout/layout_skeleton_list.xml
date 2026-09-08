@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Generic loading placeholder for any info tab whose real content is a plain title/value row
+  list (vi_item_value.xml's shape). Shown until the real RecyclerView adapter reports its first
+  data (see BaseRvFragment.kt/FrmCpuInfo.kt/FrmGpuInfo.kt/FrmRamInfo.kt "skeleton" wiring) — most
+  tabs read hardware/system data directly (no network), so this is usually visible only very
+  briefly, but was found to flash blank/empty instead of showing any loading affordance.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/skeletonContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorSurface"
+    android:orientation="vertical"
+    android:paddingTop="8dp">
+
+    <include layout="@layout/vi_item_skeleton_row" />
+    <include layout="@layout/vi_item_skeleton_row" />
+    <include layout="@layout/vi_item_skeleton_row" />
+    <include layout="@layout/vi_item_skeleton_row" />
+    <include layout="@layout/vi_item_skeleton_row" />
+    <include layout="@layout/vi_item_skeleton_row" />
+    <include layout="@layout/vi_item_skeleton_row" />
+
+</LinearLayout>

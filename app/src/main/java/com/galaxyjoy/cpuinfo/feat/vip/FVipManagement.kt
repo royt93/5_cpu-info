@@ -21,6 +21,9 @@ import com.galaxyjoy.cpuinfo.databinding.FVipManagementBinding
 import com.galaxyjoy.cpuinfo.feat.vip.gift.VipGiftCode
 import com.galaxyjoy.cpuinfo.feat.vip.gift.VipGiftLogic
 import com.galaxyjoy.cpuinfo.feat.vip.gift.VipGiftPrefs
+import com.galaxyjoy.cpuinfo.util.isNightMode
+import com.galaxyjoy.cpuinfo.util.resolveAccentColor
+import com.galaxyjoy.cpuinfo.util.resolveOnAccentColor
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.roy.sdkadbmob.AdManager
 import java.text.SimpleDateFormat
@@ -76,9 +79,37 @@ class FVipManagement : Fragment() {
         Log.d(TAG, "onViewCreated → preload rewarded")
         AdManager.loadRewarded(requireContext())
 
+        applyDynamicAccentColors()
         setupListeners()
         listenForRevokeResult()
         bindUi()
+    }
+
+    /**
+     * XML hardcodes `@color/accent`/`@color/btn_primary_activate(_text)` — static, found still
+     * cyan during Material You audit. Override at runtime with the resolved dynamic-or-static
+     * accent (same [com.galaxyjoy.cpuinfo.util.resolveAccentColor] used across `feat/infor`).
+     */
+    private fun applyDynamicAccentColors() {
+        val nightMode = requireContext().isNightMode()
+        val accentColor = requireContext().resolveAccentColor(nightMode)
+        val onAccentColor = requireContext().resolveOnAccentColor(nightMode)
+        val accentColorStateList = android.content.res.ColorStateList.valueOf(accentColor)
+
+        binding.tvVipStatsTitle.setTextColor(accentColor)
+        binding.tvPrivacyPolicy.setTextColor(accentColor)
+
+        binding.tilRedeemKey.boxStrokeColor = accentColor
+        binding.tilRedeemKey.defaultHintTextColor = accentColorStateList
+        binding.tilRedeemKey.setEndIconTintList(accentColorStateList)
+        binding.tilRedeemKey.setStartIconTintList(accentColorStateList)
+
+        binding.btnRedeemKey.backgroundTintList = accentColorStateList
+        binding.btnRedeemKey.setTextColor(onAccentColor)
+
+        binding.btnWatchAd.backgroundTintList = accentColorStateList
+        binding.btnWatchAd.setTextColor(onAccentColor)
+        binding.btnWatchAd.iconTint = android.content.res.ColorStateList.valueOf(onAccentColor)
     }
 
     private fun setupListeners() {

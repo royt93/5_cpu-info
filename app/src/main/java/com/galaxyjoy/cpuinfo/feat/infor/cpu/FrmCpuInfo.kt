@@ -24,6 +24,7 @@ import com.galaxyjoy.cpuinfo.feat.infor.base.shrinkFabOnScroll
 import com.galaxyjoy.cpuinfo.feat.truth.DeviceTruthBottomSheet
 import com.galaxyjoy.cpuinfo.ui.theme.CpuInfoTheme
 import com.galaxyjoy.cpuinfo.util.DividerItemDecoration
+import com.galaxyjoy.cpuinfo.util.hideSkeletonAfterFirstData
 import com.galaxyjoy.cpuinfo.util.lifecycle.ListLiveData
 import com.galaxyjoy.cpuinfo.util.lifecycle.ListLiveDataObserver
 import dagger.hilt.android.AndroidEntryPoint
@@ -81,6 +82,11 @@ class FrmCpuInfo : BaseFrm<FrmCpuInfoBinding>(R.layout.frm_cpu_info), AdtInfoIte
             }
         }
         binding.rv.adapter = ConcatAdapter(headerAdapter, adtCpuInfo)
+        // Real data arrives via viewModel.viewState below, not synchronously — was flashing
+        // blank/empty in the meantime instead of showing any loading affordance. Watches
+        // adtCpuInfo specifically, not the outer ConcatAdapter (headerAdapter alone always
+        // contributes 1 item, which would make the ConcatAdapter's own itemCount never 0).
+        view.findViewById<View>(R.id.skeletonContainer)?.hideSkeletonAfterFirstData(adtCpuInfo)
 
         viewModel.viewState.observe(viewLifecycleOwner) { state ->
             displayItems.replace(toDisplayItems(state.cpuData))

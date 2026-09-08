@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.galaxyjoy.cpuinfo.R
+import com.galaxyjoy.cpuinfo.util.hideSkeletonAfterFirstData
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -46,6 +47,12 @@ abstract class BaseRvFragment : Fragment(), AdtInfoItems.OnClickListener {
         recyclerView = view.findViewById(R.id.rv)
         setupRecyclerView()
         setupRecyclerViewAdapter()
+        // Most tabs here read hardware/system data directly (no network), so real content
+        // usually replaces this within well under a second — but it was flashing blank/empty
+        // instead of showing any loading affordance in the meantime (Material You audit).
+        recyclerView.adapter?.let { adapter ->
+            view.findViewById<View>(R.id.skeletonContainer)?.hideSkeletonAfterFirstData(adapter)
+        }
         return view
     }
 
