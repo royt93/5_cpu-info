@@ -28,7 +28,7 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:text="@string/shield_score_widget_label"
-            android:textColor="@color/onSurface"
+            android:textColor="@color/widget_text"
             android:textSize="12sp" />
     </LinearLayout>
 
@@ -49,7 +49,7 @@
         android:layout_height="6dp"
         android:layout_marginTop="6dp"
         android:max="100"
-        android:progressTint="@color/accent"
+        android:progressTint="@color/widget_accent"
         tools:progress="82" />
 
 </LinearLayout>

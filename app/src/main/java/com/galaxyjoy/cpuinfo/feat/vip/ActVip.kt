@@ -2,13 +2,13 @@ package com.galaxyjoy.cpuinfo.feat.vip
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
+import androidx.activity.SystemBarStyle
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
-import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import com.galaxyjoy.cpuinfo.BaseActivity
@@ -27,12 +27,21 @@ import dagger.hilt.android.AndroidEntryPoint
 class ActVip : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Phải gọi trước setContentView() — status/nav bar cùng màu colorPrimary như toolbar
+        // (Widget.MaterialComponents.Toolbar.Primary bên dưới) theo yêu cầu match action bar.
+        // SystemBarStyle.dark(): colorOnPrimary luôn trắng ở cả 2 theme (xem util/Ext.kt
+        // setupEdgeToEdge kdoc) nên icon sáng luôn đúng, không cần .auto().
+        val primaryColor = ContextCompat.getColor(this, R.color.primary)
+        enableEdgeToEdge(
+            statusBarStyle = SystemBarStyle.dark(primaryColor),
+            navigationBarStyle = SystemBarStyle.dark(primaryColor),
+        )
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate")
         setContentView(R.layout.act_vip)
-        // Edge-to-edge — custom version có IME inset handling cho EditText trong VIP screen.
-        // Project's setupEdgeToEdge() chỉ apply systemBars, không apply IME → adjustResize
-        // không trigger khi keyboard show. Custom version combine cả systemBars + IME.
+        // Padding riêng cho IME — enableEdgeToEdge() chỉ set decorFitsSystemWindows(false),
+        // không tự apply padding/adjustResize. Project's setupEdgeToEdge() chỉ apply systemBars,
+        // không apply IME → giữ bản custom này combine cả systemBars + IME.
         setupEdgeToEdgeWithIme()
 
         val toolbar = findViewById<Toolbar>(R.id.toolbarVip)
@@ -58,10 +67,6 @@ class ActVip : BaseActivity() {
      * vào view above keyboard).
      */
     private fun setupEdgeToEdgeWithIme() {
-        window.setBackgroundDrawable(
-            ColorDrawable(ContextCompat.getColor(this, R.color.status_bar))
-        )
-        WindowCompat.setDecorFitsSystemWindows(window, false)
         val root = findViewById<android.view.View>(android.R.id.content)
         ViewCompat.setOnApplyWindowInsetsListener(root) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())

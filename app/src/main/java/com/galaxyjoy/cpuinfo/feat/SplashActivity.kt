@@ -3,9 +3,12 @@ package com.galaxyjoy.cpuinfo.feat
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import androidx.activity.SystemBarStyle
+import androidx.activity.enableEdgeToEdge
 import androidx.lifecycle.lifecycleScope
 import com.galaxyjoy.cpuinfo.BaseActivity
 import com.galaxyjoy.cpuinfo.databinding.ActivitySplashBinding
@@ -28,6 +31,14 @@ class SplashActivity : BaseActivity() {
     private val delayedFinishRunnable = Runnable { finish() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Full-bleed splash drawable (@drawable/startup) đã che hết status/nav bar area —
+        // chỉ cần status/nav bar transparent + auto icon để không có viền màu cứng lúc App Open
+        // ad hoặc hệ thống hiện overlay đè lên, không cần custom inset listener (không có
+        // element tương tác nào sát mép màn ở splash).
+        enableEdgeToEdge(
+            statusBarStyle = SystemBarStyle.auto(Color.TRANSPARENT, Color.TRANSPARENT),
+            navigationBarStyle = SystemBarStyle.auto(Color.TRANSPARENT, Color.TRANSPARENT),
+        )
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate → request UMP consent")
         binding = ActivitySplashBinding.inflate(layoutInflater)

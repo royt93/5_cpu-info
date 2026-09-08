@@ -1,11 +1,15 @@
 package com.galaxyjoy.cpuinfo.ui.theme
 
+import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.dynamicDarkColorScheme
+import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Density
 
@@ -73,15 +77,28 @@ private val DarkColors = darkColorScheme(
     scrim = md_theme_dark_scrim,
 )
 
+/**
+ * Pure so it's JVM-testable without a Compose/instrumented test rule — [Build.VERSION.SDK_INT]
+ * is passed in rather than read directly so tests can cover both sides of the API31 threshold.
+ */
+internal fun shouldUseDynamicColor(dynamicColor: Boolean, sdkInt: Int): Boolean =
+    dynamicColor && sdkInt >= Build.VERSION_CODES.S
+
 @Composable
 fun CpuInfoTheme(
     useDarkTheme: Boolean = isSystemInDarkTheme(),
+    dynamicColor: Boolean = true,
     content: @Composable () -> Unit,
 ) {
-    val colors = if (!useDarkTheme) {
-        LightColors
-    } else {
-        DarkColors
+    val context = LocalContext.current
+    val colors = when {
+        // Dynamic color (Material You, wallpaper-based) chỉ có từ Android 12 (API 31).
+        // Dưới đó không fallback nào của hệ thống — giữ palette tĩnh branded.
+        shouldUseDynamicColor(dynamicColor, Build.VERSION.SDK_INT) -> {
+            if (useDarkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+        }
+        useDarkTheme -> DarkColors
+        else -> LightColors
     }
 
     // Lock text scale to the app's own sizing regardless of the device's system font size —

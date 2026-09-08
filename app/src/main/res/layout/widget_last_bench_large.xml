@@ -14,7 +14,7 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:text="@string/last_bench_widget_label"
-        android:textColor="@color/onSurface"
+        android:textColor="@color/widget_text"
         android:textSize="12sp" />
 
     <TextView
@@ -22,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:textColor="@color/onSurface"
+        android:textColor="@color/widget_text"
         android:textSize="14sp"
         android:textStyle="bold"
         tools:text="CPU (sustained): 2600 MHz" />
@@ -32,7 +32,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
-        android:textColor="@color/onSurface"
+        android:textColor="@color/widget_text"
         android:textSize="14sp"
         android:textStyle="bold"
         tools:text="Storage (write/read): 100.0/200.0 MB/s" />
@@ -42,7 +42,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
-        android:textColor="@color/onSurface"
+        android:textColor="@color/widget_text"
         android:textSize="14sp"
         android:textStyle="bold"
         tools:text="RAM (write/read): 4000.0/5000.0 MB/s" />
@@ -52,7 +52,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
-        android:textColor="@color/onSurface"
+        android:textColor="@color/widget_text"
         android:textSize="14sp"
         android:textStyle="bold"
         tools:text="GPU (avg FPS): 55.5 FPS" />

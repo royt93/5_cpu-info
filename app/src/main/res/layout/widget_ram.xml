@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_weight="1"
-            android:textColor="@color/onSurface"
+            android:textColor="@color/widget_text"
             android:textSize="18sp"
             android:textStyle="bold"
             tools:text="45%" />
@@ -39,7 +39,7 @@
         android:layout_height="6dp"
         android:layout_marginTop="6dp"
         android:max="100"
-        android:progressTint="@color/accent"
+        android:progressTint="@color/widget_accent"
         tools:progress="45" />
 
     <TextView
@@ -47,7 +47,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:textColor="@color/onSurface"
+        android:textColor="@color/widget_text"
         android:textSize="11sp"
         tools:text="3.5 GB free of 7.6 GB" />
 
@@ -63,7 +63,7 @@
         android:paddingEnd="12dp"
         android:paddingBottom="4dp"
         android:text="@string/ram_widget_clean_action"
-        android:textColor="@color/accent"
+        android:textColor="@color/widget_accent"
         android:textSize="12sp" />
 
 </LinearLayout>

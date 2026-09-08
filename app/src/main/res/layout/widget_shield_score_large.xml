@@ -28,7 +28,7 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:text="@string/shield_score_widget_label"
-            android:textColor="@color/onSurface"
+            android:textColor="@color/widget_text"
             android:textSize="12sp" />
     </LinearLayout>
 
@@ -49,7 +49,7 @@
         android:layout_height="6dp"
         android:layout_marginTop="6dp"
         android:max="100"
-        android:progressTint="@color/accent"
+        android:progressTint="@color/widget_accent"
         tools:progress="82" />
 
     <TextView
@@ -57,7 +57,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:textColor="@color/onSurface"
+        android:textColor="@color/widget_text"
         android:textSize="12sp"
         tools:text="RAM: 74" />
 
@@ -66,7 +66,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:textColor="@color/onSurface"
+        android:textColor="@color/widget_text"
         android:textSize="12sp"
         tools:text="Storage: 61" />
 
@@ -75,7 +75,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:textColor="@color/onSurface"
+        android:textColor="@color/widget_text"
         android:textSize="12sp"
         tools:text="Battery: 90" />
 

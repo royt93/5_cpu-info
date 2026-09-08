@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+      Home-screen widgets (RemoteViews) don't go through Activity/Compose theme — they read
+      resources directly, so dynamic color for them needs its own qualifier-based override
+      (values-v31/ + values-night-v31/) instead of the Compose dynamicColorScheme() used for
+      in-app screens (see ui/theme/Theme.kt). Default (API<31, no dynamic wallpaper color)
+      aliases straight to the existing branded palette — same look as before this migration.
+    -->
+    <color name="widget_bg">@color/surface</color>
+    <color name="widget_text">@color/onSurface</color>
+    <color name="widget_accent">@color/accent</color>
+</resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Material You dynamic (wallpaper-based) — API31+, light. system_accentN_M are framework
+         tonal-palette resources (@android:color), fixed absolute tone regardless of day/night —
+         picking a light-tone bg / dark-tone text here is what makes it read correctly in light
+         mode; the dark-mode pairing lives in values-night-v31/. -->
+    <color name="widget_bg">@android:color/system_accent1_50</color>
+    <color name="widget_text">@android:color/system_accent1_900</color>
+    <color name="widget_accent">@android:color/system_accent1_600</color>
+</resources>

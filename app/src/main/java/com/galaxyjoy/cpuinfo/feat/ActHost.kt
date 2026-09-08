@@ -10,6 +10,9 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
@@ -103,6 +106,7 @@ class ActHost : BaseActivity() {
         consumeOpenBenchTabFromWidget()
         binding = DataBindingUtil.setContentView(this, R.layout.act_host_layout)
         setupEdgeToEdge()
+        setupBottomNavigationInsetPadding()
         setupNavigation()
         setSupportActionBar(binding.toolbar)
 
@@ -236,6 +240,21 @@ class ActHost : BaseActivity() {
     }
 
     override fun onSupportNavigateUp() = navController.navigateUp()
+
+    /**
+     * `setupEdgeToEdge()` deliberately skips the bottom inset (it only owns top/left/right —
+     * see its kdoc). `bottomNavigation` is the one view actually touching the physical bottom
+     * edge (constrained to parent bottom in act_host_layout.xml) — without this, its icons/
+     * labels sit under the transparent gesture/3-button nav bar on edge-to-edge devices.
+     */
+    private fun setupBottomNavigationInsetPadding() {
+        val initialPadding = binding.bottomNavigation.paddingBottom
+        ViewCompat.setOnApplyWindowInsetsListener(binding.bottomNavigation) { v, insets ->
+            val navBarInset = insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom
+            v.updatePadding(bottom = initialPadding + navBarInset)
+            insets
+        }
+    }
 
     private fun setupNavigation() {
         navController =

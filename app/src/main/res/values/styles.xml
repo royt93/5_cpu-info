@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="AppThemeBase" parent="@style/Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="AppThemeBase" parent="@style/Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryVariant">@color/primaryDark</item>
         <item name="colorPrimaryDark">@color/primaryDark</item>
@@ -16,8 +16,10 @@
         <!-- Use surface as window background so Activity.recreate() (e.g. locale change)
              doesn't show a contrasting flash between destroyed and new activity instances. -->
         <item name="android:windowBackground">?attr/colorSurface</item>
-        <item name="android:statusBarColor" tools:ignore="NewApi">@color/status_bar</item>
-        <item name="android:navigationBarColor" tools:ignore="NewApi">@color/nav_bar</item>
+        <!-- android:statusBarColor/navigationBarColor removed — dead since targetSdk 35+
+             (edge-to-edge enforced, system ignores both attrs). Real status/nav bar styling now
+             lives in code via ComponentActivity.enableEdgeToEdge() (see util/Ext.kt,
+             ActVip/SplashActivity) — see doc/task/epic-02-techdebt.md Story 11 T2.32/T2.34. -->
         <item name="alertDialogTheme">@style/CustomAppCompatAlertDialogStyle</item>
         <item name="materialAlertDialogTheme">@style/CustomAppCompatAlertDialogStyle</item>
 
@@ -40,15 +42,16 @@
     </style>
 
     <!-- Bottom sheet rounded corners + expanded state are applied at runtime via
-         BaseRoundedBottomSheet (MaterialShapeDrawable). Theme-level styles aren't used
-         because the app theme parent is Material 2 and M3 BottomSheet styles don't
-         overlay cleanly on M2 base. -->
+         BaseRoundedBottomSheet (MaterialShapeDrawable) — kept as-is after the M2→M3 base theme
+         switch (Story 11 T2.35): the app theme is M3 now, so a declarative M3 BottomSheet style
+         would overlay cleanly, but the runtime approach isn't broken by anything, just not
+         required anymore — not migrated in this pass to keep the diff scoped to theme/color. -->
 
     <style name="TintedProgressBar" parent="Theme.AppCompat.Dialog.Alert">
         <item name="colorAccent">@color/accent</item>
     </style>
 
-    <style name="CustomAppCompatAlertDialogStyle" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">
+    <style name="CustomAppCompatAlertDialogStyle" parent="ThemeOverlay.Material3.Dialog.Alert">
         <item name="colorPrimary">@color/onBackground</item>
     </style>
 

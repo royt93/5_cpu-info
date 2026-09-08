@@ -5,13 +5,14 @@ package com.galaxyjoy.cpuinfo.util
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
+import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
+import androidx.activity.enableEdgeToEdge
 import androidx.annotation.IdRes
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
-import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import com.galaxyjoy.cpuinfo.R
@@ -92,27 +93,33 @@ fun Activity.uninstallApp(packageName: String) {
 }
 
 /**
- * !Warning! It will control only top/left/right insets. Register your own one for bottom ones.
+ * !Warning! It will control only top/left/right insets. Register your own one for bottom ones
+ * (e.g. a bottom nav bar's own inset listener) — this fn deliberately leaves bottom untouched.
  *
- * Window background is forced to the primary status-bar color: in edge-to-edge mode the system
- * status bar area shows the window background through, so this is what gives the status bar
- * its app-primary tint instead of falling back to surface (which would appear white in light mode).
+ * Status + nav bar are both solid `?attr/colorPrimary` (same color as the app's toolbar/action
+ * bar and `BottomNavigationView` — matches pre-edge-to-edge look on request) via
+ * `SystemBarStyle.dark(primaryColor)`. Always "dark" (forces light/white system bar icons), not
+ * `.auto()`: `colorOnPrimary` is white in BOTH day/night `colors.xml` (toolbar text/icons are
+ * always white regardless of theme, only `colorPrimary` itself changes value) — so the correct
+ * icon appearance never actually flips with day/night here, unlike `colorSurface`-based bars.
  *
  * The locale-change recreate flicker is mitigated separately via [LocaleManager.applyWithSnapshot]
  * which sets a bitmap drawable as window background just before triggering recreate.
  */
-fun Activity.setupEdgeToEdge(
+fun ComponentActivity.setupEdgeToEdge(
     @IdRes containerId: Int = android.R.id.content,
 ) {
-    window.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(this, R.color.status_bar)))
-    WindowCompat.setDecorFitsSystemWindows(window, false)
+    val primaryColor = ContextCompat.getColor(this, R.color.primary)
+    enableEdgeToEdge(
+        statusBarStyle = SystemBarStyle.dark(primaryColor),
+        navigationBarStyle = SystemBarStyle.dark(primaryColor),
+    )
     ViewCompat.setOnApplyWindowInsetsListener(findViewById(containerId)) { v, insets ->
         val systemInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
         v.updatePadding(
             top = systemInsets.top,
             left = systemInsets.left,
             right = systemInsets.right,
-            bottom = 0,
         )
         insets
     }
