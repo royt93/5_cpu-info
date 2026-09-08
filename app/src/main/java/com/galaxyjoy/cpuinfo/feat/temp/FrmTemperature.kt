@@ -11,8 +11,10 @@ import com.galaxyjoy.cpuinfo.domain.model.TemperatureData
 import com.galaxyjoy.cpuinfo.feat.infor.base.BaseFrm
 import com.galaxyjoy.cpuinfo.feat.temp.list.AdtTemperature
 import com.galaxyjoy.cpuinfo.feat.temp.list.TemperatureItem
+import com.galaxyjoy.cpuinfo.util.isNightMode
 import com.galaxyjoy.cpuinfo.util.lifecycle.ListLiveData
 import com.galaxyjoy.cpuinfo.util.lifecycle.ListLiveDataObserver
+import com.galaxyjoy.cpuinfo.util.resolveAccentColor
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -36,6 +38,14 @@ class FrmTemperature : BaseFrm<FrmTemperatureBinding>(
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
         setupRecycleView()
+        // XML's style="@style/TintedProgressBar" pins colorAccent to a static @color/accent
+        // inside its own self-contained Theme.AppCompat.Dialog.Alert-derived style — that shadows
+        // the Activity's real (DynamicColors-overlaid) theme entirely, so the global dynamic-color
+        // initializer can't reach it (Material You widget audit).
+        val ctx = requireContext()
+        binding.pb.indeterminateTintList = android.content.res.ColorStateList.valueOf(
+            ctx.resolveAccentColor(ctx.isNightMode()),
+        )
     }
 
     override fun onStart() {

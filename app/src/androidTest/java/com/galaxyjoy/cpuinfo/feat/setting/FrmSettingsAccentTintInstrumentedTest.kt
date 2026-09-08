@@ -2,7 +2,6 @@ package com.galaxyjoy.cpuinfo.feat.setting
 
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CompoundButton
 import android.widget.TextView
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
@@ -176,24 +175,31 @@ class FrmSettingsAccentTintInstrumentedTest {
         val rv = preferenceRecyclerView()
         scrollToRowWithText(composeRule.activity.getString(R.string.health_alert_pref_title))
 
-        lateinit var switches: List<CompoundButton>
+        // pref.xml's app:widgetLayout swaps SwitchPreferenceCompat's default widget (plain
+        // SwitchCompat — Material 2/AppCompat's thin-track/small-thumb style, not real Material
+        // You) for com.google.android.material.materialswitch.MaterialSwitch (real M3 shape).
+        // MaterialSwitch IS-A SwitchCompat (thumb/track tint APIs still apply), but must be
+        // matched specifically here to guard against the widgetLayout override silently not
+        // taking effect and falling back to the plain SwitchCompat again.
+        lateinit var switches: List<com.google.android.material.materialswitch.MaterialSwitch>
         InstrumentationRegistry.getInstrumentation().runOnMainSync {
-            switches = findAll(rv, { it is CompoundButton })
-                .filterIsInstance<CompoundButton>()
+            switches = findAll(rv, { it is com.google.android.material.materialswitch.MaterialSwitch })
+                .filterIsInstance<com.google.android.material.materialswitch.MaterialSwitch>()
         }
-        assertTrue("expected at least one SwitchPreferenceCompat row (health alert / bench reminder)", switches.isNotEmpty())
+        assertTrue("expected at least one SwitchPreferenceCompat row using MaterialSwitch (health alert / bench reminder)", switches.isNotEmpty())
 
         switches.forEach { switch ->
-            val tintList = androidx.core.widget.CompoundButtonCompat.getButtonTintList(switch)
-            assertNotNull("switch should have a non-null tint list after Material You audit fix", tintList)
-            val checkedColor = tintList!!.getColorForState(intArrayOf(android.R.attr.state_checked), 0)
-            val uncheckedColor = tintList.getColorForState(intArrayOf(-android.R.attr.state_checked), 0)
-            assertNotEquals(
-                "checked vs unchecked switch tint must differ, or the on/off state becomes " +
-                    "visually indistinguishable (bug found + fixed during self-review this round)",
-                checkedColor,
-                uncheckedColor,
-            )
+            listOf(switch.thumbTintList to "thumb", switch.trackTintList to "track").forEach { (tintList, part) ->
+                assertNotNull("switch $part should have a non-null tint list after Material You audit fix", tintList)
+                val checkedColor = tintList!!.getColorForState(intArrayOf(android.R.attr.state_checked), 0)
+                val uncheckedColor = tintList.getColorForState(intArrayOf(-android.R.attr.state_checked), 0)
+                assertNotEquals(
+                    "checked vs unchecked switch $part tint must differ, or the on/off state becomes " +
+                        "visually indistinguishable (bug found + fixed during self-review this round)",
+                    checkedColor,
+                    uncheckedColor,
+                )
+            }
         }
     }
 }

@@ -2,6 +2,7 @@ package com.galaxyjoy.cpuinfo.di.modules
 
 import com.galaxyjoy.cpuinfo.appinitializers.AppInitializer
 import com.galaxyjoy.cpuinfo.appinitializers.BenchReminderNotificationInitializer
+import com.galaxyjoy.cpuinfo.appinitializers.DynamicColorsInitializer
 import com.galaxyjoy.cpuinfo.appinitializers.HealthAlertNotificationInitializer
 import com.galaxyjoy.cpuinfo.appinitializers.NativeToolsInitializer
 import com.galaxyjoy.cpuinfo.appinitializers.InitializerTheme
@@ -41,4 +42,8 @@ abstract class AppModuleBinds {
     @Binds
     @IntoSet
     abstract fun provideRebootStabilityInitializer(bind: RebootStabilityInitializer): AppInitializer
+
+    @Binds
+    @IntoSet
+    abstract fun provideDynamicColorsInitializer(bind: DynamicColorsInitializer): AppInitializer
 }

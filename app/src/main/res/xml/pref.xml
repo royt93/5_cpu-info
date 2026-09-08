@@ -50,13 +50,15 @@
             app:defaultValue="false"
             app:key="key_health_alert"
             app:summary="@string/health_alert_pref_summary"
-            app:title="@string/health_alert_pref_title" />
+            app:title="@string/health_alert_pref_title"
+            app:widgetLayout="@layout/preference_widget_material_switch" />
 
         <SwitchPreferenceCompat
             app:defaultValue="false"
             app:key="key_bench_reminder"
             app:summary="@string/bench_reminder_pref_summary"
-            app:title="@string/bench_reminder_pref_title" />
+            app:title="@string/bench_reminder_pref_title"
+            app:widgetLayout="@layout/preference_widget_material_switch" />
 
         <Preference
             app:key="key_export_bench_history"

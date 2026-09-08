@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  SwitchPreferenceCompat's DEFAULT widget layout (androidx.preference's own
+  preference_widget_switch_compat.xml) uses androidx.appcompat.widget.SwitchCompat — the classic
+  Material 2/AppCompat thin-track/small-thumb style, not real Material You/M3. Overriding with
+  MaterialSwitch here (M3's bigger pill track + larger thumb, closer to what the platform actually
+  calls "Material You" and what users compare against iOS's toggle) via app:widgetLayout on each
+  SwitchPreferenceCompat in pref.xml. Id MUST stay `switchWidget` — SwitchPreferenceCompat looks
+  the widget up via androidx.preference.R.id.switchWidget in onBindViewHolder().
+-->
+<com.google.android.material.materialswitch.MaterialSwitch
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/switchWidget"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@null"
+    android:clickable="false"
+    android:focusable="false" />

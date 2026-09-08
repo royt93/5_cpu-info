@@ -44,6 +44,7 @@ import com.galaxyjoy.cpuinfo.util.enableEdgeToEdgeMatchingActionBar
 import com.galaxyjoy.cpuinfo.util.isNightMode
 import com.galaxyjoy.cpuinfo.util.resolveActionBarColor
 import com.galaxyjoy.cpuinfo.util.resolveActionBarContentColor
+import com.google.android.material.color.DynamicColors
 import com.google.android.material.snackbar.Snackbar
 import com.roy.sdkadbmob.AdManager
 import dagger.hilt.android.AndroidEntryPoint
@@ -106,6 +107,13 @@ class ActHost : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppThemeBase)
+        // DynamicColorsInitializer's Application-wide callback overlays dynamic color via
+        // onActivityPreCreated(), which fires BEFORE this onCreate() — the setTheme() call right
+        // above replaces the theme reference wholesale, silently discarding that overlay (Material
+        // You widget audit: this made every M3-default-styled View here, e.g. the CPU tab's FAB,
+        // fall back to Material3's static baseline colorPrimaryContainer instead of the dynamic
+        // one). Re-apply it onto the fresh theme immediately.
+        DynamicColors.applyIfAvailable(this)
         // Must run before super.onCreate()/setContentView() — see enableEdgeToEdgeMatchingActionBar() kdoc.
         enableEdgeToEdgeMatchingActionBar()
         super.onCreate(savedInstanceState)
