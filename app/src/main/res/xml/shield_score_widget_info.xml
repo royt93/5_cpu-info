@@ -8,6 +8,7 @@
     android:minResizeWidth="110dp"
     android:minWidth="180dp"
     android:previewImage="@drawable/ic_shield"
+    android:previewLayout="@layout/widget_shield_score"
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="0"
     android:widgetCategory="home_screen" />

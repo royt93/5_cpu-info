@@ -8,6 +8,7 @@
     android:minResizeWidth="110dp"
     android:minWidth="180dp"
     android:previewImage="@drawable/ic_cpu_high"
+    android:previewLayout="@layout/widget_last_bench"
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="0"
     android:widgetCategory="home_screen" />

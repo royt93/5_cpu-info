@@ -38,7 +38,12 @@ import com.galaxyjoy.cpuinfo.feat.vip.streak.CheckInStreakPrefs
 import com.galaxyjoy.cpuinfo.rateAppInApp
 import com.galaxyjoy.cpuinfo.util.LocaleManager
 import com.galaxyjoy.cpuinfo.util.SystemInfoExporter
-import com.galaxyjoy.cpuinfo.util.setupEdgeToEdge
+import com.galaxyjoy.cpuinfo.util.applyEdgeToEdgeContentPadding
+import com.galaxyjoy.cpuinfo.util.applyStatusBarColorToToolbar
+import com.galaxyjoy.cpuinfo.util.enableEdgeToEdgeMatchingActionBar
+import com.galaxyjoy.cpuinfo.util.isNightMode
+import com.galaxyjoy.cpuinfo.util.resolveActionBarColor
+import com.galaxyjoy.cpuinfo.util.resolveActionBarContentColor
 import com.google.android.material.snackbar.Snackbar
 import com.roy.sdkadbmob.AdManager
 import dagger.hilt.android.AndroidEntryPoint
@@ -98,6 +103,8 @@ class ActHost : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppThemeBase)
+        // Must run before super.onCreate()/setContentView() — see enableEdgeToEdgeMatchingActionBar() kdoc.
+        enableEdgeToEdgeMatchingActionBar()
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate")
         // Must run before setContentView: the layout's `app:navGraph` makes NavHostFragment
@@ -105,10 +112,20 @@ class ActHost : BaseActivity() {
         // inflation, before any code after setContentView() below can run.
         consumeOpenBenchTabFromWidget()
         binding = DataBindingUtil.setContentView(this, R.layout.act_host_layout)
-        setupEdgeToEdge()
-        setupBottomNavigationInsetPadding()
+        applyEdgeToEdgeContentPadding()
+        val nightMode = isNightMode()
+        val actionBarColor = resolveActionBarColor(nightMode)
+        val actionBarContentColor = resolveActionBarContentColor(nightMode)
+        binding.toolbar.applyStatusBarColorToToolbar(actionBarColor)
+        binding.toolbar.setTitleTextColor(actionBarContentColor)
+        setupBottomNavigationInsetPadding(actionBarColor, actionBarContentColor)
         setupNavigation()
         setSupportActionBar(binding.toolbar)
+        // Per-tab Fragments (e.g. Applications: Sort/Show system apps/...) add their own overflow
+        // menu items merged into this same Toolbar — its "⋮" icon is a Toolbar-level default
+        // (theme's colorControlNormal), not tied to any single MenuItem, so it was never covered
+        // by the menu_main.xml icon fixes below. Same static-white-on-dynamic-bg issue.
+        binding.toolbar.overflowIcon?.mutate()?.setTint(actionBarContentColor)
 
         // Banner Ad — apply state ngay tuỳ VIP. Free → load. VIP → skip + hide container.
         applyVipBannerState()
@@ -242,12 +259,18 @@ class ActHost : BaseActivity() {
     override fun onSupportNavigateUp() = navController.navigateUp()
 
     /**
-     * `setupEdgeToEdge()` deliberately skips the bottom inset (it only owns top/left/right —
+     * `applyEdgeToEdgeContentPadding()` deliberately skips the bottom inset (it only owns top/left/right —
      * see its kdoc). `bottomNavigation` is the one view actually touching the physical bottom
      * edge (constrained to parent bottom in act_host_layout.xml) — without this, its icons/
      * labels sit under the transparent gesture/3-button nav bar on edge-to-edge devices.
      */
-    private fun setupBottomNavigationInsetPadding() {
+    private fun setupBottomNavigationInsetPadding(actionBarColor: Int, actionBarContentColor: Int) {
+        // XML's ?colorPrimary/nav_drawer_tint_color are static — override with the resolved
+        // dynamic-or-static colors (same reasoning as applyStatusBarColorToToolbar) so bg+icon/text
+        // contrast stays correct even when dynamic dark's primary is a light/pastel tone.
+        binding.bottomNavigation.setBackgroundColor(actionBarColor)
+        binding.bottomNavigation.itemIconTintList = android.content.res.ColorStateList.valueOf(actionBarContentColor)
+        binding.bottomNavigation.itemTextColor = android.content.res.ColorStateList.valueOf(actionBarContentColor)
         val initialPadding = binding.bottomNavigation.paddingBottom
         ViewCompat.setOnApplyWindowInsetsListener(binding.bottomNavigation) { v, insets ->
             val navBarInset = insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom
@@ -297,6 +320,16 @@ class ActHost : BaseActivity() {
             ShieldScoreBottomSheet().show(supportFragmentManager, ShieldScoreBottomSheet.TAG)
         }
         refreshShieldScoreBadge()
+
+        // XML's app:tint="?attr/colorOnPrimary"/app:iconTint="?attr/colorOnPrimary" are static —
+        // override with the resolved dynamic-or-static content color (see
+        // resolveActionBarContentColor kdoc for why this must not stay hardcoded white).
+        val actionBarContentColor = resolveActionBarContentColor(isNightMode())
+        shieldScoreActionView?.findViewById<android.widget.ImageView>(R.id.actionShieldScoreIcon)
+            ?.setColorFilter(actionBarContentColor)
+        menu.findItem(R.id.menuActionShare)?.icon
+            ?.mutate()
+            ?.setTint(actionBarContentColor)
         return true
     }
 
@@ -386,9 +419,19 @@ class ActHost : BaseActivity() {
             startVipIconPulse()
             startVipGlow()
         } else {
+            // `android.R.attr.colorControlNormal` is a framework default unrelated to our resolved
+            // action bar content color — was making the crown look washed-out/mismatched against
+            // the dynamic toolbar (found during Material You audit). ~70% alpha of the resolved
+            // content color matches the same "dimmed, available but inactive" treatment already
+            // used for unselected tab labels (FrmInfoContainer).
             androidx.core.widget.ImageViewCompat.setImageTintList(
                 icon,
-                android.content.res.ColorStateList.valueOf(resolveAttrColor(android.R.attr.colorControlNormal)),
+                android.content.res.ColorStateList.valueOf(
+                    androidx.core.graphics.ColorUtils.setAlphaComponent(
+                        resolveActionBarContentColor(isNightMode()),
+                        179,
+                    ),
+                ),
             )
             stopVipIconPulse()
             stopVipGlow()

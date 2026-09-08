@@ -8,6 +8,7 @@
     android:minResizeWidth="110dp"
     android:minWidth="180dp"
     android:previewImage="@drawable/ic_ram_high"
+    android:previewLayout="@layout/widget_ram"
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="0"
     android:widgetCategory="home_screen" />

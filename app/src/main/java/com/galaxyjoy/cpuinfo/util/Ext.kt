@@ -5,13 +5,18 @@ package com.galaxyjoy.cpuinfo.util
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.net.Uri
 import android.os.Build
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.IdRes
+import androidx.compose.material3.dynamicDarkColorScheme
+import androidx.compose.material3.dynamicLightColorScheme
+import androidx.compose.ui.graphics.toArgb
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
@@ -93,34 +98,116 @@ fun Activity.uninstallApp(packageName: String) {
 }
 
 /**
+ * The action bar/toolbar color: dynamic (Material You, wallpaper-based) on API31+, same static
+ * `@color/primary` fallback below that (already dark-toned in `values-night/colors.xml`) — a
+ * plain `Context` is enough, `dynamicLightColorScheme`/`dynamicDarkColorScheme` aren't
+ * `@Composable`, they only read system resources (`@android:color/system_accent1_*`).
+ *
+ * Light theme uses `primary` (M3 tonal spec: saturated/dark-ish tone in light scheme, pairs with
+ * white `onPrimary`) — a nice branded pop of color, matches the old static teal look. Dark theme
+ * deliberately does NOT use `primary`/`onPrimary` — M3's dynamic DARK scheme's `primary` is a
+ * light/PASTEL tone (opposite of light scheme, by design — it's meant for small accents on a dark
+ * surface, not a whole toolbar). Using it made the toolbar look like a stray light patch in an
+ * otherwise dark UI — reported directly by the user after seeing it on a real device. `primaryContainer`
+ * in the dark scheme is the tone actually meant for this ("dark tone, white text" — matches
+ * `onPrimaryContainer`), while still being wallpaper-tinted, not a flat static color.
+ */
+fun Context.resolveActionBarColor(useDarkTheme: Boolean): Int {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        val scheme = if (useDarkTheme) dynamicDarkColorScheme(this) else dynamicLightColorScheme(this)
+        (if (useDarkTheme) scheme.primaryContainer else scheme.primary).toArgb()
+    } else {
+        ContextCompat.getColor(this, R.color.primary)
+    }
+}
+
+fun Context.isNightMode(): Boolean =
+    (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
+
+/**
+ * The color for text/icons drawn ON [resolveActionBarColor] (title, tab labels, bottom nav
+ * icons, menu action icons) — the counterpart token to whichever role [resolveActionBarColor]
+ * picked (`onPrimary` for light's `primary`, `onPrimaryContainer` for dark's `primaryContainer`).
+ * See [resolveActionBarColor] kdoc for why dark theme doesn't just use `onPrimary`.
+ */
+fun Context.resolveActionBarContentColor(useDarkTheme: Boolean): Int {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        val scheme = if (useDarkTheme) dynamicDarkColorScheme(this) else dynamicLightColorScheme(this)
+        (if (useDarkTheme) scheme.onPrimaryContainer else scheme.onPrimary).toArgb()
+    } else {
+        ContextCompat.getColor(this, R.color.onPrimary)
+    }
+}
+
+/**
+ * !Warning! MUST be called before `super.onCreate()`/`setContentView()` (required by
+ * `enableEdgeToEdge()` itself regardless of the finding below).
+ *
+ * Only sets up `decorFitsSystemWindows(false)` + icon appearance. Deliberately does NOT rely on
+ * `Window.statusBarColor`/`SystemBarStyle` scrim to actually PAINT the bar — tried that first and
+ * it silently did nothing on a real Android 16 device (Samsung S24U): `dumpsys window windows`
+ * for the app's window doesn't even list a status bar color field anymore, confirming it's fully
+ * dead at this API level, not just deprecated. The real, version-agnostic fix is
+ * [applyStatusBarColorToToolbar] — let the toolbar's own opaque background bleed up through the
+ * transparent bar instead of asking the system to paint it. The scrim int passed here still
+ * matters for API<35 (where it's not dead) and, more importantly, picking `.dark()` vs `.light()`
+ * from it is what drives the system icon color via `WindowInsetsControllerCompat` — that part
+ * keeps working on every API level. Icon choice is by actual luminance of the resolved dynamic
+ * color, not a hardcoded assumption: M3's dynamic dark scheme's `primary` is a light/pastel tone
+ * (needs dark icons), the opposite of the old static branded dark primary (`#1C1C1C`, needed
+ * light icons) — a fixed `.dark()` would be wrong for half of the dynamic color cases.
+ */
+fun ComponentActivity.enableEdgeToEdgeMatchingActionBar() {
+    val color = resolveActionBarColor(isNightMode())
+    val useLightIcons = ColorUtils.calculateLuminance(color) < 0.5
+    enableEdgeToEdge(
+        statusBarStyle = if (useLightIcons) SystemBarStyle.dark(color) else SystemBarStyle.light(color, color),
+        navigationBarStyle = if (useLightIcons) SystemBarStyle.dark(color) else SystemBarStyle.light(color, color),
+    )
+}
+
+/**
  * !Warning! It will control only top/left/right insets. Register your own one for bottom ones
  * (e.g. a bottom nav bar's own inset listener) — this fn deliberately leaves bottom untouched.
+ * Call after `setContentView()` — needs the real content view to attach the listener to.
  *
- * Status + nav bar are both solid `?attr/colorPrimary` (same color as the app's toolbar/action
- * bar and `BottomNavigationView` — matches pre-edge-to-edge look on request) via
- * `SystemBarStyle.dark(primaryColor)`. Always "dark" (forces light/white system bar icons), not
- * `.auto()`: `colorOnPrimary` is white in BOTH day/night `colors.xml` (toolbar text/icons are
- * always white regardless of theme, only `colorPrimary` itself changes value) — so the correct
- * icon appearance never actually flips with day/night here, unlike `colorSurface`-based bars.
+ * Deliberately does NOT pad `top` — padding the whole content container top pushes the toolbar
+ * down, leaving the vacated strip at y=0 showing the plain window background
+ * (`android:windowBackground` = `?attr/colorSurface`) instead of the toolbar's own color. Call
+ * [applyStatusBarColorToToolbar] separately for that — its padding target is the toolbar itself,
+ * so the toolbar's background still starts at y=0 and bleeds up under the transparent status bar.
  *
  * The locale-change recreate flicker is mitigated separately via [LocaleManager.applyWithSnapshot]
  * which sets a bitmap drawable as window background just before triggering recreate.
  */
-fun ComponentActivity.setupEdgeToEdge(
+fun ComponentActivity.applyEdgeToEdgeContentPadding(
     @IdRes containerId: Int = android.R.id.content,
 ) {
-    val primaryColor = ContextCompat.getColor(this, R.color.primary)
-    enableEdgeToEdge(
-        statusBarStyle = SystemBarStyle.dark(primaryColor),
-        navigationBarStyle = SystemBarStyle.dark(primaryColor),
-    )
     ViewCompat.setOnApplyWindowInsetsListener(findViewById(containerId)) { v, insets ->
         val systemInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
         v.updatePadding(
-            top = systemInsets.top,
             left = systemInsets.left,
             right = systemInsets.right,
         )
+        insets
+    }
+}
+
+/**
+ * Sets [this] toolbar's background to [color] (the resolved dynamic-or-static action bar color —
+ * XML's `?attr/colorPrimary` is always static, so a dynamic color can only be applied at
+ * runtime like this) and pads its top by the status bar inset (added to whatever top padding it
+ * already has) instead of moving/clipping it — so the background still starts at y=0 and shows
+ * through the transparent status bar, while the actual content (title/icons) sits below the
+ * status bar. Use on the app's toolbar rather than on the whole content container — see
+ * [applyEdgeToEdgeContentPadding] kdoc for why that doesn't work.
+ */
+fun android.view.View.applyStatusBarColorToToolbar(color: Int) {
+    setBackgroundColor(color)
+    val initialPadding = paddingTop
+    ViewCompat.setOnApplyWindowInsetsListener(this) { v, insets ->
+        val top = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top
+        v.updatePadding(top = initialPadding + top)
         insets
     }
 }

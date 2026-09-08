@@ -8,6 +8,9 @@ import com.galaxyjoy.cpuinfo.R
 import com.galaxyjoy.cpuinfo.databinding.FrmInfoBinding
 import com.galaxyjoy.cpuinfo.feat.infor.base.BaseFrm
 import com.galaxyjoy.cpuinfo.feat.infor.base.AdtInfoContainerState
+import com.galaxyjoy.cpuinfo.util.isNightMode
+import com.galaxyjoy.cpuinfo.util.resolveActionBarColor
+import com.galaxyjoy.cpuinfo.util.resolveActionBarContentColor
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -21,6 +24,20 @@ class FrmInfoContainer : BaseFrm<FrmInfoBinding>(R.layout.frm_info) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // XML's Widget.MaterialComponents.TabLayout.Colored reads static ?attr/colorPrimary (bg)
+        // and ?attr/colorOnPrimary (tab text, hardcoded white) — override both with the resolved
+        // dynamic-or-static colors so this tab bar (sits right below ActHost's toolbar) matches it
+        // exactly, and text stays readable even when dynamic dark's primary is a light/pastel tone
+        // (see resolveActionBarContentColor kdoc).
+        val nightMode = requireContext().isNightMode()
+        val contentColor = requireContext().resolveActionBarContentColor(nightMode)
+        binding.tabs.setBackgroundColor(requireContext().resolveActionBarColor(nightMode))
+        binding.tabs.setTabTextColors(
+            androidx.core.graphics.ColorUtils.setAlphaComponent(contentColor, 179), // ~70%, unselected
+            contentColor, // selected
+        )
+        binding.tabs.setSelectedTabIndicatorColor(contentColor)
 
         val adapter = AdtInfoContainerState(this)
         binding.vp.adapter = adapter

@@ -4,15 +4,17 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.activity.SystemBarStyle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.widget.Toolbar
-import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import com.galaxyjoy.cpuinfo.BaseActivity
 import com.galaxyjoy.cpuinfo.R
+import com.galaxyjoy.cpuinfo.util.applyStatusBarColorToToolbar
+import com.galaxyjoy.cpuinfo.util.enableEdgeToEdgeMatchingActionBar
+import com.galaxyjoy.cpuinfo.util.isNightMode
+import com.galaxyjoy.cpuinfo.util.resolveActionBarColor
+import com.galaxyjoy.cpuinfo.util.resolveActionBarContentColor
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -27,24 +29,24 @@ import dagger.hilt.android.AndroidEntryPoint
 class ActVip : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        // Phải gọi trước setContentView() — status/nav bar cùng màu colorPrimary như toolbar
-        // (Widget.MaterialComponents.Toolbar.Primary bên dưới) theo yêu cầu match action bar.
-        // SystemBarStyle.dark(): colorOnPrimary luôn trắng ở cả 2 theme (xem util/Ext.kt
-        // setupEdgeToEdge kdoc) nên icon sáng luôn đúng, không cần .auto().
-        val primaryColor = ContextCompat.getColor(this, R.color.primary)
-        enableEdgeToEdge(
-            statusBarStyle = SystemBarStyle.dark(primaryColor),
-            navigationBarStyle = SystemBarStyle.dark(primaryColor),
-        )
+        // Phải gọi trước super.onCreate()/setContentView() — xem kdoc enableEdgeToEdgeMatchingActionBar().
+        enableEdgeToEdgeMatchingActionBar()
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate")
         setContentView(R.layout.act_vip)
         // Padding riêng cho IME — enableEdgeToEdge() chỉ set decorFitsSystemWindows(false),
-        // không tự apply padding/adjustResize. Project's setupEdgeToEdge() chỉ apply systemBars,
-        // không apply IME → giữ bản custom này combine cả systemBars + IME.
+        // không tự apply padding/adjustResize. util/Ext.kt's applyEdgeToEdgeContentPadding() chỉ
+        // apply systemBars, không apply IME → giữ bản custom này combine cả systemBars + IME.
         setupEdgeToEdgeWithIme()
 
+        val nightMode = isNightMode()
+        val actionBarContentColor = resolveActionBarContentColor(nightMode)
         val toolbar = findViewById<Toolbar>(R.id.toolbarVip)
+        toolbar.applyStatusBarColorToToolbar(resolveActionBarColor(nightMode))
+        toolbar.setTitleTextColor(actionBarContentColor)
+        // XML's app:navigationIcon drawable has no tint of its own (relies on the old static
+        // white ?attr/colorOnPrimary theme default) — same fix as resolveActionBarContentColor.
+        toolbar.navigationIcon?.mutate()?.setTint(actionBarContentColor)
         setSupportActionBar(toolbar)
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
@@ -61,10 +63,13 @@ class ActVip : BaseActivity() {
     }
 
     /**
-     * Custom edge-to-edge: top padding nhận status bar, bottom padding nhận MAX(nav bar, IME).
-     * Khi keyboard show → padding bottom = IME height → ScrollView bên trong tự shrink →
-     * `View.requestRectangleOnScreen` trong FVipManagement work đúng (scroll btn Activate
-     * vào view above keyboard).
+     * Custom edge-to-edge: bottom padding nhận MAX(nav bar, IME). Khi keyboard show → padding
+     * bottom = IME height → ScrollView bên trong tự shrink → `View.requestRectangleOnScreen`
+     * trong FVipManagement work đúng (scroll btn Activate vào view above keyboard).
+     *
+     * Không pad `top` ở đây nữa — pad root sẽ đẩy toolbar xuống, để lộ dải nền cửa sổ mặc định
+     * (`@color/background`) phía trên thay vì màu toolbar; top đã được xử lý riêng ở
+     * [applyStatusBarColorToToolbar] ngay trên toolbar để nền toolbar tự tràn lên tới y=0.
      */
     private fun setupEdgeToEdgeWithIme() {
         val root = findViewById<android.view.View>(android.R.id.content)
@@ -72,7 +77,6 @@ class ActVip : BaseActivity() {
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             val ime = insets.getInsets(WindowInsetsCompat.Type.ime())
             v.updatePadding(
-                top = systemBars.top,
                 left = systemBars.left,
                 right = systemBars.right,
                 // Bottom = MAX(nav bar, IME) — khi keyboard show IME > nav, content shrink lên.
