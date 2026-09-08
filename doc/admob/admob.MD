@@ -1,12 +1,12 @@
 package name: com.galaxyjoy.cpuinfo
 policy: https://loitp.notion.site/Term-Privacy-Policy-Disclaimer-319b1cd8783942fa8923d2a3c9bce60f
 
-admob app id: 
-banner: 
-inter: 
-open app: 
-native: 
-rewarded: 
+admob app id: ca-app-pub-3004713799155145~7714695218
+banner: ca-app-pub-3004713799155145/6401613541
+inter: ca-app-pub-3004713799155145/2681860387
+open app: ca-app-pub-3004713799155145/9271319465
+native: ca-app-pub-3004713799155145/1368778714
+rewarded: ca-app-pub-3004713799155145/1616190729
 
 chú ý:
 
