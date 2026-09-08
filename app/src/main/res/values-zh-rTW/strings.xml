@@ -21,6 +21,7 @@
     <string name="temp">溫度</string>
     <string name="settings">設定</string>
     <string name="export_format_title">匯出格式</string>
+    <string name="share_device_info_menu_title">分享裝置資訊</string>
     <string name="export_as_text">純文字</string>
     <string name="export_as_image">圖片（分享）</string>
     <string name="device_card_row_cores">核心數</string>

@@ -19,6 +19,7 @@
     <string name="temp">Temperatur</string>
     <string name="settings">Einstellungen</string>
     <string name="export_format_title">Exportformat</string>
+    <string name="share_device_info_menu_title">Geräteinfo teilen</string>
     <string name="export_as_text">Klartext</string>
     <string name="export_as_image">Bild (teilen)</string>
     <string name="device_card_row_cores">Kerne</string>
