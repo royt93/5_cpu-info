@@ -58,6 +58,17 @@ class HealthAlertNotifierTest {
     private fun isNotificationActive(): Boolean =
         notificationManager.activeNotifications.any { it.id == HealthAlertNotifier.NOTIFICATION_ID }
 
+    /** Both notify-triggered posts and [NotificationManager.cancel] are fire-and-forget Binder
+     * calls to the system notification service — [isNotificationActive] can still report the
+     * stale pre-call state for a brief window right after either one. Poll instead of checking
+     * once immediately. */
+    private fun waitUntilNotificationActiveIs(expected: Boolean, timeoutMs: Long = 2_000L) {
+        val deadline = System.currentTimeMillis() + timeoutMs
+        while (isNotificationActive() != expected && System.currentTimeMillis() < deadline) {
+            Thread.sleep(50)
+        }
+    }
+
     @Test
     fun maybeNotify_scoreBelowAbsoluteThreshold_postsARealNotification() {
         HealthAlertNotifier.maybeNotify(
@@ -67,6 +78,7 @@ class HealthAlertNotifierTest {
             nowMs = System.currentTimeMillis(),
         )
 
+        waitUntilNotificationActiveIs(true)
         assertTrue(isNotificationActive())
     }
 
@@ -88,6 +100,12 @@ class HealthAlertNotifierTest {
         HealthAlertNotifier.maybeNotify(appContext, prefs, currentScore = HealthAlertLogic.ABSOLUTE_LOW_THRESHOLD - 1, nowMs = now)
         assertTrue(isNotificationActive())
         notificationManager.cancel(HealthAlertNotifier.NOTIFICATION_ID)
+        // cancel() above is async (Binder call to the system notification service) — wait for it
+        // to actually land, otherwise the assertFalse below can see the pre-cancel notification
+        // still listed and misreport this as maybeNotify() having wrongly re-posted. The cooldown
+        // logic itself (HealthAlertLogic.shouldAlert) is pure and separately proven correct by
+        // HealthAlertLogicTest, so a failure here was always this test's race, not app logic.
+        waitUntilNotificationActiveIs(false)
 
         HealthAlertNotifier.maybeNotify(
             appContext,

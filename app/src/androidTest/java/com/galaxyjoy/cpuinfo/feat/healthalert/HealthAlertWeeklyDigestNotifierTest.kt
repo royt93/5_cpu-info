@@ -55,6 +55,17 @@ class HealthAlertWeeklyDigestNotifierTest {
     private fun isNotificationActive(): Boolean =
         notificationManager.activeNotifications.any { it.id == HealthAlertWeeklyDigestNotifier.NOTIFICATION_ID }
 
+    /** Both notify-triggered posts and [NotificationManager.cancel] are fire-and-forget Binder
+     * calls to the system notification service — [isNotificationActive] can still report the
+     * stale pre-call state for a brief window right after either one. Poll instead of checking
+     * once immediately (same fix as [HealthAlertNotifierTest]). */
+    private fun waitUntilNotificationActiveIs(expected: Boolean, timeoutMs: Long = 2_000L) {
+        val deadline = System.currentTimeMillis() + timeoutMs
+        while (isNotificationActive() != expected && System.currentTimeMillis() < deadline) {
+            Thread.sleep(50)
+        }
+    }
+
     @Test
     fun maybeNotify_noBaselineYet_postsNoNotification() {
         HealthAlertWeeklyDigestNotifier.maybeNotify(appContext, prefs, currentScore = 80)
@@ -68,6 +79,7 @@ class HealthAlertWeeklyDigestNotifierTest {
 
         HealthAlertWeeklyDigestNotifier.maybeNotify(appContext, prefs, currentScore = 80)
 
+        waitUntilNotificationActiveIs(true)
         assertTrue(isNotificationActive())
     }
 
@@ -79,6 +91,7 @@ class HealthAlertWeeklyDigestNotifierTest {
 
         HealthAlertWeeklyDigestNotifier.maybeNotify(appContext, prefs, currentScore = 80)
 
+        waitUntilNotificationActiveIs(true)
         assertTrue(isNotificationActive())
     }
 

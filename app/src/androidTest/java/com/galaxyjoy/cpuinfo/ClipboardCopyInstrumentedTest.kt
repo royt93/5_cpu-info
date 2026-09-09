@@ -30,13 +30,16 @@ import org.junit.runner.RunWith
  * shared helper still copies the real row value to the clipboard and shows the confirmation
  * Snackbar, on every one of the 4 fragments that can't extend `BaseRvFragment`.
  *
- * Each test passes reliably run in isolation (`--tests ClipboardCopyInstrumentedTest#<name>`).
- * Running the whole class in one `connectedDevDebugAndroidTest` invocation can non-deterministically
- * fail 1 of the 4 (a different one each run) on this specific TECNO KJ7 device — confirmed via
- * live logcat that the OEM's own "Griffin/KeepAlive" task manager force-kills the freshly
- * relaunched `ActHost` task between orchestrated tests (`Griffin/KeepAlive:removeTask: ... kill:true`),
- * same class of TECNO-specific harness instability already documented at the bottom of
- * `ActHostSmokeTest` (4 known-flaky failures out of 23 there too) — not a regression in this code.
+ * 2026-09-09: previous KDoc here wrongly blamed TECNO's "Griffin/KeepAlive" OEM task-killer for
+ * an intermittent 1-of-4 failure. Re-verified by running this class isolated
+ * (`--tests ClipboardCopyInstrumentedTest`, no other class in the same invocation, so no
+ * Griffin-triggering install/uninstall churn from sibling classes): `longPressingGpuRowCopiesItsValue`
+ * and `longPressingSensorRowCopiesItsValue` failed 100% reproducibly, every run, not
+ * intermittently. Real cause: GPU and Sensors tabs now prepend a non-copyable Compose header
+ * (Vulkan/GLES detail bar / waveform chart) as RecyclerView item 0 via `ConcatAdapter` — see
+ * `FrmGpuInfo.kt`/`FrmSensorsInfo.kt` — so `longPressFirstRowAndVerifyCopy()`'s hardcoded position
+ * 0 was long-pressing the header, which has no copy handler, instead of a real value row. Fixed by
+ * targeting position 1 for those two tabs.
  */
 @RunWith(AndroidJUnit4::class)
 class ClipboardCopyInstrumentedTest {
@@ -78,9 +81,16 @@ class ClipboardCopyInstrumentedTest {
         onView(withText(R.string.text_copied)).check(matches(isDisplayed()))
     }
 
-    private fun longPressFirstRowAndVerifyCopy() = verifyClipboardAndSnackbarAfter {
+    /**
+     * @param position RecyclerView item index to long-press. Default 0 works for tabs whose
+     * adapter has no header (RAM). GPU and Sensors now prepend a non-copyable Compose header
+     * (Vulkan/GLES detail bar / waveform chart) as item 0 via `ConcatAdapter` — see
+     * `FrmGpuInfo.kt`/`FrmSensorsInfo.kt` — so those tabs must target position 1, the first real
+     * value row, same reasoning as the CPU test's label-based row lookup below.
+     */
+    private fun longPressFirstRowAndVerifyCopy(position: Int = 0) = verifyClipboardAndSnackbarAfter {
         onView(withId(R.id.rv)).perform(
-            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0, longClick())
+            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(position, longClick())
         )
     }
 
@@ -110,7 +120,7 @@ class ClipboardCopyInstrumentedTest {
         onView(withText(composeRule.activity.getString(R.string.gpu))).perform(scrollTo(), click())
         composeRule.waitForIdle()
 
-        longPressFirstRowAndVerifyCopy()
+        longPressFirstRowAndVerifyCopy(position = 1)
     }
 
     @Test
@@ -130,6 +140,6 @@ class ClipboardCopyInstrumentedTest {
         onView(withText(composeRule.activity.getString(R.string.sensors))).perform(scrollTo(), click())
         composeRule.waitForIdle()
 
-        longPressFirstRowAndVerifyCopy()
+        longPressFirstRowAndVerifyCopy(position = 1)
     }
 }

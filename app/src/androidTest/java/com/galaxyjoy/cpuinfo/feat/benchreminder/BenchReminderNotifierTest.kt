@@ -55,6 +55,17 @@ class BenchReminderNotifierTest {
     private fun isNotificationActive(): Boolean =
         notificationManager.activeNotifications.any { it.id == BenchReminderNotifier.NOTIFICATION_ID }
 
+    /** Both notify-triggered posts and [NotificationManager.cancel] are fire-and-forget Binder
+     * calls to the system notification service — [isNotificationActive] can still report the
+     * stale pre-call state for a brief window right after either one. Poll instead of checking
+     * once immediately (same fix as [com.galaxyjoy.cpuinfo.feat.healthalert.HealthAlertNotifierTest]). */
+    private fun waitUntilNotificationActiveIs(expected: Boolean, timeoutMs: Long = 2_000L) {
+        val deadline = System.currentTimeMillis() + timeoutMs
+        while (isNotificationActive() != expected && System.currentTimeMillis() < deadline) {
+            Thread.sleep(50)
+        }
+    }
+
     @Test
     fun maybeNotify_neverBenchmarked_postsNoNotification() {
         BenchReminderNotifier.maybeNotify(appContext, lastBenchTimestampMs = null, nowMs = intervalMs * 2)
@@ -75,6 +86,7 @@ class BenchReminderNotifierTest {
         val now = intervalMs * 2
         BenchReminderNotifier.maybeNotify(appContext, lastBenchTimestampMs = now - intervalMs, nowMs = now)
 
+        waitUntilNotificationActiveIs(true)
         assertTrue(isNotificationActive())
     }
 

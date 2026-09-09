@@ -28,6 +28,7 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
 import com.galaxyjoy.cpuinfo.feat.ActHost
 import com.galaxyjoy.cpuinfo.feat.app.APPLICATIONS_LIST_TAG
 import com.galaxyjoy.cpuinfo.feat.infor.cpu.ClusterTopologyBuilder
@@ -127,9 +128,21 @@ class ActHostSmokeTest {
 
         // Regression guard for T2.1: proves FrmNewApplications (Compose) is what's actually
         // wired into nav_graph.xml and inflates successfully — not the deleted FrmApplications.
-        composeRule.onNodeWithContentDescription(
-            composeRule.activity.getString(R.string.apps_more_options)
-        ).assertExists()
+        //
+        // 2026-09-09: was querying the COMPOSE semantics tree for `apps_more_options`
+        // (`composeRule.onNodeWithContentDescription`), which never matched — confirmed 100%
+        // reproducible even run in isolation (not TECNO/Griffin flakiness). Root cause:
+        // FrmNewApplications.kt merges its overflow menu into the Activity's shared native
+        // Toolbar via `MenuProvider`/`menu_apps_actions.xml` (see its KDoc: "Gộp menu 3 chấm ...
+        // vào Toolbar chung ... tránh 2 app bar chồng nhau") instead of rendering its own Compose
+        // app bar — so the overflow icon is a plain View, invisible to the Compose semantics
+        // tree. `apps_more_options` itself was never wired to any contentDescription anywhere in
+        // app code. Fixed by driving the overflow via Espresso instead.
+        Espresso.openActionBarOverflowOrOptionsMenu(
+            InstrumentationRegistry.getInstrumentation().targetContext,
+        )
+        onView(withText(composeRule.activity.getString(R.string.apps_sort_order))).check(matches(isDisplayed()))
+        pressBack()
     }
 
     @Test
@@ -137,17 +150,20 @@ class ActHostSmokeTest {
         onView(withId(R.id.menuApplications)).perform(click())
         composeRule.waitForIdle()
 
-        composeRule.onNodeWithContentDescription(
-            composeRule.activity.getString(R.string.apps_more_options)
-        ).performClick()
+        // See navigatingToApplicationsTabLoadsWithoutCrashing() above for why this drives the
+        // overflow via Espresso rather than the Compose semantics tree.
+        Espresso.openActionBarOverflowOrOptionsMenu(
+            InstrumentationRegistry.getInstrumentation().targetContext,
+        )
 
         // Before this fix, the Compose screen was missing Sort (dead onClick) and all 4 of these
         // actions compared to the FrmApplications it replaced — see doc/task/epic-01-bugfix.md B03.
-        composeRule.onNodeWithText(composeRule.activity.getString(R.string.apps_sort_order)).assertExists()
-        composeRule.onNodeWithText(composeRule.activity.getString(R.string.rate_app)).assertExists()
-        composeRule.onNodeWithText(composeRule.activity.getString(R.string.more_app)).assertExists()
-        composeRule.onNodeWithText(composeRule.activity.getString(R.string.share_app)).assertExists()
-        composeRule.onNodeWithText(composeRule.activity.getString(R.string.term_policy)).assertExists()
+        onView(withText(composeRule.activity.getString(R.string.apps_sort_order))).check(matches(isDisplayed()))
+        onView(withText(composeRule.activity.getString(R.string.rate_app))).check(matches(isDisplayed()))
+        onView(withText(composeRule.activity.getString(R.string.more_app))).check(matches(isDisplayed()))
+        onView(withText(composeRule.activity.getString(R.string.share_app))).check(matches(isDisplayed()))
+        onView(withText(composeRule.activity.getString(R.string.term_policy))).check(matches(isDisplayed()))
+        pressBack()
     }
 
     @Test
