@@ -1,5 +1,44 @@
 # AD migration — `AdmobApplovinWrapper 1.8.5`
 
+> **Cập nhật 2026-09-09 (audit consent theo yêu cầu QC)**: QC báo tích hợp ad SDK vẫn sai so với
+> guide, đào sâu tập trung consent (fetch trực tiếp `MyApplication.kt`/`SplashActivity.kt`/
+> `AdSdkConfig.kt`/`doc/CONSENT.MD` thật từ repo SDK qua `gh api`, không tin doc nội bộ có thể đã cũ).
+> Kết luận: code path đang active (AdMob, `IS_ENABLE_ADMOB=true`) khớp ĐÚNG với config mẫu tối giản
+> chính thức của SDK cho AdMob-gms ("Không cần consent config — UMP tự xử lý") — `SplashActivity.kt`
+> gọi `requestConsentInfoUpdate()` đúng pattern. Tìm được 4 gap thật, xử lý như sau:
+>
+> 1. **AdMob Console → Privacy messaging → European regulations → Published**: user xác nhận
+>    **đã publish** (2026-09-09) — nếu chưa, đây là P0 theo chính guide (RISK-03: UMP fail-open,
+>    phát ad cá nhân hoá cho EEA chưa consent = vi phạm GDPR thật). Ghi lại ở đây để lần audit sau
+>    không phải hỏi lại.
+> 2. **0 test coverage cho consent flow** (so với 5 file test riêng của SDK gốc) — đã thêm
+>    `app/src/androidTest/.../feat/SplashConsentNoHangInstrumentedTest.kt`, dùng seam
+>    `AdManager.setConsentHangForTest(true)` (mirror `SplashNoHangTest.kt` của SDK) để chứng minh
+>    splash luôn navigate sang `ActHost` dù UMP callback treo vĩnh viễn (chỉ dựa vào watchdog nội bộ
+>    SDK). Verify PASS trên TECNO KJ7 thật.
+> 3. **Không có cách xem form GDPR EEA thật mà không cần VPN** — đã wire `umpDebugGeography`/
+>    `umpTestDeviceHashedIds` (debug-only, `AdSdkConfig`) qua gradle property mới
+>    `-PdebugGeo=EEA` (`app/build.gradle.kts` field `UMP_DEBUG_GEOGRAPHY`, release luôn rỗng).
+>    ⚠️ **Phát hiện quan trọng lúc verify**: hash test-device cho `umpTestDeviceHashedIds` (UMP
+>    `ConsentDebugSettings`) là **HỆ HASH KHÁC** với hash AdMob `RequestConfiguration.setTestDeviceIds`
+>    (`QA_ADMOB_TEST_DEVICE_HASHES`) — cùng 1 máy TECNO KJ7, cùng thời điểm, ra 2 hash khác nhau
+>    (`7FA023DF89A8F446A4D9C665CEBF0B92` vs `B1EF014DD6D4DC54A4D160ECAA04C9A9`). Tách riêng thành
+>    `QA_UMP_DEBUG_GEOGRAPHY_TEST_DEVICE_HASHES` trong `GalaxyApp.kt`, đừng gộp 2 list. Verify sống
+>    trên TECNO KJ7: form GDPR EEA thật ("Publisher Test Ads asks for your consent...") hiện đúng,
+>    `IABTCF_gdprApplies=1` ghi vào storage, không cần VPN.
+> 4. **`applovinHasUserConsent` chưa set** — theo KDoc `AdSdkConfig.kt` thật (F-1, fix 1.7.2), field
+>    này áp dụng cho **CẢ HAI chế độ** `IS_ENABLE_ADMOB` (AppLovin vẫn là 1 network trong mediation
+>    waterfall dù AdMob là provider chính), không chỉ nhánh AppLovin thuần. Không có setter runtime —
+>    chỉ set được lúc `setConfig()`, hoặc gián tiếp qua `confirmGdprConsent(context, hasConsent)` sau
+>    khi UMP resolve. Nhưng `hasConsent` phải là **TCF Purpose 1 thật** (accept/decline), KHÔNG phải
+>    `canRequestAds` (gần như luôn `true` kể cả khi decline — chỉ đổi nghĩa sang NPA); tự parse bit
+>    TCF sai chuẩn v2.2 còn tệ hơn để trống — chính SDK cũng cố ý KHÔNG tự làm việc này (C-02, xem
+>    `doc/CONSENT.MD` mục "Consent signal → AppLovin settings"). **Quyết định (user, 2026-09-09):
+>    giữ `applovinHasUserConsent = null`** — khớp đúng config mẫu chính thức của SDK cho AdMob-gms,
+>    chấp nhận rủi ro còn lại đã được chính SDK author document rõ ("AppLovin mediation adapters chỉ
+>    nhận consent qua tự đọc `IABTCF_*` SharedPrefs, không đảm bảo 100% cho mọi network trong
+>    waterfall") thay vì tự viết TCF parser rủi ro sai cao hơn.
+>
 > **Cập nhật 2026-09-08 (bump 1.1.5 → 1.8.5 + VIP token ECDSA)**: SDK pin trước đó (`1.1.5`) thấp hơn
 > cả sàn tối thiểu `1.6.2` mà `AD_PROMPT_AOS.MD` yêu cầu — audit trực tiếp source thật (repo private
 > `royt93/AdmobApplovinWrapper`, tag `1.8.5` là mới nhất). Đã bump lên `1.8.5` với 2 thay đổi bắt buộc

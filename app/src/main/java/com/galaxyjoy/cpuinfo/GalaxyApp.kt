@@ -39,6 +39,15 @@ class GalaxyApp : Application() {
             "322285166ACB542864828826D2D92491", // Google Pixel 7 Pro
             "B1EF014DD6D4DC54A4D160ECAA04C9A9", // TECNO KJ7 (2026-09-09, hash cũ E422A3...87CC lỗi thời — ANDROID_ID đổi)
         )
+
+        // Hash RIÊNG cho UMP ConsentDebugSettings (umpDebugGeography) — KHÁC hệ với
+        // QA_ADMOB_TEST_DEVICE_HASHES ở trên (AdMob RequestConfiguration.setTestDeviceIds), dù cùng
+        // là "test-device hash" và cùng đọc từ logcat. Xác nhận thực nghiệm 2026-09-09 trên TECNO
+        // KJ7: 2 hash KHÁC NHAU cho cùng 1 máy vật lý cùng thời điểm (7FA023DF... vs B1EF014D...).
+        // Đọc từ logcat: "Use new ConsentDebugSettings.Builder().addTestDeviceHashedId(\"<HASH>\")".
+        private val QA_UMP_DEBUG_GEOGRAPHY_TEST_DEVICE_HASHES = arrayOf(
+            "7FA023DF89A8F446A4D9C665CEBF0B92", // TECNO KJ7 (2026-09-09)
+        )
     }
 
     @Inject
@@ -88,6 +97,13 @@ class GalaxyApp : Application() {
             // của SDK) — activateVipByKey tự thử verify token TRƯỚC redeem code, nên onRedeemClick
             // không cần sửa gì thêm để chấp nhận token; xem feat/vip/mint/ (debug-only) để đúc.
             vipTokenPublicKey = BuildConfig.VIP_TOKEN_PUBLIC_KEY,
+            // Debug-only QA override — ép UMP báo geography EEA/NOT_EEA để xem form consent GDPR
+            // thật trên máy VN mà không cần VPN (AD_PROMPT_AOS.MD audit 2026-09-09: SDK hỗ trợ sẵn
+            // cơ chế này nhưng app chưa từng wire). Bật bằng `-PdebugGeo=EEA`; rỗng = tắt (mặc định),
+            // release luôn rỗng (build.gradle.kts). Chỉ có tác dụng trên thiết bị đã khai ở
+            // QA_ADMOB_TEST_DEVICE_HASHES — UMP debug geography yêu cầu test-device hash tương ứng.
+            umpDebugGeography = if (BuildConfig.DEBUG) BuildConfig.UMP_DEBUG_GEOGRAPHY.ifBlank { null } else null,
+            umpTestDeviceHashedIds = if (BuildConfig.DEBUG) QA_UMP_DEBUG_GEOGRAPHY_TEST_DEVICE_HASHES.toList() else emptyList(),
         )
 
         // Revenue tracking — SDK Demo mẫu (MyApplication.kt) set 2 listener này trong

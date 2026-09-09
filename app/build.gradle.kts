@@ -127,6 +127,12 @@ android {
             buildConfigField("Boolean", "IS_ENABLE_ADMOB", "true") // false = AppLovin MAX
             manifestPlaceholders["admobAppId"] = "ca-app-pub-3940256099942544~3347511713" // Google test App ID
 
+            // QA: ép UMP báo geography EEA/NOT_EEA để xem form consent GDPR thật mà không cần VPN
+            // (`./gradlew -PdebugGeo=EEA :app:installDevDebug`). Rỗng = tắt, dùng geo thật của máy.
+            // Chỉ tác dụng trên thiết bị đã khai trong QA_ADMOB_TEST_DEVICE_HASHES (GalaxyApp.kt).
+            val umpDebugGeoOverride = (project.findProperty("debugGeo") as String?).orEmpty()
+            buildConfigField("String", "UMP_DEBUG_GEOGRAPHY", "\"$umpDebugGeoOverride\"")
+
             signingConfig = signingConfigs.getByName("debug")
             isMinifyEnabled = false
             enableUnitTestCoverage = true
@@ -141,6 +147,9 @@ android {
             buildConfigField("String", "ADMOB_REWARDED_ID", "\"${adsProp("admobRewardedIdRelease")}\"")
             buildConfigField("Boolean", "IS_ENABLE_ADMOB", "true") // false = AppLovin MAX
             manifestPlaceholders["admobAppId"] = adsProp("admobAppIdRelease")
+
+            // Release: không bao giờ ép geo — luôn dùng geography thật của user.
+            buildConfigField("String", "UMP_DEBUG_GEOGRAPHY", "\"\"")
 
             signingConfig = signingConfigs.findByName("release")
             isMinifyEnabled = true
