@@ -8,14 +8,17 @@ plugins {
     alias(libs.plugins.hilt)
 }
 
-val releaseKeystorePropertiesFile =
-    rootProject.file("../../../../myKeyStore/com.galaxyjoy.cpuinfo/keystore.properties")
-val releaseKeystorePropertiesText = providers.fileContents(
-    layout.file(providers.provider { releaseKeystorePropertiesFile })
+// Single source of truth cho mọi secret (signing + AppLovin + AdMob release + VIP backup) —
+// xem doc/AD_PROMPT_AOS.MD Step 1.5. File nằm ở private repo royt93/myKeyStore, KHÔNG commit
+// vào repo này.
+val adsPropertiesFile =
+    rootProject.file("../../../../myKeyStore/com.galaxyjoy.cpuinfo/ads.properties")
+val adsPropertiesText = providers.fileContents(
+    layout.file(providers.provider { adsPropertiesFile })
 ).asText.orNull
-val releaseKeystoreProperties = Properties().apply {
-    if (releaseKeystorePropertiesText != null) {
-        releaseKeystorePropertiesText.reader().use(::load)
+val adsProperties = Properties().apply {
+    if (adsPropertiesText != null) {
+        adsPropertiesText.reader().use(::load)
     }
 }
 val releaseTaskRequested = gradle.startParameter.taskNames.any { requestedTask ->
@@ -26,13 +29,20 @@ val releaseTaskRequested = gradle.startParameter.taskNames.any { requestedTask -
         taskName.equals("bundle", ignoreCase = true)
 }
 
-if (releaseTaskRequested && !releaseKeystorePropertiesFile.isFile) {
+if (releaseTaskRequested && !adsPropertiesFile.isFile) {
     throw GradleException(
         "Release signing configuration is missing. Clone the private royt93/myKeyStore " +
-            "repository to ${releaseKeystorePropertiesFile.parentFile.parentFile.parentFile} " +
-            "and ensure com.galaxyjoy.cpuinfo/keystore.properties exists."
+            "repository to ${adsPropertiesFile.parentFile.parentFile.parentFile} " +
+            "and ensure com.galaxyjoy.cpuinfo/ads.properties exists."
     )
 }
+
+// debug build không bắt buộc có file (contributor chưa clone myKeyStore vẫn build debug được) —
+// chỉ log cảnh báo, AppLovin ad sẽ không hiện (SDK fail-soft) thay vì crash.
+fun adsProp(key: String): String =
+    adsProperties.getProperty(key) ?: "".also {
+        logger.warn("⚠️ ads.properties thiếu key '$key' (${adsPropertiesFile.path}) — AppLovin ad sẽ không hiện ở build này.")
+    }
 
 android {
     namespace = "com.galaxyjoy.cpuinfo"
@@ -55,12 +65,17 @@ android {
             }
         }
 
-        // AppLovin MAX
-        buildConfigField("String", "APPLOVIN_SDK_KEY",     "\"e75FnQfS9XTTqM1Kne69U7PW_MBgAnGQTFvtwVVui6kRPKs5L7ws9twr5IQWwVfzPKZ5pF2IfDa7lguMgGlCyt\"")
-        buildConfigField("String", "APPLOVIN_BANNER_ID",   "\"b568752d68ca93f8\"")
-        buildConfigField("String", "APPLOVIN_INTER_ID",    "\"5ce404d8a94fa941\"")
-        buildConfigField("String", "APPLOVIN_APP_OPEN_ID", "\"8f218722ddc4ff48\"")
-        buildConfigField("String", "APPLOVIN_REWARD_ID",   "\"e460250d026fafa6\"")
+        // AppLovin MAX — giá trị thật đọc từ ads.properties (private myKeyStore repo), KHÔNG
+        // hardcode ở đây. Xem adsProp() phía trên.
+        buildConfigField("String", "APPLOVIN_SDK_KEY",     "\"${adsProp("applovinSdkKey")}\"")
+        buildConfigField("String", "APPLOVIN_BANNER_ID",   "\"${adsProp("applovinBannerId")}\"")
+        buildConfigField("String", "APPLOVIN_INTER_ID",    "\"${adsProp("applovinInterstitialId")}\"")
+        buildConfigField("String", "APPLOVIN_APP_OPEN_ID", "\"${adsProp("applovinAppOpenId")}\"")
+        buildConfigField("String", "APPLOVIN_REWARD_ID",   "\"${adsProp("applovinRewardedId")}\"")
+
+        // VIP token ECDSA public key (verify-only, an toàn khi ship trong app) — private key
+        // KHÔNG bao giờ đi qua BuildConfig, xem ads.properties.
+        buildConfigField("String", "VIP_TOKEN_PUBLIC_KEY", "\"${adsProp("vipTokenPublicKey")}\"")
 
         // Privacy Policy URL — dùng chung cho consent dialog + VIP footer
         buildConfigField(
@@ -81,7 +96,7 @@ android {
 //            keyPassword = debugSigningConfig.getProperty(SigningConfig.KEY_PASS)
 //            storePassword = debugSigningConfig.getProperty(SigningConfig.KEY_PASS)
         }
-        if (releaseKeystorePropertiesFile.isFile) create("release") {
+        if (adsPropertiesFile.isFile) create("release") {
 //            val releaseSigningConfig = SigningConfig.getReleaseProperties(rootProject.rootDir)
 //            storeFile = file(releaseSigningConfig.getProperty(SigningConfig.KEY_PATH))
 //            keyAlias = releaseSigningConfig.getProperty(SigningConfig.KEY_ALIAS)
@@ -89,13 +104,13 @@ android {
 //            storePassword = releaseSigningConfig.getProperty(SigningConfig.KEY_PASS)
 
             fun requiredSigningProperty(name: String): String =
-                releaseKeystoreProperties.getProperty(name)?.takeIf(String::isNotBlank)
+                adsProperties.getProperty(name)?.takeIf(String::isNotBlank)
                     ?: throw GradleException(
-                        "Missing '$name' in ${releaseKeystorePropertiesFile.absolutePath}"
+                        "Missing '$name' in ${adsPropertiesFile.absolutePath}"
                     )
 
             val configuredStoreFile = requiredSigningProperty("storeFile")
-            storeFile = releaseKeystorePropertiesFile.parentFile.resolve(configuredStoreFile)
+            storeFile = adsPropertiesFile.parentFile.resolve(configuredStoreFile)
             storePassword = requiredSigningProperty("storePassword")
             keyAlias = requiredSigningProperty("keyAlias")
             keyPassword = requiredSigningProperty("keyPassword")
@@ -104,11 +119,13 @@ android {
 
     buildTypes {
         debug {
+            // Debug: Google test ID chính thức (an toàn, không cần secret) — giữ nguyên hardcode.
             buildConfigField("String", "ADMOB_BANNER_ID", "\"ca-app-pub-3940256099942544/6300978111\"")
             buildConfigField("String", "ADMOB_INTERSTITIAL_ID", "\"ca-app-pub-3940256099942544/1033173712\"")
             buildConfigField("String", "ADMOB_APP_OPEN_ID", "\"ca-app-pub-3940256099942544/9257395921\"")
             buildConfigField("String", "ADMOB_REWARDED_ID", "\"ca-app-pub-3940256099942544/5224354917\"")
             buildConfigField("Boolean", "IS_ENABLE_ADMOB", "true") // false = AppLovin MAX
+            manifestPlaceholders["admobAppId"] = "ca-app-pub-3940256099942544~3347511713" // Google test App ID
 
             signingConfig = signingConfigs.getByName("debug")
             isMinifyEnabled = false
@@ -116,14 +133,14 @@ android {
 //            applicationIdSuffix = ".debug"
         }
         release {
-            //nho check APPLICATION_ID trong manifest
-            buildConfigField("String", "ADMOB_BANNER_ID", "\"ca-app-pub-3612191981543807/6633406668\"")
-            buildConfigField("String", "ADMOB_INTERSTITIAL_ID", "\"ca-app-pub-3612191981543807/5493932422\"")
-            buildConfigField("String", "ADMOB_APP_OPEN_ID", "\"ca-app-pub-3612191981543807/5265851653\"")
-            // TODO: Thay test ID bằng AdMob Rewarded ID prod khi có (hỏi user). Test ID hiện tại
-            // KHÔNG kiếm tiền — chỉ giữ để release build không crash khi rewarded button được bấm.
-            buildConfigField("String", "ADMOB_REWARDED_ID", "\"ca-app-pub-3940256099942544/5224354917\"")
+            // Release: giá trị thật đọc từ ads.properties (private myKeyStore repo).
+            buildConfigField("String", "ADMOB_BANNER_ID", "\"${adsProp("admobBannerIdRelease")}\"")
+            buildConfigField("String", "ADMOB_INTERSTITIAL_ID", "\"${adsProp("admobInterstitialIdRelease")}\"")
+            buildConfigField("String", "ADMOB_APP_OPEN_ID", "\"${adsProp("admobAppOpenIdRelease")}\"")
+            // TODO: admobRewardedIdRelease trong ads.properties vẫn là test ID — thay khi user cấp ID prod thật.
+            buildConfigField("String", "ADMOB_REWARDED_ID", "\"${adsProp("admobRewardedIdRelease")}\"")
             buildConfigField("Boolean", "IS_ENABLE_ADMOB", "true") // false = AppLovin MAX
+            manifestPlaceholders["admobAppId"] = adsProp("admobAppIdRelease")
 
             signingConfig = signingConfigs.findByName("release")
             isMinifyEnabled = true

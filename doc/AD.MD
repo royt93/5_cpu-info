@@ -1,9 +1,44 @@
-# AD migration — `AdmobApplovinWrapper 1.1.5`
+# AD migration — `AdmobApplovinWrapper 1.8.5`
 
+> **Cập nhật 2026-09-08 (bump 1.1.5 → 1.8.5 + VIP token ECDSA)**: SDK pin trước đó (`1.1.5`) thấp hơn
+> cả sàn tối thiểu `1.6.2` mà `AD_PROMPT_AOS.MD` yêu cầu — audit trực tiếp source thật (repo private
+> `royt93/AdmobApplovinWrapper`, tag `1.8.5` là mới nhất). Đã bump lên `1.8.5` với 2 thay đổi bắt buộc
+> để không vỡ VIP: (1) `AdSdkConfig.appOpenExcludedActivities = listOf(SplashActivity::class.java)`
+> (field chỉ có từ 1.3.0+, trước đó dựa default deprecated); (2) toàn bộ chỗ dùng
+> `activateVipByKey(ctx, AdKeys.VIP_SECRET, days)` như "cấp ngày không cần verify" (rewarded ad, gift
+> code, streak claim) chuyển sang `AdManager.grantVipDays(ctx, days)` — API đúng, cộng dồn thật, không
+> phụ thuộc `allowLegacyPlaintextVipKey` (giữ mặc định `false`, an toàn hơn bản trước).
+> Đồng thời tách `AdKeys.VIP_SECRET` cũ (trùng giá trị mã VIP 30 ngày public — lỗi thiết kế) thành
+> `AdKeys.VIP_ANTI_TAMPER_SECRET` (giá trị riêng, chỉ chống-tamper) + đăng ký mã 30d/3d qua
+> `AdSdkConfig.vipRedeemCodes` (API "thẻ cào" chính thức, không deprecated) — mã cũ khách đang có
+> **giữ nguyên giá trị, không bị ảnh hưởng**. Bổ sung `AdManager.generateVipKeyPair()` sinh cặp khoá
+> ECDSA thật (không phải cặp mẫu SDK), `vipTokenPublicKey` ship trong app qua `BuildConfig`, private
+> key chỉ lưu ở `ads.properties` (myKeyStore) — dán tay vào công cụ đúc token debug-only
+> (`feat/vip/mint/VipTokenMintBottomSheet`, long-press nút "Đổi mã" ở màn VIP).
+> `composeBom` cũng bump `2024.06.00 → 2024.09.03` (kéo theo khi nâng `androidx-test-ext-junit`/
+> `espresso` để fix widget test — bản Compose cũ và thư viện test mới lệch runtime, gây
+> `NoSuchMethodError` khi chạy instrumented test) — đã verify app thật chạy trên máy, không crash.
+> `PullToRefreshContainer` (màn Apps) bị xoá ở bản mới → viết lại bằng `PullToRefreshBox`.
+>
+> **Cập nhật 2026-09-08 (secrets audit theo `doc/AD_PROMPT_AOS.MD` Step 1.5)**: `app/build.gradle.kts`
+> trước đó hardcode plaintext `APPLOVIN_SDK_KEY` + toàn bộ AppLovin ad-unit ID + AdMob release ad-unit
+> ID, và `AndroidManifest.xml` hardcode AdMob App ID thật — cả 3 file này **tracked trong git, đã push
+> lên repo public `github.com/royt93/5_cpu-info`**. Đã gom hết các giá trị này (+ AdMob App ID, + bản
+> backup plain-text của VIP secrets vốn chỉ tồn tại dưới dạng Base64 trong `AdKeys.kt`) vào **1 file
+> duy nhất** `../../../../myKeyStore/com.galaxyjoy.cpuinfo/ads.properties` (đổi tên từ
+> `keystore.properties` cũ, private repo `royt93/myKeyStore`, đã commit+push). `app/build.gradle.kts`
+> giờ đọc AppLovin/AdMob-release/App-ID qua hàm `adsProp(key)` — debug build vẫn hardcode Google test ID
+> (không cần secret). Đã verify `assembleDevDebug` + `assembleProductionRelease` build xanh với giá trị
+> đọc từ file mới, `BuildConfig` ra đúng giá trị cũ (không đổi hành vi runtime).
+> ⚠️ **Chưa xử lý**: key ký release (keystore.jks alias `mckimquyen`) + password của nó từng bị commit
+> plaintext vào lịch sử git của **chính repo cpuinfo** (`app/keystore.jks` tới commit `e025d75`, đã push
+> lên `origin/dev` public) — user đã xác nhận **chấp nhận rủi ro, không rotate key, không rewrite
+> history, giữ repo public** (2026-09-08). Key public production hiện tại vẫn là key đã lộ này.
+>
 > **Cập nhật 2026-08-28**: mục 7 dưới đây ghi "đã xoá field `adView`" đúng tại thời điểm migration, nhưng field này **đã được thêm lại sau đó** trong `ActHost.kt` — cần thiết để có thể `AdManager.bannerDestroy()` thủ công khi user activate VIP giữa session (lib không tự destroy khi VIP toggle vì view đã instantiated trước đó). Không phải leak — có comment giải thích tại chỗ khai báo field. Phần còn lại của tài liệu vẫn đúng lịch sử migration.
 
 Lib reference: `/Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/_AdmobWrapper`
-Coordinate: `com.github.royt93:AdmobApplovinWrapper:1.1.5` (JitPack)
+Coordinate: `com.github.royt93:AdmobApplovinWrapper:1.8.5` (JitPack) — bump lịch sử: 1.1.1 → 1.1.5 (migration 2026-08-28) → 1.8.5 (2026-09-08, xem cập nhật đầu file)
 Spec gốc của template: `doc/AD_PROMPT_AOS.MD`
 
 ## Provider runtime

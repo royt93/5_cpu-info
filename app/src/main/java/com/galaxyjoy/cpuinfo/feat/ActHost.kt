@@ -47,6 +47,7 @@ import com.galaxyjoy.cpuinfo.util.resolveActionBarContentColor
 import com.google.android.material.color.DynamicColors
 import com.google.android.material.snackbar.Snackbar
 import com.roy.sdkadbmob.AdManager
+import com.roy.sdkadbmob.SafeLogger
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -207,7 +208,7 @@ class ActHost : BaseActivity() {
      */
     private fun applyVipBannerState() {
         val isVip = AdManager.isVipByKeyActive()
-        Log.d(TAG, "applyVipBannerState: isVip=$isVip, adView=${adView != null}")
+        SafeLogger.d(TAG, "applyVipBannerState: isVip=$isVip, adView=${adView != null}")
         if (isVip) {
             adView?.let { AdManager.bannerDestroy(it) }
             adView = null
@@ -221,7 +222,7 @@ class ActHost : BaseActivity() {
                     container = binding.layoutAdBanner.bannerContainer,
                     tvLabelAd = binding.layoutAdBanner.tvLabelAd,
                 )
-                Log.d(TAG, "applyVipBannerState: loaded banner, adView=${adView != null}")
+                SafeLogger.d(TAG, "applyVipBannerState: loaded banner, adView=${adView != null}")
             }
         }
     }
@@ -353,7 +354,7 @@ class ActHost : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        Log.d(TAG, "onResume → refresh banner state + VIP badge")
+        SafeLogger.d(TAG, "onResume → refresh banner state + VIP badge")
         applyVipBannerState()
         refreshVipBadgeAndPulse()
         refreshShieldScoreBadge()
@@ -408,7 +409,7 @@ class ActHost : BaseActivity() {
     }
 
     private fun navigateToVip() {
-        Log.d(TAG, "navigateToVip → start ActVip")
+        SafeLogger.d(TAG, "navigateToVip → start ActVip")
         ActVip.start(this)
     }
 
@@ -427,7 +428,7 @@ class ActHost : BaseActivity() {
     private fun refreshVipBadgeAndPulse() {
         val active = AdManager.isVipByKeyActive()
         val icon = vipIconView ?: return
-        Log.d(TAG, "refreshVipBadgeAndPulse: active=$active")
+        SafeLogger.d(TAG, "refreshVipBadgeAndPulse: active=$active")
         if (active) {
             // Solid gold cho VIP — color visible rõ trên cả light/dark toolbar.
             androidx.core.widget.ImageViewCompat.setImageTintList(

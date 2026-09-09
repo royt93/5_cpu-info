@@ -5,25 +5,40 @@ import com.galaxyjoy.cpuinfo.common.const.AdKeys
 /**
  * Whitelist các plain key + số ngày tương ứng.
  *
- * Lib `AdManager.activateVipByKey(ctx, key, days)` (v1.1.5) chỉ accept duy nhất
- * `key == adConfig.vipKeySecret`. Vì vậy tất cả entry trong whitelist này MUST
- * map về cùng `AdKeys.VIP_SECRET` khi gọi lib, chỉ thay đổi field `days`.
+ * SDK 1.8.5+: `AdSdkConfig.vipRedeemCodes` (đúng "thẻ cào" API, non-deprecated) đọc trực tiếp
+ * [keyToDays] này — `AdManager.activateVipByKey(ctx, rawKeyUserGõ, _)` tự tra map + tự tính days,
+ * KHÔNG còn cần app tự thay key user gõ bằng `vipKeySecret` như bản cũ (≤1.1.5, xem git history).
  *
- * Map app-side là để UX (user có cảm giác có "2 key khác nhau" cho 30/3 ngày),
- * nhưng key truyền vào lib luôn = `VIP_SECRET`.
+ * [lookupDays] vẫn giữ để UI hiển thị đúng "days" trong toast thành công + phân biệt "key hợp lệ
+ * nhưng chưa activate" với "không phải key, thử gift-code" ở `FVipManagement.onRedeemClick`.
  */
 internal object VipKeys {
 
     const val VIP_30D_DAYS = 30
     const val VIP_3D_DAYS = 3
 
-    private val keyToDays: Map<String, Int> by lazy {
+    /** Nguồn cho `AdSdkConfig.vipRedeemCodes` (GalaxyApp.kt) — SDK tự verify + tự cấp đúng số ngày. */
+    val keyToDays: Map<String, Int> by lazy {
         mapOf(
             AdKeys.VIP_30D_KEY to VIP_30D_DAYS,
             AdKeys.VIP_3D_KEY  to VIP_3D_DAYS,
         )
     }
 
-    /** Trả số ngày nếu key hợp lệ, hoặc null. */
-    fun lookupDays(rawInput: String): Int? = keyToDays[rawInput.trim()]
+    /** Trả số ngày nếu key hợp lệ, hoặc null. [keyToDays] injectable cho unit test JVM (tránh phụ
+     * thuộc `android.util.Base64` của bản thật — xem `VipGiftCode.decode`'s cùng pattern). */
+    fun lookupDays(rawInput: String, keyToDays: Map<String, Int> = VipKeys.keyToDays): Int? =
+        keyToDays[rawInput.trim()]
+
+    /**
+     * Số ngày còn lại tới [expiryMs], làm tròn LÊN ngày kế tiếp (giống cách SDK tính hạn cho
+     * redeem code) — dùng để hiển thị "days" trong toast thành công khi kích hoạt qua **token
+     * ECDSA** (không nằm trong [keyToDays] nên [lookupDays] trả null, không có sẵn con số để hiện
+     * trước; phải đọc lại hạn thật từ `AdManager.getVipByKeyExpiry()` SAU khi activate thành công).
+     */
+    fun daysUntil(expiryMs: Long, nowMs: Long): Int {
+        val dayMs = 24L * 60L * 60L * 1000L
+        val diffMs = expiryMs - nowMs
+        return ((diffMs + dayMs - 1) / dayMs).toInt().coerceAtLeast(1)
+    }
 }

@@ -26,8 +26,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
-import androidx.compose.material3.pulltorefresh.PullToRefreshContainer
-import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -37,7 +36,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
@@ -95,17 +93,10 @@ fun ApplicationsScreen(
         },
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
     ) { innerPaddingModifier ->
-        val pullToRefreshState = rememberPullToRefreshState()
-        LaunchedEffect(uiState.isLoading) {
-            if (uiState.isLoading) pullToRefreshState.startRefresh() else pullToRefreshState.endRefresh()
-        }
-        if (pullToRefreshState.isRefreshing) {
-            LaunchedEffect(Unit) { onRefreshApplications() }
-        }
-        Box(
-            modifier = Modifier
-                .nestedScroll(pullToRefreshState.nestedScrollConnection)
-                .padding(innerPaddingModifier),
+        PullToRefreshBox(
+            isRefreshing = uiState.isLoading,
+            onRefresh = onRefreshApplications,
+            modifier = Modifier.padding(innerPaddingModifier),
         ) {
             ApplicationsList(
                 appList = uiState.applications,
@@ -118,10 +109,6 @@ fun ApplicationsScreen(
                 onNativeLibsClicked = onNativeLibsClicked,
                 onPermissionsClicked = onPermissionsClicked,
                 onOpenPlayStore = onOpenPlayStore,
-            )
-            PullToRefreshContainer(
-                state = pullToRefreshState,
-                modifier = Modifier.align(Alignment.TopCenter),
             )
         }
     }

@@ -6,7 +6,6 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
 import androidx.lifecycle.lifecycleScope
@@ -14,7 +13,9 @@ import com.galaxyjoy.cpuinfo.BaseActivity
 import com.galaxyjoy.cpuinfo.databinding.ActivitySplashBinding
 import com.roy.sdkadbmob.AdManager
 import com.roy.sdkadbmob.ExperimentalAdApi
+import com.roy.sdkadbmob.SafeLogger
 import com.roy.sdkadbmob.awaitSplashComplete
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
@@ -40,7 +41,7 @@ class SplashActivity : BaseActivity() {
             navigationBarStyle = SystemBarStyle.auto(Color.TRANSPARENT, Color.TRANSPARENT),
         )
         super.onCreate(savedInstanceState)
-        Log.d(TAG, "onCreate → request UMP consent")
+        SafeLogger.d(TAG, "onCreate → request UMP consent")
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -49,24 +50,30 @@ class SplashActivity : BaseActivity() {
         // launch coroutine để tránh race khi user back ra khỏi splash sớm.
         AdManager.requestConsentInfoUpdate(this) { canRequestAds ->
             if (isFinishing || isDestroyed) {
-                Log.d(TAG, "UMP callback fired AFTER activity destroyed → skip")
+                SafeLogger.d(TAG, "UMP callback fired AFTER activity destroyed → skip")
                 return@requestConsentInfoUpdate
             }
-            Log.d(TAG, "UMP canRequestAds=$canRequestAds → start splash flow")
+            SafeLogger.d(TAG, "UMP canRequestAds=$canRequestAds → start splash flow")
             runSplashFlow()
         }
     }
 
     @OptIn(ExperimentalAdApi::class)
     private fun runSplashFlow() {
-        Log.d(TAG, "runSplashFlow: awaitSplashComplete start")
+        SafeLogger.d(TAG, "runSplashFlow: awaitSplashComplete start")
         splashJob?.cancel()
         splashJob = lifecycleScope.launch {
             try {
                 AdManager.awaitSplashComplete(this@SplashActivity)
-                Log.d(TAG, "runSplashFlow: awaitSplashComplete returned → navigate")
+                SafeLogger.d(TAG, "runSplashFlow: awaitSplashComplete returned → navigate")
+            } catch (e: CancellationException) {
+                // Activity bị destroy (xoay màn hình...) giữa lúc awaitSplashComplete đang suspend
+                // → coroutine bị cancel theo lifecycleScope, KHÔNG phải lỗi load ad. Rethrow thay vì
+                // nuốt (đúng mẫu SplashActivity.kt thật của SDK) — goToMain() bên dưới vẫn tự guard
+                // isFinishing/isDestroyed nên không navigate nhầm dù rethrow ở đây.
+                throw e
             } catch (e: Exception) {
-                Log.e(TAG, "awaitSplashComplete error", e)
+                SafeLogger.e(TAG, "awaitSplashComplete error", e)
             }
             goToMain()
         }
@@ -74,10 +81,10 @@ class SplashActivity : BaseActivity() {
 
     private fun goToMain() {
         if (isFinishing || isDestroyed) {
-            Log.d(TAG, "goToMain skipped (activity finishing/destroyed)")
+            SafeLogger.d(TAG, "goToMain skipped (activity finishing/destroyed)")
             return
         }
-        Log.d(TAG, "goToMain → ActHost")
+        SafeLogger.d(TAG, "goToMain → ActHost")
         val intent = Intent(this@SplashActivity, ActHost::class.java)
         startActivity(intent)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {

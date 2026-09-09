@@ -55,7 +55,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.galaxyjoy.cpuinfo.R
-import com.galaxyjoy.cpuinfo.common.const.AdKeys
 import com.galaxyjoy.cpuinfo.feat.achievement.AchievementPrefs
 import com.galaxyjoy.cpuinfo.feat.setting.BaseRoundedBottomSheet
 import com.galaxyjoy.cpuinfo.feat.vip.streak.CheckInStreak
@@ -110,10 +109,10 @@ class ShieldScoreBottomSheet : BaseRoundedBottomSheet() {
                     hasUnclaimedMilestone = hasUnclaimed,
                     justClaimedBase = justClaimedBase,
                     onClaimBaseClicked = {
-                        // v1.1.5 has no direct "grant N days" API — activateVipByKey(secret, days)
-                        // is the same call VipKeys-based redemption already uses (see VipKeys.kt),
-                        // just with days=1 instead of the 30/3-day whitelist amounts.
-                        val granted = AdManager.activateVipByKey(requireContext(), AdKeys.VIP_SECRET, 1)
+                        // grantVipDays: cấp thẳng N ngày, không qua verify key — đúng API cho case
+                        // "app tự quyết định cấp thưởng" (khác onRedeemClick, nơi user gõ 1 mã cụ
+                        // thể phải verify qua AdSdkConfig.vipRedeemCodes).
+                        val granted = AdManager.grantVipDays(requireContext(), 1)
                         if (granted) {
                             streakPrefs.consumeMilestoneClaim()
                             hasUnclaimed = false
@@ -125,7 +124,7 @@ class ShieldScoreBottomSheet : BaseRoundedBottomSheet() {
                         val hostActivity = activity ?: return@ShieldScoreContent
                         AdManager.showRewarded(hostActivity) { earned ->
                             if (!isAdded || earned != true) return@showRewarded
-                            AdManager.activateVipByKey(requireContext(), AdKeys.VIP_SECRET, 1)
+                            AdManager.grantVipDays(requireContext(), 1)
                             Toast.makeText(requireContext(), R.string.streak_claimed_toast, Toast.LENGTH_LONG).show()
                         }
                     },
@@ -140,7 +139,7 @@ class ShieldScoreBottomSheet : BaseRoundedBottomSheet() {
 }
 
 @Composable
-private fun ShieldScoreContent(
+internal fun ShieldScoreContent(
     score: ShieldScoreCalculator.Result,
     recordsBrokenCount: Int,
     rebootCount: Int,

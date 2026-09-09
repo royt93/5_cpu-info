@@ -5,12 +5,11 @@ import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 
 /**
- * U11 — gift-a-day share code. Deliberately does NOT embed [AdKeys.VIP_SECRET] anywhere in the
- * shared text (that constant is the same value as the real 30-day redeem key — see `VipKeys.kt`'s
- * own doc comment — leaking it in a code meant to be pasted into chat apps would hand out the
- * master redeem key). Instead the code just proves "this is a genuine gift, issued on day X" via
- * HMAC with a separate signing key; the receiving app's own embedded [AdKeys.VIP_SECRET] (never
- * transmitted) is what actually gets passed to `AdManager.activateVipByKey` on redemption.
+ * U11 — gift-a-day share code. Deliberately does NOT embed any VIP redeem key or the app's
+ * anti-tamper secret ([AdKeys.VIP_ANTI_TAMPER_SECRET]) anywhere in the shared text. The code just
+ * proves "this is a genuine gift, issued on day X" via HMAC with a separate signing key
+ * ([AdKeys.VIP_GIFT_SIGNING_KEY]); redemption grants the gift day(s) via `AdManager.grantVipDays`
+ * (see `FVipManagement.tryRedeemGiftCode`), unrelated to the redeem-key/anti-tamper secrets.
  */
 object VipGiftCode {
 

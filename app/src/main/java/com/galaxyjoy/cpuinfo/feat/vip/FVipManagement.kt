@@ -7,7 +7,9 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.util.Log
+import com.galaxyjoy.cpuinfo.BuildConfig
+import com.galaxyjoy.cpuinfo.feat.vip.mint.VipTokenMintBottomSheet
+import com.roy.sdkadbmob.SafeLogger
 import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
 import android.view.View
@@ -76,7 +78,7 @@ class FVipManagement : Fragment() {
         binding.vipRoot.startAnimation(anim)
 
         // Đảm bảo rewarded sẵn sàng khi user mở VIP screen — lib không tự auto-load.
-        Log.d(TAG, "onViewCreated → preload rewarded")
+        SafeLogger.d(TAG, "onViewCreated → preload rewarded")
         AdManager.loadRewarded(requireContext())
 
         applyDynamicAccentColors()
@@ -114,6 +116,14 @@ class FVipManagement : Fragment() {
 
     private fun setupListeners() {
         binding.btnRedeemKey.setOnClickListener { onRedeemClick() }
+        // Debug-only entry point cho công cụ đúc VIP token nội bộ (không đóng gói vào release,
+        // không hiện gợi ý UI gì — dev tự biết long-press). Xem feat/vip/mint/VipTokenMintBottomSheet.
+        if (BuildConfig.DEBUG) {
+            binding.btnRedeemKey.setOnLongClickListener {
+                VipTokenMintBottomSheet().show(parentFragmentManager, VipTokenMintBottomSheet.TAG)
+                true
+            }
+        }
         binding.btnWatchAd.setOnClickListener { onWatchAdClick() }
         binding.btnGiftVip.setOnClickListener { onGiftVipClick() }
         binding.btnRevoke.setOnClickListener { onRevokeClick() }
@@ -155,23 +165,26 @@ class FVipManagement : Fragment() {
 
     private fun onRedeemClick() {
         val raw = binding.etRedeemKey.text?.toString().orEmpty()
-        Log.d(TAG, "onRedeemClick: input length=${raw.length}")
+        SafeLogger.d(TAG, "onRedeemClick: input length=${raw.length}")
         if (raw.isBlank()) {
             binding.tilRedeemKey.error = getString(R.string.vip_redeem_invalid)
             return
         }
-        val days = VipKeys.lookupDays(raw)
-        if (days == null) {
-            if (tryRedeemGiftCode(raw)) return
-            Log.d(TAG, "onRedeemClick: invalid key (not in whitelist, not a valid gift code)")
-            binding.tilRedeemKey.error = getString(R.string.vip_redeem_invalid)
-            return
-        }
-        // Lib v1.1.5 single-key: phải pass AdKeys.VIP_SECRET (= vipKeySecret) cho dù
-        // app-side detect key 30d hay 3d. App-side đã verify whitelist qua lookupDays().
-        val ok = AdManager.activateVipByKey(requireContext(), AdKeys.VIP_SECRET, days)
-        Log.d(TAG, "onRedeemClick: activate result=$ok, days=$days")
+        if (tryRedeemGiftCode(raw)) return
+
+        // SDK 1.8.5+: pass THẲNG key user gõ. AdManager.activateVipByKey tự thử 3 nhánh theo thứ
+        // tự — (1) token ECDSA ký hợp lệ (AdSdkConfig.vipTokenPublicKey), (2) mã cố định trong
+        // AdSdkConfig.vipRedeemCodes (= VipKeys.keyToDays) — không còn cần app tự thay key user gõ
+        // bằng vipKeySecret như bản cũ (≤1.1.5). `days` truyền vào chỉ có ý nghĩa nếu SDK không tự
+        // suy ra được (không xảy ra ở 2 nhánh trên) nên dùng lookupDays() ?: 0 là an toàn.
+        val whitelistedDays = VipKeys.lookupDays(raw)
+        val ok = AdManager.activateVipByKey(requireContext(), raw, whitelistedDays ?: 0)
+        SafeLogger.d(TAG, "onRedeemClick: activate result=$ok")
         if (ok) {
+            // Mã 30d/3d biết trước số ngày; token ECDSA thì không (SDK tự đọc hạn từ payload ký) —
+            // suy ra từ hạn thật sau khi activate cho đúng con số hiện trong toast.
+            val days = whitelistedDays
+                ?: VipKeys.daysUntil(AdManager.getVipByKeyExpiry(), System.currentTimeMillis())
             vipPrefs.saveGrantedAtMs(System.currentTimeMillis())
             vipPrefs.markUserRedeemed()
             vipPrefs.addTotalDaysActivated(days)
@@ -185,6 +198,7 @@ class FVipManagement : Fragment() {
             bindUi()
             notifyVipChanged()
         } else {
+            SafeLogger.d(TAG, "onRedeemClick: invalid key (not token, not whitelist, not gift code)")
             binding.tilRedeemKey.error = getString(R.string.vip_redeem_invalid)
         }
     }
@@ -199,17 +213,19 @@ class FVipManagement : Fragment() {
         val issuedEpochDay = VipGiftCode.decode(raw) ?: return false
         val today = VipGiftPrefs.todayEpochDay()
         if (!VipGiftLogic.isCodeFresh(issuedEpochDay, today)) {
-            Log.d(TAG, "tryRedeemGiftCode: code expired (issued=$issuedEpochDay, today=$today)")
+            SafeLogger.d(TAG, "tryRedeemGiftCode: code expired (issued=$issuedEpochDay, today=$today)")
             return false
         }
         if (!VipGiftLogic.canRedeemToday(vipGiftPrefs.getLastRedeemedEpochDay(), today)) {
-            Log.d(TAG, "tryRedeemGiftCode: already redeemed a gift today")
+            SafeLogger.d(TAG, "tryRedeemGiftCode: already redeemed a gift today")
             binding.tilRedeemKey.error = getString(R.string.vip_gift_already_redeemed_today)
             return true
         }
-        val days = VipGiftLogic.daysToGrantForAccumulate(AdManager.getVipByKeyExpiry(), System.currentTimeMillis())
-        val ok = AdManager.activateVipByKey(requireContext(), AdKeys.VIP_SECRET, days)
-        Log.d(TAG, "tryRedeemGiftCode: activate result=$ok, accumulateDays=$days")
+        // grantVipDays tự cộng dồn (addVipDaysAtomic) — không còn cần daysToGrantForAccumulate
+        // tính bù cho hành vi raise-to-max cũ của activateVipByKey.
+        val days = VipGiftLogic.GIFT_DAYS
+        val ok = AdManager.grantVipDays(requireContext(), days)
+        SafeLogger.d(TAG, "tryRedeemGiftCode: grant result=$ok, days=$days")
         if (!ok) return false
 
         vipGiftPrefs.saveLastRedeemedEpochDay(today)
@@ -241,7 +257,7 @@ class FVipManagement : Fragment() {
         }
         val code = VipGiftCode.encode(today)
         vipGiftPrefs.saveLastGeneratedEpochDay(today)
-        Log.d(TAG, "onGiftVipClick: generated gift code for epochDay=$today")
+        SafeLogger.d(TAG, "onGiftVipClick: generated gift code for epochDay=$today")
 
         val shareIntent = Intent(Intent.ACTION_SEND).apply {
             type = "text/plain"
@@ -256,12 +272,12 @@ class FVipManagement : Fragment() {
         // Nếu user đã VIP → lib sẽ skip rewarded với earned=false. KHÔNG cho click.
         // bindUi() đã hide btn khi active, đây là defensive check.
         if (AdManager.isVipByKeyActive()) {
-            Log.d(TAG, "onWatchAdClick blocked — user already VIP")
+            SafeLogger.d(TAG, "onWatchAdClick blocked — user already VIP")
             return
         }
-        Log.d(TAG, "onWatchAdClick → showRewarded")
+        SafeLogger.d(TAG, "onWatchAdClick → showRewarded")
         AdManager.showRewarded(activity) { earned ->
-            Log.d(TAG, "showRewarded callback: earned=$earned")
+            SafeLogger.d(TAG, "showRewarded callback: earned=$earned")
             if (!isAdded || _binding == null) return@showRewarded
             if (earned) {
                 // Rewarded contract: chỉ grant khi user xem hết ad. KHÔNG fallback
@@ -280,13 +296,11 @@ class FVipManagement : Fragment() {
     }
 
     private fun grantViaRewarded() {
-        // Lib single-key: pass AdKeys.VIP_SECRET. App-side overrides days = 3.
-        val ok = AdManager.activateVipByKey(
-            requireContext(),
-            AdKeys.VIP_SECRET,
-            VipKeys.VIP_3D_DAYS,
-        )
-        Log.d(TAG, "grantViaRewarded: activate result=$ok, days=${VipKeys.VIP_3D_DAYS}")
+        // grantVipDays: app tự quyết định cấp thưởng (không phải user gõ 1 mã cụ thể) → không qua
+        // verify key, cộng dồn đúng số ngày xem ad (khác activateVipByKey cũ vốn chỉ raise-to-max,
+        // không cộng dồn nhiều lượt xem).
+        val ok = AdManager.grantVipDays(requireContext(), VipKeys.VIP_3D_DAYS)
+        SafeLogger.d(TAG, "grantViaRewarded: activate result=$ok, days=${VipKeys.VIP_3D_DAYS}")
         if (ok) {
             vipPrefs.saveGrantedAtMs(System.currentTimeMillis())
             vipPrefs.markUserRedeemed()
@@ -309,7 +323,7 @@ class FVipManagement : Fragment() {
     }
 
     private fun onRevokeClick() {
-        Log.d(TAG, "onRevokeClick → show revoke BottomSheet")
+        SafeLogger.d(TAG, "onRevokeClick → show revoke BottomSheet")
         val fm = parentFragmentManager
         if (fm.isStateSaved) return
         if (fm.findFragmentByTag(VipRevokeConfirmBottomSheet.TAG) != null) return
@@ -323,7 +337,7 @@ class FVipManagement : Fragment() {
             viewLifecycleOwner,
         ) { _, bundle ->
             val confirmed = bundle.getBoolean(VipRevokeConfirmBottomSheet.ARG_CONFIRMED, false)
-            Log.d(TAG, "revoke result: confirmed=$confirmed")
+            SafeLogger.d(TAG, "revoke result: confirmed=$confirmed")
             if (confirmed) {
                 AdManager.clearVipByKey()
                 vipPrefs.clearGrantedAtMs()
@@ -438,7 +452,7 @@ class FVipManagement : Fragment() {
     }
 
     private fun notifyVipChanged() {
-        Log.d(TAG, "notifyVipChanged → broadcasting to ActHost")
+        SafeLogger.d(TAG, "notifyVipChanged → broadcasting to ActHost")
         parentFragmentManager.setFragmentResult(KEY_VIP_CHANGED, Bundle.EMPTY)
     }
 
@@ -655,6 +669,11 @@ class FVipManagement : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        // App Open exclusion cho màn này: AdSdkConfig.appOpenExcludedActivities đã gồm
+        // ActVip::class.java (GalaxyApp.kt) — ActVip là Activity RIÊNG lưu trữ fragment này,
+        // không cần tự quản lý suppressAppOpenTemporarily thủ công ở đây (bản cũ dùng cách này vì
+        // tưởng nhầm ActVip là Fragment trong ActHost — có bug thật: unsuppress nhầm lúc app
+        // background, đã verify + xoá khi phát hiện qua audit 2026-09-08).
         // Restart animators in case fragment returns from background
         if (_binding != null) {
             startWatchAdPulse()

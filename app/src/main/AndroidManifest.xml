@@ -79,10 +79,11 @@
                 android:value="true" />
         </service>
 
-        <!-- Khai báo AdMob App ID -->
+        <!-- Khai báo AdMob App ID — giá trị thật/test nạp qua manifestPlaceholders["admobAppId"]
+             (app/build.gradle.kts, per buildType), không hardcode ở đây. -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-3612191981543807~1355135619" /> <!-- Sample AdMob App ID -->
+            android:value="${admobAppId}" />
 
         <activity
             android:name=".feat.SplashActivity"

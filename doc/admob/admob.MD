@@ -1,26 +1,22 @@
 package name: com.galaxyjoy.cpuinfo
 policy: https://loitp.notion.site/Term-Privacy-Policy-Disclaimer-319b1cd8783942fa8923d2a3c9bce60f
 
-admob app id: ca-app-pub-3004713799155145~7714695218
-banner: ca-app-pub-3004713799155145/6401613541
-inter: ca-app-pub-3004713799155145/2681860387
-open app: ca-app-pub-3004713799155145/9271319465
-native: ca-app-pub-3004713799155145/1368778714
-rewarded: ca-app-pub-3004713799155145/1616190729
+Giá trị thật (App ID, ad-unit ID, VIP key) đã chuyển sang
+`../../../../myKeyStore/com.galaxyjoy.cpuinfo/ads.properties` (private repo royt93/myKeyStore) —
+KHÔNG lưu plaintext ở đây nữa. File này từng bị commit + push kèm plaintext lên repo public
+`royt93/5_cpu-info` (commit `9bf8daa`, `d4ab8ca`, `da1ce2d`, branch `dev`) — đã redact ở HEAD
+nhưng giá trị cũ vẫn còn trong lịch sử git cho tới khi rewrite history (xem báo cáo audit
+2026-09-08).
 
-chú ý:
+chú ý (giữ lại cho lần audit sau):
 
 - dùng admob provider
-- audit kỹ các flow tích hợp các loại ad để tìm rủi ro vi phạm admob l
-- có vẻ như app native chưa được tích hợp, bạn có gợi ý gì?
+- audit kỹ các flow tích hợp các loại ad để tìm rủi ro vi phạm admob
+- native ad chưa tích hợp được — AdmobApplovinWrapper (kể cả tag mới nhất 1.8.5) không có API
+  Native Ad, xem báo cáo audit 2026-09-08
 - debug mode: dùng bộ admob id test
-- release mode: dùng bộ admob id real ở file này
-- có thể dùng vip key 30 days: 9fA0q7eN!27cLx04@21993Y2u0I7#Q0
-  3 days: eQ7@93L0f!2Y2707xN04021993u0I#2aKMD
-- chú ý thông tin nhạy cảm cần phải sync
-  lên https://github.com/royt93/myKeyStore/ và local path có ở macbook này (
-  đã có sẵn), nếu bạn phát hiện thông tin nhạy cảm nào chưa sync, báo tôi ngay lập tức
-- nên tập trung toàn bộ thông tin nhạy cảm vào 1 file duy nhất, vd như app.properties và sync lên
-- lưu ý bổ sung unit test + widget test + integration test cho mọi case
-- lưu ý follow đúng guide AD_PROMPT_AOS.MD, không hiểu gì báo tôi ngay
-- lưu ý thêm id test hash device khi init sdk, tham khảo https://github.com/royt93/myKeyStore/blob/main/README.md
+- release mode: dùng bộ admob id real trong ads.properties
+- thông tin nhạy cảm tập trung vào ads.properties (myKeyStore), đã sync lên
+  https://github.com/royt93/myKeyStore/
+- đã bổ sung id test hash device khi init sdk (GalaxyApp.setupAd), tham khảo
+  https://github.com/royt93/myKeyStore/blob/main/README.md
