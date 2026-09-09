@@ -136,5 +136,13 @@
             app:title="@string/pref_policy_app_summary" />
 
     </PreferenceCategory>
+    <PreferenceCategory app:title="@string/manage_consent_title">
+
+        <Preference
+            app:defaultValue="default"
+            app:key="key_manage_consent"
+            app:title="@string/pref_manage_consent_summary" />
+
+    </PreferenceCategory>
 
 </PreferenceScreen>

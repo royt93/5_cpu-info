@@ -569,6 +569,10 @@
     <string name="pref_more_app_summary">Discover more exciting apps from us—download them on the Play Store now!</string>
     <string name="pref_share_app_summary">This app is amazing—share it with everyone to enjoy together!</string>
     <string name="pref_policy_app_summary">App Terms and Privacy Services</string>
+    <!-- GDPR Article 7(3) — withdrawing consent must be as easy as giving it. -->
+    <string name="manage_consent_title">Privacy &amp; Consent</string>
+    <string name="pref_manage_consent_summary">Manage your ad personalization consent</string>
+    <string name="consent_updated_toast">Consent updated</string>
     <string name="splash_ad_notice">Please note: this action may show ads</string>
     <!--Realtime Dashboard (F01)-->
     <string name="dashboard">Dashboard</string>

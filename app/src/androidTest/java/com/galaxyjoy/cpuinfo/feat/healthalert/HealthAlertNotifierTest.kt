@@ -98,6 +98,7 @@ class HealthAlertNotifierTest {
     fun maybeNotify_secondCallWithinCooldown_doesNotPostAgain() {
         val now = System.currentTimeMillis()
         HealthAlertNotifier.maybeNotify(appContext, prefs, currentScore = HealthAlertLogic.ABSOLUTE_LOW_THRESHOLD - 1, nowMs = now)
+        waitUntilNotificationActiveIs(true)
         assertTrue(isNotificationActive())
         notificationManager.cancel(HealthAlertNotifier.NOTIFICATION_ID)
         // cancel() above is async (Binder call to the system notification service) — wait for it

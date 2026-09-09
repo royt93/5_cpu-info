@@ -217,10 +217,14 @@ class ActHost : BaseActivity() {
         } else {
             binding.flAd.visibility = View.VISIBLE
             if (adView == null) {
+                // Adaptive width (matches guide's demo — "adaptive tốt hơn fixed") thay vì mặc
+                // định AdBannerSize.Banner (320×50 cố định) — audit 2026-09-09, dùng đúng screen
+                // width thật thay vì banner nhỏ cố định trên mọi kích thước máy.
                 adView = AdManager.loadBanner(
                     context   = this,
                     container = binding.layoutAdBanner.bannerContainer,
                     tvLabelAd = binding.layoutAdBanner.tvLabelAd,
+                    adSize    = AdManager.getAdaptiveBannerSize(this),
                 )
                 SafeLogger.d(TAG, "applyVipBannerState: loaded banner, adView=${adView != null}")
             }

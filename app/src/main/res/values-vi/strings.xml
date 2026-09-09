@@ -542,6 +542,9 @@
     <string name="pref_more_app_summary">Khám phá thêm các ứng dụng thú vị khác từ chúng tôi trên Play Store!</string>
     <string name="pref_share_app_summary">Ứng dụng rất hữu ích — chia sẻ với bạn bè để cùng trải nghiệm!</string>
     <string name="pref_policy_app_summary">Điều khoản ứng dụng &amp; Chính sách bảo mật</string>
+    <string name="manage_consent_title">Quyền riêng tư &amp; Đồng ý</string>
+    <string name="pref_manage_consent_summary">Quản lý lựa chọn quảng cáo cá nhân hoá</string>
+    <string name="consent_updated_toast">Đã cập nhật lựa chọn đồng ý</string>
     <string name="splash_ad_notice">Lưu ý: thao tác này có thể xuất hiện quảng cáo</string>
     <!--Realtime Dashboard (F01)-->
     <string name="dashboard">Bảng điều khiển</string>

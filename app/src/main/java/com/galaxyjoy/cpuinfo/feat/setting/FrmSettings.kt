@@ -217,6 +217,18 @@ class FrmSettings : PreferenceFragmentCompat(),
             activity?.openBrowserPolicy()
             true
         }
+        // GDPR Article 7(3) — withdrawing/changing consent must be as easy as giving it. Reopens
+        // Google UMP's privacy options form (no-op if UMP itself decides it isn't required, e.g.
+        // non-EEA user or form not published) — matches the SDK demo's showConsentManagementDialog.
+        val manageConsentPreference: Preference? = findPreference("key_manage_consent")
+        manageConsentPreference?.setOnPreferenceClickListener {
+            activity?.let { act ->
+                AdManager.showConsentFormIfAvailable(act) {
+                    Toast.makeText(act, getString(R.string.consent_updated_toast), Toast.LENGTH_SHORT).show()
+                }
+            }
+            true
+        }
         val versionAppPreference: Preference? = findPreference("key_version_app")
         versionAppPreference?.title = BuildConfig.VERSION_NAME
         versionAppPreference?.setOnPreferenceClickListener {

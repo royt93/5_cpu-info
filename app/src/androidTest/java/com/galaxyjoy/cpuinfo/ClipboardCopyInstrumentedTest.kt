@@ -4,9 +4,9 @@ import android.content.ClipboardManager
 import android.content.Context
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
-import androidx.compose.ui.test.performClick
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.longClick
 import androidx.test.espresso.action.ViewActions.scrollTo
@@ -57,7 +57,14 @@ class ClipboardCopyInstrumentedTest {
             }
         }.isSuccess
         if (appeared) {
-            composeRule.onAllNodesWithText(systemDefaultLabel)[0].performClick()
+            // Dismiss via back-press, NOT by selecting a language — same fix as
+            // ActHostSmokeTest.kt's dismissFirstLaunchLanguagePickerIfShown() (see its KDoc):
+            // selecting anything calls LocaleManager.applyNoFlicker() (finish()+startActivity()),
+            // creating a genuinely NEW ActHost instance that ComposeTestRule's ActivityScenario
+            // doesn't adopt — every later composeRule call then throws "Cannot run onActivity
+            // since Activity has been destroyed already". Reproduced live in this file (2026-09-09
+            // full-suite run) before this fix.
+            pressBack()
             composeRule.waitForIdle()
         }
     }
