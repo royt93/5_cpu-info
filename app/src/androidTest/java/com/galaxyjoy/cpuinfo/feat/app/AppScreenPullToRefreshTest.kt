@@ -51,7 +51,6 @@ class AppScreenPullToRefreshTest {
                     onAppUninstallClicked = {},
                     onAppSettingsClicked = {},
                     onNativeLibsClicked = {},
-                    onSystemAppsSwitched = {},
                 )
             }
         }
@@ -77,7 +76,6 @@ class AppScreenPullToRefreshTest {
                     onAppUninstallClicked = {},
                     onAppSettingsClicked = {},
                     onNativeLibsClicked = {},
-                    onSystemAppsSwitched = {},
                 )
             }
         }

@@ -66,7 +66,10 @@ class DeviceReportExporterInstrumentedTest {
             dataProviderCpu = DataProviderCpu(),
             dataNativeProviderCpu = DataNativeProviderCpu(),
             dataProviderRam = DataProviderRam(activityManager),
-            dataProviderStorage = DataProviderStorage(),
+            dataProviderStorage = DataProviderStorage(
+                appContext,
+                appContext.getSystemService(Context.STORAGE_SERVICE) as android.os.storage.StorageManager,
+            ),
             dataProviderScreen = DataProviderScreen(
                 appContext.resources,
                 appContext.getSystemService(Context.DISPLAY_SERVICE) as DisplayManager,
