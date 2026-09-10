@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Least-privilege audit 2026-09-09: only cacheDir is actually shared via FileProvider
+     (BenchResultCardExporter/DeviceReportExporter/DeviceCardExporter, all under context.cacheDir).
+     Removed external-path/root-path entries that granted the whole external storage / filesystem
+     root — those were never referenced by any FileProvider.getUriForFile() call in this app;
+     grantUriPermissions on those unused, overly broad paths was pure attack-surface with no
+     functional use. -->
 <paths xmlns:android="http://schemas.android.com/apk/res/android">
-    <external-path
-        name="external_files"
-        path="." />
-    <external-path
-        name="downloads"
-        path="Download/" />
     <cache-path
         name="apk_cache"
-        path="." />
-    <root-path
-        name="root"
         path="." />
 </paths>

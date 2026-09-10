@@ -143,7 +143,6 @@ android {
             buildConfigField("String", "ADMOB_BANNER_ID", "\"${adsProp("admobBannerIdRelease")}\"")
             buildConfigField("String", "ADMOB_INTERSTITIAL_ID", "\"${adsProp("admobInterstitialIdRelease")}\"")
             buildConfigField("String", "ADMOB_APP_OPEN_ID", "\"${adsProp("admobAppOpenIdRelease")}\"")
-            // TODO: admobRewardedIdRelease trong ads.properties vẫn là test ID — thay khi user cấp ID prod thật.
             buildConfigField("String", "ADMOB_REWARDED_ID", "\"${adsProp("admobRewardedIdRelease")}\"")
             buildConfigField("Boolean", "IS_ENABLE_ADMOB", "true") // false = AppLovin MAX
             manifestPlaceholders["admobAppId"] = adsProp("admobAppIdRelease")

@@ -124,15 +124,25 @@ class FrmSettingsAccentTintInstrumentedTest {
         }
         assertTrue("expected to find the '$vipCategoryTitle' category header row", categoryTextColors.isNotEmpty())
         categoryTextColors.forEach { color ->
-            assertNotEquals(
-                "category header should no longer be painted with the old static @color/accent",
-                staticAccent,
-                color,
-            )
+            // resolveAccentColor() (Ext.kt) only computes a DIFFERENT-from-static dynamic color on
+            // API 31+ (Build.VERSION_CODES.S) — below that it deliberately falls back to returning
+            // the same static @color/accent (no Dynamic Color API exists pre-S). "not the old
+            // static accent" is only a meaningful assertion where a dynamic alternative exists;
+            // asserting it unconditionally fails by design on API < 31 (found 2026-09-09 running
+            // this suite on a real Android 11 device for the first time this project — every prior
+            // run was on Android 13+ devices, so this never surfaced before).
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+                assertNotEquals(
+                    "category header should no longer be painted with the old static @color/accent",
+                    staticAccent,
+                    color,
+                )
+            }
             // Exact match, not just "not the old cyan" — a flat "not equals staticAccent" check
             // alone previously passed even while the real bug painted these gray instead of
             // accent-colored (bug found + fixed during this round's audit, see FrmSettings.kt's
-            // tintPreferenceView).
+            // tintPreferenceView). Still meaningful on API < 31: proves tintPreferenceView applies
+            // whatever resolveAccentColor() actually returns (here, correctly, the static fallback).
             assertEquals(
                 "category header should be painted with the resolved dynamic accent color, not some other color",
                 expectedAccent,

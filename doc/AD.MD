@@ -84,7 +84,7 @@ Spec gốc của template: `doc/AD_PROMPT_AOS.MD`
 
 - **Active**: AdMob (`BuildConfig.IS_ENABLE_ADMOB=true` cho cả debug + release, xem commit `e1e8906`)
 - **Fallback**: AppLovin MAX (flip `IS_ENABLE_ADMOB=false` trong `app/build.gradle.kts` để quay lại)
-- **Lưu ý**: `ADMOB_REWARDED_ID` production hiện vẫn là test ID (`ca-app-pub-3940256099942544/...`) — Banner/Interstitial/AppOpen đã có ID prod thật, riêng Rewarded chưa (xem `TODO` ở `app/build.gradle.kts`, cần ID thật trước khi phát hành bản kiếm tiền từ rewarded).
+- **2026-09-09 SỬA**: dòng "Rewarded vẫn test ID" trước đây SAI — `admobRewardedIdRelease` trong `ads.properties` là `ca-app-pub-3004713799155145/1616190729`, cùng account prefix với App ID/Banner/Interstitial/AppOpen thật (Google test ID luôn bắt đầu `ca-app-pub-3940256099942544`, khác hẳn). Cả 5 ID production đều là ID thật, comment TODO cũ đã xoá khỏi `app/build.gradle.kts`.
 - **VIP feature**: built-in từ SDK v1.1.4 (Step 9 của template) — không re-implement trong app code.
 
 ## 1. Touchpoint table
@@ -207,7 +207,7 @@ Spec gốc của template: `doc/AD_PROMPT_AOS.MD`
 
 | Item                              | Trạng thái        | Ghi chú                                                                                          |
 |-----------------------------------|-------------------|--------------------------------------------------------------------------------------------------|
-| AdMob Rewarded ID prod (release)  | **CHƯA CÓ**        | Đang dùng test ID `ca-app-pub-3940256099942544/5224354917` cho cả debug+release. Test ID **không kiếm tiền** — thay khi có ID prod. |
+| AdMob Rewarded ID prod (release)  | OK                | `ca-app-pub-3004713799155145/1616190729` (ID thật, trong `ads.properties`) — bảng này trước đây ghi sai "chưa có", sửa 2026-09-09. |
 | AppLovin Rewarded ID              | OK                | `APPLOVIN_REWARD_ID = "e460250d026fafa6"` (đã trong BuildConfig).                                |
 | AppLovin SDK key                  | OK                | `APPLOVIN_SDK_KEY` trong `defaultConfig`.                                                         |
 | Privacy Policy URL                | OK                | `https://loitp.notion.site/.../Privacy-Policy-...` — migrate sang `BuildConfig.PRIVACY_POLICY_URL`. |

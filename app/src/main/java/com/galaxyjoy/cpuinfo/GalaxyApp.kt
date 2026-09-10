@@ -37,7 +37,11 @@ class GalaxyApp : Application() {
             "5B409111AF01C6BB9F9FF77AEEB44275", // TECNO BG6
             "D1B50484E250B064A9BF6F7CAE29A941", // samsung SM-S928B
             "322285166ACB542864828826D2D92491", // Google Pixel 7 Pro
-            "B1EF014DD6D4DC54A4D160ECAA04C9A9", // TECNO KJ7 (2026-09-09, hash cũ E422A3...87CC lỗi thời — ANDROID_ID đổi)
+            "7FA023DF89A8F446A4D9C665CEBF0B92", // TECNO KJ7 (2026-09-10 — hash đổi LẦN 3 trong <24h so với
+            // B1EF014D...9A9 (2026-09-09), trước đó là E422A3...87CC (2026-08-31). Nghi ngờ trigger
+            // KHÔNG chỉ factory-reset/OS-update như tài liệu Google mô tả — máy này bị uninstall+
+            // reinstall APK liên tục (debug/production đan xen) suốt 2 ngày qua cho việc test, đổi
+            // hash nhanh bất thường. Xem myKeyStore/README.md ghi chú mới.
         )
 
         // Hash RIÊNG cho UMP ConsentDebugSettings (umpDebugGeography) — KHÁC hệ với

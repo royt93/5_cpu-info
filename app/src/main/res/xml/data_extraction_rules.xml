@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- API 31+ Auto Backup / device-transfer exclusion. Excludes SharedPreferences files holding
+     VIP entitlement state and GDPR consent decision from cloud backup and device-to-device
+     transfer — security audit 2026-09-09 (allowBackup="true" was backing these up with no
+     exclusion). loitp_admob is the ad SDK's own file (VIP active flag + consent decision);
+     vip_screen_prefs/vip_gift_prefs/vip_streak_prefs are this app's own VIP-adjacent state. -->
+<data-extraction-rules>
+    <cloud-backup>
+        <exclude domain="sharedpref" path="loitp_admob.xml" />
+        <exclude domain="sharedpref" path="vip_screen_prefs.xml" />
+        <exclude domain="sharedpref" path="vip_gift_prefs.xml" />
+        <exclude domain="sharedpref" path="vip_streak_prefs.xml" />
+    </cloud-backup>
+    <device-transfer>
+        <exclude domain="sharedpref" path="loitp_admob.xml" />
+        <exclude domain="sharedpref" path="vip_screen_prefs.xml" />
+        <exclude domain="sharedpref" path="vip_gift_prefs.xml" />
+        <exclude domain="sharedpref" path="vip_streak_prefs.xml" />
+    </device-transfer>
+</data-extraction-rules>
