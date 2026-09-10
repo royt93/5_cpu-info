@@ -37,11 +37,17 @@ class GalaxyApp : Application() {
             "5B409111AF01C6BB9F9FF77AEEB44275", // TECNO BG6
             "D1B50484E250B064A9BF6F7CAE29A941", // samsung SM-S928B
             "322285166ACB542864828826D2D92491", // Google Pixel 7 Pro
-            "7FA023DF89A8F446A4D9C665CEBF0B92", // TECNO KJ7 (2026-09-10 — hash đổi LẦN 3 trong <24h so với
-            // B1EF014D...9A9 (2026-09-09), trước đó là E422A3...87CC (2026-08-31). Nghi ngờ trigger
-            // KHÔNG chỉ factory-reset/OS-update như tài liệu Google mô tả — máy này bị uninstall+
-            // reinstall APK liên tục (debug/production đan xen) suốt 2 ngày qua cho việc test, đổi
-            // hash nhanh bất thường. Xem myKeyStore/README.md ghi chú mới.
+            // TECNO KJ7 — hash KHÔNG ổn định, quan sát CYCLE qua lại giữa các giá trị này (không
+            // phải tăng dần đơn điệu như factory-reset/OS-update thường gây ra). Timeline:
+            // E422A3...87CC (2026-08-31) → B1EF014D...C9A9 (2026-09-09 sáng) → 7FA023DF...F0B92
+            // (2026-09-10 sáng) → QUAY LẠI B1EF014D...C9A9 (2026-09-10 trưa, sau khi cài lại bản
+            // production-signed — nghi đổi signing cert debug⇄production lúc reinstall là trigger).
+            // Đăng ký CẢ 2 hash gần nhất để chịu được việc cycle qua lại; nếu vẫn phát ad thật, PHẢI
+            // check logcat "This request is sent from a test device." TRƯỚC MỖI lần test ad sống
+            // trên máy này — xem sự cố thật 2026-09-10 (ad CANIFA/thật hiện, user kill app ngay vì
+            // sợ invalid traffic) và myKeyStore/README.md.
+            "B1EF014DD6D4DC54A4D160ECAA04C9A9", // TECNO KJ7 (2026-09-09 / lại thấy 2026-09-10 trưa)
+            "7FA023DF89A8F446A4D9C665CEBF0B92", // TECNO KJ7 (2026-09-10 sáng)
         )
 
         // Hash RIÊNG cho UMP ConsentDebugSettings (umpDebugGeography) — KHÁC hệ với
