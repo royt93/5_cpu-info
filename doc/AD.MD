@@ -1,5 +1,20 @@
 # AD migration — `AdmobApplovinWrapper 1.8.5`
 
+> **Cập nhật 2026-09-10 (root cause: AdMob test-device hash phụ thuộc signing cert)**: sự cố thật
+> 2026-09-10 — TECNO KJ7 vừa gỡ cài + cài lại bản **production-signed** (trước đó là debug-signed)
+> để verify sống, hiện ra **1 quảng cáo thật** (không phải "Quảng cáo thử nghiệm") vì
+> `QA_ADMOB_TEST_DEVICE_HASHES` trong `GalaxyApp.kt` không khớp hash mới. Ban đầu nghi hash tự đổi
+> ngẫu nhiên theo `ANDROID_ID` (factory reset/update Play Services...), nhưng user tự A/B test trực
+> tiếp trên đúng máy này (cùng `ANDROID_ID`) — cài debug rồi cài production, so logcat mỗi lần —
+> xác nhận **root cause thật**: hash phụ thuộc **build variant/signing cert (debug vs release)**,
+> không phải churn ngẫu nhiên. Debug build của TECNO KJ7 luôn ra `7FA023DF89A8F446A4D9C665CEBF0B92`;
+> production build luôn ra `B1EF014DD6D4DC54A4D160ECAA04C9A9`. Google không document công khai hành
+> vi này. **Quy tắc thực hành rút ra**: đăng ký hash theo cặp (device, build variant), không phải
+> theo device — 1 hash bắt được từ debug build sẽ không bao giờ khớp lần test production-signed trên
+> cùng máy. **Quy tắc thứ hai (user, áp dụng vĩnh viễn)**: chỉ được **THÊM** hash mới vào
+> `QA_ADMOB_TEST_DEVICE_HASHES`, không bao giờ xoá hash cũ — hash không khớp thì vô hại, nhưng xoá
+> nhầm 1 hash còn/lại-đúng là rủi ro thật (đã xảy ra 1 lần, phải khôi phục lại ngay trong cùng ngày).
+>
 > **Cập nhật 2026-09-09 (audit consent theo yêu cầu QC)**: QC báo tích hợp ad SDK vẫn sai so với
 > guide, đào sâu tập trung consent (fetch trực tiếp `MyApplication.kt`/`SplashActivity.kt`/
 > `AdSdkConfig.kt`/`doc/CONSENT.MD` thật từ repo SDK qua `gh api`, không tin doc nội bộ có thể đã cũ).

@@ -37,7 +37,8 @@
 **#5 hoàn tất** (Sprint 15, 2026-08-30) — Network Info tab, permission consent flow đầu tiên của app.
 **#4 hoàn tất** (Sprint 17, 2026-08-30) — tab Battery riêng, thay hẳn phần battery basic cũ trong Hardware tab.
 **#3 hoàn tất** (2026-09-02) — mở rộng Throttle Test có sẵn thêm điểm benchmark ops/sec, không xây feature riêng.
-**Còn lại thật sự mở**: #1 (đã skip, xem lý do trên).
+**#9 hoàn tất** (2026-09-21) — thêm nốt format HTML còn thiếu, đủ 3/3 format dự kiến.
+**Còn lại thật sự mở**: #1 (đã skip, xem lý do trên) — toàn bộ backlog quick-win còn lại đã ✅.
 
 ---
 
@@ -169,9 +170,11 @@
 
 ---
 
-## 🟡 #9 — Export hardware report (0.5 ngày) — Đã xong một phần
+## ✅ #9 — Export hardware report (0.5 ngày) — Đã xong (2026-09-21)
 
-**Đã làm**: `SystemInfoExporter.kt` implement 2/3 format dự kiến — `Format.TEXT` và `Format.JSON`, chia sẻ qua `ACTION_SEND` (đúng plan), picker format qua `ExportFormatBottomSheet.kt`. **Còn thiếu so với mô tả gốc**: format HTML (printable) chưa có — enum `Format` chỉ có `TEXT`/`JSON`, chưa `HTML`.
+**Đã làm**: `SystemInfoExporter.kt` implement đủ 3/3 format dự kiến — `Format.TEXT`, `Format.JSON`, và **`Format.HTML`** (thêm 2026-09-21, `buildSystemInfoHtml()` — cùng bộ section với TEXT/JSON, escape `&`/`<`/`>` qua `htmlEscape()`, share qua `ACTION_SEND` với mime `text/html`, không ghi file — nhất quán với cách TEXT/JSON đã làm), chia sẻ qua `ACTION_SEND`, picker format qua `ExportFormatBottomSheet.kt` (đã có row "HTML"). Cộng thêm `Format.IMAGE` (không nằm trong scope gốc #9, xem `DeviceCardExporter`/U14).
+
+**Verify**: `SystemInfoExporterTest` — test `htmlEscape` (không dựa vào `buildSystemInfoHtml()` full-document vì hàm đó đọc `android.os.Build.*` field trực tiếp, ném NPE dưới JVM stub `isReturnDefaultValues=true` khi không dùng Robolectric — cùng giới hạn đã áp dụng cho TEXT/JSON build trước đó, chưa test được nội dung đầy đủ). `testDevDebugUnitTest` + `lintDevDebug` xanh.
 
 **Mô tả gốc**: Generate JSON/HTML/Text từ tất cả `DataProvider*`, share intent.
 
@@ -215,7 +218,7 @@
 | 6 | Camera capabilities | 0.5d | ✅ | Zero | 🌟🌟 |
 | 7 | Display detail | 0.5d | 🟡 (extend) | Zero | 🌟🌟 |
 | 8 | Media codec | 0.5d | ✅ | Zero | 🌟🌟 |
-| 9 | Export report | 0.5d | ✅ | Zero | 🌟🌟 |
+| 9 | Export report (3/3 format) | 0.5d | ✅ | Zero | 🌟🌟 |
 | 10 | DRM/Widevine | 2h | ✅ | Zero | 🌟🌟 |
 
 **Recommend bundle quick-wins** (#6 + #7 + #8 + #9 + #10): ≈ 2.5 ngày, 5 tab/feature mới hiển thị ngay, 0 permission rủi ro, 0 backend, fit hoàn hảo "CPU Info" positioning read-only.

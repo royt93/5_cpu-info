@@ -1,5 +1,15 @@
 # Epic 1 — Bugfix & Stability
 
+## ✅ Sprint 8 (2026-09-10) — security hardening: FileProvider path, ActHost exported, backup exclusion
+
+Full pre-release audit (3 focused pass song song + 1 pass tay đối chiếu `AdSdkConfig.kt` thật field-by-field). 3 finding thật:
+
+- **`file_paths.xml`**: xoá các entry `root-path`/`external-path` không dùng — cấp quyền `grantUriPermissions` cho **toàn bộ filesystem/external storage** qua `FileProvider`, trong khi cả 3 call site `getUriForFile()` thật (Device Card/Bench Result Card export, System Info export) đều chỉ dùng `context.cacheDir`. Chưa bị khai thác được (chưa có Intent nào share `content://` URI ra ngoài trỏ path khác cacheDir), nhưng là attack surface thừa theo nguyên tắc least-privilege — xoá sạch.
+- **`AndroidManifest.xml`**: `ActHost` `exported="true"` → `"false"`. Không có intent-filter, không phải launcher activity, và toàn bộ 7 call site khởi chạy nội bộ đã dùng (Splash, 3 widget, QS tile, 2 notifier) đều là explicit same-app `Intent`/`PendingIntent` — không phụ thuộc `exported`. Verify đủ cả 7 chỗ trước khi đổi, không regression.
+- **Backup**: thêm `data_extraction_rules.xml` (API 31+) + `full_backup_content.xml` — loại trừ VIP token/secret khỏi Android Auto Backup mặc định (trước đó không có rule nào, toàn bộ `SharedPreferences`/DataStore bị backup thô, bao gồm VIP anti-tamper secret).
+
+Kèm sửa vài chỗ doc lệch thực tế phát hiện lúc audit (không liệt kê riêng — xem `doc/AD.MD`/`CLAUDE.md` history).
+
 ## ✅ Sprint 7 (2026-09-02) — tab bar/FAB chữ to (textAllCaps), flake language-picker recreate
 
 User report: "tôi thấy tabbar chữ rất to, floating icon button chữ rất to". Root cause xác nhận qua unzip trực tiếp `material-1.12.0.aar` (đúng version resolve theo `libs.versions.toml`): `TextAppearance.Design.Tab` (default style của `TabLayout`) và `Base.TextAppearance.MaterialComponents.Button` (default style của `Button`/`ExtendedFloatingActionButton`) đều set `textAllCaps=true` ở 14sp, riêng Button còn thêm `textStyle=bold` + `letterSpacing=0.0892857143` — cộng hưởng với font_scale thật của máy (TECNO 1.45) làm chữ trông to/đậm bất thường. Đây là hành vi mặc định của Material Components v1 (M2, theme `AppThemeBase` vẫn extend `Theme.MaterialComponents.DayNight.NoActionBar`), không phải lỗi layout.

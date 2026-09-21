@@ -96,10 +96,7 @@ testImplementation(kotlin("test"))
 ---
 
 ## ⏸️ Deferred
-
-- **Merge `feat/` ↔ `features/`** — scope lớn, để đợt sau
-- **Tech stack consolidation** (bỏ EventBus) — RxJava→Coroutines đã xong (Epic 2 Story 2, 2026-09-01); EventBus removal scope vẫn còn, cần plan riêng
-- **Bỏ Epoxy** — Airbnb đã deprecated, nhưng scope migration sang RecyclerView/LazyColumn lớn, defer
+*(none — 2 mục cũ ở đây đã xong thật, xác nhận 2026-09-21 qua grep code: `features/` đã xoá từ đợt 2 (#6), EventBus/Epoxy không còn reference nào trong `app/src/main` — xem Epic 2 Story 6/7, `doc/task/epic-02-techdebt.md`)*
 
 ## ❌ Skipped
 - Full Hilt test runner + Espresso UI test (chọn smoke test thay thế)
