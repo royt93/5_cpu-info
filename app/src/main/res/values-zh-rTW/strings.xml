@@ -537,6 +537,9 @@
     <string name="pref_more_app_summary">探索我們開發的更多實用應用程式 — 立即在 Play 商店下載！</string>
     <string name="pref_share_app_summary">這是一款實用的應用程式 — 立即分享給朋友吧！</string>
     <string name="pref_policy_app_summary">應用程式服務條款與隱私權政策</string>
+    <string name="manage_consent_title">隱私與同意</string>
+    <string name="pref_manage_consent_summary">管理您的廣告個人化同意設定</string>
+    <string name="consent_updated_toast">同意設定已更新</string>
     <string name="splash_ad_notice">請注意：此操作可能會顯示廣告</string>
     <!--Realtime Dashboard (F01)-->
     <string name="dashboard">儀表板</string>

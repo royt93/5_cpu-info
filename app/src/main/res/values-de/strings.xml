@@ -538,6 +538,9 @@
     <string name="pref_more_app_summary">Entdecke weitere spannende Apps von uns im Play Store!</string>
     <string name="pref_share_app_summary">Diese App ist großartig — teile sie mit deinen Freunden!</string>
     <string name="pref_policy_app_summary">Nutzungsbedingungen und Datenschutzrichtlinie</string>
+    <string name="manage_consent_title">Datenschutz &amp; Einwilligung</string>
+    <string name="pref_manage_consent_summary">Einwilligung zur Anzeigenpersonalisierung verwalten</string>
+    <string name="consent_updated_toast">Einwilligung aktualisiert</string>
     <string name="splash_ad_notice">Hinweis: Bei dieser Aktion wird möglicherweise Werbung angezeigt</string>
     <!--Realtime Dashboard (F01)-->
     <string name="dashboard">Übersicht</string>
