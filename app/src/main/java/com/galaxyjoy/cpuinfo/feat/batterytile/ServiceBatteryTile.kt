@@ -84,14 +84,8 @@ class ServiceBatteryTile : TileService(), CoroutineScope {
         }
     }
 
-    private fun getLoadIcon(level: Int): Icon {
-        val loadEnum = when {
-            level <= 20 -> BatteryLevel.Low
-            level <= 50 -> BatteryLevel.Medium
-            else -> BatteryLevel.High
-        }
-        return icons.getOrDefault(loadEnum, defaultIcon)
-    }
+    private fun getLoadIcon(level: Int): Icon =
+        icons.getOrDefault(classify(level), defaultIcon)
 
     enum class BatteryLevel {
         Low,
@@ -101,5 +95,12 @@ class ServiceBatteryTile : TileService(), CoroutineScope {
 
     companion object {
         private const val REFRESHING_DELAY_MS = 10_000L
+
+        /** Pure classification, split out from [getLoadIcon] so it's testable without an [Icon]. */
+        internal fun classify(level: Int): BatteryLevel = when {
+            level <= 20 -> BatteryLevel.Low
+            level <= 50 -> BatteryLevel.Medium
+            else -> BatteryLevel.High
+        }
     }
 }

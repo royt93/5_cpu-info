@@ -82,7 +82,7 @@ class ServiceNetworkTile : TileService(), CoroutineScope {
         }
     }
 
-    private fun connectionState(): Pair<String, Boolean> {
+    internal fun connectionState(): Pair<String, Boolean> {
         val network = connectivityManager.activeNetwork
         val capabilities = network?.let { connectivityManager.getNetworkCapabilities(it) }
             ?: return "Offline" to false

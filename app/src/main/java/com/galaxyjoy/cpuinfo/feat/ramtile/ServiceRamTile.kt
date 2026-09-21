@@ -135,14 +135,8 @@ class ServiceRamTile : TileService(), CoroutineScope {
         }
     }
 
-    private fun getLoadIcon(usedPercentage: Int): Icon {
-        val loadEnum = when {
-            usedPercentage >= 75 -> RAMLoad.High
-            usedPercentage >= 50 -> RAMLoad.Medium
-            else -> RAMLoad.Low
-        }
-        return icons.getOrDefault(loadEnum, defaultIcon)
-    }
+    private fun getLoadIcon(usedPercentage: Int): Icon =
+        icons.getOrDefault(classify(usedPercentage), defaultIcon)
 
     enum class RAMLoad {
         Low,
@@ -152,5 +146,12 @@ class ServiceRamTile : TileService(), CoroutineScope {
 
     companion object {
         private const val REFRESHING_DELAY_MS = 2000L
+
+        /** Pure classification, split out from [getLoadIcon] so it's testable without an [Icon]. */
+        internal fun classify(usedPercentage: Int): RAMLoad = when {
+            usedPercentage >= 75 -> RAMLoad.High
+            usedPercentage >= 50 -> RAMLoad.Medium
+            else -> RAMLoad.Low
+        }
     }
 }

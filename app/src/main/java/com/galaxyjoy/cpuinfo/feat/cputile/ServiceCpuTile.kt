@@ -82,13 +82,7 @@ class ServiceCpuTile : TileService(), CoroutineScope {
     }
 
     private fun getLoadIcon(avgLoad: Long): Icon {
-        val freqDiff = minMaxAvg.second - minMaxAvg.first
-        val freqThirds = freqDiff / 3
-        val loadEnum = when {
-            avgLoad >= minMaxAvg.second - freqThirds -> CPULoad.High
-            minMaxAvg.second - freqThirds > avgLoad && avgLoad >= minMaxAvg.first + freqThirds -> CPULoad.Medium
-            else -> CPULoad.Low
-        }
+        val loadEnum = classify(avgLoad, minMaxAvg.first, minMaxAvg.second)
         return icons.getOrDefault(loadEnum, defaultIcon)
     }
 
@@ -110,5 +104,16 @@ class ServiceCpuTile : TileService(), CoroutineScope {
 
     companion object {
         private const val REFRESHING_DELAY_MS = 1000L
+
+        /** Pure classification, split out from [getLoadIcon] so it's testable without an [Icon]. */
+        internal fun classify(avgLoad: Long, minAvg: Long, maxAvg: Long): CPULoad {
+            val freqDiff = maxAvg - minAvg
+            val freqThirds = freqDiff / 3
+            return when {
+                avgLoad >= maxAvg - freqThirds -> CPULoad.High
+                maxAvg - freqThirds > avgLoad && avgLoad >= minAvg + freqThirds -> CPULoad.Medium
+                else -> CPULoad.Low
+            }
+        }
     }
 }
