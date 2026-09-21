@@ -42,7 +42,7 @@ Release signing đọc trực tiếp từ private sibling repo `../../../../myKe
 
 ### Package map (`com.galaxyjoy.cpuinfo`)
 
-- `feat/` — mỗi feature 1 sub-package (`feat/infor/{cpu,gpu,ram,sensor,storage,screen,hardware,android,camera,drm,media}`, `feat/app`, `feat/temp`, `feat/setting`, `feat/cputile`, `feat/ramtile`). `feat/ActHost.kt` là Activity chính có bottom nav, `feat/SplashActivity.kt` là entry điểm. `feat/processes` đã bị xoá (tab bị ẩn từ lâu, không dùng được — xem `doc/task/epic-01-bugfix.md` B11).
+- `feat/` — mỗi feature 1 sub-package, đã lớn lên đáng kể qua các sprint F/U-coded (xem `doc/task/feature.md`): ngoài core (`feat/infor/{cpu,gpu,ram,sensor,storage,screen,hardware,android,camera,drm,media}`, `feat/app`, `feat/temp`, `feat/setting`) còn có 3 nhóm — **benchmark/truth** (`clusterbench`, `gpubench`, `rambench`, `storagebench`, `ramtruth`, `sensortruth`, `storagetruth`, `siliconlottery`, `throttle`, `truth`, `allbench`), **widget/tile** (`cputile`, `ramtile`, `batterytile`, `networktile`, `qstile`, `ramwidget`, `lastbenchwidget`, `shieldwidget`), và **report/vip/misc** (`achievement`, `airead`, `backup`, `benchhistory`, `benchreminder`, `benchresultcard`, `canmydevice`, `devicecard`, `devicereport`, `fleet`, `healthalert`, `p2pcompare`, `shield`, `snapshot`, `usbbt`, `vip`, `vipreport`). `feat/ActHost.kt` là Activity chính có bottom nav, `feat/SplashActivity.kt` là entry điểm. `feat/processes` đã bị xoá (tab bị ẩn từ lâu, không dùng được — xem `doc/task/epic-01-bugfix.md` B11).
 - `data/{provider,local}` — `DataProvider*` cho từng loại thông tin (CPU/GPU/RAM/Storage/Applications) + `RepositoryUserPreferences` (DataStore).
 - `domain/{model,observable,action,result}` + `Interactor.kt` — kiến trúc Interactor/Observable (Frm → VM → Observable*Data(Interactor) → DataProvider), **12/12 vùng `feat/infor` đã migrate xong** (Story 1, 2026-09-01).
 - `di/modules/{AppModule,AppModuleBinds}.kt` — Hilt graph. App entry: `GalaxyApp.kt` (`@HiltAndroidApp`).
@@ -69,7 +69,7 @@ Chi tiết đầy đủ ở `doc/AD.MD`. Tóm tắt:
 ## Test setup hiện tại
 
 - Unit test deps: JUnit 4.13.2, MockK 1.13.13, kotlinx-coroutines-test 1.9.0, kotlin-test (qua `testImplementation(kotlin("test"))`).
-- Test target hiện có: `DataProviderRamTest`, `DataProviderApplicationsTest`, `DataProviderGpuTest`, `VMSensorsInfoTest`. `VMSensorsInfoTest.onCleared` là regression cho memory leak #1 (`doc/MEMORY_LEAK.MD`).
+- Test suite đã lớn lên đáng kể theo các sprint feature (~75 file, `app/src/test/java/com/galaxyjoy/cpuinfo/`), phủ hầu hết `data/provider`, `domain/{action,observable}`, phần lớn `feat/*` (mỗi sub-package benchmark/truth/widget/vip thường có test riêng), và `util/`. `VMSensorsInfoTest.onCleared` là regression cho memory leak #1 (`doc/MEMORY_LEAK.MD`).
 - Pattern: dùng MockK mock Android dependencies; `ViewModel.onCleared()` protected → gọi qua reflection. Không dùng Robolectric (giữ test fast). Build script đã set `unitTests.isReturnDefaultValues = true`.
 
 ## Notes
