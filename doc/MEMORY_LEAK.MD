@@ -2,6 +2,18 @@
 
 > Phân tích 76 file Kotlin. Tổng cộng **7 memory leak** đã được tìm thấy và fix.
 
+> **Re-audit 2026-09-21**: rà lại toàn bộ code mới từ lần audit gốc (2026-03-23) — ~30 package
+> `feat/` mới (benchmark/truth/widget/tile/vip...), 29 `ViewModel` hiện có trong app. Kiểm tra:
+> mọi `registerListener`/`registerReceiver`/`postDelayed`/`Timer`/`Thread(` có cleanup đúng cặp;
+> mọi `ViewModel` có listener/callback/scope thủ công (`CoroutineScope(`, `GlobalScope`,
+> `Handler(`, `Choreographer`) đều override `onCleared()` dọn dẹp; mọi Compose screen collect
+> Flow qua `collectAsStateWithLifecycle` (0 chỗ dùng `collectAsState()` trần — vốn không tôn
+> trọng lifecycle STOP). **Kết quả: sạch, không phát hiện leak mới.** Duy nhất `VMSensorsInfo`
+> (leak #1 cũ) có pattern registerListener ở tầng ViewModel — vẫn đúng `onCleared()`, có test
+> `VMSensorsInfoTest` regression riêng. 3 chỗ `sensorManager.registerListener` mới
+> (`SensorTestRunner`, `SensorTruthRunner`, cộng `ObservableSensorData`/`DataProviderSensor` cũ)
+> đều unregister trong `finally` — an toàn kể cả khi coroutine bị cancel giữa chừng.
+
 ---
 
 ## 🔴 Critical (đã fix)
