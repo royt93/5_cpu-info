@@ -24,6 +24,7 @@
     <string name="share_device_info_menu_title">Share device info</string>
     <string name="export_as_text">Plain text</string>
     <string name="export_as_json" translatable="false">JSON</string>
+    <string name="export_as_html" translatable="false">HTML</string>
     <string name="export_as_image">Image (share)</string>
 
     <string name="device_card_app_label" translatable="false">CPU Info</string>

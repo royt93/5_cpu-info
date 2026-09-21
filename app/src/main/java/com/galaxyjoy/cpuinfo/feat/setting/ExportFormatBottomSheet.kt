@@ -33,7 +33,7 @@ import com.galaxyjoy.cpuinfo.ui.theme.CpuInfoTheme
 import com.galaxyjoy.cpuinfo.util.SystemInfoExporter.Format
 
 /**
- * Material You bottom sheet to pick export format (plain text vs JSON).
+ * Material You bottom sheet to pick export format (plain text, JSON, HTML, or image).
  * Returns chosen [Format.name] via Fragment Result API under [REQUEST_KEY] / [ARG_FORMAT].
  */
 class ExportFormatBottomSheet : BaseRoundedBottomSheet() {
@@ -77,7 +77,7 @@ class ExportFormatBottomSheet : BaseRoundedBottomSheet() {
 }
 
 @Composable
-private fun ExportFormatContent(initial: Format, onPicked: (Format) -> Unit) {
+internal fun ExportFormatContent(initial: Format, onPicked: (Format) -> Unit) {
     var selected by rememberSaveable { mutableStateOf(initial) }
 
     Surface(
@@ -110,6 +110,14 @@ private fun ExportFormatContent(initial: Format, onPicked: (Format) -> Unit) {
                 onClick = {
                     selected = Format.JSON
                     onPicked(Format.JSON)
+                },
+            )
+            FormatRow(
+                label = stringResource(R.string.export_as_html),
+                selected = selected == Format.HTML,
+                onClick = {
+                    selected = Format.HTML
+                    onPicked(Format.HTML)
                 },
             )
             FormatRow(

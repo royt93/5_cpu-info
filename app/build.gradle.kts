@@ -289,6 +289,7 @@ dependencies {
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.androidx.espresso.intents)
     androidTestImplementation(libs.androidx.espresso.contrib) {
         // Pulls in an old support-library appcompat/recyclerview transitively that conflicts
         // with our AndroidX ones — only RecyclerViewActions is needed here.

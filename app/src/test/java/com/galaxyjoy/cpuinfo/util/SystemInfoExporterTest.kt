@@ -65,4 +65,13 @@ class SystemInfoExporterTest {
         assertEquals("1.10", exporter.formatTwoDecimals(1.1))
         assertEquals("3.00", exporter.formatTwoDecimals(2.999))
     }
+
+    @Test
+    fun `htmlEscape neutralizes markup-significant characters`() {
+        with(exporter) {
+            assertEquals("R&amp;D &lt;lab&gt;", "R&D <lab>".htmlEscape())
+            assertEquals("", (null as String?).htmlEscape())
+            assertEquals("Pixel 9", "Pixel 9".htmlEscape())
+        }
+    }
 }
