@@ -1,5 +1,27 @@
 # Epic 1 — Bugfix & Stability
 
+## ✅ Sprint 9 (2026-09-22) — CPU QS Tile luôn hiện xám, không bao giờ "active"
+
+Phát hiện qua smoke test tay trên TECNO KJ7 (`adb shell cmd statusbar add-tile` cho cả 4 tile
+CPU/RAM/Battery/Network rồi mở QS panel thật, chụp ảnh so sánh): 3/4 tile (RAM/Battery/Network)
+hiện icon xanh (active) đúng, riêng **CPU tile luôn xám** dù coroutine refresh (mỗi 1s) chạy đúng
+không lỗi, không crash, log bind/connect bình thường.
+
+**Root cause**: `ServiceCpuTile.onStartListening()` là tile DUY NHẤT trong 4 tile không set
+`state = Tile.STATE_ACTIVE` trong khối `qsTile?.apply {...}` (3 tile kia đều có dòng này). Tile
+mặc định ở `Tile.STATE_UNAVAILABLE` — Android render tile ở state này luôn xám bất kể
+label/icon/`updateTile()` gọi đúng bao nhiêu lần.
+
+**Fix**: thêm `state = Tile.STATE_ACTIVE` vào `ServiceCpuTile.kt` — verify lại bằng đúng quy
+trình `add-tile` + chụp ảnh, tile CPU đã chuyển xanh khớp 3 tile còn lại.
+
+**Ghi chú phụ (chưa kết luận, không phải bug)**: cả 4 tile đều hiện label tĩnh theo
+`android:label` khai báo Manifest trong lưới QS panel thay vì label động runtime
+("Avg XXXMHz"/"X.XGB Free"/...) — quan sát trên TECNO KJ7 (Transsion/HiOS skin). Icon + màu
+active vẫn cập nhật đúng (chứng minh IPC `updateTile()` hoạt động thật). Nghi ngờ là OEM skin
+cache caption tĩnh ở view lưới, không phải lỗi code — cần đối chiếu máy thứ 2 (stock Android/
+Samsung) mới kết luận chắc, chưa làm ở lần này.
+
 ## ✅ Sprint 8 (2026-09-10) — security hardening: FileProvider path, ActHost exported, backup exclusion
 
 Full pre-release audit (3 focused pass song song + 1 pass tay đối chiếu `AdSdkConfig.kt` thật field-by-field). 3 finding thật:

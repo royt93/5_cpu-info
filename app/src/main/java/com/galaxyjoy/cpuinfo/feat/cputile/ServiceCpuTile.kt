@@ -2,6 +2,7 @@ package com.galaxyjoy.cpuinfo.feat.cputile
 
 import android.graphics.drawable.Icon
 import android.os.Build
+import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 import androidx.annotation.RequiresApi
 import com.galaxyjoy.cpuinfo.R
@@ -64,6 +65,7 @@ class ServiceCpuTile : TileService(), CoroutineScope {
                 qsTile?.apply {
                     label = "Avg ${load}MHz"
                     icon = getLoadIcon(load)
+                    state = Tile.STATE_ACTIVE
                     updateTile()
                 }
                 delay(REFRESHING_DELAY_MS)
