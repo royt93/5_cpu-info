@@ -400,6 +400,15 @@
     <string name="touch_diag_sample_rate_unavailable">Vzorkovací frekvence: —</string>
     <string name="touch_diag_reset_button">Resetovat relaci</string>
     <string name="touch_diag_canvas_hint">Dotkněte se níže jedním nebo více prsty</string>
+    <string name="foldable_pref_title">Skládatelné a více obrazovek</string>
+    <string name="foldable_pref_summary">Poloha závěsu a všechny připojené obrazovky</string>
+    <string name="foldable_title">Skládatelné a více obrazovek</string>
+    <string name="foldable_displays_section">Obrazovky (%1$d)</string>
+    <string name="foldable_display_row">%1$s — %2$dx%3$d, %4$d dpi, %5$s</string>
+    <string name="foldable_default_display_suffix">(výchozí)</string>
+    <string name="foldable_hinge_section">Poloha závěsu</string>
+    <string name="foldable_no_hinge">Nebyl nahlášen žádný závěs — nejedná se o skládatelné zařízení, nebo jej OS zde nezpřístupňuje.</string>
+    <string name="foldable_hinge_row">Stav: %1$s · Orientace: %2$s · Zakrytí: %3$s · Oddělení: %4$s</string>
     <string name="usb_bt_title">USB a Bluetooth</string>
     <string name="usb_bt_bluetooth_section">Bluetooth</string>
     <string name="usb_bt_usb_section">Zařízení USB (%1$d)</string>

@@ -421,6 +421,15 @@
     <string name="touch_diag_sample_rate_unavailable">Tần suất lấy mẫu: —</string>
     <string name="touch_diag_reset_button">Đặt lại phiên</string>
     <string name="touch_diag_canvas_hint">Chạm vào vùng bên dưới bằng một hoặc nhiều ngón tay</string>
+    <string name="foldable_pref_title">Máy gập &amp; Đa màn hình</string>
+    <string name="foldable_pref_summary">Tư thế bản lề và mọi màn hình đang kết nối</string>
+    <string name="foldable_title">Máy gập &amp; Đa màn hình</string>
+    <string name="foldable_displays_section">Màn hình (%1$d)</string>
+    <string name="foldable_display_row">%1$s — %2$dx%3$d, %4$d dpi, %5$s</string>
+    <string name="foldable_default_display_suffix">(mặc định)</string>
+    <string name="foldable_hinge_section">Tư thế bản lề</string>
+    <string name="foldable_no_hinge">Không có bản lề nào được báo cáo — không phải máy gập, hoặc hệ điều hành không cung cấp thông tin này ở đây.</string>
+    <string name="foldable_hinge_row">Trạng thái: %1$s · Hướng: %2$s · Che khuất: %3$s · Tách rời: %4$s</string>
     <string name="usb_bt_title">USB &amp; Bluetooth</string>
     <string name="usb_bt_bluetooth_section">Bluetooth</string>
     <string name="usb_bt_usb_section">Thiết bị USB (%1$d)</string>

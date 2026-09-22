@@ -1,11 +1,26 @@
 package com.galaxyjoy.cpuinfo.ext
 
+import android.app.Activity
 import android.content.Context
+import android.content.ContextWrapper
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
+
+/**
+ * Unwraps to the hosting [Activity]. Needed anywhere Compose's `LocalContext.current` is read
+ * from inside a Hilt-injected `BottomSheetDialogFragment`'s `ComposeView` — Hilt wraps that
+ * context in `ViewComponentManager$FragmentContextWrapper` (a [ContextWrapper]), so a direct
+ * `as Activity` cast throws `ClassCastException` (found via [FoldableDisplayBottomSheet] E08's
+ * instrumented test crashing on a real device, not by reading the docs first).
+ */
+tailrec fun Context.findActivity(): Activity = when (this) {
+    is Activity -> this
+    is ContextWrapper -> baseContext.findActivity()
+    else -> error("no Activity found in Context chain: $this")
+}
 
 //check xem app hien tai co phai la default launcher hay khong
 fun Context.isDefaultLauncher(): Boolean {

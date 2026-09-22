@@ -404,6 +404,15 @@
     <string name="touch_diag_sample_rate_unavailable">Częstotliwość próbkowania: —</string>
     <string name="touch_diag_reset_button">Zresetuj sesję</string>
     <string name="touch_diag_canvas_hint">Dotknij obszaru poniżej jednym lub kilkoma palcami</string>
+    <string name="foldable_pref_title">Składane i wiele ekranów</string>
+    <string name="foldable_pref_summary">Pozycja zawiasu i wszystkie podłączone ekrany</string>
+    <string name="foldable_title">Składane i wiele ekranów</string>
+    <string name="foldable_displays_section">Ekrany (%1$d)</string>
+    <string name="foldable_display_row">%1$s — %2$dx%3$d, %4$d dpi, %5$s</string>
+    <string name="foldable_default_display_suffix">(domyślny)</string>
+    <string name="foldable_hinge_section">Pozycja zawiasu</string>
+    <string name="foldable_no_hinge">Nie zgłoszono zawiasu — to nie jest urządzenie składane albo system nie udostępnia go tutaj.</string>
+    <string name="foldable_hinge_row">Stan: %1$s · Orientacja: %2$s · Zasłonięcie: %3$s · Rozdzielenie: %4$s</string>
     <string name="usb_bt_title">USB i Bluetooth</string>
     <string name="usb_bt_bluetooth_section">Bluetooth</string>
     <string name="usb_bt_usb_section">Urządzenia USB (%1$d)</string>

@@ -360,6 +360,15 @@
     <string name="touch_diag_sample_rate_unavailable">取樣率：—</string>
     <string name="touch_diag_reset_button">重設工作階段</string>
     <string name="touch_diag_canvas_hint">請用一根或多根手指觸碰下方區域</string>
+    <string name="foldable_pref_title">摺疊與多螢幕</string>
+    <string name="foldable_pref_summary">鉸鏈姿態與所有已連接的螢幕</string>
+    <string name="foldable_title">摺疊與多螢幕</string>
+    <string name="foldable_displays_section">螢幕（%1$d）</string>
+    <string name="foldable_display_row">%1$s — %2$dx%3$d，%4$d dpi，%5$s</string>
+    <string name="foldable_default_display_suffix">（預設）</string>
+    <string name="foldable_hinge_section">鉸鏈姿態</string>
+    <string name="foldable_no_hinge">未回報任何摺疊/鉸鏈功能 — 這不是摺疊裝置，或系統未在此公開該資訊。</string>
+    <string name="foldable_hinge_row">狀態：%1$s · 方向：%2$s · 遮蔽：%3$s · 分離：%4$s</string>
     <string name="usb_bt_title">USB 與藍牙</string>
     <string name="usb_bt_bluetooth_section">藍牙</string>
     <string name="usb_bt_usb_section">USB 裝置（%1$d）</string>

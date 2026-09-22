@@ -403,6 +403,15 @@
     <string name="touch_diag_sample_rate_unavailable">Abtastrate: —</string>
     <string name="touch_diag_reset_button">Sitzung zurücksetzen</string>
     <string name="touch_diag_canvas_hint">Berühre den Bereich unten mit einem oder mehreren Fingern</string>
+    <string name="foldable_pref_title">Faltbar &amp; Mehrfachanzeige</string>
+    <string name="foldable_pref_summary">Scharnierstellung und alle verbundenen Displays</string>
+    <string name="foldable_title">Faltbar &amp; Mehrfachanzeige</string>
+    <string name="foldable_displays_section">Displays (%1$d)</string>
+    <string name="foldable_display_row">%1$s — %2$dx%3$d, %4$d dpi, %5$s</string>
+    <string name="foldable_default_display_suffix">(Standard)</string>
+    <string name="foldable_hinge_section">Scharnierstellung</string>
+    <string name="foldable_no_hinge">Kein Falt-/Scharniermerkmal gemeldet — kein faltbares Gerät, oder das Betriebssystem stellt hier keines bereit.</string>
+    <string name="foldable_hinge_row">Status: %1$s · Ausrichtung: %2$s · Verdeckung: %3$s · Getrennt: %4$s</string>
     <string name="usb_bt_title">USB &amp; Bluetooth</string>
     <string name="usb_bt_bluetooth_section">Bluetooth</string>
     <string name="usb_bt_usb_section">USB-Geräte (%1$d)</string>

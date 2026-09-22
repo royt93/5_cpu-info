@@ -457,6 +457,15 @@
     <string name="touch_diag_sample_rate_unavailable">Sample rate: —</string>
     <string name="touch_diag_reset_button">Reset session</string>
     <string name="touch_diag_canvas_hint">Touch the area below with one or more fingers</string>
+    <string name="foldable_pref_title">Foldable &amp; Multi-Display</string>
+    <string name="foldable_pref_summary">Hinge posture and every connected display</string>
+    <string name="foldable_title">Foldable &amp; Multi-Display</string>
+    <string name="foldable_displays_section">Displays (%1$d)</string>
+    <string name="foldable_display_row">%1$s — %2$dx%3$d, %4$d dpi, %5$s</string>
+    <string name="foldable_default_display_suffix">(default)</string>
+    <string name="foldable_hinge_section">Hinge posture</string>
+    <string name="foldable_no_hinge">No fold/hinge feature reported — not a foldable device, or the OS doesn\'t expose one here.</string>
+    <string name="foldable_hinge_row">State: %1$s · Orientation: %2$s · Occlusion: %3$s · Separating: %4$s</string>
     <string name="usb_bt_title">USB &amp; Bluetooth</string>
     <string name="usb_bt_bluetooth_section">Bluetooth</string>
     <string name="usb_bt_usb_section">USB Devices (%1$d)</string>
