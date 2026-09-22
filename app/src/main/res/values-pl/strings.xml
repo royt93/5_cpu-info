@@ -422,6 +422,15 @@
     <string name="component_audit_row">%1$s — %2$s (%3$s)</string>
     <string name="component_audit_type_provider">Dostawca</string>
     <string name="component_audit_type_receiver">Odbiornik</string>
+    <string name="gnss_diag_pref_title">Diagnostyka satelitów GNSS</string>
+    <string name="gnss_diag_pref_summary">Siła sygnału satelitów na żywo, konstelacje, dual-frequency</string>
+    <string name="gnss_diag_title">Diagnostyka satelitów GNSS</string>
+    <string name="gnss_diag_permission_rationale">Przyznaj dostęp do lokalizacji, aby odczytać dane sygnału satelitów GPS/GNSS na żywo. Ta aplikacja nie przechowuje ani nie udostępnia Twojej lokalizacji.</string>
+    <string name="gnss_diag_waiting_for_fix">Oczekiwanie na sygnał satelitarny… może to potrwać od kilku sekund do kilku minut, dłużej w pomieszczeniach.</string>
+    <string name="gnss_diag_used_in_fix">%1$d z %2$d satelitów użytych do namiaru</string>
+    <string name="gnss_diag_dual_frequency">%1$d satelit(y/ów) śledzonych na 2 pasmach częstotliwości (dual-frequency)</string>
+    <string name="gnss_diag_constellation_row">%1$s: %2$d</string>
+    <string name="gnss_diag_satellite_row">%1$s #%2$d — %3$.1f dB-Hz — użyty do namiaru: %4$s</string>
     <string name="usb_bt_title">USB i Bluetooth</string>
     <string name="usb_bt_bluetooth_section">Bluetooth</string>
     <string name="usb_bt_usb_section">Urządzenia USB (%1$d)</string>

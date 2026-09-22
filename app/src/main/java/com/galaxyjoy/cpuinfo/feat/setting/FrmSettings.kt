@@ -34,6 +34,7 @@ import com.galaxyjoy.cpuinfo.feat.snapshot.HardwareSnapshotBottomSheet
 import com.galaxyjoy.cpuinfo.feat.storagebench.StorageBenchResultPrefs
 import com.galaxyjoy.cpuinfo.feat.throttle.ThrottleResultPrefs
 import com.galaxyjoy.cpuinfo.feat.componentaudit.ComponentAuditBottomSheet
+import com.galaxyjoy.cpuinfo.feat.gnssdiag.GnssDiagnosticBottomSheet
 import com.galaxyjoy.cpuinfo.feat.foldable.FoldableDisplayBottomSheet
 import com.galaxyjoy.cpuinfo.feat.touchdiag.TouchDiagBottomSheet
 import com.galaxyjoy.cpuinfo.feat.usbbt.UsbBluetoothBottomSheet
@@ -247,6 +248,7 @@ class FrmSettings : PreferenceFragmentCompat(),
         wireTouchDiagPref()
         wireFoldableDisplayPref()
         wireComponentAuditPref()
+        wireGnssDiagPref()
         wireFleetComparePref()
         wireVipDiagnosticHistoryPref()
         wireHealthAlertPref()
@@ -342,6 +344,17 @@ class FrmSettings : PreferenceFragmentCompat(),
             val fm = childFragmentManager
             if (!fm.isStateSaved && fm.findFragmentByTag(ComponentAuditBottomSheet.TAG) == null) {
                 ComponentAuditBottomSheet().show(fm, ComponentAuditBottomSheet.TAG)
+            }
+            true
+        }
+    }
+
+    /** E09 — see `doc/task/epic-05-new-ideas.md`. */
+    private fun wireGnssDiagPref() {
+        findPreference<Preference>("key_gnss_diag")?.setOnPreferenceClickListener {
+            val fm = childFragmentManager
+            if (!fm.isStateSaved && fm.findFragmentByTag(GnssDiagnosticBottomSheet.TAG) == null) {
+                GnssDiagnosticBottomSheet().show(fm, GnssDiagnosticBottomSheet.TAG)
             }
             true
         }

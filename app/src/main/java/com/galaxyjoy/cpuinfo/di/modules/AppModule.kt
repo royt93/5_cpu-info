@@ -17,6 +17,7 @@ import android.hardware.camera2.CameraManager
 import android.hardware.display.DisplayManager
 import android.hardware.input.InputManager
 import android.hardware.usb.UsbManager
+import android.location.LocationManager
 import android.media.AudioManager
 import android.net.ConnectivityManager
 import android.net.wifi.WifiManager
@@ -194,6 +195,13 @@ class AppModule {
     @Singleton
     fun provideInputManager(@ApplicationContext appContext: Context): InputManager =
         appContext.getSystemService(Context.INPUT_SERVICE) as InputManager
+
+    /** E09 GNSS Satellite Diagnostic: registerGnssStatusCallback requires ACCESS_FINE_LOCATION at
+     * call time (checked at the call site, not here — this provider is just the service handle). */
+    @Provides
+    @Singleton
+    fun provideLocationManager(@ApplicationContext appContext: Context): LocationManager =
+        appContext.getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
     companion object {
         const val USER_PREFERENCES_NAME = "user_preferences"

@@ -421,6 +421,15 @@
     <string name="component_audit_row">%1$s — %2$s (%3$s)</string>
     <string name="component_audit_type_provider">Provider</string>
     <string name="component_audit_type_receiver">Receiver</string>
+    <string name="gnss_diag_pref_title">GNSS-Satellitendiagnose</string>
+    <string name="gnss_diag_pref_summary">Live-Satellitensignalstärke, Konstellationen, Dual-Frequency</string>
+    <string name="gnss_diag_title">GNSS-Satellitendiagnose</string>
+    <string name="gnss_diag_permission_rationale">Gewähre Standortzugriff, um Live-GPS/GNSS-Satellitensignaldaten zu lesen. Diese App speichert oder teilt deinen Standort nicht.</string>
+    <string name="gnss_diag_waiting_for_fix">Warte auf Satellitensignal … kann von wenigen Sekunden bis zu einigen Minuten dauern, drinnen länger.</string>
+    <string name="gnss_diag_used_in_fix">%1$d von %2$d Satelliten für Fix verwendet</string>
+    <string name="gnss_diag_dual_frequency">%1$d Satellit(en) auf 2 Frequenzbändern erfasst (Dual-Frequency)</string>
+    <string name="gnss_diag_constellation_row">%1$s: %2$d</string>
+    <string name="gnss_diag_satellite_row">%1$s #%2$d — %3$.1f dB-Hz — für Fix verwendet: %4$s</string>
     <string name="usb_bt_title">USB &amp; Bluetooth</string>
     <string name="usb_bt_bluetooth_section">Bluetooth</string>
     <string name="usb_bt_usb_section">USB-Geräte (%1$d)</string>

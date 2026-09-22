@@ -57,6 +57,11 @@
             app:title="@string/component_audit_pref_title" />
 
         <Preference
+            app:key="key_gnss_diag"
+            app:summary="@string/gnss_diag_pref_summary"
+            app:title="@string/gnss_diag_pref_title" />
+
+        <Preference
             app:key="key_fleet_compare"
             app:summary="@string/fleet_compare_pref_summary"
             app:title="@string/fleet_compare_pref_title" />

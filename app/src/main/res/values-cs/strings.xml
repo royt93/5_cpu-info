@@ -418,6 +418,15 @@
     <string name="component_audit_row">%1$s — %2$s (%3$s)</string>
     <string name="component_audit_type_provider">Provider</string>
     <string name="component_audit_type_receiver">Přijímač</string>
+    <string name="gnss_diag_pref_title">Diagnostika satelitů GNSS</string>
+    <string name="gnss_diag_pref_summary">Živá síla signálu satelitů, souhvězdí, dual-frequency</string>
+    <string name="gnss_diag_title">Diagnostika satelitů GNSS</string>
+    <string name="gnss_diag_permission_rationale">Udělte přístup k poloze pro čtení živých dat signálu satelitů GPS/GNSS. Aplikace vaši polohu neukládá ani nesdílí.</string>
+    <string name="gnss_diag_waiting_for_fix">Čeká se na signál satelitu… může trvat od několika sekund po několik minut, uvnitř déle.</string>
+    <string name="gnss_diag_used_in_fix">%1$d z %2$d satelitů použito pro určení polohy</string>
+    <string name="gnss_diag_dual_frequency">%1$d satelit(ů) sledováno na 2 frekvenčních pásmech (dual-frequency)</string>
+    <string name="gnss_diag_constellation_row">%1$s: %2$d</string>
+    <string name="gnss_diag_satellite_row">%1$s #%2$d — %3$.1f dB-Hz — použito: %4$s</string>
     <string name="usb_bt_title">USB a Bluetooth</string>
     <string name="usb_bt_bluetooth_section">Bluetooth</string>
     <string name="usb_bt_usb_section">Zařízení USB (%1$d)</string>

@@ -378,6 +378,15 @@
     <string name="component_audit_row">%1$s — %2$s（%3$s）</string>
     <string name="component_audit_type_provider">Provider</string>
     <string name="component_audit_type_receiver">Receiver</string>
+    <string name="gnss_diag_pref_title">GNSS 衛星診斷</string>
+    <string name="gnss_diag_pref_summary">即時衛星訊號強度、星座系統、雙頻</string>
+    <string name="gnss_diag_title">GNSS 衛星診斷</string>
+    <string name="gnss_diag_permission_rationale">授予位置權限以讀取即時 GPS/GNSS 衛星訊號資料。此應用程式不會儲存或分享您的位置。</string>
+    <string name="gnss_diag_waiting_for_fix">正在等待衛星訊號…可能需要數秒到數分鐘，室內會更久。</string>
+    <string name="gnss_diag_used_in_fix">%2$d 顆衛星中有 %1$d 顆用於定位</string>
+    <string name="gnss_diag_dual_frequency">%1$d 顆衛星以 2 個頻段追蹤（雙頻）</string>
+    <string name="gnss_diag_constellation_row">%1$s：%2$d</string>
+    <string name="gnss_diag_satellite_row">%1$s #%2$d — %3$.1f dB-Hz — 用於定位：%4$s</string>
     <string name="usb_bt_title">USB 與藍牙</string>
     <string name="usb_bt_bluetooth_section">藍牙</string>
     <string name="usb_bt_usb_section">USB 裝置（%1$d）</string>

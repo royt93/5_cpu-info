@@ -34,6 +34,7 @@ Task mới (feature ý tưởng, bugfix, tech debt...) luôn thêm vào đúng 1
 | [epic-04-unique-ideas.md](epic-04-unique-ideas.md) | Ý tưởng độc quyền (USP) — U01/U02 được **3 AI review độc lập** cùng tự đề xuất | 16 |
 | [feature.md](feature.md) | Roadmap enhancement đợt 1-2 (đã ship) + Ideas | — |
 | [quick_win.md](quick_win.md) | Cải tiến nhỏ, dễ làm — #1-#10 | 10 |
+| [epic-05-new-ideas.md](epic-05-new-ideas.md) | Ý tưởng mới sau khi epic-03/04/quick_win cạn (tạo 2026-09-05, chưa tồn tại lúc file README này viết) — Truth Series, quick-win bundle, privacy/security bundle, foldable/touch/GNSS/component-audit | 17 (16 ✅, 1 ❌) |
 
 ## Đánh giá tổng quan tình trạng repo
 

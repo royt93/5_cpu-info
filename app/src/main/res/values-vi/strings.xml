@@ -439,6 +439,15 @@
     <string name="component_audit_row">%1$s — %2$s (%3$s)</string>
     <string name="component_audit_type_provider">Provider</string>
     <string name="component_audit_type_receiver">Receiver</string>
+    <string name="gnss_diag_pref_title">Chẩn đoán vệ tinh GNSS</string>
+    <string name="gnss_diag_pref_summary">Cường độ tín hiệu vệ tinh sống, chòm sao, dual-frequency</string>
+    <string name="gnss_diag_title">Chẩn đoán vệ tinh GNSS</string>
+    <string name="gnss_diag_permission_rationale">Cấp quyền vị trí để đọc dữ liệu tín hiệu vệ tinh GPS/GNSS sống. App không lưu hay chia sẻ vị trí của bạn.</string>
+    <string name="gnss_diag_waiting_for_fix">Đang chờ tín hiệu vệ tinh… có thể mất vài giây tới vài phút, lâu hơn khi ở trong nhà.</string>
+    <string name="gnss_diag_used_in_fix">%1$d/%2$d vệ tinh dùng để định vị</string>
+    <string name="gnss_diag_dual_frequency">%1$d vệ tinh đang bắt được 2 dải tần (dual-frequency)</string>
+    <string name="gnss_diag_constellation_row">%1$s: %2$d</string>
+    <string name="gnss_diag_satellite_row">%1$s #%2$d — %3$.1f dB-Hz — dùng định vị: %4$s</string>
     <string name="usb_bt_title">USB &amp; Bluetooth</string>
     <string name="usb_bt_bluetooth_section">Bluetooth</string>
     <string name="usb_bt_usb_section">Thiết bị USB (%1$d)</string>

@@ -21,10 +21,12 @@
     <!-- Network Info tab: Wi-Fi SSID/BSSID are only readable with a location-adjacent runtime
          permission. Pre-API33 that's ACCESS_FINE_LOCATION; API33+ prefers NEARBY_WIFI_DEVICES
          with neverForLocation, which grants the same SSID/BSSID access without implying the app
-         derives physical location from it (it doesn't). -->
-    <uses-permission
-        android:name="android.permission.ACCESS_FINE_LOCATION"
-        android:maxSdkVersion="32" />
+         derives physical location from it (it doesn't).
+         E09 GNSS Satellite Diagnostic (`feat/gnssdiag/`) needs real ACCESS_FINE_LOCATION on EVERY
+         API level — GnssStatus.Callback has no NEARBY_WIFI_DEVICES-style substitute — so this entry
+         no longer caps maxSdkVersion at 32 (removed 2026-09-22, was capped for the Network tab
+         alone before E09 existed). -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission
         android:name="android.permission.NEARBY_WIFI_DEVICES"
         android:usesPermissionFlags="neverForLocation"
