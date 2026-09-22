@@ -147,6 +147,18 @@ Package mới `feat/foldable/{DisplayInventoryProvider,FoldingFeatureMapper,Fold
 
 **Test**: unit — `DisplayInventoryProviderTest`/`displayStateLabel` (mapping đủ 6 `Display.STATE_*` + fallback UNKNOWN), `FoldingFeatureMapperTest` (2 case, mockk `FoldingFeature`), `ContextTest.findActivity` (4 case: Activity trực tiếp, 1 lớp wrap, wrap lồng nhau mô phỏng đúng tình huống Hilt thật, throw khi không có Activity trong chuỗi). Widget — `FoldableDisplayContentTest` (4 test, render state dựng tay). Integration — `FoldableDisplayFlowInstrumentedTest` (mở sheet thật qua Settings, xác nhận nhánh "no hinge" thật hiện ra trên TECNO KJ7 — máy không phải foldable nên đây là nhánh thật chứ không phải state giả). Tất cả pass trên TECNO KJ7 sau khi sửa bug crash: 5/5 widget+integration, unit pass trong suite đầy đủ, lint xanh.
 
+## ✅ E19 — Exported Content-Provider/Receiver Audit — Đã xong (2026-09-22)
+
+Package mới `feat/componentaudit/{ExportedComponentAuditProvider,ComponentAuditBottomSheet}.kt`, entry point Settings `key_component_audit`. **Quyết định kiến trúc (user, sau khi từ chối `QUERY_ALL_PACKAGES`)**: tái dùng đúng cơ chế `DataProviderApplications.getInstalledApplications()` (tab Ứng dụng) đã và đang dùng — `PackageManager.getInstalledPackages()` chạy dưới visibility filter của `<queries><intent action=MAIN></queries>` **có sẵn** trong Manifest, không thêm permission nào. Đây chính là "giải pháp filter khác" user nhớ ra — không phải ý tưởng mới, mà đúng pattern đã chạy production ở tab Ứng dụng từ trước.
+
+**Giới hạn phạm vi ghi rõ cho user** (không giấu): chỉ audit được app đã "visible" qua khai báo `<queries>` đó (cùng tập app hiện ở tab Ứng dụng) — không phải toàn bộ thiết bị như `QUERY_ALL_PACKAGES` sẽ cho. Disclaimer này hiện thẳng trong sheet (`component_audit_scope_disclaimer`), không chỉ nằm trong doc.
+
+**Logic**: với mỗi package visible, `ProviderInfo` unguarded = `exported && readPermission rỗng && writePermission rỗng` (provider có thể guard bằng 1 trong 2 hoặc cả 2, chỉ flag khi KHÔNG có cái nào); `ActivityInfo` (receiver dùng chung class này) unguarded = `exported && permission rỗng`. Tách hàm `findUnguardedComponents(pkg, pm)` thuần khỏi việc gọi `PackageManager` thật để test được.
+
+**Phát hiện lúc viết test (cùng loại giới hạn `Bundle` đã ghi nhận trước đây)**: `ApplicationInfo.loadLabel(PackageManager)` — dù field-based `nonLocalizedLabel` set trực tiếp — vẫn luôn trả `null` dưới JVM unit-test stub (`isReturnDefaultValues=true` thay toàn bộ THÂN HÀM của mọi class SDK, kể cả hàm "đơn giản" như `loadLabel()`, không chỉ riêng service-backed method) → code production đã có fallback `?: pkg.packageName` nên không sao, chỉ điều chỉnh lại test cho khớp thực tế thay vì giả vờ pass.
+
+**Test**: unit — `FindUnguardedComponentsTest` (7 case: provider/receiver có/không guard, non-exported không bao giờ flag, mảng null không crash, fallback packageName khi thiếu ApplicationInfo — dùng instance `ProviderInfo`/`ActivityInfo`/`PackageInfo`/`ApplicationInfo` thật set field trực tiếp, không mock). Widget — `ComponentAuditContentTest` (4 test, render state dựng tay + luôn hiện disclaimer). Integration — `ComponentAuditFlowInstrumentedTest` (mở sheet thật qua Settings, scan thật trên TECNO KJ7, không crash, disclaimer luôn hiện). Tất cả pass, lint xanh (xác nhận `@SuppressLint("QueryPermissionsNeeded")` đúng chỗ, không có cảnh báo Play Store policy nào bị lint bắt).
+
 ## Ý tưởng khác — gap vs competitor (CPU-Z/AIDA64/Device Info HW)
 
 | # | Ý tưởng | Mô tả ngắn | API/nguồn | Permission | Effort |
@@ -170,7 +182,7 @@ Package mới `feat/foldable/{DisplayInventoryProvider,FoldingFeatureMapper,Fold
 | E16 | ✅ Input Method (IME) Inventory — Đã xong (2026-09-06, xem Quick-win bundle) | Danh sách bàn phím đang bật/đang chọn, bàn phím bên thứ 3 nào xin quyền Internet — rủi ro keylogger kinh điển | `InputMethodManager` | Không | S |
 | E17 | ✅ VPN/Proxy Active-Connection Indicator — Đã xong (2026-09-06, xem Privacy/security bundle) | Traffic đang qua VPN/proxy HTTP không, transport mạng mặc định là gì | `ConnectivityManager.getNetworkCapabilities()`, `getDefaultProxy()` | ACCESS_NETWORK_STATE (thường đã có) | S |
 | E18 | ✅ Cleartext/Network Security Config Self-Audit — Đã xong (2026-09-06, xem Privacy/security bundle) | App này (và app khác qua flag legacy) có cho phép cleartext traffic không — thẻ minh bạch nhỏ | `ApplicationInfo.FLAG_USES_CLEARTEXT_TRAFFIC` | Không | S |
-| E19 | ⏸️ Exported Content-Provider/Receiver Audit — hoãn, rủi ro Play Store review do cần `QUERY_ALL_PACKAGES` | Đếm/liệt kê app cài sẵn có provider/receiver `exported=true` không có permission guard — bề mặt tấn công khác F05 (F05 chỉ nhìn theo tên SDK) | `PackageManager` (GET_PROVIDERS/GET_RECEIVERS) | ⚠️ cần `QUERY_ALL_PACKAGES` — Play Store hạn chế mạnh, nên scope theo `<queries>` khai báo sẵn | M |
+| E19 | ✅ Exported Content-Provider/Receiver Audit — Đã xong (2026-09-22), scope theo `<queries>` có sẵn, KHÔNG dùng `QUERY_ALL_PACKAGES` | Đếm/liệt kê app **hiển thị được** (cùng tập app tab Ứng dụng) có provider/receiver `exported=true` không có permission guard | `PackageManager` (GET_PROVIDERS/GET_RECEIVERS) | Không (tái dùng `<queries>` có sẵn, không thêm permission nào) | M |
 
 ## Ý tưởng khác — Shield Score / gamification mở rộng
 

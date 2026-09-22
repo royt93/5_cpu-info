@@ -466,6 +466,15 @@
     <string name="foldable_hinge_section">Hinge posture</string>
     <string name="foldable_no_hinge">No fold/hinge feature reported — not a foldable device, or the OS doesn\'t expose one here.</string>
     <string name="foldable_hinge_row">State: %1$s · Orientation: %2$s · Occlusion: %3$s · Separating: %4$s</string>
+    <string name="component_audit_pref_title">Exported Component Audit</string>
+    <string name="component_audit_pref_summary">Find unguarded exported providers/receivers in visible apps</string>
+    <string name="component_audit_title">Exported Component Audit</string>
+    <string name="component_audit_scope_disclaimer">Scope note: this only scans apps already visible to this app (the same set shown on the Applications tab) — not a full device scan. CPU Info doesn\'t request the QUERY_ALL_PACKAGES permission.</string>
+    <string name="component_audit_summary">%1$d unguarded component(s) found across %2$d visible app(s)</string>
+    <string name="component_audit_no_findings">No unguarded exported providers or receivers found.</string>
+    <string name="component_audit_row">%1$s — %2$s (%3$s)</string>
+    <string name="component_audit_type_provider">Provider</string>
+    <string name="component_audit_type_receiver">Receiver</string>
     <string name="usb_bt_title">USB &amp; Bluetooth</string>
     <string name="usb_bt_bluetooth_section">Bluetooth</string>
     <string name="usb_bt_usb_section">USB Devices (%1$d)</string>

@@ -413,6 +413,15 @@
     <string name="foldable_hinge_section">Pozycja zawiasu</string>
     <string name="foldable_no_hinge">Nie zgłoszono zawiasu — to nie jest urządzenie składane albo system nie udostępnia go tutaj.</string>
     <string name="foldable_hinge_row">Stan: %1$s · Orientacja: %2$s · Zasłonięcie: %3$s · Rozdzielenie: %4$s</string>
+    <string name="component_audit_pref_title">Audyt eksportowanych komponentów</string>
+    <string name="component_audit_pref_summary">Znajduje niezabezpieczone eksportowane dostawców/odbiorniki w widocznych aplikacjach</string>
+    <string name="component_audit_title">Audyt eksportowanych komponentów</string>
+    <string name="component_audit_scope_disclaimer">Uwaga dot. zakresu: skanowane są tylko aplikacje już widoczne dla tej aplikacji (ten sam zestaw co na karcie Aplikacje) — nie jest to pełne skanowanie urządzenia. CPU Info nie żąda uprawnienia QUERY_ALL_PACKAGES.</string>
+    <string name="component_audit_summary">Znaleziono %1$d niezabezpieczony(-e) komponent(y) w %2$d widocznych aplikacjach</string>
+    <string name="component_audit_no_findings">Nie znaleziono żadnych niezabezpieczonych eksportowanych dostawców ani odbiorników.</string>
+    <string name="component_audit_row">%1$s — %2$s (%3$s)</string>
+    <string name="component_audit_type_provider">Dostawca</string>
+    <string name="component_audit_type_receiver">Odbiornik</string>
     <string name="usb_bt_title">USB i Bluetooth</string>
     <string name="usb_bt_bluetooth_section">Bluetooth</string>
     <string name="usb_bt_usb_section">Urządzenia USB (%1$d)</string>

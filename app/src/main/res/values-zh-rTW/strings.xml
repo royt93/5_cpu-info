@@ -369,6 +369,15 @@
     <string name="foldable_hinge_section">鉸鏈姿態</string>
     <string name="foldable_no_hinge">未回報任何摺疊/鉸鏈功能 — 這不是摺疊裝置，或系統未在此公開該資訊。</string>
     <string name="foldable_hinge_row">狀態：%1$s · 方向：%2$s · 遮蔽：%3$s · 分離：%4$s</string>
+    <string name="component_audit_pref_title">已匯出元件稽核</string>
+    <string name="component_audit_pref_summary">找出可見應用程式中未受保護的已匯出 Provider/Receiver</string>
+    <string name="component_audit_title">已匯出元件稽核</string>
+    <string name="component_audit_scope_disclaimer">範圍說明：僅掃描此應用程式已可見的應用程式（與「應用程式」分頁相同的集合）— 並非完整裝置掃描。CPU Info 不會要求 QUERY_ALL_PACKAGES 權限。</string>
+    <string name="component_audit_summary">在 %2$d 個可見應用程式中找到 %1$d 個未受保護的元件</string>
+    <string name="component_audit_no_findings">未找到任何未受保護的已匯出 Provider 或 Receiver。</string>
+    <string name="component_audit_row">%1$s — %2$s（%3$s）</string>
+    <string name="component_audit_type_provider">Provider</string>
+    <string name="component_audit_type_receiver">Receiver</string>
     <string name="usb_bt_title">USB 與藍牙</string>
     <string name="usb_bt_bluetooth_section">藍牙</string>
     <string name="usb_bt_usb_section">USB 裝置（%1$d）</string>

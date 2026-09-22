@@ -52,6 +52,11 @@
             app:title="@string/foldable_pref_title" />
 
         <Preference
+            app:key="key_component_audit"
+            app:summary="@string/component_audit_pref_summary"
+            app:title="@string/component_audit_pref_title" />
+
+        <Preference
             app:key="key_fleet_compare"
             app:summary="@string/fleet_compare_pref_summary"
             app:title="@string/fleet_compare_pref_title" />

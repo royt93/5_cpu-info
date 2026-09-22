@@ -412,6 +412,15 @@
     <string name="foldable_hinge_section">Scharnierstellung</string>
     <string name="foldable_no_hinge">Kein Falt-/Scharniermerkmal gemeldet — kein faltbares Gerät, oder das Betriebssystem stellt hier keines bereit.</string>
     <string name="foldable_hinge_row">Status: %1$s · Ausrichtung: %2$s · Verdeckung: %3$s · Getrennt: %4$s</string>
+    <string name="component_audit_pref_title">Audit exportierter Komponenten</string>
+    <string name="component_audit_pref_summary">Findet ungeschützte exportierte Provider/Receiver in sichtbaren Apps</string>
+    <string name="component_audit_title">Audit exportierter Komponenten</string>
+    <string name="component_audit_scope_disclaimer">Hinweis zum Umfang: Es werden nur Apps geprüft, die für diese App bereits sichtbar sind (dieselbe Auswahl wie im Tab „Apps“) — kein vollständiger Gerätescan. CPU Info fordert nicht die Berechtigung QUERY_ALL_PACKAGES an.</string>
+    <string name="component_audit_summary">%1$d ungeschützte Komponente(n) in %2$d sichtbaren App(s) gefunden</string>
+    <string name="component_audit_no_findings">Keine ungeschützten exportierten Provider oder Receiver gefunden.</string>
+    <string name="component_audit_row">%1$s — %2$s (%3$s)</string>
+    <string name="component_audit_type_provider">Provider</string>
+    <string name="component_audit_type_receiver">Receiver</string>
     <string name="usb_bt_title">USB &amp; Bluetooth</string>
     <string name="usb_bt_bluetooth_section">Bluetooth</string>
     <string name="usb_bt_usb_section">USB-Geräte (%1$d)</string>

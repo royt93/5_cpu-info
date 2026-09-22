@@ -409,6 +409,15 @@
     <string name="foldable_hinge_section">Poloha závěsu</string>
     <string name="foldable_no_hinge">Nebyl nahlášen žádný závěs — nejedná se o skládatelné zařízení, nebo jej OS zde nezpřístupňuje.</string>
     <string name="foldable_hinge_row">Stav: %1$s · Orientace: %2$s · Zakrytí: %3$s · Oddělení: %4$s</string>
+    <string name="component_audit_pref_title">Audit exportovaných komponent</string>
+    <string name="component_audit_pref_summary">Najde nezajištěné exportované providery/přijímače ve viditelných aplikacích</string>
+    <string name="component_audit_title">Audit exportovaných komponent</string>
+    <string name="component_audit_scope_disclaimer">Poznámka k rozsahu: kontroluje pouze aplikace, které jsou této aplikaci již viditelné (stejná sada jako na kartě Aplikace) — nejde o kontrolu celého zařízení. CPU Info nežádá oprávnění QUERY_ALL_PACKAGES.</string>
+    <string name="component_audit_summary">Nalezeno %1$d nezajištěných komponent napříč %2$d viditelnými aplikacemi</string>
+    <string name="component_audit_no_findings">Nebyly nalezeny žádné nezajištěné exportované providery ani přijímače.</string>
+    <string name="component_audit_row">%1$s — %2$s (%3$s)</string>
+    <string name="component_audit_type_provider">Provider</string>
+    <string name="component_audit_type_receiver">Přijímač</string>
     <string name="usb_bt_title">USB a Bluetooth</string>
     <string name="usb_bt_bluetooth_section">Bluetooth</string>
     <string name="usb_bt_usb_section">Zařízení USB (%1$d)</string>

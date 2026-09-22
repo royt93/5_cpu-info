@@ -430,6 +430,15 @@
     <string name="foldable_hinge_section">Tư thế bản lề</string>
     <string name="foldable_no_hinge">Không có bản lề nào được báo cáo — không phải máy gập, hoặc hệ điều hành không cung cấp thông tin này ở đây.</string>
     <string name="foldable_hinge_row">Trạng thái: %1$s · Hướng: %2$s · Che khuất: %3$s · Tách rời: %4$s</string>
+    <string name="component_audit_pref_title">Kiểm tra component xuất công khai</string>
+    <string name="component_audit_pref_summary">Tìm provider/receiver xuất công khai không được bảo vệ ở app hiển thị được</string>
+    <string name="component_audit_title">Kiểm tra component xuất công khai</string>
+    <string name="component_audit_scope_disclaimer">Lưu ý phạm vi: chỉ quét app đã hiển thị được với app này (cùng tập app hiện ở tab Ứng dụng) — không phải quét toàn bộ thiết bị. CPU Info không xin quyền QUERY_ALL_PACKAGES.</string>
+    <string name="component_audit_summary">Tìm thấy %1$d component không được bảo vệ trong %2$d app hiển thị được</string>
+    <string name="component_audit_no_findings">Không tìm thấy provider/receiver xuất công khai nào không được bảo vệ.</string>
+    <string name="component_audit_row">%1$s — %2$s (%3$s)</string>
+    <string name="component_audit_type_provider">Provider</string>
+    <string name="component_audit_type_receiver">Receiver</string>
     <string name="usb_bt_title">USB &amp; Bluetooth</string>
     <string name="usb_bt_bluetooth_section">Bluetooth</string>
     <string name="usb_bt_usb_section">Thiết bị USB (%1$d)</string>
