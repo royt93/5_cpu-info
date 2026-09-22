@@ -33,6 +33,7 @@ import com.galaxyjoy.cpuinfo.feat.rambench.RamBenchResultPrefs
 import com.galaxyjoy.cpuinfo.feat.snapshot.HardwareSnapshotBottomSheet
 import com.galaxyjoy.cpuinfo.feat.storagebench.StorageBenchResultPrefs
 import com.galaxyjoy.cpuinfo.feat.throttle.ThrottleResultPrefs
+import com.galaxyjoy.cpuinfo.feat.touchdiag.TouchDiagBottomSheet
 import com.galaxyjoy.cpuinfo.feat.usbbt.UsbBluetoothBottomSheet
 import com.galaxyjoy.cpuinfo.feat.vip.ActVip
 import com.galaxyjoy.cpuinfo.feat.vipreport.VipDiagnosticReportBottomSheet
@@ -241,6 +242,7 @@ class FrmSettings : PreferenceFragmentCompat(),
         wireThemePref()
         wireHardwareSnapshotPref()
         wireUsbBluetoothPref()
+        wireTouchDiagPref()
         wireFleetComparePref()
         wireVipDiagnosticHistoryPref()
         wireHealthAlertPref()
@@ -303,6 +305,17 @@ class FrmSettings : PreferenceFragmentCompat(),
             val fm = childFragmentManager
             if (!fm.isStateSaved && fm.findFragmentByTag(UsbBluetoothBottomSheet.TAG) == null) {
                 UsbBluetoothBottomSheet().show(fm, UsbBluetoothBottomSheet.TAG)
+            }
+            true
+        }
+    }
+
+    /** E11 — see `doc/task/epic-05-new-ideas.md`. */
+    private fun wireTouchDiagPref() {
+        findPreference<Preference>("key_touch_diag")?.setOnPreferenceClickListener {
+            val fm = childFragmentManager
+            if (!fm.isStateSaved && fm.findFragmentByTag(TouchDiagBottomSheet.TAG) == null) {
+                TouchDiagBottomSheet().show(fm, TouchDiagBottomSheet.TAG)
             }
             true
         }

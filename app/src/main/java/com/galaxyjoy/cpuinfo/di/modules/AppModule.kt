@@ -15,6 +15,7 @@ import android.hardware.SensorManager
 import android.hardware.biometrics.BiometricManager
 import android.hardware.camera2.CameraManager
 import android.hardware.display.DisplayManager
+import android.hardware.input.InputManager
 import android.hardware.usb.UsbManager
 import android.media.AudioManager
 import android.net.ConnectivityManager
@@ -186,6 +187,13 @@ class AppModule {
     @Singleton
     fun provideUserManager(@ApplicationContext appContext: Context): UserManager =
         appContext.getSystemService(Context.USER_SERVICE) as UserManager
+
+    /** E11 Touchscreen Diagnostic: enumerate [android.view.InputDevice]s to find the touchscreen
+     * and read its pressure/size/orientation axis ranges. */
+    @Provides
+    @Singleton
+    fun provideInputManager(@ApplicationContext appContext: Context): InputManager =
+        appContext.getSystemService(Context.INPUT_SERVICE) as InputManager
 
     companion object {
         const val USER_PREFERENCES_NAME = "user_preferences"
